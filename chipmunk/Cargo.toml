@@ -1,0 +1,7 @@
+[package]
+name = "chipmunk"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+squirrel_lang = { path = "../squirrel_lang", version = "0.1.0"}

@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "squirrel_lang",
+    "chipmunk",
+]
+
+resolver = "2"
