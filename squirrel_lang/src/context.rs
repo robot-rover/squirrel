@@ -9,8 +9,9 @@ use std::{
 
 use ariadne::{Label, Report, ReportKind, Source};
 use once_cell::sync::Lazy;
+use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
 pub struct Span {
     pub start: usize,
     pub end: usize,

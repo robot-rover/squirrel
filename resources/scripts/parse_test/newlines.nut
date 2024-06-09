@@ -2,12 +2,14 @@
 if
 (
     1
-) {
+)
+{
     ::print("Yes")
 }
 
 function test(
-    a,
+    a
+    ,
     b,
     c
 ) {
@@ -17,14 +19,30 @@ function test(
 }
 
 {
-    a = 1,
-    b = 2,
-    c = 3
+    a
+    <-
+    1
+    ,
+    b
+    <-
+    2
+    c
+    <-
+    3
 }
 
-::print("\n")
-a <- 1 + 5
-+ 6
+::print(
+    "\n"
+    )
+
+a
+<-
+1
++
+5
++
+6
+
 ::print(a)
 ::print("\n")
 

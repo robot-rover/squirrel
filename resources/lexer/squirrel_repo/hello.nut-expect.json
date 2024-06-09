@@ -1,0 +1,11 @@
+[
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "Hello World!"
+  },
+  "RightParenthesis",
+  "Newline"
+]

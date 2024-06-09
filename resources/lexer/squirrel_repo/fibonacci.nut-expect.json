@@ -1,0 +1,118 @@
+[
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fib"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "LessThan",
+  {
+    "Integer": 2
+  },
+  "RightParenthesis",
+  "Return",
+  {
+    "Integer": 1
+  },
+  "Newline",
+  "Return",
+  {
+    "Identifier": "fib"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "Minus",
+  {
+    "Integer": 2
+  },
+  "RightParenthesis",
+  "Plus",
+  {
+    "Identifier": "fib"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "Minus",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "n"
+  },
+  "Assign",
+  {
+    "Identifier": "vargv"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "DoesNotEqual",
+  {
+    "Integer": 0
+  },
+  "QuestionMark",
+  {
+    "Identifier": "vargv"
+  },
+  "LeftSquareBracket",
+  {
+    "Integer": 0
+  },
+  "RightSquareBracket",
+  "Period",
+  {
+    "Identifier": "tointeger"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Colon",
+  {
+    "Integer": 1
+  },
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "fib"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline"
+]

@@ -1,12 +1,14 @@
 use std::convert::TryFrom;
 
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
+
 use crate::context::Span;
 
 use super::error::ParseError;
 
 pub type Ident = (String, Span);
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum Literal {
     Integer(i64),
     Number(f64),
@@ -14,7 +16,7 @@ pub enum Literal {
     Null,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum BinaryOp {
     // Arithmetic
     Add,
@@ -44,7 +46,7 @@ pub enum BinaryOp {
     InstanceOf,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum UnaryOp {
     Neg,
     Not,
@@ -54,7 +56,7 @@ pub enum UnaryOp {
     Resume,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum UnaryRefOp {
     PreIncr,
     PreDecr,
@@ -62,7 +64,7 @@ pub enum UnaryRefOp {
     PostDecr,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Function {
     pub keyword_span: Span,
     pub args: Vec<(Ident, Option<Expr>)>,
@@ -72,7 +74,7 @@ pub struct Function {
 
 pub type StateRef = Box<Statement>;
 
-#[derive(strum_macros::Display, Debug)]
+#[derive(strum_macros::Display, Debug, PartialEq, Serialize, Deserialize)]
 pub enum StatementData {
     Block(Vec<Statement>),
     Expr(Expr),
@@ -104,7 +106,7 @@ pub enum StatementData {
     Empty,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Statement {
     pub data: StatementData,
     pub span: Span,
@@ -248,7 +250,7 @@ impl From<Statement> for StatementData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum AssignTarget {
     Ident(Ident),
     ArrayAccess {
@@ -281,7 +283,7 @@ impl AssignTarget {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub enum AssignKind {
     Normal,
     NewSlot,
@@ -291,7 +293,7 @@ pub enum AssignKind {
     Sub,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Assign {
     pub target: AssignTarget,
     pub value: ExprRef,
@@ -315,7 +317,7 @@ impl TryFrom<Expr> for AssignTarget {
     }
 }
 
-#[derive(strum_macros::Display, Debug)]
+#[derive(strum_macros::Display, Debug, PartialEq, Serialize, Deserialize)]
 pub enum ExprData {
     Literal(Literal),
     TableDecl(Vec<(Expr, Expr)>),
@@ -360,7 +362,7 @@ impl ExprData {
 }
 
 pub type ExprRef = Box<Expr>;
-#[derive(Debug)]
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 pub struct Expr {
     pub data: ExprData,
     pub span: Span,

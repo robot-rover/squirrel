@@ -1,0 +1,336 @@
+[
+  "Local",
+  {
+    "Identifier": "arr"
+  },
+  "Assign",
+  "LeftSquareBracket",
+  {
+    "String": "one"
+  },
+  "Comma",
+  {
+    "String": "two"
+  },
+  "Comma",
+  {
+    "String": "three"
+  },
+  "RightSquareBracket",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "FOREACH\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "ForEach",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "Comma",
+  {
+    "Identifier": "val"
+  },
+  "In",
+  {
+    "Identifier": "arr"
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "index ["
+  },
+  "Plus",
+  {
+    "Identifier": "i"
+  },
+  "Plus",
+  {
+    "String": "]="
+  },
+  "Plus",
+  {
+    "Identifier": "val"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "FOR\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "arr"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "index ["
+  },
+  "Plus",
+  {
+    "Identifier": "i"
+  },
+  "Plus",
+  {
+    "String": "]="
+  },
+  "Plus",
+  {
+    "Identifier": "arr"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "WHILE\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  "Newline",
+  "While",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "arr"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "index ["
+  },
+  "Plus",
+  {
+    "Identifier": "i"
+  },
+  "Plus",
+  {
+    "String": "]="
+  },
+  "Plus",
+  {
+    "Identifier": "arr"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "DO WHILE\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  "Newline",
+  {
+    "Identifier": "do"
+  },
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "index ["
+  },
+  "Plus",
+  {
+    "Identifier": "i"
+  },
+  "Plus",
+  {
+    "String": "]="
+  },
+  "Plus",
+  {
+    "Identifier": "arr"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "While",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "arr"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline"
+]

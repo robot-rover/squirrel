@@ -611,18 +611,18 @@ mod error {
 mod tests {
     use std::fs;
 
+    use crate::test_foreach;
+    use crate::test_util::exchange_data;
+
     use super::*;
 
-    #[test]
-    fn squirrel_sample_test() {
-        for file in
-            fs::read_dir("../squirrel/samples/").expect("Unable to find squirrel samples directory")
-        {
-            let file = file.expect("Unable to read squirrel samples directory");
-            let path = file.path();
-            let contents = fs::read_to_string(&path).unwrap();
-            let _ast = parse(&contents, path.to_string_lossy().to_string()).unwrap();
-            // TODO: Validate ast somehow
-        }
+    test_foreach!(sample_test);
+
+    fn sample_test(file_name: &str, file_contents: &str) {
+        let actual_ast = parse(file_contents, file_name.to_string()).unwrap();
+        let expect_ast = exchange_data("parse", file_name, &actual_ast);
+
+        // TODO: Have a more useful comparison for these trees
+        assert_eq!(actual_ast, expect_ast);
     }
 }

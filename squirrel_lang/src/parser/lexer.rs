@@ -3,6 +3,7 @@ use std::str::FromStr;
 
 use ariadne::{Label, Report, ReportKind};
 use logos::{Lexer, Logos, Skip};
+use serde::{Deserialize, Serialize};
 
 use crate::context::{DisplayReport, Span, SquirrelError};
 
@@ -10,7 +11,7 @@ use self::error::{LexError, LexResult};
 
 use super::error::ParseError;
 
-#[derive(Clone, Debug, PartialEq, Logos)]
+#[derive(Clone, Debug, PartialEq, Logos, Serialize, Deserialize)]
 #[logos(extras = LexerContext)]
 #[logos(error = LexError)]
 #[logos(skip r"[ \t\r\f]+")]
@@ -532,8 +533,15 @@ mod tests {
 
     use super::error::LexResult;
 
+    use crate::test_foreach;
+    use crate::test_util::exchange_data;
+
     use super::*;
-    use std::fs;
+    use std::{
+        fs::{self, File},
+        io::BufReader,
+        path::{Path, PathBuf},
+    };
 
     fn lex(input: &str) -> Vec<Result<Token, LexError>> {
         Lexer::new(input).collect()
@@ -608,23 +616,27 @@ mod tests {
         assert_eq!(vec![Ok(Token::Number(4e-2))], result);
     }
 
-    #[test]
-    fn squirrel_sample_test() {
-        for file in
-            fs::read_dir("../squirrel/samples/").expect("Unable to find squirrel samples directory")
-        {
-            let file = file.expect("Unable to read squirrel samples directory");
-            let path = file.path();
-            let contents = fs::read_to_string(&path).unwrap();
-            let mut spanned_lexer =
-                SpannedLexer::new(&contents, path.to_string_lossy().to_string());
-            let tokens = spanned_lexer.by_ref().collect::<Result<Vec<_>, _>>();
-            match tokens {
-                Ok(tokens) => {}
-                Err(e) => panic!("{:#}", e.with_context(spanned_lexer.get_source())),
-            }
+    fn sample_test(sample_path: &str, sample_contents: &str) {
+        let mut spanned_lexer = SpannedLexer::new(sample_contents, sample_path.to_string());
+        let tokens = spanned_lexer.by_ref().collect::<Result<Vec<_>, _>>();
+        let tokens = match tokens {
+            Ok(tokens) => tokens,
+            Err(e) => panic!("{:#}", e.with_context(spanned_lexer.get_source())),
+        };
 
-            // TODO: Do something with tokens
+        let actual_data = tokens
+            .into_iter()
+            .map(|(token, _)| token)
+            .collect::<Vec<_>>();
+        let expected_data = exchange_data("lexer", sample_path, &actual_data);
+        for (idx, (expected, actual)) in expected_data
+            .into_iter()
+            .zip(actual_data.into_iter())
+            .enumerate()
+        {
+            assert_eq!(expected, actual, "Token at index {} does not match", idx);
         }
     }
+
+    test_foreach!(sample_test);
 }

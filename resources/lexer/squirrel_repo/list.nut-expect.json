@@ -1,0 +1,401 @@
+[
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "compare_arr"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a1"
+  },
+  "Comma",
+  {
+    "Identifier": "a2"
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "ForEach",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "Comma",
+  {
+    "Identifier": "val"
+  },
+  "In",
+  {
+    "Identifier": "a1"
+  },
+  "RightParenthesis",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  {
+    "Identifier": "val"
+  },
+  "DoesNotEqual",
+  {
+    "Identifier": "a2"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "RightParenthesis",
+  "Return",
+  "Null",
+  "Semicolon",
+  "Newline",
+  "Return",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "test"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "size"
+  },
+  "Assign",
+  {
+    "Integer": 10000
+  },
+  "Newline",
+  "Local",
+  {
+    "Identifier": "l1"
+  },
+  "Assign",
+  "LeftSquareBracket",
+  "RightSquareBracket",
+  "Semicolon",
+  {
+    "Identifier": "l1"
+  },
+  "Period",
+  {
+    "Identifier": "resize"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "size"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "size"
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  {
+    "Identifier": "l1"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "Assign",
+  {
+    "Identifier": "i"
+  },
+  "Semicolon",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "l2"
+  },
+  "Assign",
+  "Clone",
+  {
+    "Identifier": "l1"
+  },
+  "Semicolon",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "l3"
+  },
+  "Assign",
+  "LeftSquareBracket",
+  "RightSquareBracket",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "l2"
+  },
+  "Period",
+  {
+    "Identifier": "reverse"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "While",
+  "LeftParenthesis",
+  {
+    "Identifier": "l2"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "GreaterThan",
+  {
+    "Integer": 0
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "l3"
+  },
+  "Period",
+  {
+    "Identifier": "append"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "l2"
+  },
+  "Period",
+  {
+    "Identifier": "pop"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "While",
+  "LeftParenthesis",
+  {
+    "Identifier": "l3"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "GreaterThan",
+  {
+    "Integer": 0
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "l2"
+  },
+  "Period",
+  {
+    "Identifier": "append"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "l3"
+  },
+  "Period",
+  {
+    "Identifier": "pop"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  {
+    "Identifier": "l1"
+  },
+  "Period",
+  {
+    "Identifier": "reverse"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  {
+    "Identifier": "compare_arr"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "l1"
+  },
+  "Comma",
+  {
+    "Identifier": "l2"
+  },
+  "RightParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "Return",
+  {
+    "Identifier": "l1"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Return",
+  "Null",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "n"
+  },
+  "Assign",
+  {
+    "Identifier": "vargv"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "DoesNotEqual",
+  {
+    "Integer": 0
+  },
+  "QuestionMark",
+  {
+    "Identifier": "vargv"
+  },
+  "LeftSquareBracket",
+  {
+    "Integer": 0
+  },
+  "RightSquareBracket",
+  "Period",
+  {
+    "Identifier": "tointeger"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Colon",
+  {
+    "Integer": 1
+  },
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "n"
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  "Not",
+  {
+    "Identifier": "test"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "failed"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Return",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "oki doki"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline"
+]

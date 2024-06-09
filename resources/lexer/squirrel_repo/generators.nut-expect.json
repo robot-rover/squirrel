@@ -1,0 +1,345 @@
+[
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "gen_random"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "max"
+  },
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "last"
+  },
+  "Assign",
+  {
+    "Integer": 42
+  },
+  "Newline",
+  "Local",
+  {
+    "Identifier": "IM"
+  },
+  "Assign",
+  {
+    "Integer": 139968
+  },
+  "Semicolon",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "IA"
+  },
+  "Assign",
+  {
+    "Integer": 3877
+  },
+  "Semicolon",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "IC"
+  },
+  "Assign",
+  {
+    "Integer": 29573
+  },
+  "Semicolon",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Semicolon",
+  "Semicolon",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "Yield",
+  "LeftParenthesis",
+  {
+    "Identifier": "max"
+  },
+  "Multiply",
+  "LeftParenthesis",
+  {
+    "Identifier": "last"
+  },
+  "Assign",
+  "LeftParenthesis",
+  {
+    "Identifier": "last"
+  },
+  "Multiply",
+  {
+    "Identifier": "IA"
+  },
+  "Plus",
+  {
+    "Identifier": "IC"
+  },
+  "RightParenthesis",
+  "Modulus",
+  {
+    "Identifier": "IM"
+  },
+  "RightParenthesis",
+  "Divide",
+  {
+    "Identifier": "IM"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "randtor"
+  },
+  "Assign",
+  {
+    "Identifier": "gen_random"
+  },
+  "LeftParenthesis",
+  {
+    "Integer": 100
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "RAND NUMBERS \n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Integer": 10
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": ">"
+  },
+  "Plus",
+  "Resume",
+  {
+    "Identifier": "randtor"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "FIBONACCI \n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fiboz"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "prev"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "curr"
+  },
+  "Assign",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  "Newline",
+  "Yield",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  "Newline",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  "Local",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "n"
+  },
+  "Minus",
+  {
+    "Integer": 1
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "res"
+  },
+  "Assign",
+  {
+    "Identifier": "prev"
+  },
+  "Plus",
+  {
+    "Identifier": "curr"
+  },
+  "Semicolon",
+  "Newline",
+  {
+    "Identifier": "prev"
+  },
+  "Assign",
+  {
+    "Identifier": "curr"
+  },
+  "Semicolon",
+  "Newline",
+  "Yield",
+  {
+    "Identifier": "curr"
+  },
+  "Assign",
+  {
+    "Identifier": "res"
+  },
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Return",
+  {
+    "Identifier": "prev"
+  },
+  "Plus",
+  {
+    "Identifier": "curr"
+  },
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "ForEach",
+  "LeftParenthesis",
+  {
+    "Identifier": "val"
+  },
+  "In",
+  {
+    "Identifier": "fiboz"
+  },
+  "LeftParenthesis",
+  {
+    "Integer": 10
+  },
+  "RightParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": ">"
+  },
+  "Plus",
+  {
+    "Identifier": "val"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline"
+]

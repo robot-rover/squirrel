@@ -1,0 +1,42 @@
+[
+  {
+    "data": {
+      "Expr": {
+        "data": {
+          "FunctionCall": {
+            "func": {
+              "data": {
+                "Ident": "print"
+              },
+              "span": {
+                "start": 0,
+                "end": 5
+              }
+            },
+            "args": [
+              {
+                "data": {
+                  "Literal": {
+                    "String": "Hello World!"
+                  }
+                },
+                "span": {
+                  "start": 6,
+                  "end": 20
+                }
+              }
+            ]
+          }
+        },
+        "span": {
+          "start": 5,
+          "end": 21
+        }
+      }
+    },
+    "span": {
+      "start": 5,
+      "end": 21
+    }
+  }
+]

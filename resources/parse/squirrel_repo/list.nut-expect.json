@@ -1,0 +1,1493 @@
+[
+  {
+    "data": {
+      "LocalDec": [
+        [
+          "compare_arr",
+          {
+            "start": 86,
+            "end": 97
+          }
+        ],
+        {
+          "data": {
+            "FunctionDef": {
+              "keyword_span": {
+                "start": 77,
+                "end": 85
+              },
+              "args": [
+                [
+                  [
+                    "a1",
+                    {
+                      "start": 98,
+                      "end": 100
+                    }
+                  ],
+                  null
+                ]
+              ],
+              "is_varargs": false,
+              "body": {
+                "data": {
+                  "Block": [
+                    {
+                      "data": {
+                        "Foreach": {
+                          "index_id": [
+                            "i",
+                            {
+                              "start": 119,
+                              "end": 120
+                            }
+                          ],
+                          "value_id": [
+                            "val",
+                            {
+                              "start": 121,
+                              "end": 124
+                            }
+                          ],
+                          "iterable": {
+                            "data": {
+                              "Ident": "a1"
+                            },
+                            "span": {
+                              "start": 128,
+                              "end": 130
+                            }
+                          },
+                          "body": {
+                            "data": {
+                              "IfElse": [
+                                {
+                                  "data": {
+                                    "BinaryOp": {
+                                      "op": "Eq",
+                                      "lhs": {
+                                        "data": {
+                                          "Ident": "val"
+                                        },
+                                        "span": {
+                                          "start": 143,
+                                          "end": 146
+                                        }
+                                      },
+                                      "rhs": {
+                                        "data": {
+                                          "ArrayAccess": {
+                                            "array": {
+                                              "data": {
+                                                "Ident": "a2"
+                                              },
+                                              "span": {
+                                                "start": 148,
+                                                "end": 150
+                                              }
+                                            },
+                                            "index": {
+                                              "data": {
+                                                "Ident": "i"
+                                              },
+                                              "span": {
+                                                "start": 151,
+                                                "end": 152
+                                              }
+                                            }
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 150,
+                                          "end": 153
+                                        }
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 143,
+                                    "end": 153
+                                  }
+                                },
+                                {
+                                  "data": {
+                                    "Return": {
+                                      "data": {
+                                        "Literal": "Null"
+                                      },
+                                      "span": {
+                                        "start": 161,
+                                        "end": 165
+                                      }
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 154,
+                                    "end": 165
+                                  }
+                                },
+                                {
+                                  "data": "Empty",
+                                  "span": {
+                                    "start": 0,
+                                    "end": 0
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 0,
+                              "end": 165
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 0,
+                        "end": 165
+                      }
+                    },
+                    {
+                      "data": {
+                        "Return": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 1
+                            }
+                          },
+                          "span": {
+                            "start": 178,
+                            "end": 179
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 171,
+                        "end": 179
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 0,
+                  "end": 182
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 0,
+            "end": 182
+          }
+        }
+      ]
+    },
+    "span": {
+      "start": 0,
+      "end": 182
+    }
+  },
+  {
+    "data": {
+      "LocalDec": [
+        [
+          "test",
+          {
+            "start": 193,
+            "end": 197
+          }
+        ],
+        {
+          "data": {
+            "FunctionDef": {
+              "keyword_span": {
+                "start": 184,
+                "end": 192
+              },
+              "args": [],
+              "is_varargs": false,
+              "body": {
+                "data": {
+                  "Block": [
+                    {
+                      "data": {
+                        "LocalDec": [
+                          [
+                            "size",
+                            {
+                              "start": 212,
+                              "end": 216
+                            }
+                          ],
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 10000
+                              }
+                            },
+                            "span": {
+                              "start": 217,
+                              "end": 222
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 206,
+                        "end": 222
+                      }
+                    },
+                    {
+                      "data": {
+                        "LocalDec": [
+                          [
+                            "l1",
+                            {
+                              "start": 233,
+                              "end": 235
+                            }
+                          ],
+                          {
+                            "data": {
+                              "ArrayDecl": []
+                            },
+                            "span": {
+                              "start": 236,
+                              "end": 238
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 227,
+                        "end": 238
+                      }
+                    },
+                    {
+                      "data": {
+                        "Expr": {
+                          "data": {
+                            "FunctionCall": {
+                              "func": {
+                                "data": {
+                                  "FieldAccess": [
+                                    {
+                                      "data": {
+                                        "Ident": "l1"
+                                      },
+                                      "span": {
+                                        "start": 240,
+                                        "end": 242
+                                      }
+                                    },
+                                    [
+                                      "resize",
+                                      {
+                                        "start": 243,
+                                        "end": 249
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "span": {
+                                  "start": 240,
+                                  "end": 249
+                                }
+                              },
+                              "args": [
+                                {
+                                  "data": {
+                                    "Ident": "size"
+                                  },
+                                  "span": {
+                                    "start": 250,
+                                    "end": 254
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 249,
+                            "end": 255
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 249,
+                        "end": 255
+                      }
+                    },
+                    {
+                      "data": {
+                        "For": {
+                          "init": {
+                            "data": {
+                              "LocalDec": [
+                                [
+                                  "i",
+                                  {
+                                    "start": 271,
+                                    "end": 272
+                                  }
+                                ],
+                                {
+                                  "data": {
+                                    "Literal": {
+                                      "Integer": 0
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 273,
+                                    "end": 274
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 265,
+                              "end": 274
+                            }
+                          },
+                          "cond": {
+                            "data": {
+                              "BinaryOp": {
+                                "op": "Less",
+                                "lhs": {
+                                  "data": {
+                                    "Ident": "i"
+                                  },
+                                  "span": {
+                                    "start": 275,
+                                    "end": 276
+                                  }
+                                },
+                                "rhs": {
+                                  "data": {
+                                    "Ident": "size"
+                                  },
+                                  "span": {
+                                    "start": 277,
+                                    "end": 281
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 275,
+                              "end": 281
+                            }
+                          },
+                          "incr": {
+                            "data": {
+                              "Expr": {
+                                "data": {
+                                  "Assign": {
+                                    "target": {
+                                      "Ident": [
+                                        "i",
+                                        {
+                                          "start": 282,
+                                          "end": 283
+                                        }
+                                      ]
+                                    },
+                                    "value": {
+                                      "data": {
+                                        "Literal": {
+                                          "Integer": 1
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 285,
+                                        "end": 286
+                                      }
+                                    },
+                                    "kind": "Add"
+                                  }
+                                },
+                                "span": {
+                                  "start": 282,
+                                  "end": 286
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 282,
+                              "end": 286
+                            }
+                          },
+                          "body": {
+                            "data": {
+                              "Expr": {
+                                "data": {
+                                  "Assign": {
+                                    "target": {
+                                      "ArrayAccess": {
+                                        "array": {
+                                          "data": {
+                                            "Ident": "l1"
+                                          },
+                                          "span": {
+                                            "start": 288,
+                                            "end": 290
+                                          }
+                                        },
+                                        "index": {
+                                          "data": {
+                                            "Ident": "i"
+                                          },
+                                          "span": {
+                                            "start": 291,
+                                            "end": 292
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 290,
+                                          "end": 293
+                                        }
+                                      }
+                                    },
+                                    "value": {
+                                      "data": {
+                                        "Ident": "i"
+                                      },
+                                      "span": {
+                                        "start": 294,
+                                        "end": 295
+                                      }
+                                    },
+                                    "kind": "Normal"
+                                  }
+                                },
+                                "span": {
+                                  "start": 290,
+                                  "end": 295
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 290,
+                              "end": 295
+                            }
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 261,
+                        "end": 295
+                      }
+                    },
+                    {
+                      "data": {
+                        "LocalDec": [
+                          [
+                            "l2",
+                            {
+                              "start": 307,
+                              "end": 309
+                            }
+                          ],
+                          {
+                            "data": {
+                              "UnaryOp": [
+                                "Clone",
+                                {
+                                  "data": {
+                                    "Ident": "l1"
+                                  },
+                                  "span": {
+                                    "start": 316,
+                                    "end": 318
+                                  }
+                                }
+                              ]
+                            },
+                            "span": {
+                              "start": 310,
+                              "end": 318
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 301,
+                        "end": 318
+                      }
+                    },
+                    {
+                      "data": {
+                        "LocalDec": [
+                          [
+                            "l3",
+                            {
+                              "start": 330,
+                              "end": 332
+                            }
+                          ],
+                          {
+                            "data": {
+                              "ArrayDecl": []
+                            },
+                            "span": {
+                              "start": 333,
+                              "end": 335
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 324,
+                        "end": 335
+                      }
+                    },
+                    {
+                      "data": {
+                        "Expr": {
+                          "data": {
+                            "FunctionCall": {
+                              "func": {
+                                "data": {
+                                  "FieldAccess": [
+                                    {
+                                      "data": {
+                                        "Ident": "l2"
+                                      },
+                                      "span": {
+                                        "start": 341,
+                                        "end": 343
+                                      }
+                                    },
+                                    [
+                                      "reverse",
+                                      {
+                                        "start": 344,
+                                        "end": 351
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "span": {
+                                  "start": 341,
+                                  "end": 351
+                                }
+                              },
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 351,
+                            "end": 353
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 351,
+                        "end": 353
+                      }
+                    },
+                    {
+                      "data": {
+                        "While": [
+                          {
+                            "data": {
+                              "BinaryOp": {
+                                "op": "Greater",
+                                "lhs": {
+                                  "data": {
+                                    "FunctionCall": {
+                                      "func": {
+                                        "data": {
+                                          "FieldAccess": [
+                                            {
+                                              "data": {
+                                                "Ident": "l2"
+                                              },
+                                              "span": {
+                                                "start": 365,
+                                                "end": 367
+                                              }
+                                            },
+                                            [
+                                              "len",
+                                              {
+                                                "start": 368,
+                                                "end": 371
+                                              }
+                                            ]
+                                          ]
+                                        },
+                                        "span": {
+                                          "start": 365,
+                                          "end": 371
+                                        }
+                                      },
+                                      "args": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 371,
+                                    "end": 373
+                                  }
+                                },
+                                "rhs": {
+                                  "data": {
+                                    "Literal": {
+                                      "Integer": 0
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 374,
+                                    "end": 375
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 371,
+                              "end": 375
+                            }
+                          },
+                          {
+                            "data": {
+                              "Expr": {
+                                "data": {
+                                  "FunctionCall": {
+                                    "func": {
+                                      "data": {
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "Ident": "l3"
+                                            },
+                                            "span": {
+                                              "start": 385,
+                                              "end": 387
+                                            }
+                                          },
+                                          [
+                                            "append",
+                                            {
+                                              "start": 388,
+                                              "end": 394
+                                            }
+                                          ]
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 385,
+                                        "end": 394
+                                      }
+                                    },
+                                    "args": [
+                                      {
+                                        "data": {
+                                          "FunctionCall": {
+                                            "func": {
+                                              "data": {
+                                                "FieldAccess": [
+                                                  {
+                                                    "data": {
+                                                      "Ident": "l2"
+                                                    },
+                                                    "span": {
+                                                      "start": 395,
+                                                      "end": 397
+                                                    }
+                                                  },
+                                                  [
+                                                    "pop",
+                                                    {
+                                                      "start": 398,
+                                                      "end": 401
+                                                    }
+                                                  ]
+                                                ]
+                                              },
+                                              "span": {
+                                                "start": 395,
+                                                "end": 401
+                                              }
+                                            },
+                                            "args": []
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 401,
+                                          "end": 403
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                "span": {
+                                  "start": 394,
+                                  "end": 404
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 394,
+                              "end": 404
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 359,
+                        "end": 404
+                      }
+                    },
+                    {
+                      "data": {
+                        "While": [
+                          {
+                            "data": {
+                              "BinaryOp": {
+                                "op": "Greater",
+                                "lhs": {
+                                  "data": {
+                                    "FunctionCall": {
+                                      "func": {
+                                        "data": {
+                                          "FieldAccess": [
+                                            {
+                                              "data": {
+                                                "Ident": "l3"
+                                              },
+                                              "span": {
+                                                "start": 416,
+                                                "end": 418
+                                              }
+                                            },
+                                            [
+                                              "len",
+                                              {
+                                                "start": 419,
+                                                "end": 422
+                                              }
+                                            ]
+                                          ]
+                                        },
+                                        "span": {
+                                          "start": 416,
+                                          "end": 422
+                                        }
+                                      },
+                                      "args": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 422,
+                                    "end": 424
+                                  }
+                                },
+                                "rhs": {
+                                  "data": {
+                                    "Literal": {
+                                      "Integer": 0
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 425,
+                                    "end": 426
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 422,
+                              "end": 426
+                            }
+                          },
+                          {
+                            "data": {
+                              "Expr": {
+                                "data": {
+                                  "FunctionCall": {
+                                    "func": {
+                                      "data": {
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "Ident": "l2"
+                                            },
+                                            "span": {
+                                              "start": 436,
+                                              "end": 438
+                                            }
+                                          },
+                                          [
+                                            "append",
+                                            {
+                                              "start": 439,
+                                              "end": 445
+                                            }
+                                          ]
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 436,
+                                        "end": 445
+                                      }
+                                    },
+                                    "args": [
+                                      {
+                                        "data": {
+                                          "FunctionCall": {
+                                            "func": {
+                                              "data": {
+                                                "FieldAccess": [
+                                                  {
+                                                    "data": {
+                                                      "Ident": "l3"
+                                                    },
+                                                    "span": {
+                                                      "start": 446,
+                                                      "end": 448
+                                                    }
+                                                  },
+                                                  [
+                                                    "pop",
+                                                    {
+                                                      "start": 449,
+                                                      "end": 452
+                                                    }
+                                                  ]
+                                                ]
+                                              },
+                                              "span": {
+                                                "start": 446,
+                                                "end": 452
+                                              }
+                                            },
+                                            "args": []
+                                          }
+                                        },
+                                        "span": {
+                                          "start": 452,
+                                          "end": 454
+                                        }
+                                      }
+                                    ]
+                                  }
+                                },
+                                "span": {
+                                  "start": 445,
+                                  "end": 455
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 445,
+                              "end": 455
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 410,
+                        "end": 455
+                      }
+                    },
+                    {
+                      "data": {
+                        "Expr": {
+                          "data": {
+                            "FunctionCall": {
+                              "func": {
+                                "data": {
+                                  "FieldAccess": [
+                                    {
+                                      "data": {
+                                        "Ident": "l1"
+                                      },
+                                      "span": {
+                                        "start": 461,
+                                        "end": 463
+                                      }
+                                    },
+                                    [
+                                      "reverse",
+                                      {
+                                        "start": 464,
+                                        "end": 471
+                                      }
+                                    ]
+                                  ]
+                                },
+                                "span": {
+                                  "start": 461,
+                                  "end": 471
+                                }
+                              },
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 471,
+                            "end": 473
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 471,
+                        "end": 473
+                      }
+                    },
+                    {
+                      "data": {
+                        "IfElse": [
+                          {
+                            "data": {
+                              "FunctionCall": {
+                                "func": {
+                                  "data": {
+                                    "Ident": "compare_arr"
+                                  },
+                                  "span": {
+                                    "start": 483,
+                                    "end": 494
+                                  }
+                                },
+                                "args": [
+                                  {
+                                    "data": {
+                                      "Ident": "l1"
+                                    },
+                                    "span": {
+                                      "start": 495,
+                                      "end": 497
+                                    }
+                                  },
+                                  {
+                                    "data": {
+                                      "Ident": "l2"
+                                    },
+                                    "span": {
+                                      "start": 498,
+                                      "end": 500
+                                    }
+                                  }
+                                ]
+                              }
+                            },
+                            "span": {
+                              "start": 494,
+                              "end": 501
+                            }
+                          },
+                          {
+                            "data": {
+                              "Return": {
+                                "data": {
+                                  "FunctionCall": {
+                                    "func": {
+                                      "data": {
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "Ident": "l1"
+                                            },
+                                            "span": {
+                                              "start": 518,
+                                              "end": 520
+                                            }
+                                          },
+                                          [
+                                            "len",
+                                            {
+                                              "start": 521,
+                                              "end": 524
+                                            }
+                                          ]
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 518,
+                                        "end": 524
+                                      }
+                                    },
+                                    "args": []
+                                  }
+                                },
+                                "span": {
+                                  "start": 524,
+                                  "end": 526
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 511,
+                              "end": 526
+                            }
+                          },
+                          {
+                            "data": "Empty",
+                            "span": {
+                              "start": 0,
+                              "end": 0
+                            }
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 0,
+                        "end": 526
+                      }
+                    },
+                    {
+                      "data": {
+                        "Return": {
+                          "data": {
+                            "Literal": "Null"
+                          },
+                          "span": {
+                            "start": 539,
+                            "end": 543
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 532,
+                        "end": 543
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 0,
+                  "end": 546
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 0,
+            "end": 546
+          }
+        }
+      ]
+    },
+    "span": {
+      "start": 0,
+      "end": 546
+    }
+  },
+  {
+    "data": {
+      "LocalDec": [
+        [
+          "n",
+          {
+            "start": 554,
+            "end": 555
+          }
+        ],
+        {
+          "data": {
+            "Ternary": {
+              "cond": {
+                "data": {
+                  "BinaryOp": {
+                    "op": "Eq",
+                    "lhs": {
+                      "data": {
+                        "FunctionCall": {
+                          "func": {
+                            "data": {
+                              "FieldAccess": [
+                                {
+                                  "data": {
+                                    "Ident": "vargv"
+                                  },
+                                  "span": {
+                                    "start": 558,
+                                    "end": 563
+                                  }
+                                },
+                                [
+                                  "len",
+                                  {
+                                    "start": 564,
+                                    "end": 567
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 558,
+                              "end": 567
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 567,
+                        "end": 569
+                      }
+                    },
+                    "rhs": {
+                      "data": {
+                        "Literal": {
+                          "Integer": 0
+                        }
+                      },
+                      "span": {
+                        "start": 571,
+                        "end": 572
+                      }
+                    }
+                  }
+                },
+                "span": {
+                  "start": 567,
+                  "end": 572
+                }
+              },
+              "true_expr": {
+                "data": {
+                  "FunctionCall": {
+                    "func": {
+                      "data": {
+                        "FieldAccess": [
+                          {
+                            "data": {
+                              "ArrayAccess": {
+                                "array": {
+                                  "data": {
+                                    "Ident": "vargv"
+                                  },
+                                  "span": {
+                                    "start": 573,
+                                    "end": 578
+                                  }
+                                },
+                                "index": {
+                                  "data": {
+                                    "Literal": {
+                                      "Integer": 0
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 579,
+                                    "end": 580
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 578,
+                              "end": 581
+                            }
+                          },
+                          [
+                            "tointeger",
+                            {
+                              "start": 582,
+                              "end": 591
+                            }
+                          ]
+                        ]
+                      },
+                      "span": {
+                        "start": 578,
+                        "end": 591
+                      }
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 591,
+                  "end": 593
+                }
+              },
+              "false_expr": {
+                "data": {
+                  "Literal": {
+                    "Integer": 1
+                  }
+                },
+                "span": {
+                  "start": 594,
+                  "end": 595
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 567,
+            "end": 595
+          }
+        }
+      ]
+    },
+    "span": {
+      "start": 548,
+      "end": 595
+    }
+  },
+  {
+    "data": {
+      "For": {
+        "init": {
+          "data": {
+            "LocalDec": [
+              [
+                "i",
+                {
+                  "start": 606,
+                  "end": 607
+                }
+              ],
+              {
+                "data": {
+                  "Literal": {
+                    "Integer": 0
+                  }
+                },
+                "span": {
+                  "start": 608,
+                  "end": 609
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 600,
+            "end": 609
+          }
+        },
+        "cond": {
+          "data": {
+            "BinaryOp": {
+              "op": "Less",
+              "lhs": {
+                "data": {
+                  "Ident": "i"
+                },
+                "span": {
+                  "start": 610,
+                  "end": 611
+                }
+              },
+              "rhs": {
+                "data": {
+                  "Ident": "n"
+                },
+                "span": {
+                  "start": 612,
+                  "end": 613
+                }
+              }
+            }
+          },
+          "span": {
+            "start": 610,
+            "end": 613
+          }
+        },
+        "incr": {
+          "data": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "i",
+                      {
+                        "start": 614,
+                        "end": 615
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 1
+                      }
+                    },
+                    "span": {
+                      "start": 617,
+                      "end": 618
+                    }
+                  },
+                  "kind": "Add"
+                }
+              },
+              "span": {
+                "start": 614,
+                "end": 618
+              }
+            }
+          },
+          "span": {
+            "start": 614,
+            "end": 618
+          }
+        },
+        "body": {
+          "data": {
+            "IfElse": [
+              {
+                "data": {
+                  "UnaryOp": [
+                    "Not",
+                    {
+                      "data": {
+                        "FunctionCall": {
+                          "func": {
+                            "data": {
+                              "Ident": "test"
+                            },
+                            "span": {
+                              "start": 628,
+                              "end": 632
+                            }
+                          },
+                          "args": []
+                        }
+                      },
+                      "span": {
+                        "start": 632,
+                        "end": 634
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 627,
+                  "end": 634
+                }
+              },
+              {
+                "data": {
+                  "Block": [
+                    {
+                      "data": {
+                        "Expr": {
+                          "data": {
+                            "FunctionCall": {
+                              "func": {
+                                "data": {
+                                  "Ident": "print"
+                                },
+                                "span": {
+                                  "start": 650,
+                                  "end": 655
+                                }
+                              },
+                              "args": [
+                                {
+                                  "data": {
+                                    "Literal": {
+                                      "String": "failed"
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 656,
+                                    "end": 664
+                                  }
+                                }
+                              ]
+                            }
+                          },
+                          "span": {
+                            "start": 655,
+                            "end": 665
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 655,
+                        "end": 665
+                      }
+                    },
+                    {
+                      "data": {
+                        "Return": {
+                          "data": {
+                            "Literal": "Null"
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 0
+                          }
+                        }
+                      },
+                      "span": {
+                        "start": 0,
+                        "end": 681
+                      }
+                    }
+                  ]
+                },
+                "span": {
+                  "start": 0,
+                  "end": 688
+                }
+              },
+              {
+                "data": "Empty",
+                "span": {
+                  "start": 0,
+                  "end": 0
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 0,
+            "end": 688
+          }
+        }
+      }
+    },
+    "span": {
+      "start": 0,
+      "end": 688
+    }
+  },
+  {
+    "data": {
+      "Expr": {
+        "data": {
+          "FunctionCall": {
+            "func": {
+              "data": {
+                "Ident": "print"
+              },
+              "span": {
+                "start": 690,
+                "end": 695
+              }
+            },
+            "args": [
+              {
+                "data": {
+                  "Literal": {
+                    "String": "oki doki"
+                  }
+                },
+                "span": {
+                  "start": 696,
+                  "end": 706
+                }
+              }
+            ]
+          }
+        },
+        "span": {
+          "start": 695,
+          "end": 707
+        }
+      }
+    },
+    "span": {
+      "start": 695,
+      "end": 707
+    }
+  }
+]
