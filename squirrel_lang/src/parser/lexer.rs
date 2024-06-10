@@ -200,7 +200,6 @@ pub enum Token {
     #[regex(r"'([^'])*'", |lex| lex.slice().chars().nth(1).map(|c| c as i64))]
     Integer(i64),
     // Todo: handle missing number after decimal point
-    // Todo: Currently a string so that we can hash / eq
     #[regex(r"\d+\.\d*", |lex| f64::from_str(lex.slice()))]
     #[regex(r"\d+(\.\d*)?e[+-]?\d*", |lex| parse_sci(lex))]
     // #[regex(r"\d+\.\d*", |lex| lex.slice().to_string())]

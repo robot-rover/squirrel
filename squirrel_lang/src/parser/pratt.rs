@@ -201,7 +201,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
             Token::LeftParenthesis => {
                 let (args, call_span) =
                     parse_list(tokens, Token::LeftParenthesis, Token::RightParenthesis)?;
-                lhs = Expr::function_call(lhs, args, call_span);
+                lhs = Expr::function_call(lhs.try_into()?, args, call_span);
                 continue;
             }
             Token::LeftSquareBracket => {

@@ -11,7 +11,7 @@ use ariadne::{Label, Report, ReportKind, Source};
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Span {
     pub start: usize,
     pub end: usize,
@@ -189,7 +189,6 @@ impl DisplayReport<'_> {
 impl<'a> Display for DisplayReport<'a> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let mut report_bytes = Vec::new();
-        // TODO: Don't clone
         self.report
             .write(
                 (self.file_name, Source::from(self.source)),

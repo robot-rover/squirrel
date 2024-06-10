@@ -8,7 +8,7 @@ use super::error::ParseError;
 
 pub type Ident = (String, Span);
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub enum Literal {
     Integer(i64),
     Number(f64),
@@ -16,7 +16,20 @@ pub enum Literal {
     Null,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+impl PartialEq for Literal {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Literal::Integer(lhs), Literal::Integer(rhs)) => lhs == rhs,
+            (Literal::Number(lhs), Literal::Number(rhs)) => (lhs.is_nan() && rhs.is_nan()) || (lhs == rhs),
+            (Literal::String(lhs), Literal::String(rhs)) => lhs == rhs,
+            (Literal::Null, Literal::Null) => true,
+            _ => false,
+        }
+    }
+}
+impl Eq for Literal {}
+
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum BinaryOp {
     // Arithmetic
     Add,
@@ -29,6 +42,7 @@ pub enum BinaryOp {
     Greater,
     Less,
     Compare,
+    // TODO: Need GTE, LTE, and NEQ for floating point
     // Logical
     And,
     Or,
@@ -46,7 +60,7 @@ pub enum BinaryOp {
     InstanceOf,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UnaryOp {
     Neg,
     Not,
@@ -56,7 +70,7 @@ pub enum UnaryOp {
     Resume,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum UnaryRefOp {
     PreIncr,
     PreDecr,
@@ -64,7 +78,7 @@ pub enum UnaryRefOp {
     PostDecr,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Function {
     pub keyword_span: Span,
     pub args: Vec<(Ident, Option<Expr>)>,
@@ -74,7 +88,7 @@ pub struct Function {
 
 pub type StateRef = Box<Statement>;
 
-#[derive(strum_macros::Display, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(strum_macros::Display, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum StatementData {
     Block(Vec<Statement>),
     Expr(Expr),
@@ -106,7 +120,7 @@ pub enum StatementData {
     Empty,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Statement {
     pub data: StatementData,
     pub span: Span,
@@ -250,7 +264,7 @@ impl From<Statement> for StatementData {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AssignTarget {
     Ident(Ident),
     ArrayAccess {
@@ -283,7 +297,7 @@ impl AssignTarget {
     }
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AssignKind {
     Normal,
     NewSlot,
@@ -293,7 +307,7 @@ pub enum AssignKind {
     Sub,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Assign {
     pub target: AssignTarget,
     pub value: ExprRef,
@@ -317,7 +331,7 @@ impl TryFrom<Expr> for AssignTarget {
     }
 }
 
-#[derive(strum_macros::Display, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(strum_macros::Display, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ExprData {
     Literal(Literal),
     TableDecl(Vec<(Expr, Expr)>),
@@ -341,7 +355,7 @@ pub enum ExprData {
     UnaryOp(UnaryOp, ExprRef),
     UnaryRefOp(UnaryRefOp, AssignTarget),
     FunctionCall {
-        func: ExprRef,
+        func: AssignTarget,
         args: Vec<Expr>,
     },
     ArrayAccess {
@@ -362,7 +376,7 @@ impl ExprData {
 }
 
 pub type ExprRef = Box<Expr>;
-#[derive(Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Expr {
     pub data: ExprData,
     pub span: Span,
@@ -442,9 +456,9 @@ impl Expr {
         ExprData::UnaryRefOp(op, expr).spanning(span)
     }
 
-    pub fn function_call(func: Expr, args: Vec<Expr>, call_span: Span) -> Self {
+    pub fn function_call(func: AssignTarget, args: Vec<Expr>, call_span: Span) -> Self {
         ExprData::FunctionCall {
-            func: Box::new(func),
+            func,
             args,
         }
         .spanning(call_span)
