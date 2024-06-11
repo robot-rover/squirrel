@@ -95,6 +95,7 @@
                     "end": 121
                   },
                   "args": [],
+                  "default_expr": [],
                   "is_varargs": false,
                   "body": {
                     "data": {
@@ -197,6 +198,7 @@
                     "end": 189
                   },
                   "args": [],
+                  "default_expr": [],
                   "is_varargs": false,
                   "body": {
                     "data": {
@@ -279,6 +281,7 @@
                     "end": 236
                   },
                   "args": [],
+                  "default_expr": [],
                   "is_varargs": false,
                   "body": {
                     "data": {
@@ -501,16 +504,14 @@
                   },
                   "args": [
                     [
-                      [
-                        "start_state",
-                        {
-                          "start": 395,
-                          "end": 406
-                        }
-                      ],
-                      null
+                      "start_state",
+                      {
+                        "start": 395,
+                        "end": 406
+                      }
                     ]
                   ],
+                  "default_expr": [],
                   "is_varargs": false,
                   "body": {
                     "data": {
@@ -521,28 +522,22 @@
                               "data": {
                                 "FunctionCall": {
                                   "func": {
-                                    "data": {
-                                      "FieldAccess": [
+                                    "FieldAccess": [
+                                      {
+                                        "data": "Base",
+                                        "span": {
+                                          "start": 426,
+                                          "end": 430
+                                        }
+                                      },
+                                      [
+                                        "constructor",
                                         {
-                                          "data": "Base",
-                                          "span": {
-                                            "start": 426,
-                                            "end": 430
-                                          }
-                                        },
-                                        [
-                                          "constructor",
-                                          {
-                                            "start": 431,
-                                            "end": 442
-                                          }
-                                        ]
+                                          "start": 431,
+                                          "end": 442
+                                        }
                                       ]
-                                    },
-                                    "span": {
-                                      "start": 426,
-                                      "end": 442
-                                    }
+                                    ]
                                   },
                                   "args": [
                                     {
@@ -666,6 +661,7 @@
                     "end": 496
                   },
                   "args": [],
+                  "default_expr": [],
                   "is_varargs": false,
                   "body": {
                     "data": {
@@ -750,28 +746,22 @@
                                           "data": {
                                             "FunctionCall": {
                                               "func": {
-                                                "data": {
-                                                  "FieldAccess": [
+                                                "FieldAccess": [
+                                                  {
+                                                    "data": "Base",
+                                                    "span": {
+                                                      "start": 572,
+                                                      "end": 576
+                                                    }
+                                                  },
+                                                  [
+                                                    "activate",
                                                     {
-                                                      "data": "Base",
-                                                      "span": {
-                                                        "start": 572,
-                                                        "end": 576
-                                                      }
-                                                    },
-                                                    [
-                                                      "activate",
-                                                      {
-                                                        "start": 577,
-                                                        "end": 585
-                                                      }
-                                                    ]
+                                                      "start": 577,
+                                                      "end": 585
+                                                    }
                                                   ]
-                                                },
-                                                "span": {
-                                                  "start": 572,
-                                                  "end": 585
-                                                }
+                                                ]
                                               },
                                               "args": []
                                             }
@@ -908,6 +898,7 @@
                 "end": 641
               },
               "args": [],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -933,30 +924,24 @@
                                         "data": {
                                           "FunctionCall": {
                                             "func": {
-                                              "data": {
-                                                "FieldAccess": [
-                                                  {
-                                                    "data": {
-                                                      "Ident": "vargv"
-                                                    },
-                                                    "span": {
-                                                      "start": 665,
-                                                      "end": 670
-                                                    }
+                                              "FieldAccess": [
+                                                {
+                                                  "data": {
+                                                    "Ident": "vargv"
                                                   },
-                                                  [
-                                                    "len",
-                                                    {
-                                                      "start": 671,
-                                                      "end": 674
-                                                    }
-                                                  ]
+                                                  "span": {
+                                                    "start": 665,
+                                                    "end": 670
+                                                  }
+                                                },
+                                                [
+                                                  "len",
+                                                  {
+                                                    "start": 671,
+                                                    "end": 674
+                                                  }
                                                 ]
-                                              },
-                                              "span": {
-                                                "start": 665,
-                                                "end": 674
-                                              }
+                                              ]
                                             },
                                             "args": []
                                           }
@@ -988,51 +973,45 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "data": {
-                                          "FieldAccess": [
-                                            {
-                                              "data": {
-                                                "ArrayAccess": {
-                                                  "array": {
-                                                    "data": {
-                                                      "Ident": "vargv"
-                                                    },
-                                                    "span": {
-                                                      "start": 680,
-                                                      "end": 685
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "ArrayAccess": {
+                                                "array": {
+                                                  "data": {
+                                                    "Ident": "vargv"
+                                                  },
+                                                  "span": {
+                                                    "start": 680,
+                                                    "end": 685
+                                                  }
+                                                },
+                                                "index": {
+                                                  "data": {
+                                                    "Literal": {
+                                                      "Integer": 0
                                                     }
                                                   },
-                                                  "index": {
-                                                    "data": {
-                                                      "Literal": {
-                                                        "Integer": 0
-                                                      }
-                                                    },
-                                                    "span": {
-                                                      "start": 686,
-                                                      "end": 687
-                                                    }
+                                                  "span": {
+                                                    "start": 686,
+                                                    "end": 687
                                                   }
                                                 }
-                                              },
-                                              "span": {
-                                                "start": 685,
-                                                "end": 688
                                               }
                                             },
-                                            [
-                                              "tointeger",
-                                              {
-                                                "start": 689,
-                                                "end": 698
-                                              }
-                                            ]
+                                            "span": {
+                                              "start": 685,
+                                              "end": 688
+                                            }
+                                          },
+                                          [
+                                            "tointeger",
+                                            {
+                                              "start": 689,
+                                              "end": 698
+                                            }
                                           ]
-                                        },
-                                        "span": {
-                                          "start": 685,
-                                          "end": 698
-                                        }
+                                        ]
                                       },
                                       "args": []
                                     }
@@ -1109,13 +1088,13 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "data": {
-                                    "Ident": "Toggle"
-                                  },
-                                  "span": {
-                                    "start": 744,
-                                    "end": 750
-                                  }
+                                  "Ident": [
+                                    "Toggle",
+                                    {
+                                      "start": 744,
+                                      "end": 750
+                                    }
+                                  ]
                                 },
                                 "args": [
                                   {
@@ -1212,58 +1191,46 @@
                                             "data": {
                                               "FunctionCall": {
                                                 "func": {
-                                                  "data": {
-                                                    "FieldAccess": [
-                                                      {
-                                                        "data": {
-                                                          "FunctionCall": {
-                                                            "func": {
-                                                              "data": {
-                                                                "FieldAccess": [
-                                                                  {
-                                                                    "data": {
-                                                                      "Ident": "toggle"
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 803,
-                                                                      "end": 809
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    "activate",
-                                                                    {
-                                                                      "start": 810,
-                                                                      "end": 818
-                                                                    }
-                                                                  ]
-                                                                ]
+                                                  "FieldAccess": [
+                                                    {
+                                                      "data": {
+                                                        "FunctionCall": {
+                                                          "func": {
+                                                            "FieldAccess": [
+                                                              {
+                                                                "data": {
+                                                                  "Ident": "toggle"
+                                                                },
+                                                                "span": {
+                                                                  "start": 803,
+                                                                  "end": 809
+                                                                }
                                                               },
-                                                              "span": {
-                                                                "start": 803,
-                                                                "end": 818
-                                                              }
-                                                            },
-                                                            "args": []
-                                                          }
-                                                        },
-                                                        "span": {
-                                                          "start": 818,
-                                                          "end": 820
+                                                              [
+                                                                "activate",
+                                                                {
+                                                                  "start": 810,
+                                                                  "end": 818
+                                                                }
+                                                              ]
+                                                            ]
+                                                          },
+                                                          "args": []
                                                         }
                                                       },
-                                                      [
-                                                        "value",
-                                                        {
-                                                          "start": 821,
-                                                          "end": 826
-                                                        }
-                                                      ]
+                                                      "span": {
+                                                        "start": 818,
+                                                        "end": 820
+                                                      }
+                                                    },
+                                                    [
+                                                      "value",
+                                                      {
+                                                        "start": 821,
+                                                        "end": 826
+                                                      }
                                                     ]
-                                                  },
-                                                  "span": {
-                                                    "start": 818,
-                                                    "end": 826
-                                                  }
+                                                  ]
                                                 },
                                                 "args": []
                                               }
@@ -1307,13 +1274,13 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "data": {
-                                  "Ident": "print"
-                                },
-                                "span": {
-                                  "start": 841,
-                                  "end": 846
-                                }
+                                "Ident": [
+                                  "print",
+                                  {
+                                    "start": 841,
+                                    "end": 846
+                                  }
+                                ]
                               },
                               "args": [
                                 {
@@ -1323,30 +1290,24 @@
                                         "data": {
                                           "FunctionCall": {
                                             "func": {
-                                              "data": {
-                                                "FieldAccess": [
-                                                  {
-                                                    "data": {
-                                                      "Ident": "toggle"
-                                                    },
-                                                    "span": {
-                                                      "start": 847,
-                                                      "end": 853
-                                                    }
+                                              "FieldAccess": [
+                                                {
+                                                  "data": {
+                                                    "Ident": "toggle"
                                                   },
-                                                  [
-                                                    "value",
-                                                    {
-                                                      "start": 854,
-                                                      "end": 859
-                                                    }
-                                                  ]
+                                                  "span": {
+                                                    "start": 847,
+                                                    "end": 853
+                                                  }
+                                                },
+                                                [
+                                                  "value",
+                                                  {
+                                                    "start": 854,
+                                                    "end": 859
+                                                  }
                                                 ]
-                                              },
-                                              "span": {
-                                                "start": 847,
-                                                "end": 859
-                                              }
+                                              ]
                                             },
                                             "args": []
                                           }
@@ -1452,13 +1413,13 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "data": {
-                                    "Ident": "NthToggle"
-                                  },
-                                  "span": {
-                                    "start": 921,
-                                    "end": 930
-                                  }
+                                  "Ident": [
+                                    "NthToggle",
+                                    {
+                                      "start": 921,
+                                      "end": 930
+                                    }
+                                  ]
                                 },
                                 "args": [
                                   {
@@ -1577,58 +1538,46 @@
                                             "data": {
                                               "FunctionCall": {
                                                 "func": {
-                                                  "data": {
-                                                    "FieldAccess": [
-                                                      {
-                                                        "data": {
-                                                          "FunctionCall": {
-                                                            "func": {
-                                                              "data": {
-                                                                "FieldAccess": [
-                                                                  {
-                                                                    "data": {
-                                                                      "Ident": "ntoggle"
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 980,
-                                                                      "end": 987
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    "activate",
-                                                                    {
-                                                                      "start": 988,
-                                                                      "end": 996
-                                                                    }
-                                                                  ]
-                                                                ]
+                                                  "FieldAccess": [
+                                                    {
+                                                      "data": {
+                                                        "FunctionCall": {
+                                                          "func": {
+                                                            "FieldAccess": [
+                                                              {
+                                                                "data": {
+                                                                  "Ident": "ntoggle"
+                                                                },
+                                                                "span": {
+                                                                  "start": 980,
+                                                                  "end": 987
+                                                                }
                                                               },
-                                                              "span": {
-                                                                "start": 980,
-                                                                "end": 996
-                                                              }
-                                                            },
-                                                            "args": []
-                                                          }
-                                                        },
-                                                        "span": {
-                                                          "start": 996,
-                                                          "end": 998
+                                                              [
+                                                                "activate",
+                                                                {
+                                                                  "start": 988,
+                                                                  "end": 996
+                                                                }
+                                                              ]
+                                                            ]
+                                                          },
+                                                          "args": []
                                                         }
                                                       },
-                                                      [
-                                                        "value",
-                                                        {
-                                                          "start": 999,
-                                                          "end": 1004
-                                                        }
-                                                      ]
+                                                      "span": {
+                                                        "start": 996,
+                                                        "end": 998
+                                                      }
+                                                    },
+                                                    [
+                                                      "value",
+                                                      {
+                                                        "start": 999,
+                                                        "end": 1004
+                                                      }
                                                     ]
-                                                  },
-                                                  "span": {
-                                                    "start": 996,
-                                                    "end": 1004
-                                                  }
+                                                  ]
                                                 },
                                                 "args": []
                                               }
@@ -1672,13 +1621,13 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "data": {
-                                  "Ident": "print"
-                                },
-                                "span": {
-                                  "start": 1018,
-                                  "end": 1023
-                                }
+                                "Ident": [
+                                  "print",
+                                  {
+                                    "start": 1018,
+                                    "end": 1023
+                                  }
+                                ]
                               },
                               "args": [
                                 {
@@ -1688,30 +1637,24 @@
                                         "data": {
                                           "FunctionCall": {
                                             "func": {
-                                              "data": {
-                                                "FieldAccess": [
-                                                  {
-                                                    "data": {
-                                                      "Ident": "ntoggle"
-                                                    },
-                                                    "span": {
-                                                      "start": 1024,
-                                                      "end": 1031
-                                                    }
+                                              "FieldAccess": [
+                                                {
+                                                  "data": {
+                                                    "Ident": "ntoggle"
                                                   },
-                                                  [
-                                                    "value",
-                                                    {
-                                                      "start": 1032,
-                                                      "end": 1037
-                                                    }
-                                                  ]
+                                                  "span": {
+                                                    "start": 1024,
+                                                    "end": 1031
+                                                  }
+                                                },
+                                                [
+                                                  "value",
+                                                  {
+                                                    "start": 1032,
+                                                    "end": 1037
+                                                  }
                                                 ]
-                                              },
-                                              "span": {
-                                                "start": 1024,
-                                                "end": 1037
-                                              }
+                                              ]
                                             },
                                             "args": []
                                           }
@@ -1799,13 +1742,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "clock"
-                },
-                "span": {
-                  "start": 1080,
-                  "end": 1085
-                }
+                "Ident": [
+                  "clock",
+                  {
+                    "start": 1080,
+                    "end": 1085
+                  }
+                ]
               },
               "args": []
             }
@@ -1828,13 +1771,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "main"
-              },
-              "span": {
-                "start": 1089,
-                "end": 1093
-              }
+              "Ident": [
+                "main",
+                {
+                  "start": 1089,
+                  "end": 1093
+                }
+              ]
             },
             "args": []
           }
@@ -1856,13 +1799,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 1097,
-                "end": 1102
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 1097,
+                  "end": 1102
+                }
+              ]
             },
             "args": [
               {
@@ -1892,13 +1835,13 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "data": {
-                                          "Ident": "clock"
-                                        },
-                                        "span": {
-                                          "start": 1112,
-                                          "end": 1117
-                                        }
+                                        "Ident": [
+                                          "clock",
+                                          {
+                                            "start": 1112,
+                                            "end": 1117
+                                          }
+                                        ]
                                       },
                                       "args": []
                                     }

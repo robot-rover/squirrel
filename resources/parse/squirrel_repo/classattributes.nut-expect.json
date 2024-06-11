@@ -38,6 +38,7 @@
                               "end": 45
                             },
                             "args": [],
+                            "default_expr": [],
                             "is_varargs": false,
                             "body": {
                               "data": {
@@ -159,6 +160,7 @@
                               "end": 173
                             },
                             "args": [],
+                            "default_expr": [],
                             "is_varargs": false,
                             "body": {
                               "data": {
@@ -198,28 +200,22 @@
                                                     "data": {
                                                       "FunctionCall": {
                                                         "func": {
-                                                          "data": {
-                                                            "FieldAccess": [
+                                                          "FieldAccess": [
+                                                            {
+                                                              "data": "Globals",
+                                                              "span": {
+                                                                "start": 247,
+                                                                "end": 249
+                                                              }
+                                                            },
+                                                            [
+                                                              "print",
                                                               {
-                                                                "data": "Globals",
-                                                                "span": {
-                                                                  "start": 247,
-                                                                  "end": 249
-                                                                }
-                                                              },
-                                                              [
-                                                                "print",
-                                                                {
-                                                                  "start": 249,
-                                                                  "end": 254
-                                                                }
-                                                              ]
+                                                                "start": 249,
+                                                                "end": 254
+                                                              }
                                                             ]
-                                                          },
-                                                          "span": {
-                                                            "start": 247,
-                                                            "end": 254
-                                                          }
+                                                          ]
                                                         },
                                                         "args": [
                                                           {
@@ -439,28 +435,22 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "FieldAccess": [
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 422,
+                                "end": 424
+                              }
+                            },
+                            [
+                              "print",
                               {
-                                "data": "Globals",
-                                "span": {
-                                  "start": 422,
-                                  "end": 424
-                                }
-                              },
-                              [
-                                "print",
-                                {
-                                  "start": 424,
-                                  "end": 429
-                                }
-                              ]
+                                "start": 424,
+                                "end": 429
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 422,
-                            "end": 429
-                          }
+                          ]
                         },
                         "args": [
                           {
@@ -549,30 +539,24 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "data": {
-                                          "FieldAccess": [
-                                            {
-                                              "data": {
-                                                "Ident": "Foo"
-                                              },
-                                              "span": {
-                                                "start": 475,
-                                                "end": 478
-                                              }
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "Ident": "Foo"
                                             },
-                                            [
-                                              "getattributes",
-                                              {
-                                                "start": 479,
-                                                "end": 492
-                                              }
-                                            ]
+                                            "span": {
+                                              "start": 475,
+                                              "end": 478
+                                            }
+                                          },
+                                          [
+                                            "getattributes",
+                                            {
+                                              "start": 479,
+                                              "end": 492
+                                            }
                                           ]
-                                        },
-                                        "span": {
-                                          "start": 475,
-                                          "end": 492
-                                        }
+                                        ]
                                       },
                                       "args": [
                                         {
@@ -654,28 +638,22 @@
                                             "data": {
                                               "FunctionCall": {
                                                 "func": {
-                                                  "data": {
-                                                    "FieldAccess": [
+                                                  "FieldAccess": [
+                                                    {
+                                                      "data": "Globals",
+                                                      "span": {
+                                                        "start": 564,
+                                                        "end": 566
+                                                      }
+                                                    },
+                                                    [
+                                                      "print",
                                                       {
-                                                        "data": "Globals",
-                                                        "span": {
-                                                          "start": 564,
-                                                          "end": 566
-                                                        }
-                                                      },
-                                                      [
-                                                        "print",
-                                                        {
-                                                          "start": 566,
-                                                          "end": 571
-                                                        }
-                                                      ]
+                                                        "start": 566,
+                                                        "end": 571
+                                                      }
                                                     ]
-                                                  },
-                                                  "span": {
-                                                    "start": 564,
-                                                    "end": 571
-                                                  }
+                                                  ]
                                                 },
                                                 "args": [
                                                   {
@@ -828,28 +806,22 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "data": {
-                                        "FieldAccess": [
+                                      "FieldAccess": [
+                                        {
+                                          "data": "Globals",
+                                          "span": {
+                                            "start": 638,
+                                            "end": 640
+                                          }
+                                        },
+                                        [
+                                          "print",
                                           {
-                                            "data": "Globals",
-                                            "span": {
-                                              "start": 638,
-                                              "end": 640
-                                            }
-                                          },
-                                          [
-                                            "print",
-                                            {
-                                              "start": 640,
-                                              "end": 645
-                                            }
-                                          ]
+                                            "start": 640,
+                                            "end": 645
+                                          }
                                         ]
-                                      },
-                                      "span": {
-                                        "start": 638,
-                                        "end": 645
-                                      }
+                                      ]
                                     },
                                     "args": [
                                       {

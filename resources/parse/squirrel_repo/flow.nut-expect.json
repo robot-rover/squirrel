@@ -18,16 +18,14 @@
               },
               "args": [
                 [
-                  [
-                    "x",
-                    {
-                      "start": 13,
-                      "end": 14
-                    }
-                  ],
-                  null
+                  "x",
+                  {
+                    "start": 13,
+                    "end": 14
+                  }
                 ]
               ],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -127,16 +125,14 @@
               },
               "args": [
                 [
-                  [
-                    "x",
-                    {
-                      "start": 52,
-                      "end": 53
-                    }
-                  ],
-                  null
+                  "x",
+                  {
+                    "start": 52,
+                    "end": 53
+                  }
                 ]
               ],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -228,13 +224,13 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "Ident": "min"
-                      },
-                      "span": {
-                        "start": 81,
-                        "end": 84
-                      }
+                      "Ident": [
+                        "min",
+                        {
+                          "start": 81,
+                          "end": 84
+                        }
+                      ]
                     },
                     "args": [
                       {
@@ -271,13 +267,13 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "Ident": "max"
-                      },
-                      "span": {
-                        "start": 94,
-                        "end": 97
-                      }
+                      "Ident": [
+                        "max",
+                        {
+                          "start": 94,
+                          "end": 97
+                        }
+                      ]
                     },
                     "args": [
                       {
@@ -323,13 +319,13 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "Ident": "print"
-                    },
-                    "span": {
-                      "start": 110,
-                      "end": 115
-                    }
+                    "Ident": [
+                      "print",
+                      {
+                        "start": 110,
+                        "end": 115
+                      }
+                    ]
                   },
                   "args": [
                     {
@@ -363,13 +359,13 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "Ident": "print"
-                    },
-                    "span": {
-                      "start": 181,
-                      "end": 186
-                    }
+                    "Ident": [
+                      "print",
+                      {
+                        "start": 181,
+                        "end": 186
+                      }
+                    ]
                   },
                   "args": [
                     {
@@ -410,13 +406,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 205,
-                "end": 210
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 205,
+                  "end": 210
+                }
+              ]
             },
             "args": [
               {
@@ -462,6 +458,7 @@
                 "end": 226
               },
               "args": [],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -752,16 +749,14 @@
                     },
                     "args": [
                       [
-                        [
-                          "a",
-                          {
-                            "start": 517,
-                            "end": 518
-                          }
-                        ],
-                        null
+                        "a",
+                        {
+                          "start": 517,
+                          "end": 518
+                        }
                       ]
                     ],
+                    "default_expr": [],
                     "is_varargs": false,
                     "body": {
                       "data": {
@@ -837,13 +832,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 536,
-                "end": 541
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 536,
+                  "end": 541
+                }
+              ]
             },
             "args": [
               {
@@ -869,13 +864,13 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "data": {
-                                    "Ident": "typy"
-                                  },
-                                  "span": {
-                                    "start": 547,
-                                    "end": 551
-                                  }
+                                  "Ident": [
+                                    "typy",
+                                    {
+                                      "start": 547,
+                                      "end": 551
+                                    }
+                                  ]
                                 },
                                 "args": [
                                   {
@@ -940,13 +935,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 562,
-                "end": 567
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 562,
+                  "end": 567
+                }
+              ]
             },
             "args": [
               {
@@ -972,13 +967,13 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "data": {
-                                    "Ident": "typy"
-                                  },
-                                  "span": {
-                                    "start": 573,
-                                    "end": 577
-                                  }
+                                  "Ident": [
+                                    "typy",
+                                    {
+                                      "start": 573,
+                                      "end": 577
+                                    }
+                                  ]
                                 },
                                 "args": [
                                   {
@@ -1043,13 +1038,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 588,
-                "end": 593
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 588,
+                  "end": 593
+                }
+              ]
             },
             "args": [
               {
@@ -1075,13 +1070,13 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "data": {
-                                    "Ident": "typy"
-                                  },
-                                  "span": {
-                                    "start": 599,
-                                    "end": 603
-                                  }
+                                  "Ident": [
+                                    "typy",
+                                    {
+                                      "start": 599,
+                                      "end": 603
+                                    }
+                                  ]
                                 },
                                 "args": [
                                   {

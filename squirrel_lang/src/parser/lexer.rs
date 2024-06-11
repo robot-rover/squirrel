@@ -536,11 +536,7 @@ mod tests {
     use crate::test_util::exchange_data;
 
     use super::*;
-    use std::{
-        fs::{self, File},
-        io::BufReader,
-        path::{Path, PathBuf},
-    };
+    
 
     fn lex(input: &str) -> Vec<Result<Token, LexError>> {
         Lexer::new(input).collect()

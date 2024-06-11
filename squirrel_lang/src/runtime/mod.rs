@@ -1,20 +1,29 @@
-use std::{borrow::Borrow, cell::{Ref, RefCell}, collections::HashMap, rc::{self, Rc, Weak}};
+use std::{
+    borrow::Borrow,
+    cell::{RefCell},
+    collections::HashMap,
+    ptr::NonNull,
+    rc::{Rc, Weak},
+};
 
-use crate::parser::ast::{self, Expr, Ident, Literal, StateRef, Statement};
+use crate::{
+    context::{Span, SqBacktrace},
+    parser::ast::{self, Ident, Literal},
+};
 
 mod walker;
 
 macro_rules! rc_hash_eq {
-    ($t:ty, $value:tt) => {
+    ($t:ty, $value:tt, $ptr:tt) => {
         impl PartialEq for $t {
             fn eq(&self, other: &Self) -> bool {
-                std::ptr::eq(self.0.as_ptr(), other.0.as_ptr())
+                std::ptr::eq($ptr::as_ptr(&self.0), $ptr::as_ptr(&other.0))
             }
         }
         impl Eq for $t {}
         impl std::hash::Hash for $t {
             fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-                self.0.as_ptr().hash(state)
+                $ptr::as_ptr(&self.0).hash(state)
             }
         }
 
@@ -23,16 +32,30 @@ macro_rules! rc_hash_eq {
                 Value::$value(rc)
             }
         }
+    };
+}
+
+enum ExecError {
+    UndefinedVariable(Ident, SqBacktrace),
+    IllegalKeyword(Span, SqBacktrace),
+}
+
+impl ExecError {
+    fn undefined_variable(ident: Ident) -> Self {
+        ExecError::UndefinedVariable(ident, SqBacktrace::new())
     }
 
+    fn illegal_keyword(span: Span) -> Self {
+        ExecError::IllegalKeyword(span, SqBacktrace::new())
+    }
 }
 
 struct Context<'a> {
-    infunc: &'a mut Function
+    infunc: &'a mut FuncRuntime,
 }
 
 impl<'a> Context<'a> {
-    pub fn new(infunc: &'a mut Function) -> Context {
+    pub fn new(infunc: &'a mut FuncRuntime) -> Context {
         Context { infunc }
     }
 }
@@ -92,7 +115,7 @@ impl Value {
 
 #[derive(Debug, Clone)]
 struct ArrayRef(Rc<RefCell<Vec<Value>>>);
-rc_hash_eq!(ArrayRef, Array);
+rc_hash_eq!(ArrayRef, Array, Rc);
 impl ArrayRef {
     fn new(vec: Vec<Value>) -> Self {
         ArrayRef(Rc::new(RefCell::new(vec)))
@@ -100,17 +123,12 @@ impl ArrayRef {
 }
 
 #[derive(Debug, Clone)]
-struct FunctionRef(Rc<RefCell<ast::Function>>);
-rc_hash_eq!(FunctionRef, Function);
-impl FunctionRef {
-    fn new(func: ast::Function) -> Self {
-        FunctionRef(Rc::new(RefCell::new(func)))
-    }
-}
+struct FunctionRef(Rc<FuncLoad>);
+rc_hash_eq!(FunctionRef, Function, Rc);
 
 #[derive(Debug, Clone)]
 struct ObjectRef(Rc<RefCell<Object>>);
-rc_hash_eq!(ObjectRef, Object);
+rc_hash_eq!(ObjectRef, Object, Rc);
 impl ObjectRef {
     fn new(obj: Object) -> Self {
         ObjectRef(Rc::new(RefCell::new(obj)))
@@ -119,7 +137,7 @@ impl ObjectRef {
 
 #[derive(Debug, Clone)]
 struct WeakRef(Weak<RefCell<Object>>);
-rc_hash_eq!(WeakRef, Weak);
+rc_hash_eq!(WeakRef, Weak, Weak);
 impl WeakRef {
     fn new(obj: &ObjectRef) -> Self {
         WeakRef(Rc::downgrade(&obj.0))
@@ -136,34 +154,88 @@ struct Object {
 
 impl Object {
     fn get_field(&self, key: &Value) -> Value {
-        let mut current = self;
-        let mut refs: Vec<Ref<Object>> = Vec::new();
         // TODO: This shouldn't be recursive
-        if let Some(value) = current.slots.get(key) {
+        if let Some(value) = self.slots.get(key) {
             return value.clone();
         }
-        match &current.delegate {
+        match &self.delegate {
             Some(delegate) => {
                 let parent = (*delegate.0).borrow();
                 parent.get_field(key)
-            },
+            }
             None => panic!("Undefined variable: {:?}", key),
         }
     }
 }
 
 #[derive(Debug)]
-struct Function {
-    args: Vec<(Ident, Option<Expr>)>,
-    is_varargs: bool,
-    body: Vec<Statement>,
+struct FuncLoad {
+    ast_fn: NonNull<ast::Function>,
+    default_vals: Vec<Value>,
+}
+
+impl FunctionRef {
+    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>) -> FunctionRef {
+        FunctionRef(Rc::new(FuncLoad {
+            ast_fn: NonNull::from(ast_fn),
+            default_vals,
+        }))
+    }
+}
+
+#[derive(Debug)]
+struct FuncRuntime {
     root: WeakRef,
     env: ObjectRef,
     locals: HashMap<String, Value>,
 }
 
+impl FuncRuntime {
+    fn new(
+        func_ref: &FunctionRef,
+        arg_vals: Vec<Value>,
+        env: ObjectRef,
+        root: WeakRef,
+    ) -> FuncRuntime {
+        let mut locals = HashMap::new();
+        let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
 
-impl Function {
+        let n_arguments = arg_vals.len();
+        let n_parameters = ast_func.args.len();
+        let n_default = func_ref.0.default_vals.len();
+
+        let mut arg_iter = arg_vals.into_iter();
+        let zip_iter = arg_iter
+            .by_ref()
+            .map(Option::Some)
+            .chain(std::iter::repeat(None));
+        for (arg_idx, ((param_name, _), arg_val)) in ast_func.args.iter().zip(zip_iter).enumerate()
+        {
+            let val = if let Some(arg_val) = arg_val {
+                arg_val
+            } else if arg_idx >= n_parameters - n_default {
+                func_ref.0.default_vals[arg_idx - (n_parameters - n_default)].clone()
+            } else {
+                panic!("Not enough arguments")
+            };
+            locals.insert(param_name.clone(), val);
+        }
+
+        if ast_func.is_varargs {
+            let vararg_vec = if n_arguments > n_parameters {
+                arg_iter.collect()
+            } else {
+                Vec::new()
+            };
+            locals.insert(
+                "varargs".to_string(),
+                Value::Array(ArrayRef::new(vararg_vec)),
+            );
+        } else {
+            assert_eq!(arg_iter.next(), None, "Too many arguments");
+        }
+        FuncRuntime { root, env, locals }
+    }
 }
 
 impl From<&Literal> for Value {

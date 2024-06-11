@@ -18,6 +18,7 @@ pub struct Span {
 }
 
 impl Span {
+    // TODO: Should really get rid of this
     pub fn empty() -> Self {
         Self { start: 0, end: 0 }
     }

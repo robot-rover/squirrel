@@ -13,13 +13,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "regexp"
-                },
-                "span": {
-                  "start": 11,
-                  "end": 17
-                }
+                "Ident": [
+                  "regexp",
+                  {
+                    "start": 11,
+                    "end": 17
+                  }
+                ]
               },
               "args": [
                 {
@@ -90,30 +90,24 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "FieldAccess": [
-                    {
-                      "data": {
-                        "Ident": "ex"
-                      },
-                      "span": {
-                        "start": 85,
-                        "end": 87
-                      }
+                "FieldAccess": [
+                  {
+                    "data": {
+                      "Ident": "ex"
                     },
-                    [
-                      "search",
-                      {
-                        "start": 88,
-                        "end": 94
-                      }
-                    ]
+                    "span": {
+                      "start": 85,
+                      "end": 87
+                    }
+                  },
+                  [
+                    "search",
+                    {
+                      "start": 88,
+                      "end": 94
+                    }
                   ]
-                },
-                "span": {
-                  "start": 85,
-                  "end": 94
-                }
+                ]
               },
               "args": [
                 {
@@ -146,43 +140,37 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 104,
-                "end": 109
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 104,
+                  "end": 109
+                }
+              ]
             },
             "args": [
               {
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "string"
-                            },
-                            "span": {
-                              "start": 110,
-                              "end": 116
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "string"
                           },
-                          [
-                            "slice",
-                            {
-                              "start": 117,
-                              "end": 122
-                            }
-                          ]
+                          "span": {
+                            "start": 110,
+                            "end": 116
+                          }
+                        },
+                        [
+                          "slice",
+                          {
+                            "start": 117,
+                            "end": 122
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 110,
-                        "end": 122
-                      }
+                      ]
                     },
                     "args": [
                       {
@@ -265,13 +253,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 160,
-                "end": 165
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 160,
+                  "end": 165
+                }
+              ]
             },
             "args": [
               {
@@ -317,13 +305,13 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "Ident": "regexp"
-                    },
-                    "span": {
-                      "start": 178,
-                      "end": 184
-                    }
+                    "Ident": [
+                      "regexp",
+                      {
+                        "start": 178,
+                        "end": 184
+                      }
+                    ]
                   },
                   "args": [
                     {
@@ -416,30 +404,24 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "FieldAccess": [
-                        {
-                          "data": {
-                            "Ident": "ex"
-                          },
-                          "span": {
-                            "start": 263,
-                            "end": 265
-                          }
+                    "FieldAccess": [
+                      {
+                        "data": {
+                          "Ident": "ex"
                         },
-                        [
-                          "search",
-                          {
-                            "start": 266,
-                            "end": 272
-                          }
-                        ]
+                        "span": {
+                          "start": 263,
+                          "end": 265
+                        }
+                      },
+                      [
+                        "search",
+                        {
+                          "start": 266,
+                          "end": 272
+                        }
                       ]
-                    },
-                    "span": {
-                      "start": 263,
-                      "end": 272
-                    }
+                    ]
                   },
                   "args": [
                     {
@@ -479,43 +461,37 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 282,
-                "end": 287
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 282,
+                  "end": 287
+                }
+              ]
             },
             "args": [
               {
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "string"
-                            },
-                            "span": {
-                              "start": 288,
-                              "end": 294
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "string"
                           },
-                          [
-                            "slice",
-                            {
-                              "start": 295,
-                              "end": 300
-                            }
-                          ]
+                          "span": {
+                            "start": 288,
+                            "end": 294
+                          }
+                        },
+                        [
+                          "slice",
+                          {
+                            "start": 295,
+                            "end": 300
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 288,
-                        "end": 300
-                      }
+                      ]
                     },
                     "args": [
                       {
@@ -598,13 +574,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 339,
-                "end": 344
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 339,
+                  "end": 344
+                }
+              ]
             },
             "args": [
               {

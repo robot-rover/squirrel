@@ -18,16 +18,14 @@
               },
               "args": [
                 [
-                  [
-                    "M",
-                    {
-                      "start": 109,
-                      "end": 110
-                    }
-                  ],
-                  null
+                  "M",
+                  {
+                    "start": 109,
+                    "end": 110
+                  }
                 ]
               ],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -159,13 +157,13 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "data": {
-                                        "Ident": "Ack"
-                                      },
-                                      "span": {
-                                        "start": 174,
-                                        "end": 177
-                                      }
+                                      "Ident": [
+                                        "Ack",
+                                        {
+                                          "start": 174,
+                                          "end": 177
+                                        }
+                                      ]
                                     },
                                     "args": [
                                       {
@@ -244,13 +242,13 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "data": {
-                                  "Ident": "Ack"
-                                },
-                                "span": {
-                                  "start": 203,
-                                  "end": 206
-                                }
+                                "Ident": [
+                                  "Ack",
+                                  {
+                                    "start": 203,
+                                    "end": 206
+                                  }
+                                ]
                               },
                               "args": [
                                 {
@@ -288,13 +286,13 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "data": {
-                                          "Ident": "Ack"
-                                        },
-                                        "span": {
-                                          "start": 214,
-                                          "end": 217
-                                        }
+                                        "Ident": [
+                                          "Ack",
+                                          {
+                                            "start": 214,
+                                            "end": 217
+                                          }
+                                        ]
                                       },
                                       "args": [
                                         {
@@ -409,30 +407,24 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "vargv"
-                            },
-                            "span": {
-                              "start": 250,
-                              "end": 255
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "vargv"
                           },
-                          [
-                            "len",
-                            {
-                              "start": 256,
-                              "end": 259
-                            }
-                          ]
+                          "span": {
+                            "start": 250,
+                            "end": 255
+                          }
+                        },
+                        [
+                          "len",
+                          {
+                            "start": 256,
+                            "end": 259
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 250,
-                        "end": 259
-                      }
+                      ]
                     },
                     "args": []
                   }
@@ -481,51 +473,45 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "data": {
-                                  "FieldAccess": [
-                                    {
-                                      "data": {
-                                        "ArrayAccess": {
-                                          "array": {
-                                            "data": {
-                                              "Ident": "vargv"
-                                            },
-                                            "span": {
-                                              "start": 275,
-                                              "end": 280
+                                "FieldAccess": [
+                                  {
+                                    "data": {
+                                      "ArrayAccess": {
+                                        "array": {
+                                          "data": {
+                                            "Ident": "vargv"
+                                          },
+                                          "span": {
+                                            "start": 275,
+                                            "end": 280
+                                          }
+                                        },
+                                        "index": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 0
                                             }
                                           },
-                                          "index": {
-                                            "data": {
-                                              "Literal": {
-                                                "Integer": 0
-                                              }
-                                            },
-                                            "span": {
-                                              "start": 281,
-                                              "end": 282
-                                            }
+                                          "span": {
+                                            "start": 281,
+                                            "end": 282
                                           }
                                         }
-                                      },
-                                      "span": {
-                                        "start": 280,
-                                        "end": 283
                                       }
                                     },
-                                    [
-                                      "tointeger",
-                                      {
-                                        "start": 284,
-                                        "end": 293
-                                      }
-                                    ]
+                                    "span": {
+                                      "start": 280,
+                                      "end": 283
+                                    }
+                                  },
+                                  [
+                                    "tointeger",
+                                    {
+                                      "start": 284,
+                                      "end": 293
+                                    }
                                   ]
-                                },
-                                "span": {
-                                  "start": 280,
-                                  "end": 293
-                                }
+                                ]
                               },
                               "args": []
                             }
@@ -705,13 +691,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 336,
-                "end": 341
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 336,
+                  "end": 341
+                }
+              ]
             },
             "args": [
               {
@@ -787,13 +773,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 356,
-                "end": 361
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 356,
+                  "end": 361
+                }
+              ]
             },
             "args": [
               {
@@ -857,13 +843,13 @@
                       "data": {
                         "FunctionCall": {
                           "func": {
-                            "data": {
-                              "Ident": "Ack"
-                            },
-                            "span": {
-                              "start": 381,
-                              "end": 384
-                            }
+                            "Ident": [
+                              "Ack",
+                              {
+                                "start": 381,
+                                "end": 384
+                              }
+                            ]
                           },
                           "args": [
                             {

@@ -46,16 +46,14 @@
               },
               "args": [
                 [
-                  [
-                    "rows",
-                    {
-                      "start": 129,
-                      "end": 133
-                    }
-                  ],
-                  null
+                  "rows",
+                  {
+                    "start": 129,
+                    "end": 133
+                  }
                 ]
               ],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -166,30 +164,24 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "data": {
-                                  "FieldAccess": [
-                                    {
-                                      "data": {
-                                        "Ident": "m"
-                                      },
-                                      "span": {
-                                        "start": 184,
-                                        "end": 185
-                                      }
+                                "FieldAccess": [
+                                  {
+                                    "data": {
+                                      "Ident": "m"
                                     },
-                                    [
-                                      "resize",
-                                      {
-                                        "start": 186,
-                                        "end": 192
-                                      }
-                                    ]
+                                    "span": {
+                                      "start": 184,
+                                      "end": 185
+                                    }
+                                  },
+                                  [
+                                    "resize",
+                                    {
+                                      "start": 186,
+                                      "end": 192
+                                    }
                                   ]
-                                },
-                                "span": {
-                                  "start": 184,
-                                  "end": 192
-                                }
+                                ]
                               },
                               "args": [
                                 {
@@ -388,49 +380,43 @@
                                       "data": {
                                         "FunctionCall": {
                                           "func": {
-                                            "data": {
-                                              "FieldAccess": [
-                                                {
-                                                  "data": {
-                                                    "ArrayAccess": {
-                                                      "array": {
-                                                        "data": {
-                                                          "Ident": "m"
-                                                        },
-                                                        "span": {
-                                                          "start": 246,
-                                                          "end": 247
-                                                        }
+                                            "FieldAccess": [
+                                              {
+                                                "data": {
+                                                  "ArrayAccess": {
+                                                    "array": {
+                                                      "data": {
+                                                        "Ident": "m"
                                                       },
-                                                      "index": {
-                                                        "data": {
-                                                          "Ident": "i"
-                                                        },
-                                                        "span": {
-                                                          "start": 248,
-                                                          "end": 249
-                                                        }
+                                                      "span": {
+                                                        "start": 246,
+                                                        "end": 247
+                                                      }
+                                                    },
+                                                    "index": {
+                                                      "data": {
+                                                        "Ident": "i"
+                                                      },
+                                                      "span": {
+                                                        "start": 248,
+                                                        "end": 249
                                                       }
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 247,
-                                                    "end": 250
                                                   }
                                                 },
-                                                [
-                                                  "resize",
-                                                  {
-                                                    "start": 251,
-                                                    "end": 257
-                                                  }
-                                                ]
+                                                "span": {
+                                                  "start": 247,
+                                                  "end": 250
+                                                }
+                                              },
+                                              [
+                                                "resize",
+                                                {
+                                                  "start": 251,
+                                                  "end": 257
+                                                }
                                               ]
-                                            },
-                                            "span": {
-                                              "start": 247,
-                                              "end": 257
-                                            }
+                                            ]
                                           },
                                           "args": [
                                             {
@@ -749,46 +735,35 @@
               },
               "args": [
                 [
-                  [
-                    "rows",
-                    {
-                      "start": 364,
-                      "end": 368
-                    }
-                  ],
-                  null
+                  "rows",
+                  {
+                    "start": 364,
+                    "end": 368
+                  }
                 ],
                 [
-                  [
-                    "cols",
-                    {
-                      "start": 370,
-                      "end": 374
-                    }
-                  ],
-                  null
+                  "cols",
+                  {
+                    "start": 370,
+                    "end": 374
+                  }
                 ],
                 [
-                  [
-                    "m1",
-                    {
-                      "start": 377,
-                      "end": 379
-                    }
-                  ],
-                  null
+                  "m1",
+                  {
+                    "start": 377,
+                    "end": 379
+                  }
                 ],
                 [
-                  [
-                    "m2",
-                    {
-                      "start": 381,
-                      "end": 383
-                    }
-                  ],
-                  null
+                  "m2",
+                  {
+                    "start": 381,
+                    "end": 383
+                  }
                 ]
               ],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -1560,30 +1535,24 @@
                       "data": {
                         "FunctionCall": {
                           "func": {
-                            "data": {
-                              "FieldAccess": [
-                                {
-                                  "data": {
-                                    "Ident": "vargv"
-                                  },
-                                  "span": {
-                                    "start": 628,
-                                    "end": 633
-                                  }
+                            "FieldAccess": [
+                              {
+                                "data": {
+                                  "Ident": "vargv"
                                 },
-                                [
-                                  "len",
-                                  {
-                                    "start": 634,
-                                    "end": 637
-                                  }
-                                ]
+                                "span": {
+                                  "start": 628,
+                                  "end": 633
+                                }
+                              },
+                              [
+                                "len",
+                                {
+                                  "start": 634,
+                                  "end": 637
+                                }
                               ]
-                            },
-                            "span": {
-                              "start": 628,
-                              "end": 637
-                            }
+                            ]
                           },
                           "args": []
                         }
@@ -1615,51 +1584,45 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "ArrayAccess": {
-                                "array": {
-                                  "data": {
-                                    "Ident": "vargv"
-                                  },
-                                  "span": {
-                                    "start": 643,
-                                    "end": 648
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "ArrayAccess": {
+                              "array": {
+                                "data": {
+                                  "Ident": "vargv"
+                                },
+                                "span": {
+                                  "start": 643,
+                                  "end": 648
+                                }
+                              },
+                              "index": {
+                                "data": {
+                                  "Literal": {
+                                    "Integer": 0
                                   }
                                 },
-                                "index": {
-                                  "data": {
-                                    "Literal": {
-                                      "Integer": 0
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 649,
-                                    "end": 650
-                                  }
+                                "span": {
+                                  "start": 649,
+                                  "end": 650
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 648,
-                              "end": 651
                             }
                           },
-                          [
-                            "tointeger",
-                            {
-                              "start": 652,
-                              "end": 661
-                            }
-                          ]
+                          "span": {
+                            "start": 648,
+                            "end": 651
+                          }
+                        },
+                        [
+                          "tointeger",
+                          {
+                            "start": 652,
+                            "end": 661
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 648,
-                        "end": 661
-                      }
+                      ]
                     },
                     "args": []
                   }
@@ -1708,13 +1671,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "mkmatrix"
-                },
-                "span": {
-                  "start": 678,
-                  "end": 686
-                }
+                "Ident": [
+                  "mkmatrix",
+                  {
+                    "start": 678,
+                    "end": 686
+                  }
+                ]
               },
               "args": [
                 {
@@ -1764,13 +1727,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "mkmatrix"
-                },
-                "span": {
-                  "start": 711,
-                  "end": 719
-                }
+                "Ident": [
+                  "mkmatrix",
+                  {
+                    "start": 711,
+                    "end": 719
+                  }
+                ]
               },
               "args": [
                 {
@@ -1820,13 +1783,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "mkmatrix"
-                },
-                "span": {
-                  "start": 744,
-                  "end": 752
-                }
+                "Ident": [
+                  "mkmatrix",
+                  {
+                    "start": 744,
+                    "end": 752
+                  }
+                ]
               },
               "args": [
                 {
@@ -1970,13 +1933,13 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "Ident": "mmult"
-                          },
-                          "span": {
-                            "start": 802,
-                            "end": 807
-                          }
+                          "Ident": [
+                            "mmult",
+                            {
+                              "start": 802,
+                              "end": 807
+                            }
+                          ]
                         },
                         "args": [
                           {
@@ -2058,13 +2021,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 836,
-                "end": 841
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 836,
+                  "end": 841
+                }
+              ]
             },
             "args": [
               {

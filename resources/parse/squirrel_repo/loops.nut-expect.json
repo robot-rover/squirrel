@@ -65,28 +65,22 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "FieldAccess": [
+              "FieldAccess": [
+                {
+                  "data": "Globals",
+                  "span": {
+                    "start": 33,
+                    "end": 35
+                  }
+                },
+                [
+                  "print",
                   {
-                    "data": "Globals",
-                    "span": {
-                      "start": 33,
-                      "end": 35
-                    }
-                  },
-                  [
-                    "print",
-                    {
-                      "start": 35,
-                      "end": 40
-                    }
-                  ]
+                    "start": 35,
+                    "end": 40
+                  }
                 ]
-              },
-              "span": {
-                "start": 33,
-                "end": 40
-              }
+              ]
             },
             "args": [
               {
@@ -149,28 +143,22 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "FieldAccess": [
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 84,
+                                "end": 86
+                              }
+                            },
+                            [
+                              "print",
                               {
-                                "data": "Globals",
-                                "span": {
-                                  "start": 84,
-                                  "end": 86
-                                }
-                              },
-                              [
-                                "print",
-                                {
-                                  "start": 86,
-                                  "end": 91
-                                }
-                              ]
+                                "start": 86,
+                                "end": 91
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 84,
-                            "end": 91
-                          }
+                          ]
                         },
                         "args": [
                           {
@@ -302,28 +290,22 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "FieldAccess": [
+              "FieldAccess": [
+                {
+                  "data": "Globals",
+                  "span": {
+                    "start": 123,
+                    "end": 125
+                  }
+                },
+                [
+                  "print",
                   {
-                    "data": "Globals",
-                    "span": {
-                      "start": 123,
-                      "end": 125
-                    }
-                  },
-                  [
-                    "print",
-                    {
-                      "start": 125,
-                      "end": 130
-                    }
-                  ]
+                    "start": 125,
+                    "end": 130
+                  }
                 ]
-              },
-              "span": {
-                "start": 123,
-                "end": 130
-              }
+              ]
             },
             "args": [
               {
@@ -399,30 +381,24 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "arr"
-                            },
-                            "span": {
-                              "start": 158,
-                              "end": 161
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "arr"
                           },
-                          [
-                            "len",
-                            {
-                              "start": 162,
-                              "end": 165
-                            }
-                          ]
+                          "span": {
+                            "start": 158,
+                            "end": 161
+                          }
+                        },
+                        [
+                          "len",
+                          {
+                            "start": 162,
+                            "end": 165
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 158,
-                        "end": 165
-                      }
+                      ]
                     },
                     "args": []
                   }
@@ -487,28 +463,22 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "FieldAccess": [
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 180,
+                                "end": 182
+                              }
+                            },
+                            [
+                              "print",
                               {
-                                "data": "Globals",
-                                "span": {
-                                  "start": 180,
-                                  "end": 182
-                                }
-                              },
-                              [
-                                "print",
-                                {
-                                  "start": 182,
-                                  "end": 187
-                                }
-                              ]
+                                "start": 182,
+                                "end": 187
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 180,
-                            "end": 187
-                          }
+                          ]
                         },
                         "args": [
                           {
@@ -659,28 +629,22 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "FieldAccess": [
+              "FieldAccess": [
+                {
+                  "data": "Globals",
+                  "span": {
+                    "start": 222,
+                    "end": 224
+                  }
+                },
+                [
+                  "print",
                   {
-                    "data": "Globals",
-                    "span": {
-                      "start": 222,
-                      "end": 224
-                    }
-                  },
-                  [
-                    "print",
-                    {
-                      "start": 224,
-                      "end": 229
-                    }
-                  ]
+                    "start": 224,
+                    "end": 229
+                  }
                 ]
-              },
-              "span": {
-                "start": 222,
-                "end": 229
-              }
+              ]
             },
             "args": [
               {
@@ -756,30 +720,24 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "arr"
-                            },
-                            "span": {
-                              "start": 262,
-                              "end": 265
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "arr"
                           },
-                          [
-                            "len",
-                            {
-                              "start": 266,
-                              "end": 269
-                            }
-                          ]
+                          "span": {
+                            "start": 262,
+                            "end": 265
+                          }
+                        },
+                        [
+                          "len",
+                          {
+                            "start": 266,
+                            "end": 269
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 262,
-                        "end": 269
-                      }
+                      ]
                     },
                     "args": []
                   }
@@ -805,28 +763,22 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "FieldAccess": [
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 279,
+                                "end": 281
+                              }
+                            },
+                            [
+                              "print",
                               {
-                                "data": "Globals",
-                                "span": {
-                                  "start": 279,
-                                  "end": 281
-                                }
-                              },
-                              [
-                                "print",
-                                {
-                                  "start": 281,
-                                  "end": 286
-                                }
-                              ]
+                                "start": 281,
+                                "end": 286
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 279,
-                            "end": 286
-                          }
+                          ]
                         },
                         "args": [
                           {
@@ -1016,28 +968,22 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "FieldAccess": [
+              "FieldAccess": [
+                {
+                  "data": "Globals",
+                  "span": {
+                    "start": 330,
+                    "end": 332
+                  }
+                },
+                [
+                  "print",
                   {
-                    "data": "Globals",
-                    "span": {
-                      "start": 330,
-                      "end": 332
-                    }
-                  },
-                  [
-                    "print",
-                    {
-                      "start": 332,
-                      "end": 337
-                    }
-                  ]
+                    "start": 332,
+                    "end": 337
+                  }
                 ]
-              },
-              "span": {
-                "start": 330,
-                "end": 337
-              }
+              ]
             },
             "args": [
               {
@@ -1119,28 +1065,22 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "FieldAccess": [
+                    "FieldAccess": [
+                      {
+                        "data": "Globals",
+                        "span": {
+                          "start": 374,
+                          "end": 376
+                        }
+                      },
+                      [
+                        "print",
                         {
-                          "data": "Globals",
-                          "span": {
-                            "start": 374,
-                            "end": 376
-                          }
-                        },
-                        [
-                          "print",
-                          {
-                            "start": 376,
-                            "end": 381
-                          }
-                        ]
+                          "start": 376,
+                          "end": 381
+                        }
                       ]
-                    },
-                    "span": {
-                      "start": 374,
-                      "end": 381
-                    }
+                    ]
                   },
                   "args": [
                     {
@@ -1337,30 +1277,24 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "Ident": "arr"
-                            },
-                            "span": {
-                              "start": 432,
-                              "end": 435
-                            }
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "Ident": "arr"
                           },
-                          [
-                            "len",
-                            {
-                              "start": 436,
-                              "end": 439
-                            }
-                          ]
+                          "span": {
+                            "start": 432,
+                            "end": 435
+                          }
+                        },
+                        [
+                          "len",
+                          {
+                            "start": 436,
+                            "end": 439
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 432,
-                        "end": 439
-                      }
+                      ]
                     },
                     "args": []
                   }

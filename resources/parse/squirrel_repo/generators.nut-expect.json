@@ -17,6 +17,7 @@
                 "end": 112
               },
               "args": [],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -350,13 +351,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "gen_random"
-                },
-                "span": {
-                  "start": 327,
-                  "end": 337
-                }
+                "Ident": [
+                  "gen_random",
+                  {
+                    "start": 327,
+                    "end": 337
+                  }
+                ]
               },
               "args": [
                 {
@@ -391,13 +392,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 345,
-                "end": 350
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 345,
+                  "end": 350
+                }
+              ]
             },
             "args": [
               {
@@ -532,13 +533,13 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "data": {
-                      "Ident": "print"
-                    },
-                    "span": {
-                      "start": 400,
-                      "end": 405
-                    }
+                    "Ident": [
+                      "print",
+                      {
+                        "start": 400,
+                        "end": 405
+                      }
+                    ]
                   },
                   "args": [
                     {
@@ -632,13 +633,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 433,
-                "end": 438
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 433,
+                  "end": 438
+                }
+              ]
             },
             "args": [
               {
@@ -684,6 +685,7 @@
                 "end": 463
               },
               "args": [],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -1094,13 +1096,13 @@
           "data": {
             "FunctionCall": {
               "func": {
-                "data": {
-                  "Ident": "fiboz"
-                },
-                "span": {
-                  "start": 679,
-                  "end": 684
-                }
+                "Ident": [
+                  "fiboz",
+                  {
+                    "start": 679,
+                    "end": 684
+                  }
+                ]
               },
               "args": [
                 {
@@ -1131,28 +1133,22 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "data": {
-                            "FieldAccess": [
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 696,
+                                "end": 698
+                              }
+                            },
+                            [
+                              "print",
                               {
-                                "data": "Globals",
-                                "span": {
-                                  "start": 696,
-                                  "end": 698
-                                }
-                              },
-                              [
-                                "print",
-                                {
-                                  "start": 698,
-                                  "end": 703
-                                }
-                              ]
+                                "start": 698,
+                                "end": 703
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 696,
-                            "end": 703
-                          }
+                          ]
                         },
                         "args": [
                           {

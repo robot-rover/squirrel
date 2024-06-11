@@ -1,6 +1,6 @@
 use std::convert::TryFrom;
 
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize};
 
 use crate::context::Span;
 
@@ -20,7 +20,9 @@ impl PartialEq for Literal {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (Literal::Integer(lhs), Literal::Integer(rhs)) => lhs == rhs,
-            (Literal::Number(lhs), Literal::Number(rhs)) => (lhs.is_nan() && rhs.is_nan()) || (lhs == rhs),
+            (Literal::Number(lhs), Literal::Number(rhs)) => {
+                (lhs.is_nan() && rhs.is_nan()) || (lhs == rhs)
+            }
             (Literal::String(lhs), Literal::String(rhs)) => lhs == rhs,
             (Literal::Null, Literal::Null) => true,
             _ => false,
@@ -81,7 +83,8 @@ pub enum UnaryRefOp {
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Function {
     pub keyword_span: Span,
-    pub args: Vec<(Ident, Option<Expr>)>,
+    pub args: Vec<Ident>,
+    pub default_expr: Vec<Expr>,
     pub is_varargs: bool,
     pub body: StateRef,
 }
@@ -457,11 +460,7 @@ impl Expr {
     }
 
     pub fn function_call(func: AssignTarget, args: Vec<Expr>, call_span: Span) -> Self {
-        ExprData::FunctionCall {
-            func,
-            args,
-        }
-        .spanning(call_span)
+        ExprData::FunctionCall { func, args }.spanning(call_span)
     }
 
     pub fn array_access(array: Expr, index: Expr, start_span: Span, end_span: Span) -> Self {

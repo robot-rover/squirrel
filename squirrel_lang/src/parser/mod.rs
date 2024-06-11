@@ -486,6 +486,7 @@ fn parse_function_args_body<'s>(
         other => return Err(ParseError::unexpected_token(other, ctx)),
     };
     let mut args = Vec::new();
+    let mut default_expr = Vec::new();
     let mut is_varargs = false;
     loop {
         let (next, next_ctx) = tokens.next_token(true)?;
@@ -496,12 +497,17 @@ fn parse_function_args_body<'s>(
                 is_varargs = true;
             }
             Token::Identifier(name) if !is_varargs => {
-                let mut default_val = None;
                 if let (Token::Assign, _) = tokens.peek_token(true)? {
                     tokens.skip_token();
-                    default_val = Some(parse_expr(tokens, |tok| {
+                    let default_val = parse_expr(tokens, |tok| {
                         tok == &Token::Comma || tok == &Token::RightParenthesis
-                    })?);
+                    })?;
+                    default_expr.push(default_val);
+                } else if !default_expr.is_empty() {
+                    return Err(ParseError::syntax_error(
+                        format!("Cannot have non-default arguments after default arguments"),
+                        next_ctx,
+                    ));
                 }
 
                 let (term, ctx) = tokens.next_token(true)?;
@@ -510,7 +516,7 @@ fn parse_function_args_body<'s>(
                     Token::RightParenthesis => break,
                     other => return Err(ParseError::unexpected_token(other, ctx)),
                 }
-                args.push(((name, next_ctx), default_val));
+                args.push((name, next_ctx));
             }
             other => return Err(ParseError::unexpected_token(other, ctx)),
         }
@@ -519,6 +525,7 @@ fn parse_function_args_body<'s>(
     let body = parse_statement(tokens)?;
     Ok(Function {
         args,
+        default_expr,
         is_varargs,
         body: Box::new(body),
         keyword_span,
@@ -609,7 +616,7 @@ mod error {
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
+    
 
     use crate::test_foreach;
     use crate::test_util::exchange_data;
@@ -619,7 +626,10 @@ mod tests {
     test_foreach!(sample_test);
 
     fn sample_test(file_name: &str, file_contents: &str) {
-        let actual_ast = parse(file_contents, file_name.to_string()).unwrap();
+        let actual_ast = match parse(file_contents, file_name.to_string()) {
+            Ok(ast) => ast,
+            Err(err) => panic!("{}", err)
+        };
         let expect_ast = exchange_data("parse", file_name, &actual_ast);
 
         // TODO: Have a more useful comparison for these trees

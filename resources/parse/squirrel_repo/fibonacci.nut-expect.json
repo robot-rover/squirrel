@@ -17,6 +17,7 @@
                 "end": 104
               },
               "args": [],
+              "default_expr": [],
               "is_varargs": false,
               "body": {
                 "data": {
@@ -98,13 +99,13 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "data": {
-                                        "Ident": "fib"
-                                      },
-                                      "span": {
-                                        "start": 149,
-                                        "end": 152
-                                      }
+                                      "Ident": [
+                                        "fib",
+                                        {
+                                          "start": 149,
+                                          "end": 152
+                                        }
+                                      ]
                                     },
                                     "args": [
                                       {
@@ -150,13 +151,13 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "data": {
-                                        "Ident": "fib"
-                                      },
-                                      "span": {
-                                        "start": 160,
-                                        "end": 163
-                                      }
+                                      "Ident": [
+                                        "fib",
+                                        {
+                                          "start": 160,
+                                          "end": 163
+                                        }
+                                      ]
                                     },
                                     "args": [
                                       {
@@ -253,30 +254,24 @@
                       "data": {
                         "FunctionCall": {
                           "func": {
-                            "data": {
-                              "FieldAccess": [
-                                {
-                                  "data": {
-                                    "Ident": "vargv"
-                                  },
-                                  "span": {
-                                    "start": 182,
-                                    "end": 187
-                                  }
+                            "FieldAccess": [
+                              {
+                                "data": {
+                                  "Ident": "vargv"
                                 },
-                                [
-                                  "len",
-                                  {
-                                    "start": 188,
-                                    "end": 191
-                                  }
-                                ]
+                                "span": {
+                                  "start": 182,
+                                  "end": 187
+                                }
+                              },
+                              [
+                                "len",
+                                {
+                                  "start": 188,
+                                  "end": 191
+                                }
                               ]
-                            },
-                            "span": {
-                              "start": 182,
-                              "end": 191
-                            }
+                            ]
                           },
                           "args": []
                         }
@@ -308,51 +303,45 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "data": {
-                        "FieldAccess": [
-                          {
-                            "data": {
-                              "ArrayAccess": {
-                                "array": {
-                                  "data": {
-                                    "Ident": "vargv"
-                                  },
-                                  "span": {
-                                    "start": 197,
-                                    "end": 202
+                      "FieldAccess": [
+                        {
+                          "data": {
+                            "ArrayAccess": {
+                              "array": {
+                                "data": {
+                                  "Ident": "vargv"
+                                },
+                                "span": {
+                                  "start": 197,
+                                  "end": 202
+                                }
+                              },
+                              "index": {
+                                "data": {
+                                  "Literal": {
+                                    "Integer": 0
                                   }
                                 },
-                                "index": {
-                                  "data": {
-                                    "Literal": {
-                                      "Integer": 0
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 203,
-                                    "end": 204
-                                  }
+                                "span": {
+                                  "start": 203,
+                                  "end": 204
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 202,
-                              "end": 205
                             }
                           },
-                          [
-                            "tointeger",
-                            {
-                              "start": 206,
-                              "end": 215
-                            }
-                          ]
+                          "span": {
+                            "start": 202,
+                            "end": 205
+                          }
+                        },
+                        [
+                          "tointeger",
+                          {
+                            "start": 206,
+                            "end": 215
+                          }
                         ]
-                      },
-                      "span": {
-                        "start": 202,
-                        "end": 215
-                      }
+                      ]
                     },
                     "args": []
                   }
@@ -393,13 +382,13 @@
         "data": {
           "FunctionCall": {
             "func": {
-              "data": {
-                "Ident": "print"
-              },
-              "span": {
-                "start": 221,
-                "end": 226
-              }
+              "Ident": [
+                "print",
+                {
+                  "start": 221,
+                  "end": 226
+                }
+              ]
             },
             "args": [
               {
@@ -410,13 +399,13 @@
                       "data": {
                         "FunctionCall": {
                           "func": {
-                            "data": {
-                              "Ident": "fib"
-                            },
-                            "span": {
-                              "start": 227,
-                              "end": 230
-                            }
+                            "Ident": [
+                              "fib",
+                              {
+                                "start": 227,
+                                "end": 230
+                              }
+                            ]
                           },
                           "args": [
                             {
