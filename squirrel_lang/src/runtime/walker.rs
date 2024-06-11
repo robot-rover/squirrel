@@ -25,16 +25,15 @@ impl From<ExecError> for FlowControl {
     }
 }
 
-fn run(tree: Vec<Statement>) -> ExprResult {
+fn run(tree: Statement) -> ExprResult {
     let root = init_root();
     let mut function = FuncRuntime {
         root: WeakRef::new(&root),
         env: root,
         locals: HashMap::new(),
     };
-    let body = Statement::block(tree, Span::empty(), Span::empty());
 
-    run_function(&mut function, &body)
+    run_function(&mut function, &tree)
 }
 
 fn init_root() -> ObjectRef {
@@ -227,4 +226,30 @@ fn run_binary_op(context: &mut Context, op: &BinaryOp, lhs: &Expr, rhs: &Expr) -
 
 fn run_assign(context: &mut Context, assign: &Assign) -> ExprResult {
     todo!()
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::{parser::parse, test_foreach};
+    use crate::test_util::exchange_data;
+
+    use super::*;
+
+    // test_foreach!(sample_test);
+
+    fn sample_test(file_name: &str, file_contents: &str) {
+        let actual_ast = match parse(file_contents, file_name.to_string()) {
+            Ok(ast) => ast,
+            Err(err) => panic!("{}", err)
+        };
+
+        let result = match run(actual_ast) {
+            Ok(val) => val,
+            Err(err) => panic!("{:?}", err)
+        };
+
+        // let expect_ast = exchange_data("parse", file_name, &actual_ast);
+        // TODO: Have a more useful comparison for these trees
+        // assert_eq!(actual_ast, expect_ast);
+    }
 }

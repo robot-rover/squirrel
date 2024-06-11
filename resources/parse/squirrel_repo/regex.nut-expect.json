@@ -1,315 +1,25 @@
-[
-  {
-    "data": {
-      "LocalDec": [
-        [
-          "ex",
-          {
-            "start": 6,
-            "end": 8
-          }
-        ],
-        {
-          "data": {
-            "FunctionCall": {
-              "func": {
-                "Ident": [
-                  "regexp",
-                  {
-                    "start": 11,
-                    "end": 17
-                  }
-                ]
-              },
-              "args": [
-                {
-                  "data": {
-                    "Literal": {
-                      "String": "[a-zA-Z]+"
-                    }
-                  },
-                  "span": {
-                    "start": 18,
-                    "end": 29
-                  }
-                }
-              ]
-            }
-          },
-          "span": {
-            "start": 17,
-            "end": 30
-          }
-        }
-      ]
-    },
-    "span": {
-      "start": 0,
-      "end": 30
-    }
-  },
-  {
-    "data": {
-      "LocalDec": [
-        [
-          "string",
-          {
-            "start": 38,
-            "end": 44
-          }
-        ],
-        {
-          "data": {
-            "Literal": {
-              "String": "123 Test; strlen(str);"
-            }
-          },
-          "span": {
-            "start": 47,
-            "end": 71
-          }
-        }
-      ]
-    },
-    "span": {
-      "start": 32,
-      "end": 71
-    }
-  },
-  {
-    "data": {
-      "LocalDec": [
-        [
-          "res",
-          {
-            "start": 79,
-            "end": 82
-          }
-        ],
-        {
-          "data": {
-            "FunctionCall": {
-              "func": {
-                "FieldAccess": [
-                  {
-                    "data": {
-                      "Ident": "ex"
-                    },
-                    "span": {
-                      "start": 85,
-                      "end": 87
-                    }
-                  },
-                  [
-                    "search",
-                    {
-                      "start": 88,
-                      "end": 94
-                    }
-                  ]
-                ]
-              },
-              "args": [
-                {
-                  "data": {
-                    "Ident": "string"
-                  },
-                  "span": {
-                    "start": 95,
-                    "end": 101
-                  }
-                }
-              ]
-            }
-          },
-          "span": {
-            "start": 94,
-            "end": 102
-          }
-        }
-      ]
-    },
-    "span": {
-      "start": 73,
-      "end": 102
-    }
-  },
-  {
-    "data": {
-      "Expr": {
+{
+  "data": {
+    "Block": [
+      {
         "data": {
-          "FunctionCall": {
-            "func": {
-              "Ident": [
-                "print",
-                {
-                  "start": 104,
-                  "end": 109
-                }
-              ]
-            },
-            "args": [
+          "LocalDec": [
+            [
+              "ex",
               {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "FieldAccess": [
-                        {
-                          "data": {
-                            "Ident": "string"
-                          },
-                          "span": {
-                            "start": 110,
-                            "end": 116
-                          }
-                        },
-                        [
-                          "slice",
-                          {
-                            "start": 117,
-                            "end": 122
-                          }
-                        ]
-                      ]
-                    },
-                    "args": [
-                      {
-                        "data": {
-                          "FieldAccess": [
-                            {
-                              "data": {
-                                "Ident": "res"
-                              },
-                              "span": {
-                                "start": 123,
-                                "end": 126
-                              }
-                            },
-                            [
-                              "begin",
-                              {
-                                "start": 127,
-                                "end": 132
-                              }
-                            ]
-                          ]
-                        },
-                        "span": {
-                          "start": 123,
-                          "end": 132
-                        }
-                      },
-                      {
-                        "data": {
-                          "FieldAccess": [
-                            {
-                              "data": {
-                                "Ident": "res"
-                              },
-                              "span": {
-                                "start": 133,
-                                "end": 136
-                              }
-                            },
-                            [
-                              "end",
-                              {
-                                "start": 137,
-                                "end": 140
-                              }
-                            ]
-                          ]
-                        },
-                        "span": {
-                          "start": 133,
-                          "end": 140
-                        }
-                      }
-                    ]
-                  }
-                },
-                "span": {
-                  "start": 122,
-                  "end": 141
-                }
+                "start": 6,
+                "end": 8
               }
-            ]
-          }
-        },
-        "span": {
-          "start": 109,
-          "end": 142
-        }
-      }
-    },
-    "span": {
-      "start": 109,
-      "end": 142
-    }
-  },
-  {
-    "data": {
-      "Expr": {
-        "data": {
-          "FunctionCall": {
-            "func": {
-              "Ident": [
-                "print",
-                {
-                  "start": 160,
-                  "end": 165
-                }
-              ]
-            },
-            "args": [
-              {
-                "data": {
-                  "Literal": {
-                    "String": "\n"
-                  }
-                },
-                "span": {
-                  "start": 166,
-                  "end": 170
-                }
-              }
-            ]
-          }
-        },
-        "span": {
-          "start": 165,
-          "end": 171
-        }
-      }
-    },
-    "span": {
-      "start": 165,
-      "end": 171
-    }
-  },
-  {
-    "data": {
-      "Expr": {
-        "data": {
-          "Assign": {
-            "target": {
-              "Ident": [
-                "ex",
-                {
-                  "start": 173,
-                  "end": 175
-                }
-              ]
-            },
-            "value": {
+            ],
+            {
               "data": {
                 "FunctionCall": {
                   "func": {
                     "Ident": [
                       "regexp",
                       {
-                        "start": 178,
-                        "end": 184
+                        "start": 11,
+                        "end": 17
                       }
                     ]
                   },
@@ -317,90 +27,68 @@
                     {
                       "data": {
                         "Literal": {
-                          "String": "\\m()"
+                          "String": "[a-zA-Z]+"
                         }
                       },
                       "span": {
-                        "start": 185,
-                        "end": 192
+                        "start": 18,
+                        "end": 29
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 184,
-                "end": 193
+                "start": 17,
+                "end": 30
               }
-            },
-            "kind": "Normal"
-          }
+            }
+          ]
         },
         "span": {
-          "start": 173,
-          "end": 193
+          "start": 0,
+          "end": 30
         }
-      }
-    },
-    "span": {
-      "start": 173,
-      "end": 193
-    }
-  },
-  {
-    "data": {
-      "Expr": {
+      },
+      {
         "data": {
-          "Assign": {
-            "target": {
-              "Ident": [
-                "string",
-                {
-                  "start": 195,
-                  "end": 201
-                }
-              ]
-            },
-            "value": {
+          "LocalDec": [
+            [
+              "string",
+              {
+                "start": 38,
+                "end": 44
+              }
+            ],
+            {
               "data": {
                 "Literal": {
-                  "String": "123 Test; doSomething(str, getTemp(), (a+(b/c)));"
+                  "String": "123 Test; strlen(str);"
                 }
               },
               "span": {
-                "start": 204,
-                "end": 255
+                "start": 47,
+                "end": 71
               }
-            },
-            "kind": "Normal"
-          }
+            }
+          ]
         },
         "span": {
-          "start": 195,
-          "end": 255
+          "start": 32,
+          "end": 71
         }
-      }
-    },
-    "span": {
-      "start": 195,
-      "end": 255
-    }
-  },
-  {
-    "data": {
-      "Expr": {
+      },
+      {
         "data": {
-          "Assign": {
-            "target": {
-              "Ident": [
-                "res",
-                {
-                  "start": 257,
-                  "end": 260
-                }
-              ]
-            },
-            "value": {
+          "LocalDec": [
+            [
+              "res",
+              {
+                "start": 79,
+                "end": 82
+              }
+            ],
+            {
               "data": {
                 "FunctionCall": {
                   "func": {
@@ -410,15 +98,15 @@
                           "Ident": "ex"
                         },
                         "span": {
-                          "start": 263,
-                          "end": 265
+                          "start": 85,
+                          "end": 87
                         }
                       },
                       [
                         "search",
                         {
-                          "start": 266,
-                          "end": 272
+                          "start": 88,
+                          "end": 94
                         }
                       ]
                     ]
@@ -429,172 +117,492 @@
                         "Ident": "string"
                       },
                       "span": {
-                        "start": 273,
-                        "end": 279
+                        "start": 95,
+                        "end": 101
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 272,
-                "end": 280
+                "start": 94,
+                "end": 102
+              }
+            }
+          ]
+        },
+        "span": {
+          "start": 73,
+          "end": 102
+        }
+      },
+      {
+        "data": {
+          "Expr": {
+            "data": {
+              "FunctionCall": {
+                "func": {
+                  "Ident": [
+                    "print",
+                    {
+                      "start": 104,
+                      "end": 109
+                    }
+                  ]
+                },
+                "args": [
+                  {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "FieldAccess": [
+                            {
+                              "data": {
+                                "Ident": "string"
+                              },
+                              "span": {
+                                "start": 110,
+                                "end": 116
+                              }
+                            },
+                            [
+                              "slice",
+                              {
+                                "start": 117,
+                                "end": 122
+                              }
+                            ]
+                          ]
+                        },
+                        "args": [
+                          {
+                            "data": {
+                              "FieldAccess": [
+                                {
+                                  "data": {
+                                    "Ident": "res"
+                                  },
+                                  "span": {
+                                    "start": 123,
+                                    "end": 126
+                                  }
+                                },
+                                [
+                                  "begin",
+                                  {
+                                    "start": 127,
+                                    "end": 132
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 123,
+                              "end": 132
+                            }
+                          },
+                          {
+                            "data": {
+                              "FieldAccess": [
+                                {
+                                  "data": {
+                                    "Ident": "res"
+                                  },
+                                  "span": {
+                                    "start": 133,
+                                    "end": 136
+                                  }
+                                },
+                                [
+                                  "end",
+                                  {
+                                    "start": 137,
+                                    "end": 140
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 133,
+                              "end": 140
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 122,
+                      "end": 141
+                    }
+                  }
+                ]
               }
             },
-            "kind": "Normal"
+            "span": {
+              "start": 109,
+              "end": 142
+            }
+          }
+        },
+        "span": {
+          "start": 109,
+          "end": 142
+        }
+      },
+      {
+        "data": {
+          "Expr": {
+            "data": {
+              "FunctionCall": {
+                "func": {
+                  "Ident": [
+                    "print",
+                    {
+                      "start": 160,
+                      "end": 165
+                    }
+                  ]
+                },
+                "args": [
+                  {
+                    "data": {
+                      "Literal": {
+                        "String": "\n"
+                      }
+                    },
+                    "span": {
+                      "start": 166,
+                      "end": 170
+                    }
+                  }
+                ]
+              }
+            },
+            "span": {
+              "start": 165,
+              "end": 171
+            }
+          }
+        },
+        "span": {
+          "start": 165,
+          "end": 171
+        }
+      },
+      {
+        "data": {
+          "Expr": {
+            "data": {
+              "Assign": {
+                "target": {
+                  "Ident": [
+                    "ex",
+                    {
+                      "start": 173,
+                      "end": 175
+                    }
+                  ]
+                },
+                "value": {
+                  "data": {
+                    "FunctionCall": {
+                      "func": {
+                        "Ident": [
+                          "regexp",
+                          {
+                            "start": 178,
+                            "end": 184
+                          }
+                        ]
+                      },
+                      "args": [
+                        {
+                          "data": {
+                            "Literal": {
+                              "String": "\\m()"
+                            }
+                          },
+                          "span": {
+                            "start": 185,
+                            "end": 192
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 184,
+                    "end": 193
+                  }
+                },
+                "kind": "Normal"
+              }
+            },
+            "span": {
+              "start": 173,
+              "end": 193
+            }
+          }
+        },
+        "span": {
+          "start": 173,
+          "end": 193
+        }
+      },
+      {
+        "data": {
+          "Expr": {
+            "data": {
+              "Assign": {
+                "target": {
+                  "Ident": [
+                    "string",
+                    {
+                      "start": 195,
+                      "end": 201
+                    }
+                  ]
+                },
+                "value": {
+                  "data": {
+                    "Literal": {
+                      "String": "123 Test; doSomething(str, getTemp(), (a+(b/c)));"
+                    }
+                  },
+                  "span": {
+                    "start": 204,
+                    "end": 255
+                  }
+                },
+                "kind": "Normal"
+              }
+            },
+            "span": {
+              "start": 195,
+              "end": 255
+            }
+          }
+        },
+        "span": {
+          "start": 195,
+          "end": 255
+        }
+      },
+      {
+        "data": {
+          "Expr": {
+            "data": {
+              "Assign": {
+                "target": {
+                  "Ident": [
+                    "res",
+                    {
+                      "start": 257,
+                      "end": 260
+                    }
+                  ]
+                },
+                "value": {
+                  "data": {
+                    "FunctionCall": {
+                      "func": {
+                        "FieldAccess": [
+                          {
+                            "data": {
+                              "Ident": "ex"
+                            },
+                            "span": {
+                              "start": 263,
+                              "end": 265
+                            }
+                          },
+                          [
+                            "search",
+                            {
+                              "start": 266,
+                              "end": 272
+                            }
+                          ]
+                        ]
+                      },
+                      "args": [
+                        {
+                          "data": {
+                            "Ident": "string"
+                          },
+                          "span": {
+                            "start": 273,
+                            "end": 279
+                          }
+                        }
+                      ]
+                    }
+                  },
+                  "span": {
+                    "start": 272,
+                    "end": 280
+                  }
+                },
+                "kind": "Normal"
+              }
+            },
+            "span": {
+              "start": 257,
+              "end": 280
+            }
           }
         },
         "span": {
           "start": 257,
           "end": 280
         }
-      }
-    },
-    "span": {
-      "start": 257,
-      "end": 280
-    }
-  },
-  {
-    "data": {
-      "Expr": {
+      },
+      {
         "data": {
-          "FunctionCall": {
-            "func": {
-              "Ident": [
-                "print",
-                {
-                  "start": 282,
-                  "end": 287
-                }
-              ]
-            },
-            "args": [
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "FieldAccess": [
-                        {
-                          "data": {
-                            "Ident": "string"
-                          },
-                          "span": {
-                            "start": 288,
-                            "end": 294
-                          }
+          "Expr": {
+            "data": {
+              "FunctionCall": {
+                "func": {
+                  "Ident": [
+                    "print",
+                    {
+                      "start": 282,
+                      "end": 287
+                    }
+                  ]
+                },
+                "args": [
+                  {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "FieldAccess": [
+                            {
+                              "data": {
+                                "Ident": "string"
+                              },
+                              "span": {
+                                "start": 288,
+                                "end": 294
+                              }
+                            },
+                            [
+                              "slice",
+                              {
+                                "start": 295,
+                                "end": 300
+                              }
+                            ]
+                          ]
                         },
-                        [
-                          "slice",
+                        "args": [
                           {
-                            "start": 295,
-                            "end": 300
+                            "data": {
+                              "FieldAccess": [
+                                {
+                                  "data": {
+                                    "Ident": "res"
+                                  },
+                                  "span": {
+                                    "start": 301,
+                                    "end": 304
+                                  }
+                                },
+                                [
+                                  "begin",
+                                  {
+                                    "start": 305,
+                                    "end": 310
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 301,
+                              "end": 310
+                            }
+                          },
+                          {
+                            "data": {
+                              "FieldAccess": [
+                                {
+                                  "data": {
+                                    "Ident": "res"
+                                  },
+                                  "span": {
+                                    "start": 311,
+                                    "end": 314
+                                  }
+                                },
+                                [
+                                  "end",
+                                  {
+                                    "start": 315,
+                                    "end": 318
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 311,
+                              "end": 318
+                            }
                           }
                         ]
-                      ]
-                    },
-                    "args": [
-                      {
-                        "data": {
-                          "FieldAccess": [
-                            {
-                              "data": {
-                                "Ident": "res"
-                              },
-                              "span": {
-                                "start": 301,
-                                "end": 304
-                              }
-                            },
-                            [
-                              "begin",
-                              {
-                                "start": 305,
-                                "end": 310
-                              }
-                            ]
-                          ]
-                        },
-                        "span": {
-                          "start": 301,
-                          "end": 310
-                        }
-                      },
-                      {
-                        "data": {
-                          "FieldAccess": [
-                            {
-                              "data": {
-                                "Ident": "res"
-                              },
-                              "span": {
-                                "start": 311,
-                                "end": 314
-                              }
-                            },
-                            [
-                              "end",
-                              {
-                                "start": 315,
-                                "end": 318
-                              }
-                            ]
-                          ]
-                        },
-                        "span": {
-                          "start": 311,
-                          "end": 318
-                        }
                       }
-                    ]
+                    },
+                    "span": {
+                      "start": 300,
+                      "end": 319
+                    }
                   }
-                },
-                "span": {
-                  "start": 300,
-                  "end": 319
-                }
+                ]
               }
-            ]
+            },
+            "span": {
+              "start": 287,
+              "end": 320
+            }
           }
         },
         "span": {
           "start": 287,
           "end": 320
         }
-      }
-    },
-    "span": {
-      "start": 287,
-      "end": 320
-    }
-  },
-  {
-    "data": {
-      "Expr": {
+      },
+      {
         "data": {
-          "FunctionCall": {
-            "func": {
-              "Ident": [
-                "print",
-                {
-                  "start": 339,
-                  "end": 344
-                }
-              ]
-            },
-            "args": [
-              {
-                "data": {
-                  "Literal": {
-                    "String": "\n"
-                  }
+          "Expr": {
+            "data": {
+              "FunctionCall": {
+                "func": {
+                  "Ident": [
+                    "print",
+                    {
+                      "start": 339,
+                      "end": 344
+                    }
+                  ]
                 },
-                "span": {
-                  "start": 345,
-                  "end": 349
-                }
+                "args": [
+                  {
+                    "data": {
+                      "Literal": {
+                        "String": "\n"
+                      }
+                    },
+                    "span": {
+                      "start": 345,
+                      "end": 349
+                    }
+                  }
+                ]
               }
-            ]
+            },
+            "span": {
+              "start": 344,
+              "end": 350
+            }
           }
         },
         "span": {
@@ -602,10 +610,10 @@
           "end": 350
         }
       }
-    },
-    "span": {
-      "start": 344,
-      "end": 350
-    }
+    ]
+  },
+  "span": {
+    "start": 0,
+    "end": 350
   }
-]
+}

@@ -15,11 +15,12 @@ use self::{
 };
 use crate::context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext};
 
-pub fn parse(contents: &str, path: String) -> Result<Vec<Statement>, SquirrelErrorContext> {
+pub fn parse(contents: &str, path: String) -> Result<Statement, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);
-    parse_statements(&mut lexer, |tok| tok == None)
+    let stmts = parse_statements(&mut lexer, |tok| tok == None)
         .map_err(|err| err.with_context(&lexer))
-        .map_err(|err| err.with_context(contents))
+        .map_err(|err| err.with_context(contents))?;
+    Ok(Statement::block(stmts, Span::empty(), Span::empty()))
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -616,8 +617,6 @@ mod error {
 
 #[cfg(test)]
 mod tests {
-    
-
     use crate::test_foreach;
     use crate::test_util::exchange_data;
 

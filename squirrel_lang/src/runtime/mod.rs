@@ -35,6 +35,7 @@ macro_rules! rc_hash_eq {
     };
 }
 
+#[derive(Debug)]
 enum ExecError {
     UndefinedVariable(Ident, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
