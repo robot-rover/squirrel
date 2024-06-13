@@ -32,7 +32,13 @@ pub fn exchange_data<'a, T: Serialize + DeserializeOwned>(
     ]
     .iter()
     .collect();
-    let expect_str = exchange_internal(test_type, test_file, &actual_str, &actual_path, &expect_path);
+    let expect_str = exchange_internal(
+        test_type,
+        test_file,
+        &actual_str,
+        &actual_path,
+        &expect_path,
+    );
     let expect_data: T = serde_json::from_str(&expect_str).expect(
         format!(
             "Failed to parse expected data from {}",
@@ -44,11 +50,7 @@ pub fn exchange_data<'a, T: Serialize + DeserializeOwned>(
     expect_data
 }
 
-pub fn exchange_str<'a>(
-    test_type: &str,
-    test_file: &str,
-    actual_str: &str,
-) -> String {
+pub fn exchange_str<'a>(test_type: &str, test_file: &str, actual_str: &str) -> String {
     let actual_path: PathBuf = [
         "../target/tmp",
         test_type,
@@ -66,7 +68,6 @@ pub fn exchange_str<'a>(
     .collect();
 
     exchange_internal(test_type, test_file, actual_str, &actual_path, &expect_path)
-
 }
 
 fn exchange_internal<'a>(

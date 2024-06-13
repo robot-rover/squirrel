@@ -7,11 +7,12 @@ use ast::{AssignKind, AssignTarget};
 use error::{ParseError, ParseResult};
 use pratt::{parse_expr, parse_expr_line, parse_expr_token};
 
-use self::{
-    ast::{Expr, Function, Literal, Statement},
-};
+use self::ast::{Expr, Function, Literal, Statement};
 
-use crate::{context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext}, lexer::{SpannedLexer, Token}};
+use crate::{
+    context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext},
+    lexer::{SpannedLexer, Token},
+};
 
 pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);

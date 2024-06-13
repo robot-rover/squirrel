@@ -1,5 +1,10 @@
 use std::{
-    borrow::Borrow, cell::RefCell, collections::HashMap, io, ptr::NonNull, rc::{Rc, Weak}
+    borrow::Borrow,
+    cell::RefCell,
+    collections::HashMap,
+    io,
+    ptr::NonNull,
+    rc::{Rc, Weak},
 };
 
 use crate::{
@@ -92,7 +97,6 @@ impl<'a> From<Option<&'a mut dyn io::Write>> for WriteOption<'a> {
             .unwrap_or_else(|| WriteOption::DEFAULT(io::stdout()))
     }
 }
-
 
 struct VMState<'a> {
     root_table: ObjectRef,
@@ -252,11 +256,7 @@ struct Closure {
 }
 
 impl ClosureRef {
-    fn new(
-        ast_fn: &ast::Function,
-        default_vals: Vec<Value>,
-        root: WeakRef,
-    ) -> ClosureRef {
+    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, root: WeakRef) -> ClosureRef {
         ClosureRef(Rc::new(Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,

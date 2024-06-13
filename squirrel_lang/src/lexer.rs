@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use std::str::FromStr;
 
 use ariadne::{Label, Report, ReportKind};
@@ -268,7 +267,7 @@ fn escape_lookup(s: &str) -> Option<&'static str> {
 
 fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token>, allow_newlines: bool) -> LexResult<String>
 where
-    T: Logos<'s, Source=str> + Into<EscapedString<'s>>,
+    T: Logos<'s, Source = str> + Into<EscapedString<'s>>,
     <T as Logos<'s>>::Extras: Default,
 {
     let remainder = &lexer.source()[lexer.span().end..];
@@ -279,16 +278,18 @@ where
             Ok(EscapedString::Fragment(fragment)) => fragments.push(fragment),
             Ok(EscapedString::End) => {
                 lexer.bump(escape_lexer.span().end);
-                return Ok(fragments.join(""))
-            },
+                return Ok(fragments.join(""));
+            }
             Ok(EscapedString::Newline) => {
                 if allow_newlines {
                     lexer.extras.log_newlines(1);
                     fragments.push("\n")
                 } else {
-                    return Err(LexError::General("Newline in non-verbatim string".to_string()))
+                    return Err(LexError::General(
+                        "Newline in non-verbatim string".to_string(),
+                    ));
                 }
-            },
+            }
             Err(_) => {
                 return Err(LexError::General(format!(
                     "Illegal escape sequence in string: \"{}\"",
@@ -329,7 +330,7 @@ fn parse_char_lit<'s>(lexer: &Lexer<'s, Token>) -> LexResult<i64> {
     let close_quote = chars.next().unwrap();
     let end = chars.next();
     if close_quote != '\'' || end.is_some() {
-        return Err(LexError::General("Invalid character literal".to_string()))
+        return Err(LexError::General("Invalid character literal".to_string()));
     }
     Ok(target as i64)
 }
@@ -372,7 +373,9 @@ impl SpannedLexer<'_> {
                 let span = self.logos.span().into();
                 Some((token, span))
             }
-            Some(Err(err)) => return Err(err.with_context(&self.logos, self.get_file_name().to_string())),
+            Some(Err(err)) => {
+                return Err(err.with_context(&self.logos, self.get_file_name().to_string()))
+            }
             None => None,
         };
         Ok(op)

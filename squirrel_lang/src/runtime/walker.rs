@@ -1,4 +1,7 @@
-use std::{collections::HashMap, io::{self, Write}};
+use std::{
+    collections::HashMap,
+    io::{self, Write},
+};
 
 use crate::{
     context::{Span, SquirrelError},
@@ -9,7 +12,8 @@ use crate::{
 };
 
 use super::{
-    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value, WeakRef, WriteOption, H64
+    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value,
+    WeakRef, H64,
 };
 
 type ExprResult = Result<Value, ExecError>;
@@ -28,36 +32,48 @@ impl From<ExecError> for FlowControl {
     }
 }
 
-pub fn run(tree: &ast::Function, file_name: &str, stdout: Option<&mut dyn io::Write>) -> Result<(), SquirrelError> {
+pub fn run(
+    tree: &ast::Function,
+    file_name: &str,
+    stdout: Option<&mut dyn io::Write>,
+) -> Result<(), SquirrelError> {
     let root = init_root();
     let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root));
     let infunc = FuncRuntime::new(root_closure, Vec::new(), &Some(root.clone()));
-    let mut vm_state = VMState { root_table: root, stdout: stdout.into() };
+    let mut vm_state = VMState {
+        root_table: root,
+        stdout: stdout.into(),
+    };
     let mut context = Context {
         infunc,
         vm_state: &mut vm_state,
     };
 
-    run_function(&mut context, &tree.body).map(|_| ()).map_err(|err| err.with_context(file_name.to_string()))
+    run_function(&mut context, &tree.body)
+        .map(|_| ())
+        .map_err(|err| err.with_context(file_name.to_string()))
 }
 
 fn init_root() -> ObjectRef {
     let mut slots = HashMap::new();
-    slots.insert(Value::string("print".to_string()), Value::NativeFunction(|ctx, args| {
-        let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
-        assert!(args.len() == 1, "Wrong number of args");
-        let arg = &args[0];
-        match arg {
-            Value::Float(f) => write!(stdout, "{}", f.0).unwrap(),
-            Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
-            Value::String(s) => write!(stdout, "{}", s.0).unwrap(),
-            Value::Null => write!(stdout, "null").unwrap(),
-            Value::Object(o) => todo!(),
-            Value::Array(a) => todo!(),
-            _ => todo!(),
-        }
-        Ok(Value::Null)
-    }));
+    slots.insert(
+        Value::string("print".to_string()),
+        Value::NativeFunction(|ctx, args| {
+            let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
+            assert!(args.len() == 1, "Wrong number of args");
+            let arg = &args[0];
+            match arg {
+                Value::Float(f) => write!(stdout, "{}", f.0).unwrap(),
+                Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
+                Value::String(s) => write!(stdout, "{}", s.0).unwrap(),
+                Value::Null => write!(stdout, "null").unwrap(),
+                Value::Object(o) => todo!(),
+                Value::Array(a) => todo!(),
+                _ => todo!(),
+            }
+            Ok(Value::Null)
+        }),
+    );
     ObjectRef::new(Object {
         delegate: None,
         slots,
@@ -253,7 +269,12 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let index = run_expression(context, index)?;
             run_array_access(context, &array, index, span)
         }
-        ExprData::This => Ok(context.infunc.env.clone().map(|obj_ref| obj_ref.into()).unwrap_or(Value::Null)),
+        ExprData::This => Ok(context
+            .infunc
+            .env
+            .clone()
+            .map(|obj_ref| obj_ref.into())
+            .unwrap_or(Value::Null)),
         ExprData::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
             run_field_access(context, &target, &field.0, expr.span)
@@ -269,14 +290,23 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             .unwrap_or(Value::Null)),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
-            let res = context.infunc.env.as_ref().and_then(|obj_ref| {
-            // Double check this is null and not an error
-            let obj_ref = obj_ref.0.borrow();
-            if obj_ref.is_class_inst {
-                obj_ref.delegate.as_ref().map(|del| Value::Object(del.clone()))
-            } else {
-                None
-            }}).unwrap_or(Value::Null);
+            let res = context
+                .infunc
+                .env
+                .as_ref()
+                .and_then(|obj_ref| {
+                    // Double check this is null and not an error
+                    let obj_ref = obj_ref.0.borrow();
+                    if obj_ref.is_class_inst {
+                        obj_ref
+                            .delegate
+                            .as_ref()
+                            .map(|del| Value::Object(del.clone()))
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or(Value::Null);
             Ok(res)
         }
     }
@@ -291,14 +321,30 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
         }
         AssignTarget::Ident(ident) => {
             let func = run_load_ident(context, &ident.0, ident.1)?;
-            (context.infunc.env.clone().map(|v| v.into()).unwrap_or(Value::Null), func)
+            (
+                context
+                    .infunc
+                    .env
+                    .clone()
+                    .map(|v| v.into())
+                    .unwrap_or(Value::Null),
+                func,
+            )
         }
         AssignTarget::ArrayAccess { array, index, span } => {
             // TODO: Non array access (i.e. field expression access for tables)
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
             let func = run_array_access(context, &array, index, *span)?;
-            (context.infunc.env.clone().map(|v| v.into()).unwrap_or(Value::Null), func)
+            (
+                context
+                    .infunc
+                    .env
+                    .clone()
+                    .map(|v| v.into())
+                    .unwrap_or(Value::Null),
+                func,
+            )
         }
     };
     let env = match env {
@@ -322,11 +368,10 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
                 vm_state: context.vm_state,
             };
             run_function(&mut context, body)
-        },
+        }
         Value::NativeFunction(func) => func(context as *mut _, args),
         other => panic!("Can't call non-function {other:?}"),
     }
-
 }
 
 fn run_function(context: &mut Context, body: &Statement) -> ExprResult {
@@ -350,7 +395,8 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     let key = Value::string(ident.to_string());
     let env_match = context
         .infunc
-        .env.as_ref()
+        .env
+        .as_ref()
         .and_then(|env| env.0.borrow().get_field(&key));
     if let Some(value) = env_match {
         return Ok(value);
@@ -611,7 +657,8 @@ fn run_assign(
             }
             if is_newslot {
                 if let Some(env) = context.infunc.env.as_ref() {
-                    env.0.borrow_mut()
+                    env.0
+                        .borrow_mut()
                         .slots
                         .insert(Value::string(ident.0.clone()), val);
                 } else {
@@ -646,7 +693,9 @@ fn run_ident(context: &mut Context, ident: &Ident) -> ExprResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::{exchange_data, exchange_str}};
+    use crate::{
+        context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str,
+    };
 
     test_foreach!(sample_test);
 

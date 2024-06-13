@@ -1,6 +1,6 @@
-use std::{env::args, io};
+use std::env::args;
 
-use squirrel_lang::{context::IntoSquirrelErrorContext, runtime::WriteOption};
+use squirrel_lang::context::IntoSquirrelErrorContext;
 
 fn main() {
     let file_name = args()
