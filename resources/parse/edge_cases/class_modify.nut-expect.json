@@ -1,0 +1,195 @@
+{
+  "keyword_span": {
+    "start": 0,
+    "end": 0
+  },
+  "args": [],
+  "default_expr": [],
+  "is_varargs": false,
+  "body": {
+    "data": {
+      "Block": [
+        {
+          "data": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "Foo",
+                      {
+                        "start": 6,
+                        "end": 9
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "ClassDef": {
+                        "parent": null,
+                        "members": [
+                          [
+                            {
+                              "data": {
+                                "Literal": {
+                                  "String": "a"
+                                }
+                              },
+                              "span": {
+                                "start": 16,
+                                "end": 17
+                              }
+                            },
+                            {
+                              "data": {
+                                "Literal": {
+                                  "Integer": 0
+                                }
+                              },
+                              "span": {
+                                "start": 20,
+                                "end": 21
+                              }
+                            }
+                          ],
+                          [
+                            {
+                              "data": {
+                                "Literal": {
+                                  "String": "b"
+                                }
+                              },
+                              "span": {
+                                "start": 26,
+                                "end": 27
+                              }
+                            },
+                            {
+                              "data": {
+                                "Literal": {
+                                  "Integer": 0
+                                }
+                              },
+                              "span": {
+                                "start": 30,
+                                "end": 31
+                              }
+                            }
+                          ]
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 33
+                    }
+                  },
+                  "kind": "NewSlot"
+                }
+              },
+              "span": {
+                "start": 0,
+                "end": 33
+              }
+            }
+          },
+          "span": {
+            "start": 0,
+            "end": 33
+          }
+        },
+        {
+          "data": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "FieldAccess": [
+                      {
+                        "data": {
+                          "Ident": "Foo"
+                        },
+                        "span": {
+                          "start": 35,
+                          "end": 38
+                        }
+                      },
+                      [
+                        "c",
+                        {
+                          "start": 39,
+                          "end": 40
+                        }
+                      ]
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 0
+                      }
+                    },
+                    "span": {
+                      "start": 44,
+                      "end": 45
+                    }
+                  },
+                  "kind": "NewSlot"
+                }
+              },
+              "span": {
+                "start": 35,
+                "end": 45
+              }
+            }
+          },
+          "span": {
+            "start": 35,
+            "end": 45
+          }
+        },
+        {
+          "data": {
+            "LocalDec": [
+              [
+                "fooinst",
+                {
+                  "start": 53,
+                  "end": 60
+                }
+              ],
+              {
+                "data": {
+                  "FunctionCall": {
+                    "func": {
+                      "Ident": [
+                        "Foo",
+                        {
+                          "start": 63,
+                          "end": 66
+                        }
+                      ]
+                    },
+                    "args": []
+                  }
+                },
+                "span": {
+                  "start": 66,
+                  "end": 68
+                }
+              }
+            ]
+          },
+          "span": {
+            "start": 47,
+            "end": 68
+          }
+        }
+      ]
+    },
+    "span": {
+      "start": 0,
+      "end": 68
+    }
+  }
+}

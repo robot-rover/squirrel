@@ -73,17 +73,10 @@ pub enum Token {
     While,
     #[token("yield")]
     Yield,
-    // TODO: This isn't a real keyword
-    // #[token("constructor")]
-    // Constructor,
     #[token("instanceof")]
     InstaceOf,
     #[token("static")]
     Static,
-    #[token("__LINE__")]
-    LineDunder,
-    #[token("__FILE__")]
-    FileDunder,
     #[token("rawcall")]
     RawCall,
     // Operators
@@ -186,24 +179,19 @@ pub enum Token {
     #[regex(r"[a-zA-Z_][a-zA-Z0-9_]*", |lex| lex.slice().to_string())]
     Identifier(String),
     // Literals
-    // TODO: Parse strings with seperate lexers
-    // Todo: error if literal \n in non-verbatim string
-    #[regex(r#""([^"]|(\\")|\n)*""#, |lex| escape_str(trim_str(find_newlines(lex), 1, 1)))]
-    // TODO: Should replace "" with a single " in the string
-    #[regex(r#"@"([^"]|\n)*""#, |lex| trim_str(find_newlines(lex), 2, 1).to_string())]
+    #[token("\"", |lex| escape_str::<EscapedString>(lex, false))]
+    #[token("@\"", |lex| escape_str::<VerbString>(lex, true))]
+    #[token("__FILE__", |lex| lex.extras.file_name.clone())]
     String(String),
-    // TODO: Error Handling for invalid digits
     #[regex(r"\d+", |lex| i64::from_str(lex.slice()))]
     #[regex(r"0\d+", |lex| i64::from_str_radix(&lex.slice()[1..], 8))]
     #[regex(r"0x[0-9a-fA-F]+", |lex| i64::from_str_radix(&lex.slice()[2..], 16))]
-    // Todo: handle too long
-    #[regex(r"'([^'])*'", |lex| lex.slice().chars().nth(1).map(|c| c as i64))]
+    #[regex(r"'([^'])*'", |lex| parse_char_lit(lex))]
+    #[token("__LINE__", |lex| lex.extras.get_line() as i64)]
     Integer(i64),
     // Todo: handle missing number after decimal point
     #[regex(r"\d+\.\d*", |lex| f64::from_str(lex.slice()))]
     #[regex(r"\d+(\.\d*)?e[+-]?\d*", |lex| parse_sci(lex))]
-    // #[regex(r"\d+\.\d*", |lex| lex.slice().to_string())]
-    // #[regex(r"\d+(\.\d*)?e[+-]?\d*", |lex| lex.slice().to_string())]
     Number(f64),
     #[token("true", |_| true)]
     #[token("false", |_| false)]
@@ -231,44 +219,76 @@ pub enum Token {
     Attribute,
 }
 
-#[derive(Debug, PartialEq, Logos)]
-pub enum EscapedString<'s> {
-    #[regex(r"[^\\]+")]
-    Verbatim(&'s str),
-    #[regex(r"\\.", |lex| escape_lookup(lex.slice()))]
-    Escaped(String),
-}
-
-impl<'s> Into<Cow<'s, str>> for EscapedString<'s> {
-    fn into(self) -> Cow<'s, str> {
-        match self {
-            EscapedString::Verbatim(slice) => slice.into(),
-            EscapedString::Escaped(string) => string.into(),
-        }
-    }
-}
-
 fn trim_str(s: &str, trim_start: usize, trim_end: usize) -> &str {
     &s[trim_start..s.len() - trim_end]
 }
 
-fn escape_lookup(s: &str) -> Option<String> {
+#[derive(Debug, PartialEq, Logos)]
+pub enum EscapedString<'s> {
+    #[regex(r#"[^\\"\n]+"#)]
+    #[regex(r"\\.", |lex| escape_lookup(lex.slice()))]
+    Fragment(&'s str),
+    #[token("\"")]
+    End,
+    #[token("\n")]
+    Newline,
+}
+
+#[derive(Debug, PartialEq, Logos)]
+pub enum VerbString<'s> {
+    #[regex(r#"[^"\n]+"#)]
+    #[token("\"\"", |_| "\"")]
+    Fragment(&'s str),
+    #[token("\"")]
+    End,
+    #[token("\n")]
+    Newline,
+}
+impl<'s> From<VerbString<'s>> for EscapedString<'s> {
+    fn from(v: VerbString<'s>) -> Self {
+        match v {
+            VerbString::Fragment(s) => EscapedString::Fragment(s),
+            VerbString::End => EscapedString::End,
+            VerbString::Newline => EscapedString::Newline,
+        }
+    }
+}
+
+fn escape_lookup(s: &str) -> Option<&'static str> {
+    // TODO: Check squirrel source code for other escapes
     match s {
-        r"\n" => Some("\n".to_string()),
-        r"\r" => Some("\r".to_string()),
-        r"\t" => Some("\t".to_string()),
-        r"\\" => Some("\\".to_string()),
-        r#"\""# => Some("\"".to_string()),
+        r"\n" => Some("\n"),
+        r"\r" => Some("\r"),
+        r"\t" => Some("\t"),
+        r"\\" => Some("\\"),
+        r#"\""# => Some("\""),
         _ => None,
     }
 }
 
-fn escape_str<'s>(source: &'s str) -> LexResult<String> {
-    let mut escape_lexer = EscapedString::lexer(source);
-    let mut fragments: Vec<Cow<_>> = Vec::new();
-    while let Some(token) = escape_lexer.next() {
-        match token {
-            Ok(fragment) => fragments.push(fragment.into()),
+fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token>, allow_newlines: bool) -> LexResult<String>
+where
+    T: Logos<'s, Source=str> + Into<EscapedString<'s>>,
+    <T as Logos<'s>>::Extras: Default,
+{
+    let remainder = &lexer.source()[lexer.span().end..];
+    let mut escape_lexer = T::lexer(remainder);
+    let mut fragments: Vec<&str> = Vec::new();
+    while let Some(fragment) = escape_lexer.next() {
+        match fragment.map(Into::into) {
+            Ok(EscapedString::Fragment(fragment)) => fragments.push(fragment),
+            Ok(EscapedString::End) => {
+                lexer.bump(escape_lexer.span().end);
+                return Ok(fragments.join(""))
+            },
+            Ok(EscapedString::Newline) => {
+                if allow_newlines {
+                    lexer.extras.log_newlines(1);
+                    fragments.push("\n")
+                } else {
+                    return Err(LexError::General("Newline in non-verbatim string".to_string()))
+                }
+            },
             Err(_) => {
                 return Err(LexError::General(format!(
                     "Illegal escape sequence in string: \"{}\"",
@@ -277,7 +297,8 @@ fn escape_str<'s>(source: &'s str) -> LexResult<String> {
             }
         }
     }
-    Ok(fragments.join(""))
+
+    Err(LexError::UnterminatedString)
 }
 
 // TODO: This would be faster if it is rolled into the escaping logic for strings
@@ -300,8 +321,20 @@ fn parse_sci<'s>(lexer: &Lexer<'s, Token>) -> LexResult<f64> {
     Ok(base * 10f64.powi(exp))
 }
 
+fn parse_char_lit<'s>(lexer: &Lexer<'s, Token>) -> LexResult<i64> {
+    let mut chars = lexer.slice().chars();
+    let open_quote = chars.next().unwrap();
+    debug_assert!(open_quote == '\'');
+    let target = chars.next().unwrap();
+    let close_quote = chars.next().unwrap();
+    let end = chars.next();
+    if close_quote != '\'' || end.is_some() {
+        return Err(LexError::General("Invalid character literal".to_string()))
+    }
+    Ok(target as i64)
+}
+
 pub struct SpannedLexer<'s> {
-    file_name: String,
     logos: logos::Lexer<'s, Token>,
     stored_next: Option<(Token, Span)>,
 }
@@ -309,14 +342,13 @@ pub struct SpannedLexer<'s> {
 impl<'s> SpannedLexer<'s> {
     pub fn new(input: &'s str, file_name: String) -> Self {
         Self {
-            logos: Token::lexer(input),
-            file_name,
+            logos: Token::lexer_with_extras(input, LexerContext::new(file_name)),
             stored_next: None,
         }
     }
 
     pub fn get_file_name(&self) -> &str {
-        &self.file_name
+        &self.logos.extras.file_name
     }
 
     pub fn get_source(&self) -> &str {
@@ -340,7 +372,7 @@ impl SpannedLexer<'_> {
                 let span = self.logos.span().into();
                 Some((token, span))
             }
-            Some(Err(err)) => return Err(err.with_context(&self.logos, self.file_name.clone())),
+            Some(Err(err)) => return Err(err.with_context(&self.logos, self.get_file_name().to_string())),
             None => None,
         };
         Ok(op)
@@ -448,17 +480,19 @@ impl Iterator for SpannedLexer<'_> {
 #[derive(Debug)]
 pub struct LexerContext {
     line_num: u32,
-}
-
-impl Default for LexerContext {
-    fn default() -> Self {
-        Self { line_num: 1 }
-    }
+    file_name: String,
 }
 
 impl LexerContext {
     pub fn get_line(&self) -> u32 {
         self.line_num
+    }
+
+    pub fn new(file_name: String) -> Self {
+        Self {
+            line_num: 1,
+            file_name,
+        }
     }
 }
 
@@ -483,6 +517,7 @@ mod error {
         ParseIntError(ParseIntError),
         ParseFloatError(ParseFloatError),
         UnknownToken,
+        UnterminatedString,
         General(String),
     }
 
@@ -508,6 +543,7 @@ mod error {
                 }
                 LexError::UnknownToken => "Unknown token".to_string(),
                 LexError::General(msg) => msg,
+                LexError::UnterminatedString => "String missing termination character".to_string(),
             };
             SquirrelError::new(file_name, token_location, message, SqBacktrace::new())
         }
@@ -537,76 +573,78 @@ mod tests {
 
     use super::*;
 
-    fn lex(input: &str) -> Vec<Result<Token, LexError>> {
-        Lexer::new(input).collect()
+    fn lex(input: &str, file_name: String) -> Vec<Result<Token, LexError>> {
+        Lexer::with_extras(input, LexerContext::new(file_name)).collect()
     }
 
     #[test]
     fn single_token_test() {
+        let file_name = "single_token_test".to_string();
+
         println!("Checking Basic Tokens");
-        let result = lex("base");
+        let result = lex("base", file_name.clone());
         assert_eq!(vec![Ok(Token::Base)], result);
 
-        let result = lex("true");
+        let result = lex("true", file_name.clone());
         assert_eq!(vec![Ok(Token::Boolean(true))], result);
 
         // Strings
         println!("Checking Strings");
-        let result = lex(r#""Hello World""#);
+        let result = lex(r#""Hello World""#, file_name.clone());
         assert_eq!(vec![Ok(Token::String("Hello World".into()))], result);
 
         println!("Checking String Escapes");
-        let result = lex(r#""Hello\"World""#);
+        let result = lex(r#""Hello\"World""#, file_name.clone());
         assert_eq!(vec![Ok(Token::String(r#"Hello"World"#.into()))], result);
 
-        let result = lex(r#""Hello\nWorld""#);
+        let result = lex(r#""Hello\nWorld""#, file_name.clone());
         assert_eq!(vec![Ok(Token::String("Hello\nWorld".into()))], result);
 
-        // TODO: This should error when its not a verbatim string
-        let result = lex("\"Hello\nWorld\"");
-        assert_eq!(vec![Ok(Token::String("Hello\nWorld".into()))], result);
+        let result = lex("\"Hello\nWorld\"", file_name.clone());
+        assert!(result.len() >= 1);
+        assert!(matches!(result[0], Err(LexError::General(_))));
 
         println!("Checking Verbatim Strings");
-        let result = lex("@\"Hello\\nWorld\nNewline\"");
+        let result = lex("@\"Hello\\nWorld\nNewline\"", file_name.clone());
         assert_eq!(
             vec![Ok(Token::String("Hello\\nWorld\nNewline".into()))],
             result
         );
 
         println!("Checking Comments");
-        let result = lex("// This is a comment");
+        let result = lex("// This is a comment", file_name.clone());
         assert_eq!(Vec::<LexResult<Token>>::new(), result);
 
-        let result = lex("# This is a comment");
+        let result = lex("# This is a comment", file_name.clone());
         assert_eq!(Vec::<LexResult<Token>>::new(), result);
 
-        let result = lex("  /* This is a\n\n comment */  ");
+        let result = lex("  /* This is a\n\n comment */  ", file_name.clone());
         assert_eq!(Vec::<LexResult<Token>>::new(), result);
 
         println!("Checkint Integer Literals");
-        let result = lex("123");
+        let result = lex("123", file_name.clone());
         assert_eq!(vec![Ok(Token::Integer(123))], result);
 
-        let result = lex("0123");
+        let result = lex("0123", file_name.clone());
         assert_eq!(vec![Ok(Token::Integer(1 * 8 * 8 + 2 * 8 + 3))], result);
 
-        let result = lex("0x123");
+        let result = lex("0x123", file_name.clone());
         assert_eq!(vec![Ok(Token::Integer(0x123))], result);
 
-        let result = lex("'a'");
+        let result = lex("'a'", file_name.clone());
         assert_eq!(vec![Ok(Token::Integer(97))], result);
 
         println!("Checking Float Literals");
-        let result = lex("7.");
+        let result = lex("7.", file_name.clone());
         assert_eq!(vec![Ok(Token::Number(7.))], result);
 
-        let result = lex("4.0");
+        let result = lex("4.0", file_name.clone());
         assert_eq!(vec![Ok(Token::Number(4.))], result);
 
-        let result = lex("4.e2");
+        let result = lex("4.e2", file_name.clone());
         assert_eq!(vec![Ok(Token::Number(4e2))], result);
 
-        let result = lex("4.e-2");
+        let result = lex("4.e-2", file_name.clone());
         assert_eq!(vec![Ok(Token::Number(4e-2))], result);
     }
 
