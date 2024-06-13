@@ -536,7 +536,7 @@ mod tests {
     use crate::test_util::exchange_data;
 
     use super::*;
-    
+
 
     fn lex(input: &str) -> Vec<Result<Token, LexError>> {
         Lexer::new(input).collect()

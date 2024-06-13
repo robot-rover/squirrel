@@ -15,12 +15,13 @@ use self::{
 };
 use crate::context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext};
 
-pub fn parse(contents: &str, path: String) -> Result<Statement, SquirrelErrorContext> {
+pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);
     let stmts = parse_statements(&mut lexer, |tok| tok == None)
         .map_err(|err| err.with_context(&lexer))
         .map_err(|err| err.with_context(contents))?;
-    Ok(Statement::block(stmts, Span::empty(), Span::empty()))
+    let body = Statement::block(stmts, Span::empty(), Span::empty());
+    Ok(Function { keyword_span: Span::empty(), args: Vec::new(), default_expr: Vec::new(), is_varargs: false, body: Box::new(body) })
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -212,11 +213,11 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
         };
         let val = if let (Token::Assign, _) = tokens.peek_token(true)? {
             tokens.skip_token();
-            Some(parse_expr(tokens, |tok| {
+            parse_expr(tokens, |tok| {
                 tok == &Token::Comma || tok == &Token::Newline || tok == &Token::Semicolon
-            })?)
+            })?
         } else {
-            None
+            Expr::literal(Literal::Null, Span::empty())
         };
         decls.push((ident, val));
         let (term, ctx) = tokens.next_token(false)?;
@@ -342,7 +343,6 @@ fn parse_table_or_class<'s>(
             }
             (Token::Function, keyword_span) => {
                 let keyword_span = *keyword_span;
-                tokens.dbg(keyword_span, "Parsing Function");
                 let fn_span = tokens.expect_token(Token::Function, true)?;
                 let ident = match tokens.next_token(true)? {
                     (Token::Identifier(name), ctx) => (name, ctx),
@@ -356,12 +356,10 @@ fn parse_table_or_class<'s>(
             }
             (token, span) if token == sep || token == &Token::Newline => {
                 let span = *span;
-                tokens.dbg(span, "Skipping Separator");
                 tokens.skip_token()
             }
             (_, span) => {
                 let span = *span;
-                tokens.dbg(span, "Parsing table slot");
                 members.push(parse_table_slot(tokens, sep)?);
             }
         }
@@ -380,9 +378,7 @@ fn parse_table_slot<'s>(tokens: &mut SpannedLexer<'s>, sep: &Token) -> ParseResu
         }
         other => return Err(ParseError::unexpected_token(other, ctx)),
     };
-    println!("Parsing Assign in table slot");
     tokens.expect_token(Token::Assign, true)?;
-    println!("Parsing Expr in table slot");
     let value = parse_expr(tokens, |tok| {
         tok == sep || tok == &Token::Newline || tok == &Token::RightCurlyBrace
     })?;
@@ -416,7 +412,7 @@ fn parse_function<'s>(
     // TODO: Share logic with class
     let fd = match target {
         Some(AssignTarget::Ident(ident)) => {
-            FunctionDef::Statement(Statement::local_dec(ident, Some(func_def), keyword_span))
+            FunctionDef::Statement(Statement::local_dec(ident, func_def, keyword_span))
         }
         Some(other) => FunctionDef::Statement(Statement::expr(Expr::assign(
             other,

@@ -115,7 +115,7 @@ pub enum StatementData {
     Continue,
     Return(Expr),
     Yield(Expr),
-    LocalDec(Ident, Option<Expr>),
+    LocalDec(Ident, Expr),
     TryCatch(StateRef, Ident, StateRef),
     Throw(Expr),
     Const(Ident, Literal),
@@ -222,11 +222,8 @@ impl Statement {
         StatementData::Yield(expr).spanning(span)
     }
 
-    pub fn local_dec(ident: Ident, val: Option<Expr>, local_span: Span) -> Self {
-        let mut span = ident.1 | local_span;
-        if let Some(val) = &val {
-            span = span | val.span;
-        }
+    pub fn local_dec(ident: Ident, val: Expr, local_span: Span) -> Self {
+        let span = ident.1 | local_span | val.span;
         StatementData::LocalDec(ident, val).spanning(span)
     }
 

@@ -1,50 +1,59 @@
 {
-  "data": {
-    "Block": [
-      {
-        "data": {
-          "Expr": {
-            "data": {
-              "FunctionCall": {
-                "func": {
-                  "Ident": [
-                    "print",
+  "keyword_span": {
+    "start": 0,
+    "end": 0
+  },
+  "args": [],
+  "default_expr": [],
+  "is_varargs": false,
+  "body": {
+    "data": {
+      "Block": [
+        {
+          "data": {
+            "Expr": {
+              "data": {
+                "FunctionCall": {
+                  "func": {
+                    "Ident": [
+                      "print",
+                      {
+                        "start": 0,
+                        "end": 5
+                      }
+                    ]
+                  },
+                  "args": [
                     {
-                      "start": 0,
-                      "end": 5
+                      "data": {
+                        "Literal": {
+                          "String": "Hello World!"
+                        }
+                      },
+                      "span": {
+                        "start": 6,
+                        "end": 20
+                      }
                     }
                   ]
-                },
-                "args": [
-                  {
-                    "data": {
-                      "Literal": {
-                        "String": "Hello World!"
-                      }
-                    },
-                    "span": {
-                      "start": 6,
-                      "end": 20
-                    }
-                  }
-                ]
+                }
+              },
+              "span": {
+                "start": 5,
+                "end": 21
               }
-            },
-            "span": {
-              "start": 5,
-              "end": 21
             }
+          },
+          "span": {
+            "start": 5,
+            "end": 21
           }
-        },
-        "span": {
-          "start": 5,
-          "end": 21
         }
-      }
-    ]
-  },
-  "span": {
-    "start": 0,
-    "end": 21
+      ]
+    },
+    "span": {
+      "start": 0,
+      "end": 21
+    }
   }
 }

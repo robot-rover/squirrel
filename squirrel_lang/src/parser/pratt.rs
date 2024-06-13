@@ -139,7 +139,6 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
             tokens.stash((first_token, ctx)); // Put the bracket back
             let (elements, span) =
                 parse_list(tokens, Token::LeftSquareBracket, Token::RightSquareBracket)?;
-            tokens.dbg(span, "Array Decl");
             Expr::array_decl(elements, span)
         }
         // Prefix Unary Operators

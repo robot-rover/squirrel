@@ -51,14 +51,13 @@ impl ExecError {
     }
 }
 
-struct Context<'a> {
-    infunc: &'a mut FuncRuntime,
+struct VMState {
+    root_table: ObjectRef,
 }
 
-impl<'a> Context<'a> {
-    pub fn new(infunc: &'a mut FuncRuntime) -> Context {
-        Context { infunc }
-    }
+struct Context<'a> {
+    infunc: FuncRuntime,
+    vm_state: &'a mut VMState,
 }
 
 #[derive(Debug, Clone)]
@@ -96,7 +95,7 @@ enum Value {
     Object(ObjectRef),
     Array(ArrayRef),
     Weak(WeakRef),
-    Function(FunctionRef),
+    Function(ClosureRef),
     // Class(/* TODO */),
     // Generator(/* TODO */),
     // UserData(/* TODO */),
@@ -124,8 +123,8 @@ impl ArrayRef {
 }
 
 #[derive(Debug, Clone)]
-struct FunctionRef(Rc<FuncLoad>);
-rc_hash_eq!(FunctionRef, Function, Rc);
+struct ClosureRef(Rc<Closure>);
+rc_hash_eq!(ClosureRef, Function, Rc);
 
 #[derive(Debug, Clone)]
 struct ObjectRef(Rc<RefCell<Object>>);
@@ -154,49 +153,50 @@ struct Object {
 }
 
 impl Object {
-    fn get_field(&self, key: &Value) -> Value {
+    fn get_field(&self, key: &Value) -> Option<Value> {
         // TODO: This shouldn't be recursive
         if let Some(value) = self.slots.get(key) {
-            return value.clone();
+            return Some(value.clone());
         }
         match &self.delegate {
             Some(delegate) => {
                 let parent = (*delegate.0).borrow();
                 parent.get_field(key)
             }
-            None => panic!("Undefined variable: {:?}", key),
+            None => return None,
         }
     }
 }
 
 #[derive(Debug)]
-struct FuncLoad {
+struct Closure {
     ast_fn: NonNull<ast::Function>,
     default_vals: Vec<Value>,
+    root: WeakRef,
+    env: WeakRef,
 }
 
-impl FunctionRef {
-    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>) -> FunctionRef {
-        FunctionRef(Rc::new(FuncLoad {
+impl ClosureRef {
+    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, env: WeakRef, root: WeakRef) -> ClosureRef {
+        ClosureRef(Rc::new(Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,
+            root,
+            env,
         }))
     }
 }
 
 #[derive(Debug)]
 struct FuncRuntime {
-    root: WeakRef,
-    env: ObjectRef,
     locals: HashMap<String, Value>,
+    closure: ClosureRef,
 }
 
 impl FuncRuntime {
     fn new(
-        func_ref: &FunctionRef,
+        func_ref: ClosureRef,
         arg_vals: Vec<Value>,
-        env: ObjectRef,
-        root: WeakRef,
     ) -> FuncRuntime {
         let mut locals = HashMap::new();
         let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
@@ -235,7 +235,7 @@ impl FuncRuntime {
         } else {
             assert_eq!(arg_iter.next(), None, "Too many arguments");
         }
-        FuncRuntime { root, env, locals }
+        FuncRuntime { closure: func_ref, locals }
     }
 }
 
