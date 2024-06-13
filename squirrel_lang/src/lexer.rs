@@ -5,11 +5,11 @@ use ariadne::{Label, Report, ReportKind};
 use logos::{Lexer, Logos, Skip};
 use serde::{Deserialize, Serialize};
 
+use crate::parser::error::ParseError;
+
 use crate::context::{DisplayReport, Span, SquirrelError};
 
 use self::error::{LexError, LexResult};
-
-use super::error::ParseError;
 
 #[derive(Clone, Debug, PartialEq, Logos, Serialize, Deserialize)]
 #[logos(extras = LexerContext)]

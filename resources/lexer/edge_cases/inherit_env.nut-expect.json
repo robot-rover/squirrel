@@ -1,0 +1,206 @@
+[
+  "Function",
+  {
+    "Identifier": "parent"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "Local",
+  {
+    "Identifier": "child"
+  },
+  "Assign",
+  "Function",
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  "This",
+  "DoesNotEqual",
+  "Null",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "a"
+  },
+  "NewSlot",
+  {
+    "String": "test"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Return",
+  "This",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  "This",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Return",
+  {
+    "Identifier": "child"
+  },
+  "Period",
+  {
+    "Identifier": "bindenv"
+  },
+  "LeftParenthesis",
+  "LeftCurlyBrace",
+  "RightCurlyBrace",
+  "RightParenthesis",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "First, the root table\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "getroottable"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "parent"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "table"
+  },
+  "NewSlot",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "parent"
+  },
+  "Assign",
+  {
+    "Identifier": "parent"
+  },
+  "Period",
+  {
+    "Identifier": "bindenv"
+  },
+  "LeftParenthesis",
+  "LeftCurlyBrace",
+  "RightCurlyBrace",
+  "RightParenthesis",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "Now, a table with a parent function\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "table"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "table"
+  },
+  "Period",
+  {
+    "Identifier": "parent"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis"
+]

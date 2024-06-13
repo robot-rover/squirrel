@@ -1,0 +1,811 @@
+[
+  {
+    "Identifier": "a"
+  },
+  "NewSlot",
+  {
+    "String": "a defined at root"
+  },
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "a"
+  },
+  "NewSlot",
+  {
+    "String": "a defined in fn_newslot"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "a"
+  },
+  "Assign",
+  {
+    "String": "a defined in fn_set"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "tab"
+  },
+  "NewSlot",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "b"
+  },
+  "Assign",
+  {
+    "String": "b defined in tab"
+  },
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "b"
+  },
+  "NewSlot",
+  {
+    "String": "b defined in tab.fn_newslot"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "b"
+  },
+  "Assign",
+  {
+    "String": "b defined in tab.fn_set"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "tab"
+  },
+  "Period",
+  {
+    "Identifier": "b"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab"
+  },
+  "Period",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "tab"
+  },
+  "Period",
+  {
+    "Identifier": "b"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab"
+  },
+  "Period",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "tab"
+  },
+  "Period",
+  {
+    "Identifier": "b"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "c"
+  },
+  "NewSlot",
+  {
+    "String": "c defined at root"
+  },
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "NewSlot",
+  "LeftCurlyBrace",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "c"
+  },
+  "NewSlot",
+  {
+    "String": "c defined in tab2.fn_newslot"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "c"
+  },
+  "Assign",
+  {
+    "String": "c defined in tab2.fn_set"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_this"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "This",
+  "Period",
+  {
+    "Identifier": "c"
+  },
+  "NewSlot",
+  {
+    "String": "c defined in tab2.fn_this"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "insane"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "insane: "
+  },
+  "Plus",
+  "This",
+  "Period",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "insane"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "insane"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "insane"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "fn_this"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "tab2"
+  },
+  "Period",
+  {
+    "Identifier": "insane"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "del"
+  },
+  "NewSlot",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "d"
+  },
+  "Assign",
+  {
+    "String": "d defined in del"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "inst"
+  },
+  "NewSlot",
+  "LeftCurlyBrace",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "d"
+  },
+  "NewSlot",
+  {
+    "String": "d defined in inst.fn_newslot"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "d"
+  },
+  "Assign",
+  {
+    "String": "d defined in inst.fn_set"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "Function",
+  {
+    "Identifier": "fn_this"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "This",
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "NewSlot",
+  {
+    "String": "d defined in inst.fn_this"
+  },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "setdelegate"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "del"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": " del.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "del"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "inst.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "fn_set"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": " del.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "del"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "inst.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "fn_newslot"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": " del.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "del"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "inst.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "fn_this"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": " del.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "del"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "inst.d: "
+  },
+  "Plus",
+  {
+    "Identifier": "inst"
+  },
+  "Period",
+  {
+    "Identifier": "d"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis"
+]

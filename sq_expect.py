@@ -22,14 +22,15 @@ class Module:
     def print_mod(self, mod_name, hier, handle, indent):
         print(f'{pad(indent)}mod {mod_name} {{', file=handle)
         print(f'{pad(indent+1)}use super::*;', file=handle)
+        print(f'{pad(indent+1)}use std::fs;', file=handle)
         for script in self.scripts:
             script_name = script.split('.', 1)[0]
             script_upper = script_name.upper()
             print(f'{pad(indent+1)}const {script_upper}_PATH: &str = "{hier}/{script}";', file=handle)
-            print(f'{pad(indent+1)}const {script_upper}_CONTENTS: &str = include_str!("../../../resources/scripts/{hier}/{script}");', file=handle)
             print(f'{pad(indent+1)}#[test]', file=handle)
             print(f'{pad(indent+1)}fn test_{script_name}() {{', file=handle)
-            print(f'{pad(indent+2)}$func({script_upper}_PATH, {script_upper}_CONTENTS);', file=handle)
+            print(f'{pad(indent+2)}let contents = fs::read_to_string("../resources/scripts/{hier}/{script}").expect("Unable to read script source");', file=handle)
+            print(f'{pad(indent+2)}$func({script_upper}_PATH, &contents);', file=handle)
             print(f'{pad(indent+1)}}}', file=handle)
 
         for mod_name, mod in self.submodules.items():

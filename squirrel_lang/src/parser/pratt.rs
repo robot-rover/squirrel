@@ -1,11 +1,11 @@
 use std::convert::TryInto;
 
 use crate::context::Span;
+use crate::lexer::{SpannedLexer, Token};
 
 use super::{
     ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp},
     error::{ParseError, ParseResult},
-    lexer::{SpannedLexer, Token},
     parse_function, parse_list, parse_table_or_class, FunctionDef,
 };
 

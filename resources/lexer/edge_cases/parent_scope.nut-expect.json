@@ -1,0 +1,67 @@
+[
+  "If",
+  "LeftParenthesis",
+  {
+    "String": "a"
+  },
+  "In",
+  "This",
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a"
+  },
+  "Period",
+  {
+    "Identifier": "tostring"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "root: "
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "getroottable"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "assert"
+  },
+  "LeftParenthesis",
+  "This",
+  "Equals",
+  {
+    "Identifier": "getroottable"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis"
+]

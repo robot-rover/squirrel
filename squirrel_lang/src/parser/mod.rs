@@ -1,19 +1,17 @@
 pub mod ast;
-mod lexer;
 mod pratt;
 
 use std::convert::TryInto;
 
 use ast::{AssignKind, AssignTarget};
-use lexer::Token;
+use error::{ParseError, ParseResult};
 use pratt::{parse_expr, parse_expr_line, parse_expr_token};
 
 use self::{
     ast::{Expr, Function, Literal, Statement},
-    error::{ParseError, ParseResult},
-    lexer::SpannedLexer,
 };
-use crate::context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext};
+
+use crate::{context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext}, lexer::{SpannedLexer, Token}};
 
 pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);
@@ -535,10 +533,10 @@ fn parse_function_args_body<'s>(
     })
 }
 
-mod error {
+pub mod error {
     use crate::context::{Span, SqBacktrace, SquirrelError};
 
-    use super::lexer::{SpannedLexer, Token};
+    use crate::lexer::{SpannedLexer, Token};
 
     pub type ParseResult<T> = Result<T, ParseError>;
     #[derive(Debug)]
