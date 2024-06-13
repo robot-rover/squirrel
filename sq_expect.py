@@ -64,6 +64,8 @@ with open(MACRO_FILE, 'wt') as handle:
     print('#[macro_export]', file=handle)
     print('macro_rules! test_foreach {', file=handle)
     print('    ($func:tt) => {', file=handle)
-    root_mod.print_mod('test', Path(''), handle, 1)
+    assert len(root_mod.scripts) == 0
+    for name, sub_mod in root_mod.submodules.items():
+        sub_mod.print_mod(name, Path(name), handle, 1)
     print('    };', file=handle)
     print('}', file=handle)
