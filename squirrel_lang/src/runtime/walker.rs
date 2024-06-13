@@ -346,7 +346,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         return Ok(value.clone());
     }
 
-    let key = Value::String(ident.to_string());
+    let key = Value::string(ident.to_string());
     let env_match = context
         .infunc
         .closure
@@ -378,7 +378,7 @@ fn run_field_access(context: &mut Context, target: &Value, field: &str, span: Sp
     match target {
         // TODO: Cloning field here!
         Value::Object(obj) => {
-            let res = obj.0.borrow().get_field(&Value::String(field.to_string()));
+            let res = obj.0.borrow().get_field(&Value::string(field.to_string()));
             match res {
                 Some(val) => Ok(val),
                 None => Err(ExecError::undefined_variable((field.to_string(), span))),
@@ -440,8 +440,8 @@ fn run_array_access(context: &mut Context, array: &Value, index: Value, span: Sp
                 Value::Integer(val) => val as usize,
                 _ => panic!("Illegal operation"),
             };
-            Ok(Value::String(
-                string.chars().nth(index).unwrap().to_string(),
+            Ok(Value::string(
+                string.0.chars().nth(index).unwrap().to_string(),
             ))
         }
         Value::Object(obj) => obj
@@ -489,13 +489,13 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
             _ => panic!("Illegal operation"),
         },
         UnaryOp::TypeOf => match val {
-            Value::Null => Value::String("null".to_string()),
-            Value::Integer(_) => Value::String("integer".to_string()),
-            Value::Float(_) => Value::String("float".to_string()),
-            Value::String(_) => Value::String("string".to_string()),
-            Value::Array(_) => Value::String("array".to_string()),
-            Value::Function(_) => Value::String("function".to_string()),
-            Value::Object(_) => Value::String("object".to_string()),
+            Value::Null => Value::string("null".to_string()),
+            Value::Integer(_) => Value::string("integer".to_string()),
+            Value::Float(_) => Value::string("float".to_string()),
+            Value::String(_) => Value::string("string".to_string()),
+            Value::Array(_) => Value::string("array".to_string()),
+            Value::Function(_) => Value::string("function".to_string()),
+            Value::Object(_) => Value::string("object".to_string()),
             _ => todo!(),
         },
         UnaryOp::Clone => match val {
@@ -616,7 +616,7 @@ fn run_assign(
                 if let Some(env) = context.infunc.closure.0.env.0.upgrade() {
                     env.borrow_mut()
                         .slots
-                        .insert(Value::String(ident.0.clone()), val);
+                        .insert(Value::string(ident.0.clone()), val);
                 } else {
                     panic!("Setting field of null")
                 }
@@ -626,8 +626,8 @@ fn run_assign(
                 while let Some(strong_current) = current {
                     current = {
                         let mut obj = strong_current.borrow_mut();
-                        if obj.slots.contains_key(&Value::String(ident.0.clone())) {
-                            obj.slots.insert(Value::String(ident.0.clone()), val);
+                        if obj.slots.contains_key(&Value::string(ident.0.clone())) {
+                            obj.slots.insert(Value::string(ident.0.clone()), val);
                             break;
                         }
                         obj.delegate.clone().map(|obj_ref| obj_ref.0)

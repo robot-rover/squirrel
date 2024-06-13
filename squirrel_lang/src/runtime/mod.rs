@@ -91,7 +91,7 @@ enum Value {
     Float(H64),
     Integer(i64),
     // TODO: This should be an Rc
-    String(String),
+    String(StringRef),
     Null,
     Object(ObjectRef),
     Array(ArrayRef),
@@ -119,6 +119,10 @@ impl Value {
 
     fn float(val: f64) -> Self {
         Value::Float(H64::from(val))
+    }
+
+    fn string(val: String) -> Self {
+        Value::String(StringRef(Rc::new(val)))
     }
 }
 
@@ -152,6 +156,10 @@ impl WeakRef {
         WeakRef(Rc::downgrade(&obj.0))
     }
 }
+
+#[derive(Debug, Clone)]
+struct StringRef(Rc<String>);
+rc_hash_eq!(StringRef, String, Rc);
 
 #[derive(Debug, Clone)]
 
@@ -258,7 +266,7 @@ impl From<&Literal> for Value {
         match literal {
             Literal::Integer(integer) => Value::Integer(*integer),
             Literal::Number(float) => Value::Float((*float).into()),
-            Literal::String(string) => Value::String(string.clone()),
+            Literal::String(string) => Value::String(StringRef(Rc::new(string.clone()))),
             Literal::Null => Value::Null,
         }
     }
