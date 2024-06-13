@@ -537,7 +537,6 @@ mod tests {
 
     use super::*;
 
-
     fn lex(input: &str) -> Vec<Result<Token, LexError>> {
         Lexer::new(input).collect()
     }

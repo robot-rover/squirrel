@@ -1,12 +1,16 @@
-use std::{collections::HashMap, f32::consts::E};
+use std::collections::HashMap;
 
 use crate::{
     context::Span,
-    parser::ast::{self, Assign, AssignKind, AssignTarget, BinaryOp, Expr, ExprData, Ident, Statement, StatementData, UnaryOp, UnaryRefOp},
+    parser::ast::{
+        self, AssignKind, AssignTarget, BinaryOp, Expr, ExprData, Ident, Statement, StatementData,
+        UnaryOp, UnaryRefOp,
+    },
 };
 
 use super::{
-    ArrayRef, Closure, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value, WeakRef
+    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value,
+    WeakRef, H64,
 };
 
 type ExprResult = Result<Value, ExecError>;
@@ -30,7 +34,10 @@ fn run(tree: &ast::Function) -> ExprResult {
     let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root), WeakRef::new(&root));
     let infunc = FuncRuntime::new(root_closure, Vec::new());
     let mut vm_state = VMState { root_table: root };
-    let mut context = Context { infunc, vm_state: &mut vm_state };
+    let mut context = Context {
+        infunc,
+        vm_state: &mut vm_state,
+    };
 
     run_function(&mut context, &tree.body)
 }
@@ -49,59 +56,117 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
             for statement in stmts {
                 run_statement(context, statement)?;
             }
-        },
-        StatementData::Expr(expr) => { run_expression(context, expr)?; },
+        }
+        StatementData::Expr(expr) => {
+            run_expression(context, expr)?;
+        }
         StatementData::IfElse(cond, if_true, if_false) => {
             if run_expression(context, cond)?.truthy() {
                 run_statement(context, if_true)?;
             } else {
                 run_statement(context, if_false)?;
             }
-        },
+        }
         StatementData::While(cond, body) => {
             while run_expression(context, cond)?.truthy() {
                 match run_statement(context, body) {
                     Ok(()) => {}
                     Err(FlowControl::Break(_span)) => break,
-                    Err(FlowControl::Continue(_span)) => {},
+                    Err(FlowControl::Continue(_span)) => {}
                     Err(other) => return Err(other),
                 }
             }
+        }
+        StatementData::DoWhile(cond, body) => loop {
+            match run_statement(context, body) {
+                Ok(()) => {}
+                Err(FlowControl::Break(_span)) => break,
+                Err(FlowControl::Continue(_span)) => {}
+                Err(other) => return Err(other),
+            }
+            if !run_expression(context, cond)?.truthy() {
+                break;
+            }
         },
-        StatementData::DoWhile(cond, body) => {
-            loop {
+        StatementData::Switch(val, cases, default) => {
+            run_case(context, val, cases, default.as_ref().map(|b| &**b))?
+        }
+        StatementData::For {
+            init,
+            cond,
+            incr,
+            body,
+        } => {
+            run_statement(context, init)?;
+            while run_expression(context, cond)?.truthy() {
                 match run_statement(context, body) {
                     Ok(()) => {}
                     Err(FlowControl::Break(_span)) => break,
-                    Err(FlowControl::Continue(_span)) => {},
+                    Err(FlowControl::Continue(_span)) => {}
                     Err(other) => return Err(other),
                 }
-                if !run_expression(context, cond)?.truthy() {
-                    break;
-                }
+                run_statement(context, incr)?;
             }
-        },
-        StatementData::Switch(val, cases, default) => run_case(context, val, cases, default.as_ref().map(|b| &**b))?,
-        StatementData::For { init, cond, incr, body } => todo!(),
-        StatementData::Foreach { index_id, value_id, iterable, body } => todo!(),
+        }
+        StatementData::Foreach {
+            index_id,
+            value_id,
+            iterable,
+            body,
+        } => todo!("Foreach is not implemented"),
         StatementData::Break => return Err(FlowControl::Break(statement.span)),
         StatementData::Continue => return Err(FlowControl::Continue(statement.span)),
-        StatementData::Return(val) => return Err(FlowControl::Return(statement.span, run_expression(context, val)?)),
+        StatementData::Return(val) => {
+            return Err(FlowControl::Return(
+                statement.span,
+                run_expression(context, val)?,
+            ))
+        }
         StatementData::Yield(val) => todo!("Yield not implemented"),
         StatementData::LocalDec(ident, val) => {
             let val = run_expression(context, val)?;
             context.infunc.locals.insert(ident.0.clone(), val);
-        },
+        }
         StatementData::TryCatch(_, _, _) => todo!("Try Catch not implemented"),
         StatementData::Throw(_) => todo!("Throw not implemented"),
         StatementData::Const(_, _) => todo!("Const not implemented"),
-        StatementData::Empty => {},
+        StatementData::Empty => {}
     }
     Ok(())
 }
 
-fn run_case(context: &mut Context, val: &Expr, cases: &[(Expr, Statement)], default: Option<&Statement>) -> FlowResult {
-    todo!()
+fn run_case(
+    context: &mut Context,
+    val: &Expr,
+    cases: &[(Expr, Statement)],
+    default: Option<&Statement>,
+) -> FlowResult {
+    let cond = run_expression(context, val)?;
+    let mut matched = false;
+    for (case_val, body) in cases {
+        // TODO: Does squirrel evaluate all case labels?
+        if !matched {
+            let case_val = run_expression(context, case_val)?;
+            if cond == case_val {
+                matched = true;
+            }
+        }
+        if matched {
+            match run_statement(context, body) {
+                Ok(()) => {}
+                Err(FlowControl::Break(_span)) => return Ok(()),
+                Err(other) => return Err(other),
+            }
+        }
+    }
+    if let Some(default) = default {
+        match run_statement(context, default) {
+            Ok(()) => {}
+            Err(FlowControl::Break(_span)) => return Ok(()),
+            Err(other) => return Err(other),
+        }
+    }
+    Ok(())
 }
 
 fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
@@ -128,18 +193,24 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
         .into()),
         ExprData::ClassDef { parent, members } => run_class(context, parent.as_ref(), members),
         ExprData::Assign(assign) => {
-            let val = run_expression(context, &assign.value)?;
-            let is_newslot = match &assign.kind {
-                AssignKind::Normal => false,
-                AssignKind::NewSlot => true,
-                AssignKind::Mult => todo!(),
-                AssignKind::Div => todo!(),
-                AssignKind::Add => todo!(),
-                AssignKind::Sub => todo!(),
+            let mut val = run_expression(context, &assign.value)?;
+            let (is_newslot, op) = match &assign.kind {
+                AssignKind::Normal => (false, None),
+                AssignKind::NewSlot => (true, None),
+                AssignKind::Add => (false, Some(BinaryOp::Add)),
+                AssignKind::Sub => (false, Some(BinaryOp::Sub)),
+                AssignKind::Mult => (false, Some(BinaryOp::Mul)),
+                AssignKind::Div => (false, Some(BinaryOp::Div)),
+            };
+            val = if let Some(op) = op {
+                let target_val = get_assign_target(context, &assign.target)?;
+                run_binary_op(context, &op, target_val, val)?
+            } else {
+                val
             };
             run_assign(context, &assign.target, val.clone(), is_newslot)?;
             Ok(val)
-        },
+        }
         ExprData::Ternary {
             cond,
             true_expr,
@@ -151,11 +222,23 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 run_expression(context, false_expr)
             }
         }
-        ExprData::BinaryOp { op, lhs, rhs } => run_binary_op(context, op, lhs, rhs),
-        ExprData::UnaryOp(op, val) => run_unary_op(context, op, val),
+        ExprData::BinaryOp { op, lhs, rhs } => {
+            let lhs = run_expression(context, lhs)?;
+            let rhs = run_expression(context, rhs)?;
+            run_binary_op(context, op, lhs, rhs)
+        }
+        ExprData::UnaryOp(op, val) => {
+            let val = run_expression(context, val)?;
+            run_unary_op(context, op, val)
+        }
         ExprData::UnaryRefOp(op, val) => run_unary_ref_op(context, op, val),
         ExprData::FunctionCall { func, args } => run_function_call(context, func, args),
-        ExprData::ArrayAccess { array, index } => run_array_access(context, array, index),
+        ExprData::ArrayAccess { array, index } => {
+            let span = index.span;
+            let array = run_expression(context, array)?;
+            let index = run_expression(context, index)?;
+            run_array_access(context, &array, index, span)
+        }
         ExprData::This => Ok(context.infunc.closure.0.env.clone().into()),
         ExprData::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
@@ -173,16 +256,16 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
             let env = context.infunc.closure.0.env.0.upgrade();
-            Ok(env.and_then(|obj| {
-                let obj = obj.borrow();
-                if obj.is_class_inst {
-                    obj.delegate
-                        .as_ref()
-                        .map(|del| Value::Object(del.clone()))
-                } else {
-                    None
-                }
-            }).unwrap_or(Value::Null))
+            Ok(env
+                .and_then(|obj| {
+                    let obj = obj.borrow();
+                    if obj.is_class_inst {
+                        obj.delegate.as_ref().map(|del| Value::Object(del.clone()))
+                    } else {
+                        None
+                    }
+                })
+                .unwrap_or(Value::Null))
         }
     }
 }
@@ -238,7 +321,10 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
     let ast_fn = unsafe { func.0.ast_fn.as_ref() };
     let rt_func = FuncRuntime::new(func, args);
     let body = &ast_fn.body;
-    let mut context = Context { infunc: rt_func, vm_state: context.vm_state};
+    let mut context = Context {
+        infunc: rt_func,
+        vm_state: context.vm_state,
+    };
     run_function(&mut context, body)
 }
 
@@ -262,11 +348,13 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
 
     let key = Value::String(ident.to_string());
     let env_match = context
-            .infunc
-            .closure.0
-            .env
-            .0
-            .upgrade().and_then(|env| env.borrow().get_field(&key));
+        .infunc
+        .closure
+        .0
+        .env
+        .0
+        .upgrade()
+        .and_then(|env| env.borrow().get_field(&key));
     if let Some(value) = env_match {
         return Ok(value);
     }
@@ -294,7 +382,6 @@ fn run_field_access(context: &mut Context, target: &Value, field: &str, span: Sp
             match res {
                 Some(val) => Ok(val),
                 None => Err(ExecError::undefined_variable((field.to_string(), span))),
-
             }
         }
         _ => panic!("Can't dereference non-object"),
@@ -303,59 +390,233 @@ fn run_field_access(context: &mut Context, target: &Value, field: &str, span: Sp
 
 fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, target: &AssignTarget) -> ExprResult {
     let val = get_assign_target(context, target)?;
-    let new_val = match op {
-        UnaryRefOp::PreIncr | UnaryRefOp::PostIncr => todo!(),
-        UnaryRefOp::PreDecr | UnaryRefOp::PostDecr => false,
+    let (is_add, return_new) = match op {
+        UnaryRefOp::PreIncr => (true, true),
+        UnaryRefOp::PreDecr => (false, true),
+        UnaryRefOp::PostIncr => (true, false),
+        UnaryRefOp::PostDecr => (false, false),
     };
-    match op {
-        UnaryRefOp::PreIncr | UnaryRefOp::PreDecr => {
+    let new_val = run_binary_op(
+        context,
+        if is_add {
+            &BinaryOp::Add
+        } else {
+            &BinaryOp::Sub
         },
-        UnaryRefOp::PostIncr | UnaryRefOp::PostDecr => {
-
-        },
-    }
-    todo!()
+        val.clone(),
+        Value::Integer(1),
+    )?;
+    Ok(if return_new { new_val } else { val })
 }
 
-fn run_class(context: &mut Context, parent: Option<&Ident>, table_decl: &[(Expr, Expr)]) -> ExprResult {
+fn run_class(
+    context: &mut Context,
+    parent: Option<&Ident>,
+    table_decl: &[(Expr, Expr)],
+) -> ExprResult {
     todo!()
 }
 
 fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
-    todo!()
+    Ok(ObjectRef::new(Object {
+        delegate: None,
+        slots: table_decl
+            .iter()
+            .map(|(key, val)| {
+                let key = run_expression(context, key)?;
+                let val = run_expression(context, val)?;
+                Ok((key, val))
+            })
+            .collect::<Result<HashMap<_, _>, _>>()?,
+        is_class_inst: false,
+    })
+    .into())
 }
 
-fn run_array_access(context: &mut Context, array: &Expr, index: &Expr) -> ExprResult {
-    todo!()
+fn run_array_access(context: &mut Context, array: &Value, index: Value, span: Span) -> ExprResult {
+    match array {
+        Value::String(string) => {
+            let index = match index {
+                Value::Integer(val) => val as usize,
+                _ => panic!("Illegal operation"),
+            };
+            Ok(Value::String(
+                string.chars().nth(index).unwrap().to_string(),
+            ))
+        }
+        Value::Object(obj) => obj
+            .0
+            .borrow()
+            .get_field(&index)
+            .ok_or_else(|| panic!("Key not in object")),
+        Value::Array(arr) => {
+            let index = match index {
+                Value::Integer(val) => val as usize,
+                _ => panic!("Illegal operation"),
+            };
+            Ok(arr
+                .0
+                .borrow()
+                .get(index)
+                .cloned()
+                .unwrap_or_else(|| panic!("Array index out of bounds")))
+        }
+        Value::Weak(weak) => {
+            let obj = weak.0.upgrade().expect("Weak reference is null");
+            let val = obj
+                .borrow()
+                .get_field(&index)
+                .ok_or_else(|| panic!("Key not in object"));
+            val
+        }
+        _ => panic!("illegal operation"),
+    }
 }
 
-fn run_unary_op(context: &mut Context, op: &UnaryOp, val: &Expr) -> ExprResult {
-    todo!()
+fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
+    let res = match op {
+        UnaryOp::Neg => match val {
+            Value::Float(H64(val)) => Value::float(-val),
+            Value::Integer(val) => Value::Integer(-val),
+            _ => panic!("Illegal operation"),
+        },
+        UnaryOp::Not => match val {
+            Value::Integer(val) => Value::Integer(if val == 0 { 1 } else { 0 }),
+            _ => panic!("Illegal operation"),
+        },
+        UnaryOp::BitNot => match val {
+            Value::Integer(val) => Value::Integer(!val),
+            _ => panic!("Illegal operation"),
+        },
+        UnaryOp::TypeOf => match val {
+            Value::Null => Value::String("null".to_string()),
+            Value::Integer(_) => Value::String("integer".to_string()),
+            Value::Float(_) => Value::String("float".to_string()),
+            Value::String(_) => Value::String("string".to_string()),
+            Value::Array(_) => Value::String("array".to_string()),
+            Value::Function(_) => Value::String("function".to_string()),
+            Value::Object(_) => Value::String("object".to_string()),
+            _ => todo!(),
+        },
+        UnaryOp::Clone => match val {
+            Value::Object(_) => todo!(),
+            Value::Array(_) => todo!(),
+            Value::Weak(_) => todo!(),
+            other => other.clone(),
+        },
+        UnaryOp::Resume => todo!("Resume not implemented"),
+    };
+    Ok(res)
 }
 
-fn run_binary_op(context: &mut Context, op: &BinaryOp, lhs: &Expr, rhs: &Expr) -> ExprResult {
-    todo!()
+macro_rules! promoting_op {
+    ($lhs:ident, $rhs:ident, $op:tt) => {
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Value::Integer($lhs $op $rhs),
+            (Value::Float(H64($lhs)), Value::Float(H64($rhs))) => Value::float($lhs $op $rhs),
+            (Value::Integer($lhs), Value::Float(H64($rhs))) => Value::float(($lhs as f64) $op $rhs),
+            (Value::Float(H64($lhs)), Value::Integer($rhs)) => Value::float($lhs $op ($rhs as f64)),
+            _ => panic!("Illegal operation"),
+        }
+    };
+    ($lhs:ident, $rhs:ident, $op:tt, $result:tt) => {
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Value::$result($lhs $op $rhs),
+            (Value::Float(H64($lhs)), Value::Float(H64($rhs))) => Value::$result($lhs $op $rhs),
+            (Value::Integer($lhs), Value::Float(H64($rhs))) => Value::$result(($lhs as f64) $op $rhs),
+            (Value::Float(H64($lhs)), Value::Integer($rhs)) => Value::$result($lhs $op ($rhs as f64)),
+            _ => panic!("Illegal operation"),
+        }
+    };
+}
+
+macro_rules! int_op {
+    ($lhs:ident, $rhs:ident, $op:tt) => {
+        int_op!($lhs, $rhs, $op, Integer)
+    };
+    ($lhs:ident, $rhs:ident, $op:tt, $result:tt) => {
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Value::$result($lhs $op $rhs),
+            _ => panic!("Illegal operation"),
+        }
+    };
+}
+
+fn run_binary_op(context: &mut Context, op: &BinaryOp, lhs: Value, rhs: Value) -> ExprResult {
+    let res = match op {
+        BinaryOp::Add => promoting_op!(lhs, rhs, +),
+        BinaryOp::Sub => promoting_op!(lhs, rhs, -),
+        BinaryOp::Mul => promoting_op!(lhs, rhs, *),
+        BinaryOp::Div => promoting_op!(lhs, rhs, /),
+        BinaryOp::Mod => int_op!(lhs, rhs, %),
+        // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
+        BinaryOp::Eq => promoting_op!(lhs, rhs, ==, boolean),
+        BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean),
+        BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean),
+        BinaryOp::Compare => promoting_op!(lhs, rhs, -),
+        BinaryOp::And => {
+            if !lhs.truthy() {
+                lhs
+            } else {
+                rhs
+            }
+        }
+        BinaryOp::Or => {
+            if lhs.truthy() {
+                lhs
+            } else {
+                rhs
+            }
+        }
+        BinaryOp::BitAnd => int_op!(lhs, rhs, &),
+        BinaryOp::BitOr => int_op!(lhs, rhs, |),
+        BinaryOp::BitXor => int_op!(lhs, rhs, ^),
+        BinaryOp::Shl => int_op!(lhs, rhs, <<),
+        BinaryOp::Shr => match (lhs, rhs) {
+            (Value::Integer(lhs), Value::Integer(rhs)) => {
+                Value::Integer(((lhs as u64) >> rhs) as i64)
+            }
+            _ => panic!("Illegal operation"),
+        },
+        BinaryOp::AShr => int_op!(lhs, rhs, >>),
+        BinaryOp::In => todo!("In is not implemented"),
+        BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
+    };
+    Ok(res)
 }
 
 fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult {
     match target {
-        AssignTarget::Ident(ident) => {
-            todo!()
-        },
-        AssignTarget::ArrayAccess { array, index, span } => todo!(),
-        AssignTarget::FieldAccess(_, _) => todo!(),
+        AssignTarget::Ident(ident) => run_load_ident(context, &ident.0, ident.1),
+        AssignTarget::ArrayAccess { array, index, span } => {
+            let array = run_expression(context, array)?;
+            let index = run_expression(context, index)?;
+            run_array_access(context, &array, index, *span)
+        }
+        AssignTarget::FieldAccess(target, field) => {
+            let target = run_expression(context, target)?;
+            run_field_access(context, &target, &field.0, field.1)
+        }
     }
 }
 
-fn run_assign(context: &mut Context, target: &AssignTarget, val: Value, is_newslot: bool) -> Result<(), ExecError> {
+fn run_assign(
+    context: &mut Context,
+    target: &AssignTarget,
+    val: Value,
+    is_newslot: bool,
+) -> Result<(), ExecError> {
     match target {
         AssignTarget::Ident(ident) => {
             if let Some(val) = context.infunc.locals.get_mut(&ident.0) {
                 assert!(is_newslot, "Can't create a local slot");
                 *val = val.clone();
-            } if is_newslot {
+            }
+            if is_newslot {
                 if let Some(env) = context.infunc.closure.0.env.0.upgrade() {
-                    env.borrow_mut().slots.insert(Value::String(ident.0.clone()), val);
+                    env.borrow_mut()
+                        .slots
+                        .insert(Value::String(ident.0.clone()), val);
                 } else {
                     panic!("Setting field of null")
                 }
@@ -374,7 +635,7 @@ fn run_assign(context: &mut Context, target: &AssignTarget, val: Value, is_newsl
                 }
                 panic!("Slot does not exist: {}", ident.0)
             }
-        },
+        }
         AssignTarget::ArrayAccess { array, index, span } => todo!(),
         AssignTarget::FieldAccess(_, _) => todo!(),
     }
@@ -387,20 +648,20 @@ fn run_ident(context: &mut Context, ident: &Ident) -> ExprResult {
 
 #[cfg(test)]
 mod tests {
-    use crate::{parser::parse, test_foreach};
     use super::*;
+    use crate::{parser::parse, test_foreach};
 
     test_foreach!(sample_test);
 
     fn sample_test(file_name: &str, file_contents: &str) {
         let actual_ast = match parse(file_contents, file_name.to_string()) {
             Ok(ast) => ast,
-            Err(err) => panic!("{}", err)
+            Err(err) => panic!("{}", err),
         };
 
         let result = match run(&actual_ast) {
             Ok(val) => val,
-            Err(err) => panic!("{:?}", err)
+            Err(err) => panic!("{:?}", err),
         };
 
         // let expect_ast = exchange_data("parse", file_name, &actual_ast);

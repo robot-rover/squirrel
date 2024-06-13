@@ -56,8 +56,6 @@ pub enum BinaryOp {
     Shr,
     AShr,
     // Utility
-    Comma,
-    Dot,
     In,
     InstanceOf,
 }

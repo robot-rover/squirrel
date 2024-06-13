@@ -21,7 +21,13 @@ pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorCont
         .map_err(|err| err.with_context(&lexer))
         .map_err(|err| err.with_context(contents))?;
     let body = Statement::block(stmts, Span::empty(), Span::empty());
-    Ok(Function { keyword_span: Span::empty(), args: Vec::new(), default_expr: Vec::new(), is_varargs: false, body: Box::new(body) })
+    Ok(Function {
+        keyword_span: Span::empty(),
+        args: Vec::new(),
+        default_expr: Vec::new(),
+        is_varargs: false,
+        body: Box::new(body),
+    })
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -623,7 +629,7 @@ mod tests {
     fn sample_test(file_name: &str, file_contents: &str) {
         let actual_ast = match parse(file_contents, file_name.to_string()) {
             Ok(ast) => ast,
-            Err(err) => panic!("{}", err)
+            Err(err) => panic!("{}", err),
         };
         let expect_ast = exchange_data("parse", file_name, &actual_ast);
 

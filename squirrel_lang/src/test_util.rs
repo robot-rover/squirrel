@@ -1,6 +1,6 @@
 use std::{
     fs::{self},
-    path::{PathBuf},
+    path::PathBuf,
 };
 
 use serde::{de::DeserializeOwned, Serialize};

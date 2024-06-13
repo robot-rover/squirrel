@@ -1,6 +1,6 @@
 use std::{
     borrow::Borrow,
-    cell::{RefCell},
+    cell::RefCell,
     collections::HashMap,
     ptr::NonNull,
     rc::{Rc, Weak},
@@ -90,6 +90,7 @@ impl From<H64> for f64 {
 enum Value {
     Float(H64),
     Integer(i64),
+    // TODO: This should be an Rc
     String(String),
     Null,
     Object(ObjectRef),
@@ -110,6 +111,14 @@ impl Value {
             Value::Null => false,
             _ => true,
         }
+    }
+
+    fn boolean(val: bool) -> Self {
+        Value::Integer(if val { 1 } else { 0 })
+    }
+
+    fn float(val: f64) -> Self {
+        Value::Float(H64::from(val))
     }
 }
 
@@ -177,7 +186,12 @@ struct Closure {
 }
 
 impl ClosureRef {
-    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, env: WeakRef, root: WeakRef) -> ClosureRef {
+    fn new(
+        ast_fn: &ast::Function,
+        default_vals: Vec<Value>,
+        env: WeakRef,
+        root: WeakRef,
+    ) -> ClosureRef {
         ClosureRef(Rc::new(Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,
@@ -194,10 +208,7 @@ struct FuncRuntime {
 }
 
 impl FuncRuntime {
-    fn new(
-        func_ref: ClosureRef,
-        arg_vals: Vec<Value>,
-    ) -> FuncRuntime {
+    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>) -> FuncRuntime {
         let mut locals = HashMap::new();
         let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
 
@@ -235,7 +246,10 @@ impl FuncRuntime {
         } else {
             assert_eq!(arg_iter.next(), None, "Too many arguments");
         }
-        FuncRuntime { closure: func_ref, locals }
+        FuncRuntime {
+            closure: func_ref,
+            locals,
+        }
     }
 }
 
