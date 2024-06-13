@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -88,7 +92,19 @@
                       "start": 35,
                       "end": 43
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 58,
+                      "end": 63
+                    },
+                    "args": [
+                      [
+                        "arr",
+                        {
+                          "start": 59,
+                          "end": 62
+                        }
+                      ]
+                    ],
                     "default_expr": [],
                     "is_varargs": false,
                     "body": {
@@ -457,6 +473,10 @@
                     "keyword_span": {
                       "start": 246,
                       "end": 254
+                    },
+                    "arg_span": {
+                      "start": 268,
+                      "end": 270
                     },
                     "args": [],
                     "default_expr": [],

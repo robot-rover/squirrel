@@ -1,11 +1,8 @@
 use std::{
-    borrow::Borrow,
-    cell::RefCell,
-    collections::HashMap,
-    io,
-    ptr::NonNull,
-    rc::{Rc, Weak},
+    borrow::Borrow, cell::RefCell, collections::HashMap, f32::consts::E, io, ops::{Range, RangeInclusive}, ptr::NonNull, rc::{Rc, Weak}
 };
+
+use ariadne::Color;
 
 use crate::{
     context::{Span, SqBacktrace, SquirrelError},
@@ -40,6 +37,7 @@ macro_rules! rc_hash_eq {
 pub enum ExecError {
     UndefinedVariable(Ident, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
+    WrongArgCount { func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span>, bt: SqBacktrace},
 }
 
 impl ExecError {
@@ -49,6 +47,10 @@ impl ExecError {
 
     fn illegal_keyword(span: Span) -> Self {
         ExecError::IllegalKeyword(span, SqBacktrace::new())
+    }
+
+    fn wrong_arg_count(func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span>) -> Self {
+        ExecError::WrongArgCount { func_span, call_span, expected, got, definition_span, bt: SqBacktrace::new() }
     }
 
     fn with_context(self, file_name: String) -> SquirrelError {
@@ -65,6 +67,20 @@ impl ExecError {
                 format!("Keyword is not valid in this context"),
                 bt,
             ),
+            ExecError::WrongArgCount { func_span, call_span, expected, got, definition_span, bt} => {
+                let mut labels = vec![
+                    (func_span, if expected.start == expected.end {
+                        format!("Function expected {} arguments", expected.start)
+                    } else {
+                        format!("Function expected {} to {} arguments", expected.start, expected.end)
+                    }, Color::Blue),
+                    (call_span, format!("Call has {} arguments", got), Color::Red),
+                ];
+                if let Some(dspan) = definition_span {
+                    labels.push((dspan, "Function defined here".to_string(), Color::Green));
+                }
+                SquirrelError::new_labels(file_name, format!("Function called with incorrect number of arguments"), labels, bt)
+            },
         }
     }
 }
@@ -274,13 +290,14 @@ struct FuncRuntime {
 }
 
 impl FuncRuntime {
-    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>, env: &Option<ObjectRef>) -> FuncRuntime {
+    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>, env: &Option<ObjectRef>, func_span: Span, call_span: Span) -> Result<FuncRuntime, ExecError> {
         let mut locals = HashMap::new();
         let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
 
         let n_arguments = arg_vals.len();
         let n_parameters = ast_func.args.len();
         let n_default = func_ref.0.default_vals.len();
+        assert!(n_parameters >= n_default);
 
         let mut arg_iter = arg_vals.into_iter();
         let zip_iter = arg_iter
@@ -294,7 +311,13 @@ impl FuncRuntime {
             } else if arg_idx >= n_parameters - n_default {
                 func_ref.0.default_vals[arg_idx - (n_parameters - n_default)].clone()
             } else {
-                panic!("Not enough arguments")
+                return Err(ExecError::wrong_arg_count(
+                    func_span,
+                    call_span,
+                    (n_parameters - n_default)..n_parameters,
+                    n_arguments,
+                    Some(unsafe { func_ref.0.ast_fn.as_ref() }.arg_span),
+                ));
             };
             locals.insert(param_name.clone(), val);
         }
@@ -306,21 +329,30 @@ impl FuncRuntime {
                 Vec::new()
             };
             locals.insert(
-                "varargs".to_string(),
+                "vargv".to_string(),
                 Value::Array(ArrayRef::new(vararg_vec)),
             );
         } else {
-            assert_eq!(arg_iter.next(), None, "Too many arguments");
+            let extra_args = arg_iter.count();
+            if extra_args > 0 {
+                return Err(ExecError::wrong_arg_count(
+                    func_span,
+                    call_span,
+                    (n_parameters - n_default)..n_parameters,
+                    n_arguments,
+                    Some(unsafe { func_ref.0.ast_fn.as_ref() }.arg_span),
+                ));
+            }
         }
         let env = match func_ref.0.env.as_ref() {
             Some(closure_ref) => closure_ref.0.upgrade().map(|rc| ObjectRef(rc)),
             None => env.clone(),
         };
-        FuncRuntime {
+        Ok(FuncRuntime {
             closure: func_ref,
             locals,
             env,
-        }
+        })
     }
 }
 

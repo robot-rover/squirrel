@@ -1,6 +1,5 @@
 use std::{
-    collections::HashMap,
-    io::{self, Write},
+    collections::HashMap, env, io::{self, Write}
 };
 
 use crate::{
@@ -39,7 +38,10 @@ pub fn run(
 ) -> Result<(), SquirrelError> {
     let root = init_root();
     let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root));
-    let infunc = FuncRuntime::new(root_closure, Vec::new(), &Some(root.clone()));
+    let arg_vals = env::args().into_iter().map(Value::string).collect();
+    let infunc = FuncRuntime::new(root_closure, arg_vals, &Some(root.clone()), Span::empty(), Span::empty()).expect(
+        "Unable to create root function runtime",
+    );
     let mut vm_state = VMState {
         root_table: root,
         stdout: stdout.into(),
@@ -262,15 +264,20 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             run_unary_op(context, op, val)
         }
         ExprData::UnaryRefOp(op, val) => run_unary_ref_op(context, op, val),
-        ExprData::FunctionCall { func, args } => run_function_call(context, func, args),
+        ExprData::FunctionCall { func, args } => run_function_call(context, func, args, args.iter().map(|expr| expr.span).fold(func.span(), |acc, span| acc | span)),
         ExprData::RawCall {
             func,
             this,
             parameters,
         } => {
+            let func_span = func.span;
             let func = run_expression(context, func)?;
+            let param_span = parameters
+                .iter()
+                .map(|expr| expr.span)
+                .fold(func_span, |acc, span| acc | span);
             let this = run_expression(context, this)?;
-            run_rawcall(context, func, this, parameters)
+            run_rawcall(context, func, this, parameters, func_span, param_span)
         }
         ExprData::ArrayAccess { array, index } => {
             let span = index.span;
@@ -321,7 +328,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
     }
 }
 
-fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr]) -> ExprResult {
+fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr], args_span: Span) -> ExprResult {
     let (env, func_val) = match func {
         CallTarget::FieldAccess(target, field_name) => {
             let parent = run_expression(context, target)?;
@@ -341,10 +348,10 @@ fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr]) ->
             )
         }
     };
-    run_rawcall(context, func_val, env, args)
+    run_rawcall(context, func_val, env, args, func.span(), args_span)
 }
 
-fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr]) -> ExprResult {
+fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr], func_span: Span, call_span: Span) -> ExprResult {
     let env = match env {
         Value::Object(obj) => obj,
         _ => panic!("Can't call function on non-object"),
@@ -359,7 +366,7 @@ fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr]
     match func_val {
         Value::Function(func) => {
             let ast_fn = unsafe { func.0.ast_fn.as_ref() };
-            let rt_func = FuncRuntime::new(func, args, &context.infunc.env);
+            let rt_func = FuncRuntime::new(func, args, &context.infunc.env, func_span, call_span)?;
             let body = &ast_fn.body;
             let mut context = Context {
                 infunc: rt_func,

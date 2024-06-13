@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -64,6 +68,10 @@
                     "keyword_span": {
                       "start": 26,
                       "end": 34
+                    },
+                    "arg_span": {
+                      "start": 45,
+                      "end": 47
                     },
                     "args": [],
                     "default_expr": [],
@@ -147,6 +155,10 @@
                     "keyword_span": {
                       "start": 88,
                       "end": 96
+                    },
+                    "arg_span": {
+                      "start": 103,
+                      "end": 105
                     },
                     "args": [],
                     "default_expr": [],
@@ -590,6 +602,10 @@
                                   "start": 275,
                                   "end": 283
                                 },
+                                "arg_span": {
+                                  "start": 294,
+                                  "end": 296
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -668,6 +684,10 @@
                                 "keyword_span": {
                                   "start": 353,
                                   "end": 361
+                                },
+                                "arg_span": {
+                                  "start": 368,
+                                  "end": 370
                                 },
                                 "args": [],
                                 "default_expr": [],
@@ -1210,6 +1230,10 @@
                                   "start": 572,
                                   "end": 580
                                 },
+                                "arg_span": {
+                                  "start": 591,
+                                  "end": 593
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -1289,6 +1313,10 @@
                                   "start": 651,
                                   "end": 659
                                 },
+                                "arg_span": {
+                                  "start": 666,
+                                  "end": 668
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -1367,6 +1395,10 @@
                                 "keyword_span": {
                                   "start": 721,
                                   "end": 729
+                                },
+                                "arg_span": {
+                                  "start": 737,
+                                  "end": 739
                                 },
                                 "args": [],
                                 "default_expr": [],
@@ -1455,6 +1487,10 @@
                                 "keyword_span": {
                                   "start": 799,
                                   "end": 807
+                                },
+                                "arg_span": {
+                                  "start": 814,
+                                  "end": 816
                                 },
                                 "args": [],
                                 "default_expr": [],
@@ -2300,6 +2336,10 @@
                                   "start": 1120,
                                   "end": 1128
                                 },
+                                "arg_span": {
+                                  "start": 1139,
+                                  "end": 1141
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -2379,6 +2419,10 @@
                                   "start": 1199,
                                   "end": 1207
                                 },
+                                "arg_span": {
+                                  "start": 1214,
+                                  "end": 1216
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -2457,6 +2501,10 @@
                                 "keyword_span": {
                                   "start": 1269,
                                   "end": 1277
+                                },
+                                "arg_span": {
+                                  "start": 1285,
+                                  "end": 1287
                                 },
                                 "args": [],
                                 "default_expr": [],

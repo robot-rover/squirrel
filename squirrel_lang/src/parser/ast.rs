@@ -81,6 +81,7 @@ pub enum UnaryRefOp {
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Function {
     pub keyword_span: Span,
+    pub arg_span: Span,
     pub args: Vec<Ident>,
     pub default_expr: Vec<Expr>,
     pub is_varargs: bool,
@@ -306,6 +307,15 @@ impl From<Expr> for CallTarget {
         match value.data {
             ExprData::FieldAccess(path, ident) => CallTarget::FieldAccess(path, ident),
             _ => CallTarget::Expr(Box::new(value)),
+        }
+    }
+}
+
+impl CallTarget {
+    pub fn span(&self) -> Span {
+        match self {
+            CallTarget::Expr(expr) => expr.span,
+            CallTarget::FieldAccess(path, ident) => path.span | ident.1,
         }
     }
 }

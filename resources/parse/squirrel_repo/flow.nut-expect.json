@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -26,12 +30,23 @@
                       "start": 0,
                       "end": 8
                     },
+                    "arg_span": {
+                      "start": 12,
+                      "end": 17
+                    },
                     "args": [
                       [
                         "x",
                         {
                           "start": 13,
                           "end": 14
+                        }
+                      ],
+                      [
+                        "y",
+                        {
+                          "start": 15,
+                          "end": 16
                         }
                       ]
                     ],
@@ -133,12 +148,23 @@
                       "start": 39,
                       "end": 47
                     },
+                    "arg_span": {
+                      "start": 51,
+                      "end": 56
+                    },
                     "args": [
                       [
                         "x",
                         {
                           "start": 52,
                           "end": 53
+                        }
+                      ],
+                      [
+                        "y",
+                        {
+                          "start": 54,
+                          "end": 55
                         }
                       ]
                     ],
@@ -477,7 +503,19 @@
                       "start": 218,
                       "end": 226
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 231,
+                      "end": 236
+                    },
+                    "args": [
+                      [
+                        "obj",
+                        {
+                          "start": 232,
+                          "end": 235
+                        }
+                      ]
+                    ],
                     "default_expr": [],
                     "is_varargs": false,
                     "body": {
@@ -767,12 +805,23 @@
                             "start": 508,
                             "end": 516
                           },
+                          "arg_span": {
+                            "start": 516,
+                            "end": 521
+                          },
                           "args": [
                             [
                               "a",
                               {
                                 "start": 517,
                                 "end": 518
+                              }
+                            ],
+                            [
+                              "b",
+                              {
+                                "start": 519,
+                                "end": 520
                               }
                             ]
                           ],

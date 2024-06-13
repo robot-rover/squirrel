@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -188,6 +192,10 @@
                                   "start": 102,
                                   "end": 110
                                 },
+                                "arg_span": {
+                                  "start": 110,
+                                  "end": 112
+                                },
                                 "args": [],
                                 "default_expr": [],
                                 "is_varargs": false,
@@ -278,6 +286,10 @@
                         "keyword_span": {
                           "start": 149,
                           "end": 157
+                        },
+                        "arg_span": {
+                          "start": 175,
+                          "end": 177
                         },
                         "args": [],
                         "default_expr": [],
@@ -571,12 +583,23 @@
                           "start": 237,
                           "end": 245
                         },
+                        "arg_span": {
+                          "start": 258,
+                          "end": 268
+                        },
                         "args": [
                           [
                             "name",
                             {
                               "start": 259,
                               "end": 263
+                            }
+                          ],
+                          [
+                            "pos",
+                            {
+                              "start": 264,
+                              "end": 267
                             }
                           ]
                         ],
@@ -1020,12 +1043,23 @@
                           "start": 549,
                           "end": 557
                         },
+                        "arg_span": {
+                          "start": 570,
+                          "end": 580
+                        },
                         "args": [
                           [
                             "name",
                             {
                               "start": 571,
                               "end": 575
+                            }
+                          ],
+                          [
+                            "pos",
+                            {
+                              "start": 576,
+                              "end": 579
                             }
                           ]
                         ],

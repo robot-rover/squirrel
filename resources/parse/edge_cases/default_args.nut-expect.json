@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -64,6 +68,10 @@
                     "keyword_span": {
                       "start": 8,
                       "end": 16
+                    },
+                    "arg_span": {
+                      "start": 22,
+                      "end": 24
                     },
                     "args": [],
                     "default_expr": [],
@@ -185,7 +193,19 @@
                       "start": 57,
                       "end": 65
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 76,
+                      "end": 93
+                    },
+                    "args": [
+                      [
+                        "a_arg",
+                        {
+                          "start": 77,
+                          "end": 82
+                        }
+                      ]
+                    ],
                     "default_expr": [
                       {
                         "data": {
@@ -473,7 +493,19 @@
                       "start": 185,
                       "end": 193
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 202,
+                      "end": 215
+                    },
+                    "args": [
+                      [
+                        "b_arg",
+                        {
+                          "start": 203,
+                          "end": 208
+                        }
+                      ]
+                    ],
                     "default_expr": [
                       {
                         "data": {

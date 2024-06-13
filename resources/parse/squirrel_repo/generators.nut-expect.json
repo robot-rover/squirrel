@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -26,7 +30,19 @@
                       "start": 104,
                       "end": 112
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 123,
+                      "end": 128
+                    },
+                    "args": [
+                      [
+                        "max",
+                        {
+                          "start": 124,
+                          "end": 127
+                        }
+                      ]
+                    ],
                     "default_expr": [],
                     "is_varargs": false,
                     "body": {
@@ -702,7 +718,19 @@
                       "start": 455,
                       "end": 463
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 469,
+                      "end": 472
+                    },
+                    "args": [
+                      [
+                        "n",
+                        {
+                          "start": 470,
+                          "end": 471
+                        }
+                      ]
+                    ],
                     "default_expr": [],
                     "is_varargs": false,
                     "body": {

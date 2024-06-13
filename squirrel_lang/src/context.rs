@@ -7,7 +7,7 @@ use std::{
     rc::Rc,
 };
 
-use ariadne::{Label, Report, ReportKind, Source};
+use ariadne::{Color, Label, Report, ReportKind, Source};
 use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 
@@ -126,31 +126,45 @@ impl Display for SqBacktrace {
 
 #[derive(Debug, Clone)]
 pub struct SquirrelError {
-    pub file_name: String,
-    pub token: Span,
-    pub message: String,
-    pub backtrace: SqBacktrace,
+    file_name: String,
+    message: String,
+    labels: Vec<(Span, String, Color)>,
+    backtrace: SqBacktrace,
 }
 
 impl SquirrelError {
     pub fn new(file_name: String, token: Span, message: String, backtrace: SqBacktrace) -> Self {
         Self {
             file_name,
-            token,
             message,
+            labels: vec![(token, "Here".to_string(), Color::Red)],
+            backtrace,
+        }
+    }
+
+    pub fn new_labels(
+        file_name: String,
+        message: String,
+        labels: Vec<(Span, String, Color)>,
+        backtrace: SqBacktrace,
+    ) -> Self {
+        Self {
+            file_name,
+            message,
+            labels,
             backtrace,
         }
     }
 
     pub fn write(&self, f: &mut fmt::Formatter<'_>, source: &str) -> fmt::Result {
         let mut report_vec = Vec::new();
-        Report::build(ReportKind::Error, self.file_name.as_str(), self.token.start)
+        Report::build(ReportKind::Error, self.file_name.as_str(), self.labels[0].0.start)
             .with_message(self.message.as_str())
-            .with_label(
-                Label::new((self.file_name.as_str(), self.token.into()))
-                    .with_message("Here")
-                    .with_color(ariadne::Color::Red),
-            )
+            .with_labels(self.labels.iter().map(|(span, label, color)| {
+                Label::new((self.file_name.as_str(), (*span).into()))
+                    .with_message(label.as_str())
+                    .with_color(*color)
+            }))
             .finish()
             .write(
                 (self.file_name.as_str(), Source::from(source)),

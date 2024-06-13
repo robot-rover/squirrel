@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -25,6 +29,10 @@
                     "keyword_span": {
                       "start": 0,
                       "end": 8
+                    },
+                    "arg_span": {
+                      "start": 15,
+                      "end": 17
                     },
                     "args": [],
                     "default_expr": [],
@@ -48,6 +56,10 @@
                                       "keyword_span": {
                                         "start": 38,
                                         "end": 46
+                                      },
+                                      "arg_span": {
+                                        "start": 46,
+                                        "end": 48
                                       },
                                       "args": [],
                                       "default_expr": [],

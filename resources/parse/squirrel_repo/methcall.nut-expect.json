@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -104,7 +108,19 @@
                           "start": 113,
                           "end": 121
                         },
-                        "args": [],
+                        "arg_span": {
+                          "start": 141,
+                          "end": 153
+                        },
+                        "args": [
+                          [
+                            "startstate",
+                            {
+                              "start": 142,
+                              "end": 152
+                            }
+                          ]
+                        ],
                         "default_expr": [],
                         "is_varargs": false,
                         "body": {
@@ -207,6 +223,10 @@
                           "start": 181,
                           "end": 189
                         },
+                        "arg_span": {
+                          "start": 203,
+                          "end": 205
+                        },
                         "args": [],
                         "default_expr": [],
                         "is_varargs": false,
@@ -289,6 +309,10 @@
                         "keyword_span": {
                           "start": 228,
                           "end": 236
+                        },
+                        "arg_span": {
+                          "start": 253,
+                          "end": 255
                         },
                         "args": [],
                         "default_expr": [],
@@ -512,12 +536,23 @@
                           "start": 363,
                           "end": 371
                         },
+                        "arg_span": {
+                          "start": 394,
+                          "end": 419
+                        },
                         "args": [
                           [
                             "start_state",
                             {
                               "start": 395,
                               "end": 406
+                            }
+                          ],
+                          [
+                            "max_counter",
+                            {
+                              "start": 407,
+                              "end": 418
                             }
                           ]
                         ],
@@ -669,6 +704,10 @@
                         "keyword_span": {
                           "start": 488,
                           "end": 496
+                        },
+                        "arg_span": {
+                          "start": 517,
+                          "end": 519
                         },
                         "args": [],
                         "default_expr": [],
@@ -906,6 +945,10 @@
                     "keyword_span": {
                       "start": 633,
                       "end": 641
+                    },
+                    "arg_span": {
+                      "start": 646,
+                      "end": 648
                     },
                     "args": [],
                     "default_expr": [],

@@ -22,9 +22,10 @@ pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorCont
     let body = Statement::block(stmts, Span::empty(), Span::empty());
     Ok(Function {
         keyword_span: Span::empty(),
+        arg_span: Span::empty(),
         args: Vec::new(),
         default_expr: Vec::new(),
-        is_varargs: false,
+        is_varargs: true,
         body: Box::new(body),
     })
 }
@@ -486,23 +487,24 @@ fn parse_function_args_body<'s>(
     tokens: &mut SpannedLexer<'s>,
     keyword_span: Span,
 ) -> ParseResult<Function> {
-    let (init_token, ctx) = tokens.next_token(true)?;
+    let (init_token, init_call_ctx) = tokens.next_token(true)?;
     match init_token {
         Token::LeftParenthesis => {}
-        other => return Err(ParseError::unexpected_token(other, ctx)),
+        other => return Err(ParseError::unexpected_token(other, init_call_ctx)),
     };
     let mut args = Vec::new();
     let mut default_expr = Vec::new();
     let mut is_varargs = false;
-    loop {
+    let end_call_ctx = loop {
         let (next, next_ctx) = tokens.next_token(true)?;
         match next {
-            Token::RightParenthesis => break,
+            Token::RightParenthesis => break next_ctx,
             Token::Newline => {}
             Token::Varargs => {
                 is_varargs = true;
             }
             Token::Identifier(name) if !is_varargs => {
+                args.push((name, next_ctx));
                 if let (Token::Assign, _) = tokens.peek_token(true)? {
                     tokens.skip_token();
                     let default_val = parse_expr(
@@ -521,18 +523,18 @@ fn parse_function_args_body<'s>(
                 let (term, ctx) = tokens.next_token(true)?;
                 match term {
                     Token::Comma => {}
-                    Token::RightParenthesis => break,
+                    Token::RightParenthesis => break ctx,
                     other => return Err(ParseError::unexpected_token(other, ctx)),
                 }
-                args.push((name, next_ctx));
             }
-            other => return Err(ParseError::unexpected_token(other, ctx)),
+            other => return Err(ParseError::unexpected_token(other, next_ctx)),
         }
-    }
+    };
 
     let body = parse_statement(tokens)?;
     Ok(Function {
         args,
+        arg_span: init_call_ctx | end_call_ctx,
         default_expr,
         is_varargs,
         body: Box::new(body),

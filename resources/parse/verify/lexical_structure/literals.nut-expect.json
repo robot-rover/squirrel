@@ -3,9 +3,13 @@
     "start": 0,
     "end": 0
   },
+  "arg_span": {
+    "start": 0,
+    "end": 0
+  },
   "args": [],
   "default_expr": [],
-  "is_varargs": false,
+  "is_varargs": true,
   "body": {
     "data": {
       "Block": [
@@ -26,7 +30,19 @@
                       "start": 0,
                       "end": 8
                     },
-                    "args": [],
+                    "arg_span": {
+                      "start": 16,
+                      "end": 21
+                    },
+                    "args": [
+                      [
+                        "val",
+                        {
+                          "start": 17,
+                          "end": 20
+                        }
+                      ]
+                    ],
                     "default_expr": [],
                     "is_varargs": false,
                     "body": {
