@@ -109,13 +109,15 @@
                                       "data": {
                                         "FunctionCall": {
                                           "func": {
-                                            "Ident": [
-                                              "fib",
-                                              {
+                                            "Expr": {
+                                              "data": {
+                                                "Ident": "fib"
+                                              },
+                                              "span": {
                                                 "start": 149,
                                                 "end": 152
                                               }
-                                            ]
+                                            }
                                           },
                                           "args": [
                                             {
@@ -161,13 +163,15 @@
                                       "data": {
                                         "FunctionCall": {
                                           "func": {
-                                            "Ident": [
-                                              "fib",
-                                              {
+                                            "Expr": {
+                                              "data": {
+                                                "Ident": "fib"
+                                              },
+                                              "span": {
                                                 "start": 160,
                                                 "end": 163
                                               }
-                                            ]
+                                            }
                                           },
                                           "args": [
                                             {
@@ -392,13 +396,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 221,
                         "end": 226
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -409,13 +415,15 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "Ident": [
-                                    "fib",
-                                    {
+                                  "Expr": {
+                                    "data": {
+                                      "Ident": "fib"
+                                    },
+                                    "span": {
                                       "start": 227,
                                       "end": 230
                                     }
-                                  ]
+                                  }
                                 },
                                 "args": [
                                   {

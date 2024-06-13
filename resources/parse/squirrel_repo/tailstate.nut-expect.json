@@ -87,13 +87,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "state2",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "state2"
+                                        },
+                                        "span": {
                                           "start": 56,
                                           "end": 62
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": []
                                   }
@@ -208,13 +210,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "state3",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "state3"
+                                        },
+                                        "span": {
                                           "start": 125,
                                           "end": 131
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": []
                                   }
@@ -329,13 +333,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "state1",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "state1"
+                                        },
+                                        "span": {
                                           "start": 194,
                                           "end": 200
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": []
                                   }

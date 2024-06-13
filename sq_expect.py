@@ -40,7 +40,7 @@ class Module:
 
 root_mod = Module()
 
-for script in SCRIPTS.glob('**/*.nut'):
+def register_script(script):
     hier = script.relative_to(SCRIPTS).parent.parts
     output_dir = OUTPUTS
     module = root_mod
@@ -56,6 +56,11 @@ for script in SCRIPTS.glob('**/*.nut'):
         if len(res.stderr) > 0:
             print("Error:")
             print(res.stderr.decode())
+
+for dirpath, dirnames, filenames in SCRIPTS.walk(follow_symlinks=True):
+    for file in filenames:
+        if file.endswith('.nut'):
+            register_script(dirpath / file)
 
 def pad(amt):
     return ' ' * amt * 4

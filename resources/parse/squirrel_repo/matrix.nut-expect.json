@@ -1729,13 +1729,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "mkmatrix",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "mkmatrix"
+                        },
+                        "span": {
                           "start": 678,
                           "end": 686
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -1785,13 +1787,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "mkmatrix",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "mkmatrix"
+                        },
+                        "span": {
                           "start": 711,
                           "end": 719
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -1841,13 +1845,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "mkmatrix",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "mkmatrix"
+                        },
+                        "span": {
                           "start": 744,
                           "end": 752
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -1991,13 +1997,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "mmult",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "mmult"
+                                  },
+                                  "span": {
                                     "start": 802,
                                     "end": 807
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -2079,13 +2087,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 836,
                         "end": 841
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {

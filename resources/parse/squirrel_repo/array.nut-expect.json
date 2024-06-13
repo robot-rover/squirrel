@@ -1200,13 +1200,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 403,
                         "end": 408
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {

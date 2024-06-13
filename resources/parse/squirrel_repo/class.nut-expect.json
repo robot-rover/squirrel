@@ -975,13 +975,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "Vector3",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "Vector3"
+                        },
+                        "span": {
                           "start": 687,
                           "end": 694
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -1046,13 +1048,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "Vector3",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "Vector3"
+                        },
+                        "span": {
                           "start": 713,
                           "end": 720
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {

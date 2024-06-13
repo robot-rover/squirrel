@@ -1098,13 +1098,15 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "Ident": [
-                                          "Toggle",
-                                          {
+                                        "Expr": {
+                                          "data": {
+                                            "Ident": "Toggle"
+                                          },
+                                          "span": {
                                             "start": 744,
                                             "end": 750
                                           }
-                                        ]
+                                        }
                                       },
                                       "args": [
                                         {
@@ -1284,13 +1286,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "print",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "print"
+                                        },
+                                        "span": {
                                           "start": 841,
                                           "end": 846
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": [
                                       {
@@ -1423,13 +1427,15 @@
                                   "data": {
                                     "FunctionCall": {
                                       "func": {
-                                        "Ident": [
-                                          "NthToggle",
-                                          {
+                                        "Expr": {
+                                          "data": {
+                                            "Ident": "NthToggle"
+                                          },
+                                          "span": {
                                             "start": 921,
                                             "end": 930
                                           }
-                                        ]
+                                        }
                                       },
                                       "args": [
                                         {
@@ -1631,13 +1637,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "print",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "print"
+                                        },
+                                        "span": {
                                           "start": 1018,
                                           "end": 1023
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": [
                                       {
@@ -1752,13 +1760,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "clock",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "clock"
+                        },
+                        "span": {
                           "start": 1080,
                           "end": 1085
                         }
-                      ]
+                      }
                     },
                     "args": []
                   }
@@ -1781,13 +1791,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "main",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "main"
+                      },
+                      "span": {
                         "start": 1089,
                         "end": 1093
                       }
-                    ]
+                    }
                   },
                   "args": []
                 }
@@ -1809,13 +1821,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 1097,
                         "end": 1102
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -1845,13 +1859,15 @@
                                         "data": {
                                           "FunctionCall": {
                                             "func": {
-                                              "Ident": [
-                                                "clock",
-                                                {
+                                              "Expr": {
+                                                "data": {
+                                                  "Ident": "clock"
+                                                },
+                                                "span": {
                                                   "start": 1112,
                                                   "end": 1117
                                                 }
-                                              ]
+                                              }
                                             },
                                             "args": []
                                           }

@@ -23,13 +23,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "regexp",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "regexp"
+                        },
+                        "span": {
                           "start": 11,
                           "end": 17
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -150,13 +152,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 104,
                         "end": 109
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -263,13 +267,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 160,
                         "end": 165
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -315,13 +321,15 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "Ident": [
-                            "regexp",
-                            {
+                          "Expr": {
+                            "data": {
+                              "Ident": "regexp"
+                            },
+                            "span": {
                               "start": 178,
                               "end": 184
                             }
-                          ]
+                          }
                         },
                         "args": [
                           {
@@ -471,13 +479,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 282,
                         "end": 287
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -584,13 +594,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 339,
                         "end": 344
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {

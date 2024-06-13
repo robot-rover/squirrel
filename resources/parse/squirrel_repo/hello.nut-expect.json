@@ -15,13 +15,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 0,
                         "end": 5
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {

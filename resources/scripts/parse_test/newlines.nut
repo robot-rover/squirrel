@@ -27,10 +27,6 @@ function test(
     3
 }
 
-foreach (k,v in p) {
-    ::print(k + " " + v + "\n")
-}
-
 ::print(
     "\n"
     )

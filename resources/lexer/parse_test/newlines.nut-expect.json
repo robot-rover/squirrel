@@ -114,47 +114,6 @@
   "RightCurlyBrace",
   "Newline",
   "Newline",
-  "ForEach",
-  "LeftParenthesis",
-  {
-    "Identifier": "k"
-  },
-  "Comma",
-  {
-    "Identifier": "v"
-  },
-  "In",
-  {
-    "Identifier": "p"
-  },
-  "RightParenthesis",
-  "LeftCurlyBrace",
-  "Newline",
-  "DoubleColon",
-  {
-    "Identifier": "print"
-  },
-  "LeftParenthesis",
-  {
-    "Identifier": "k"
-  },
-  "Plus",
-  {
-    "String": " "
-  },
-  "Plus",
-  {
-    "Identifier": "v"
-  },
-  "Plus",
-  {
-    "String": "\n"
-  },
-  "RightParenthesis",
-  "Newline",
-  "RightCurlyBrace",
-  "Newline",
-  "Newline",
   "DoubleColon",
   {
     "Identifier": "print"

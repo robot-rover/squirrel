@@ -1,10 +1,10 @@
 First, the root table
-(table : 0x0x559915be5f80)
-(table : 0x0x559915be5f80)
+(table : 0x0x562195024f80)
+(table : 0x0x562195024f80)
 null
 
 Now, a table with a parent function
-(table : 0x0x559915bf0710)
+(table : 0x0x56219502f710)
 null
 null
 

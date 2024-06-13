@@ -1872,13 +1872,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "vector",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "vector"
+                        },
+                        "span": {
                           "start": 1147,
                           "end": 1153
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -1943,13 +1945,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "vector",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "vector"
+                        },
+                        "span": {
                           "start": 1177,
                           "end": 1183
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -2081,13 +2085,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "print",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "print"
+                                  },
+                                  "span": {
                                     "start": 1242,
                                     "end": 1247
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -2283,13 +2289,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "print",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "print"
+                                  },
+                                  "span": {
                                     "start": 1306,
                                     "end": 1311
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -2485,13 +2493,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "print",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "print"
+                                  },
+                                  "span": {
                                     "start": 1370,
                                     "end": 1375
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -2687,13 +2697,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "print",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "print"
+                                  },
+                                  "span": {
                                     "start": 1434,
                                     "end": 1439
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -2891,13 +2903,15 @@
                           "data": {
                             "FunctionCall": {
                               "func": {
-                                "Ident": [
-                                  "print",
-                                  {
+                                "Expr": {
+                                  "data": {
+                                    "Ident": "print"
+                                  },
+                                  "span": {
                                     "start": 1497,
                                     "end": 1502
                                   }
-                                ]
+                                }
                               },
                               "args": [
                                 {
@@ -3007,13 +3021,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 1525,
                         "end": 1530
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -3146,13 +3162,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 1571,
                         "end": 1576
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -3272,13 +3290,15 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "Ident": [
-                            "print",
-                            {
+                          "Expr": {
+                            "data": {
+                              "Ident": "print"
+                            },
+                            "span": {
                               "start": 1621,
                               "end": 1626
                             }
-                          ]
+                          }
                         },
                         "args": [
                           {
@@ -3312,13 +3332,15 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "Ident": [
-                            "print",
-                            {
+                          "Expr": {
+                            "data": {
+                              "Ident": "print"
+                            },
+                            "span": {
                               "start": 1654,
                               "end": 1659
                             }
-                          ]
+                          }
                         },
                         "args": [
                           {

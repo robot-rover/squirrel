@@ -361,13 +361,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "gen_random",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "gen_random"
+                        },
+                        "span": {
                           "start": 327,
                           "end": 337
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {
@@ -402,13 +404,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 345,
                         "end": 350
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -543,13 +547,15 @@
                     "data": {
                       "FunctionCall": {
                         "func": {
-                          "Ident": [
-                            "print",
-                            {
+                          "Expr": {
+                            "data": {
+                              "Ident": "print"
+                            },
+                            "span": {
                               "start": 400,
                               "end": 405
                             }
-                          ]
+                          }
                         },
                         "args": [
                           {
@@ -643,13 +649,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 433,
                         "end": 438
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -1106,13 +1114,15 @@
                 "data": {
                   "FunctionCall": {
                     "func": {
-                      "Ident": [
-                        "fiboz",
-                        {
+                      "Expr": {
+                        "data": {
+                          "Ident": "fiboz"
+                        },
+                        "span": {
                           "start": 679,
                           "end": 684
                         }
-                      ]
+                      }
                     },
                     "args": [
                       {

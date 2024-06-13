@@ -167,13 +167,15 @@
                                       "data": {
                                         "FunctionCall": {
                                           "func": {
-                                            "Ident": [
-                                              "Ack",
-                                              {
+                                            "Expr": {
+                                              "data": {
+                                                "Ident": "Ack"
+                                              },
+                                              "span": {
                                                 "start": 174,
                                                 "end": 177
                                               }
-                                            ]
+                                            }
                                           },
                                           "args": [
                                             {
@@ -252,13 +254,15 @@
                                 "data": {
                                   "FunctionCall": {
                                     "func": {
-                                      "Ident": [
-                                        "Ack",
-                                        {
+                                      "Expr": {
+                                        "data": {
+                                          "Ident": "Ack"
+                                        },
+                                        "span": {
                                           "start": 203,
                                           "end": 206
                                         }
-                                      ]
+                                      }
                                     },
                                     "args": [
                                       {
@@ -296,13 +300,15 @@
                                         "data": {
                                           "FunctionCall": {
                                             "func": {
-                                              "Ident": [
-                                                "Ack",
-                                                {
+                                              "Expr": {
+                                                "data": {
+                                                  "Ident": "Ack"
+                                                },
+                                                "span": {
                                                   "start": 214,
                                                   "end": 217
                                                 }
-                                              ]
+                                              }
                                             },
                                             "args": [
                                               {
@@ -709,13 +715,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 336,
                         "end": 341
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -791,13 +799,15 @@
               "data": {
                 "FunctionCall": {
                   "func": {
-                    "Ident": [
-                      "print",
-                      {
+                    "Expr": {
+                      "data": {
+                        "Ident": "print"
+                      },
+                      "span": {
                         "start": 356,
                         "end": 361
                       }
-                    ]
+                    }
                   },
                   "args": [
                     {
@@ -861,13 +871,15 @@
                             "data": {
                               "FunctionCall": {
                                 "func": {
-                                  "Ident": [
-                                    "Ack",
-                                    {
+                                  "Expr": {
+                                    "data": {
+                                      "Ident": "Ack"
+                                    },
+                                    "span": {
                                       "start": 381,
                                       "end": 384
                                     }
-                                  ]
+                                  }
                                 },
                                 "args": [
                                   {
