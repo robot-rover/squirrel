@@ -1,6 +1,8 @@
 function parent() {
     local child = function() {
-        a <- "test"
+        if (this != null) {
+            a <- "test"
+        }
         return this
     }
     ::print(this + "\n")

@@ -15,7 +15,12 @@ function array_tostring(arr) {
 
 function going_to_lose() {
     ::print(this + "\n")
-    this.field <- "I am new"
+    if (this == null) {
+        ::print("I am null\n")
+    } else {
+        ::print("I am not null\n")
+        this.field <- "I am new"
+    }
     return this
 }
 

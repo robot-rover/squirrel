@@ -646,7 +646,7 @@ fn run_ident(context: &mut Context, ident: &Ident) -> ExprResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{parser::parse, test_foreach, test_util::{exchange_data, exchange_str}};
+    use crate::{context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::{exchange_data, exchange_str}};
 
     test_foreach!(sample_test);
 
@@ -659,7 +659,7 @@ mod tests {
         let mut output = Vec::new();
         let result = match run(&actual_ast, file_name, Some(&mut output)) {
             Ok(val) => val,
-            Err(err) => panic!("{:?}", err),
+            Err(err) => panic!("{}", err.with_context(file_contents)),
         };
 
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
