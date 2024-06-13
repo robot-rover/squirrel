@@ -19,28 +19,25 @@ function test(
 }
 
 {
-    a
-    <-
+    a <-
     1
-    ,
-    b
-    <-
+    b <-
     2
-    c
-    <-
+    c <-
     3
+}
+
+foreach (k,v in p) {
+    ::print(k + " " + v + "\n")
 }
 
 ::print(
     "\n"
     )
 
-a
-<-
-1
-+
-5
-+
+a <-
+1 +
+5 +
 6
 
 ::print(a)

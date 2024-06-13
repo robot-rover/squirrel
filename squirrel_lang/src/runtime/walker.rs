@@ -6,8 +6,8 @@ use std::{
 use crate::{
     context::{Span, SquirrelError},
     parser::ast::{
-        self, AssignKind, AssignTarget, BinaryOp, Expr, ExprData, Ident, Statement, StatementData,
-        UnaryOp, UnaryRefOp,
+        self, AssignKind, AssignTarget, BinaryOp, CallTarget, Expr, ExprData, Ident, Statement,
+        StatementData, UnaryOp, UnaryRefOp,
     },
 };
 
@@ -263,6 +263,15 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
         }
         ExprData::UnaryRefOp(op, val) => run_unary_ref_op(context, op, val),
         ExprData::FunctionCall { func, args } => run_function_call(context, func, args),
+        ExprData::RawCall {
+            func,
+            this,
+            parameters,
+        } => {
+            let func = run_expression(context, func)?;
+            let this = run_expression(context, this)?;
+            run_rawcall(context, func, this, parameters)
+        }
         ExprData::ArrayAccess { array, index } => {
             let span = index.span;
             let array = run_expression(context, array)?;
@@ -312,30 +321,15 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
     }
 }
 
-fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) -> ExprResult {
+fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr]) -> ExprResult {
     let (env, func_val) = match func {
-        AssignTarget::FieldAccess(target, field_name) => {
+        CallTarget::FieldAccess(target, field_name) => {
             let parent = run_expression(context, target)?;
             let func = run_field_access(context, &parent, &field_name.0, field_name.1)?;
             (parent, func)
         }
-        AssignTarget::Ident(ident) => {
-            let func = run_load_ident(context, &ident.0, ident.1)?;
-            (
-                context
-                    .infunc
-                    .env
-                    .clone()
-                    .map(|v| v.into())
-                    .unwrap_or(Value::Null),
-                func,
-            )
-        }
-        AssignTarget::ArrayAccess { array, index, span } => {
-            // TODO: Non array access (i.e. field expression access for tables)
-            let array = run_expression(context, array)?;
-            let index = run_expression(context, index)?;
-            let func = run_array_access(context, &array, index, *span)?;
+        CallTarget::Expr(expr) => {
+            let func = run_expression(context, expr)?;
             (
                 context
                     .infunc
@@ -347,6 +341,10 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
             )
         }
     };
+    run_rawcall(context, func_val, env, args)
+}
+
+fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr]) -> ExprResult {
     let env = match env {
         Value::Object(obj) => obj,
         _ => panic!("Can't call function on non-object"),
@@ -684,10 +682,6 @@ fn run_assign(
         AssignTarget::FieldAccess(_, _) => todo!(),
     }
     Ok(())
-}
-
-fn run_ident(context: &mut Context, ident: &Ident) -> ExprResult {
-    todo!()
 }
 
 #[cfg(test)]

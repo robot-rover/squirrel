@@ -12,24 +12,30 @@ use super::{
 pub fn parse_expr<'s, F: Fn(&Token) -> bool>(
     tokens: &mut SpannedLexer<'s>,
     is_term: F,
+    ignore_newlines: bool,
 ) -> ParseResult<Expr> {
-    parse_expr_bp(tokens, 0, &is_term)
+    parse_expr_bp(tokens, 0, &is_term, ignore_newlines)
 }
 
 pub fn parse_expr_token<'s>(
     tokens: &mut SpannedLexer<'s>,
     token: Token,
 ) -> ParseResult<(Expr, Span)> {
-    let expr = parse_expr(tokens, |tok| tok == &token)?;
+    let expr = parse_expr(tokens, |tok| tok == &token, true)?;
     let span = tokens.expect_token(token, true)?;
     Ok((expr, span))
 }
 
 pub fn parse_expr_line<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
-    let expr = parse_expr(tokens, |tok| {
-        tok == &Token::Newline || tok == &Token::Semicolon
-    })?;
-    tokens.skip_token();
+    let expr = parse_expr(
+        tokens,
+        |tok| tok == &Token::Newline || tok == &Token::Semicolon,
+        false,
+    )?;
+    // Can't use expect_token here because it will panic if we hit EOF
+    if let Some(Err(err)) = tokens.next() {
+        return Err(err.into());
+    }
     Ok(expr)
 }
 
@@ -95,6 +101,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
     tokens: &mut SpannedLexer<'s>,
     min_bp: u16,
     is_term: &F,
+    ignore_newlines: bool,
 ) -> ParseResult<Expr> {
     let (first_token, ctx) = tokens.next_token(true)?;
     let mut lhs = match first_token {
@@ -148,29 +155,67 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
         | Token::BitNot
         | Token::Typeof
         | Token::Clone
-        | Token::Resume
-        | Token::Increment
-        | Token::Decrement => {
-            let rhs = parse_expr_bp(tokens, get_prefix_bp(&first_token), is_term)?;
-            match first_token {
-                Token::Minus => Expr::unary_op(UnaryOp::Neg, rhs, ctx),
-                Token::Plus => rhs,
-                Token::Not => Expr::unary_op(UnaryOp::Not, rhs, ctx),
-                Token::BitNot => Expr::unary_op(UnaryOp::BitNot, rhs, ctx),
-                Token::Typeof => Expr::unary_op(UnaryOp::TypeOf, rhs, ctx),
-                Token::Clone => Expr::unary_op(UnaryOp::Clone, rhs, ctx),
-                Token::Resume => Expr::unary_op(UnaryOp::Resume, rhs, ctx),
-                Token::Increment => Expr::unary_ref_op(UnaryRefOp::PreIncr, rhs.try_into()?, ctx),
-                Token::Decrement => Expr::unary_ref_op(UnaryRefOp::PreDecr, rhs.try_into()?, ctx),
+        | Token::Resume => {
+            let op = match first_token {
+                Token::Minus => UnaryOp::Neg,
+                Token::Not => UnaryOp::Not,
+                Token::BitNot => UnaryOp::BitNot,
+                Token::Typeof => UnaryOp::TypeOf,
+                Token::Clone => UnaryOp::Clone,
+                Token::Resume => UnaryOp::Resume,
                 _ => unreachable!(),
-            }
+            };
+            let rhs = parse_expr_bp(
+                tokens,
+                get_prefix_bp(&first_token),
+                is_term,
+                ignore_newlines,
+            )?;
+            Expr::unary_op(op, rhs, ctx)
+        }
+        Token::Increment | Token::Decrement => {
+            let rhs = parse_expr_bp(
+                tokens,
+                get_prefix_bp(&first_token),
+                is_term,
+                ignore_newlines,
+            )?;
+            let op = if matches!(first_token, Token::Increment) {
+                UnaryRefOp::PreIncr
+            } else {
+                UnaryRefOp::PreDecr
+            };
+            Expr::unary_ref_op(op, rhs.try_into()?, ctx)
+        }
+        Token::RawCall => {
+            let (args, end_span) =
+                parse_list(tokens, Token::LeftParenthesis, Token::RightParenthesis)?;
+            let mut args_iter = args.into_iter();
+            let func = args_iter.next();
+            let env = args_iter.next();
+            let (func, env) = match (func, env) {
+                (Some(func), Some(env)) => (func, env),
+                _ => {
+                    return Err(ParseError::syntax_error(
+                        "rawcall expects at least 2 arguments".to_string(),
+                        ctx | end_span,
+                    ))
+                }
+            };
+            let args = args_iter.collect();
+
+            Expr::raw_call(func, env, args, ctx, end_span)
         }
         other => return Err(ParseError::unexpected_token(other, ctx)),
     };
 
     loop {
+        // If this is a line that ends the file, return the current expression
+        if !ignore_newlines && tokens.try_peek_token(false)?.is_none() {
+            return Ok(lhs);
+        }
         // TODO: Handle newline behavior here
-        let (op_token, ctx) = tokens.peek_token(false)?;
+        let (op_token, ctx) = tokens.peek_token(ignore_newlines)?;
         let ctx = *ctx;
         let Some((l_bp, r_bp)) = get_bp(op_token) else {
             if is_term(op_token) {
@@ -200,7 +245,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
             Token::LeftParenthesis => {
                 let (args, call_span) =
                     parse_list(tokens, Token::LeftParenthesis, Token::RightParenthesis)?;
-                lhs = Expr::function_call(lhs.try_into()?, args, call_span);
+                lhs = Expr::function_call(lhs, args, call_span);
                 continue;
             }
             Token::LeftSquareBracket => {
@@ -214,11 +259,11 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
         let (op_token, ctx) = tokens.next_token(true)?;
         if matches!(op_token, Token::QuestionMark) {
             let (true_expr, _colon_span) = parse_expr_token(tokens, Token::Colon)?;
-            let false_expr = parse_expr_bp(tokens, r_bp, is_term)?;
+            let false_expr = parse_expr_bp(tokens, r_bp, is_term, ignore_newlines)?;
             lhs = Expr::ternary(lhs, true_expr, false_expr);
             continue;
         };
-        let rhs = parse_expr_bp(tokens, r_bp, is_term)?;
+        let rhs = parse_expr_bp(tokens, r_bp, is_term, ignore_newlines)?;
         lhs = match op_token {
             // Member Access (23, 24)
             // TODO Field Access

@@ -87,19 +87,15 @@
   {
     "Identifier": "a"
   },
-  "Newline",
   "NewSlot",
   "Newline",
   {
     "Integer": 1
   },
   "Newline",
-  "Comma",
-  "Newline",
   {
     "Identifier": "b"
   },
-  "Newline",
   "NewSlot",
   "Newline",
   {
@@ -109,12 +105,52 @@
   {
     "Identifier": "c"
   },
-  "Newline",
   "NewSlot",
   "Newline",
   {
     "Integer": 3
   },
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  "ForEach",
+  "LeftParenthesis",
+  {
+    "Identifier": "k"
+  },
+  "Comma",
+  {
+    "Identifier": "v"
+  },
+  "In",
+  {
+    "Identifier": "p"
+  },
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "k"
+  },
+  "Plus",
+  {
+    "String": " "
+  },
+  "Plus",
+  {
+    "Identifier": "v"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
   "Newline",
   "RightCurlyBrace",
   "Newline",
@@ -135,19 +171,16 @@
   {
     "Identifier": "a"
   },
-  "Newline",
   "NewSlot",
   "Newline",
   {
     "Integer": 1
   },
-  "Newline",
   "Plus",
   "Newline",
   {
     "Integer": 5
   },
-  "Newline",
   "Plus",
   "Newline",
   {

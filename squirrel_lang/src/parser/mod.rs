@@ -143,7 +143,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
                 _ => None,
             };
             tokens.expect_token(Token::In, true)?;
-            let iterable = parse_expr(tokens, |tok| tok == &Token::RightParenthesis)?;
+            let iterable = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
             tokens.expect_token(Token::RightParenthesis, true)?;
             let body = parse_statement(tokens)?;
             let (index, value) = match ident2 {
@@ -155,7 +155,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         Token::Switch => {
             let switch_span = tokens.expect_token(Token::Switch, true)?;
             tokens.expect_token(Token::LeftParenthesis, true)?;
-            let expr = parse_expr(tokens, |tok| tok == &Token::RightParenthesis)?;
+            let expr = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
             tokens.expect_token(Token::RightParenthesis, true)?;
             tokens.expect_token(Token::LeftCurlyBrace, true)?;
             let mut cases = Vec::new();
@@ -170,7 +170,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
                                 span,
                             ));
                         }
-                        let case_expr = parse_expr(tokens, |tok| tok == &Token::Colon)?;
+                        let case_expr = parse_expr(tokens, |tok| tok == &Token::Colon, true)?;
                         tokens.expect_token(Token::Colon, true)?;
                         let body = parse_statements(tokens, |tok| {
                             tok == Some(&Token::Case) || tok == Some(&Token::Default)
@@ -197,7 +197,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         Token::While => {
             let while_span = tokens.expect_token(Token::While, true)?;
             tokens.expect_token(Token::LeftParenthesis, true)?;
-            let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis)?;
+            let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
             tokens.expect_token(Token::RightParenthesis, true)?;
             let body = parse_statement(tokens)?;
             Statement::while_loop(cond, body, while_span)
@@ -218,9 +218,11 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
         };
         let val = if let (Token::Assign, _) = tokens.peek_token(true)? {
             tokens.skip_token();
-            parse_expr(tokens, |tok| {
-                tok == &Token::Comma || tok == &Token::Newline || tok == &Token::Semicolon
-            })?
+            parse_expr(
+                tokens,
+                |tok| tok == &Token::Comma || tok == &Token::Newline || tok == &Token::Semicolon,
+                false,
+            )?
         } else {
             Expr::literal(Literal::Null, Span::empty())
         };
@@ -250,7 +252,7 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
 fn parse_if<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     let if_span = tokens.expect_token(Token::If, true)?;
     tokens.expect_token(Token::LeftParenthesis, true)?;
-    let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis)?;
+    let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
     tokens.expect_token(Token::RightParenthesis, true)?;
     let body = parse_statement(tokens)?;
     let else_body = if let Some((Token::Else, _)) = tokens.try_peek_token(true)? {
@@ -377,16 +379,18 @@ fn parse_table_slot<'s>(tokens: &mut SpannedLexer<'s>, sep: &Token) -> ParseResu
     let key = match init_token {
         Token::Identifier(name) => Expr::literal(Literal::String(name), ctx),
         Token::LeftSquareBracket => {
-            let key = parse_expr(tokens, |tok| tok == &Token::RightSquareBracket)?;
+            let key = parse_expr(tokens, |tok| tok == &Token::RightSquareBracket, true)?;
             tokens.expect_token(Token::RightSquareBracket, true)?;
             key
         }
         other => return Err(ParseError::unexpected_token(other, ctx)),
     };
     tokens.expect_token(Token::Assign, true)?;
-    let value = parse_expr(tokens, |tok| {
-        tok == sep || tok == &Token::Newline || tok == &Token::RightCurlyBrace
-    })?;
+    let value = parse_expr(
+        tokens,
+        |tok| tok == sep || tok == &Token::Newline || tok == &Token::RightCurlyBrace,
+        false,
+    )?;
     Ok((key, value))
 }
 
@@ -470,7 +474,7 @@ fn parse_list<'s>(
                 if !args.is_empty() {
                     tokens.expect_token(Token::Comma, true)?;
                 }
-                let expr = parse_expr(tokens, |tok| tok == &end || tok == &Token::Comma)?;
+                let expr = parse_expr(tokens, |tok| tok == &end || tok == &Token::Comma, true)?;
                 args.push(expr);
             }
         }
@@ -501,9 +505,11 @@ fn parse_function_args_body<'s>(
             Token::Identifier(name) if !is_varargs => {
                 if let (Token::Assign, _) = tokens.peek_token(true)? {
                     tokens.skip_token();
-                    let default_val = parse_expr(tokens, |tok| {
-                        tok == &Token::Comma || tok == &Token::RightParenthesis
-                    })?;
+                    let default_val = parse_expr(
+                        tokens,
+                        |tok| tok == &Token::Comma || tok == &Token::RightParenthesis,
+                        true,
+                    )?;
                     default_expr.push(default_val);
                 } else if !default_expr.is_empty() {
                     return Err(ParseError::syntax_error(

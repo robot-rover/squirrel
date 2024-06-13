@@ -296,6 +296,21 @@ impl AssignTarget {
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum CallTarget {
+    Expr(ExprRef),
+    FieldAccess(ExprRef, Ident),
+}
+
+impl From<Expr> for CallTarget {
+    fn from(value: Expr) -> Self {
+        match value.data {
+            ExprData::FieldAccess(path, ident) => CallTarget::FieldAccess(path, ident),
+            _ => CallTarget::Expr(Box::new(value)),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum AssignKind {
     Normal,
     NewSlot,
@@ -353,7 +368,7 @@ pub enum ExprData {
     UnaryOp(UnaryOp, ExprRef),
     UnaryRefOp(UnaryRefOp, AssignTarget),
     FunctionCall {
-        func: AssignTarget,
+        func: CallTarget,
         args: Vec<Expr>,
     },
     ArrayAccess {
@@ -365,6 +380,11 @@ pub enum ExprData {
     Globals,
     Ident(String),
     Base,
+    RawCall {
+        func: ExprRef,
+        this: ExprRef,
+        parameters: Vec<Expr>,
+    },
 }
 
 impl ExprData {
@@ -454,8 +474,12 @@ impl Expr {
         ExprData::UnaryRefOp(op, expr).spanning(span)
     }
 
-    pub fn function_call(func: AssignTarget, args: Vec<Expr>, call_span: Span) -> Self {
-        ExprData::FunctionCall { func, args }.spanning(call_span)
+    pub fn function_call(func: Expr, args: Vec<Expr>, call_span: Span) -> Self {
+        ExprData::FunctionCall {
+            func: func.into(),
+            args,
+        }
+        .spanning(call_span)
     }
 
     pub fn array_access(array: Expr, index: Expr, start_span: Span, end_span: Span) -> Self {
@@ -470,6 +494,21 @@ impl Expr {
     pub fn field_access(path: Expr, ident: Ident) -> Self {
         let span = path.span | ident.1;
         ExprData::FieldAccess(Box::new(path), ident).spanning(span)
+    }
+
+    pub(crate) fn raw_call(
+        func: Expr,
+        this: Expr,
+        parameters: Vec<Expr>,
+        rawcall_span: Span,
+        end_span: Span,
+    ) -> Self {
+        ExprData::RawCall {
+            func: Box::new(func),
+            this: Box::new(this),
+            parameters,
+        }
+        .spanning(rawcall_span | end_span)
     }
 }
 
