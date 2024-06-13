@@ -1,0 +1,25 @@
+a defined at root
+a defined in fn_newslot
+a defined in fn_set
+
+b defined in tab
+b defined in tab.fn_newslot
+b defined in tab.fn_set
+
+c defined at root
+insane: c defined at root
+c defined at root
+insane: c defined in tab2.fn_newslot
+c defined at root
+insane: c defined in tab2.fn_set
+c defined at root
+insane: c defined in tab2.fn_this
+
+ del.d: d defined in del
+inst.d: d defined in del
+ del.d: d defined in inst.fn_set
+inst.d: d defined in inst.fn_set
+ del.d: d defined in inst.fn_set
+inst.d: d defined in inst.fn_newslot
+ del.d: d defined in inst.fn_set
+inst.d: d defined in inst.fn_this

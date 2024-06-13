@@ -1,17 +1,24 @@
-use std::env::args;
+use std::{env::args, io};
+
+use squirrel_lang::{context::IntoSquirrelErrorContext, runtime::WriteOption};
 
 fn main() {
     let file_name = args()
         .nth(1)
         .expect("Must pass input filename as first argument");
-    println!("Parsing file: {}", file_name);
     let contents = std::fs::read_to_string(&file_name).expect("Unable to read source file");
-    let ast = squirrel_lang::parser::parse(&contents, file_name);
-    match ast {
-        Ok(ast) => println!("Successfully parsed file: {:#?}", ast),
+    let ast = squirrel_lang::parser::parse(&contents, file_name.clone());
+    let ast = match ast {
+        Ok(ast) => ast,
         Err(e) => {
             println!("Failed to parse file:\n{}", e);
             std::process::exit(1);
+        }
+    };
+    match squirrel_lang::runtime::walker::run(&ast, &file_name, None) {
+        Ok(()) => {}
+        Err(err) => {
+            println!("Error: {}", err.with_context(&contents));
         }
     }
 }

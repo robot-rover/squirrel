@@ -1,17 +1,13 @@
 use std::{
-    borrow::Borrow,
-    cell::RefCell,
-    collections::HashMap,
-    ptr::NonNull,
-    rc::{Rc, Weak},
+    borrow::Borrow, cell::RefCell, collections::HashMap, io, ptr::NonNull, rc::{Rc, Weak}
 };
 
 use crate::{
-    context::{Span, SqBacktrace},
+    context::{Span, SqBacktrace, SquirrelError},
     parser::ast::{self, Ident, Literal},
 };
 
-mod walker;
+pub mod walker;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -36,7 +32,7 @@ macro_rules! rc_hash_eq {
 }
 
 #[derive(Debug)]
-enum ExecError {
+pub enum ExecError {
     UndefinedVariable(Ident, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
 }
@@ -49,15 +45,63 @@ impl ExecError {
     fn illegal_keyword(span: Span) -> Self {
         ExecError::IllegalKeyword(span, SqBacktrace::new())
     }
+
+    fn with_context(self, file_name: String) -> SquirrelError {
+        match self {
+            ExecError::UndefinedVariable(ident, bt) => SquirrelError::new(
+                file_name,
+                ident.1,
+                format!("Undefined variable: '{}'", ident.0),
+                bt,
+            ),
+            ExecError::IllegalKeyword(span, bt) => SquirrelError::new(
+                file_name,
+                span,
+                format!("Keyword is not valid in this context"),
+                bt,
+            ),
+        }
+    }
 }
 
-struct VMState {
+pub enum WriteOption<'a> {
+    DYN(&'a mut dyn io::Write),
+    DEFAULT(io::Stdout),
+}
+
+impl<'a> io::Write for &mut WriteOption<'a> {
+    fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
+        match self {
+            WriteOption::DYN(write) => write.write(buf),
+            WriteOption::DEFAULT(stdout) => stdout.write(buf),
+        }
+    }
+
+    fn flush(&mut self) -> io::Result<()> {
+        match self {
+            WriteOption::DYN(write) => write.flush(),
+            WriteOption::DEFAULT(stdout) => stdout.flush(),
+        }
+    }
+}
+
+impl<'a> From<Option<&'a mut dyn io::Write>> for WriteOption<'a> {
+    fn from(value: Option<&'a mut dyn io::Write>) -> Self {
+        value
+            .map(|write| WriteOption::DYN(write))
+            .unwrap_or_else(|| WriteOption::DEFAULT(io::stdout()))
+    }
+}
+
+
+struct VMState<'a> {
     root_table: ObjectRef,
+    stdout: WriteOption<'a>,
 }
 
-struct Context<'a> {
+struct Context<'a, 'b> {
     infunc: FuncRuntime,
-    vm_state: &'a mut VMState,
+    vm_state: &'a mut VMState<'b>,
 }
 
 #[derive(Debug, Clone)]
@@ -97,6 +141,7 @@ enum Value {
     Array(ArrayRef),
     Weak(WeakRef),
     Function(ClosureRef),
+    NativeFunction(fn(*mut Context, Vec<Value>) -> Result<Value, ExecError>),
     // Class(/* TODO */),
     // Generator(/* TODO */),
     // UserData(/* TODO */),
@@ -155,11 +200,24 @@ impl WeakRef {
     fn new(obj: &ObjectRef) -> Self {
         WeakRef(Rc::downgrade(&obj.0))
     }
+
+    fn empty() -> Self {
+        WeakRef(Weak::new())
+    }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq)]
 struct StringRef(Rc<String>);
-rc_hash_eq!(StringRef, String, Rc);
+impl PartialEq for StringRef {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.as_str() == other.0.as_str()
+    }
+}
+impl std::hash::Hash for StringRef {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.0.as_str().hash(state)
+    }
+}
 
 #[derive(Debug, Clone)]
 
@@ -190,21 +248,20 @@ struct Closure {
     ast_fn: NonNull<ast::Function>,
     default_vals: Vec<Value>,
     root: WeakRef,
-    env: WeakRef,
+    env: Option<WeakRef>,
 }
 
 impl ClosureRef {
     fn new(
         ast_fn: &ast::Function,
         default_vals: Vec<Value>,
-        env: WeakRef,
         root: WeakRef,
     ) -> ClosureRef {
         ClosureRef(Rc::new(Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,
             root,
-            env,
+            env: None,
         }))
     }
 }
@@ -212,11 +269,12 @@ impl ClosureRef {
 #[derive(Debug)]
 struct FuncRuntime {
     locals: HashMap<String, Value>,
+    env: Option<ObjectRef>,
     closure: ClosureRef,
 }
 
 impl FuncRuntime {
-    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>) -> FuncRuntime {
+    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>, env: &Option<ObjectRef>) -> FuncRuntime {
         let mut locals = HashMap::new();
         let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
 
@@ -254,9 +312,14 @@ impl FuncRuntime {
         } else {
             assert_eq!(arg_iter.next(), None, "Too many arguments");
         }
+        let env = match func_ref.0.env.as_ref() {
+            Some(closure_ref) => closure_ref.0.upgrade().map(|rc| ObjectRef(rc)),
+            None => env.clone(),
+        };
         FuncRuntime {
             closure: func_ref,
             locals,
+            env,
         }
     }
 }

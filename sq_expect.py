@@ -17,7 +17,7 @@ for category in SCRIPTS.iterdir():
     module = []
     for script in category.iterdir():
         module.append(script.name)
-        output = output_dir / f'{script.stem}.txt'
+        output = output_dir / f'{script.name}-expect.txt'
         print(script.relative_to(SCRIPTS))
         with output.open('w') as handle:
             res = subprocess.run([SQUIRREL_BIN, str(script)], stdout=handle, stderr=subprocess.PIPE)

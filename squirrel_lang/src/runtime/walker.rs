@@ -1,7 +1,7 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, io::{self, Write}};
 
 use crate::{
-    context::Span,
+    context::{Span, SquirrelError},
     parser::ast::{
         self, AssignKind, AssignTarget, BinaryOp, Expr, ExprData, Ident, Statement, StatementData,
         UnaryOp, UnaryRefOp,
@@ -9,8 +9,7 @@ use crate::{
 };
 
 use super::{
-    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value,
-    WeakRef, H64,
+    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value, WeakRef, WriteOption, H64
 };
 
 type ExprResult = Result<Value, ExecError>;
@@ -29,23 +28,39 @@ impl From<ExecError> for FlowControl {
     }
 }
 
-fn run(tree: &ast::Function) -> ExprResult {
+pub fn run(tree: &ast::Function, file_name: &str, stdout: Option<&mut dyn io::Write>) -> Result<(), SquirrelError> {
     let root = init_root();
-    let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root), WeakRef::new(&root));
-    let infunc = FuncRuntime::new(root_closure, Vec::new());
-    let mut vm_state = VMState { root_table: root };
+    let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root));
+    let infunc = FuncRuntime::new(root_closure, Vec::new(), &Some(root.clone()));
+    let mut vm_state = VMState { root_table: root, stdout: stdout.into() };
     let mut context = Context {
         infunc,
         vm_state: &mut vm_state,
     };
 
-    run_function(&mut context, &tree.body)
+    run_function(&mut context, &tree.body).map(|_| ()).map_err(|err| err.with_context(file_name.to_string()))
 }
 
 fn init_root() -> ObjectRef {
+    let mut slots = HashMap::new();
+    slots.insert(Value::string("print".to_string()), Value::NativeFunction(|ctx, args| {
+        let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
+        assert!(args.len() == 1, "Wrong number of args");
+        let arg = &args[0];
+        match arg {
+            Value::Float(f) => write!(stdout, "{}", f.0).unwrap(),
+            Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
+            Value::String(s) => write!(stdout, "{}", s.0).unwrap(),
+            Value::Null => write!(stdout, "null").unwrap(),
+            Value::Object(o) => todo!(),
+            Value::Array(a) => todo!(),
+            _ => todo!(),
+        }
+        Ok(Value::Null)
+    }));
     ObjectRef::new(Object {
         delegate: None,
-        slots: HashMap::new(),
+        slots,
         is_class_inst: false,
     })
 }
@@ -187,7 +202,6 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
-            context.infunc.closure.0.env.clone(),
             WeakRef::new(&context.vm_state.root_table),
         )
         .into()),
@@ -239,7 +253,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let index = run_expression(context, index)?;
             run_array_access(context, &array, index, span)
         }
-        ExprData::This => Ok(context.infunc.closure.0.env.clone().into()),
+        ExprData::This => Ok(context.infunc.env.clone().map(|obj_ref| obj_ref.into()).unwrap_or(Value::Null)),
         ExprData::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
             run_field_access(context, &target, &field.0, expr.span)
@@ -255,17 +269,15 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             .unwrap_or(Value::Null)),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
-            let env = context.infunc.closure.0.env.0.upgrade();
-            Ok(env
-                .and_then(|obj| {
-                    let obj = obj.borrow();
-                    if obj.is_class_inst {
-                        obj.delegate.as_ref().map(|del| Value::Object(del.clone()))
-                    } else {
-                        None
-                    }
-                })
-                .unwrap_or(Value::Null))
+            let res = context.infunc.env.as_ref().and_then(|obj_ref| {
+            // Double check this is null and not an error
+            let obj_ref = obj_ref.0.borrow();
+            if obj_ref.is_class_inst {
+                obj_ref.delegate.as_ref().map(|del| Value::Object(del.clone()))
+            } else {
+                None
+            }}).unwrap_or(Value::Null);
+            Ok(res)
         }
     }
 }
@@ -279,37 +291,19 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
         }
         AssignTarget::Ident(ident) => {
             let func = run_load_ident(context, &ident.0, ident.1)?;
-            (context.infunc.closure.0.env.clone().into(), func)
+            (context.infunc.env.clone().map(|v| v.into()).unwrap_or(Value::Null), func)
         }
         AssignTarget::ArrayAccess { array, index, span } => {
             // TODO: Non array access (i.e. field expression access for tables)
             let array = run_expression(context, array)?;
-            let array = match array {
-                Value::Array(ArrayRef(arr)) => arr,
-                _ => panic!("Can't index non-array"),
-            };
             let index = run_expression(context, index)?;
-            let index = match index {
-                // TODO: Handle negative index
-                Value::Integer(val) => val as usize,
-                _ => panic!("Can't index with non-integer"),
-            };
-            let func = array
-                .borrow()
-                .get(index)
-                .expect("Array index out of bounds")
-                .clone();
-            (context.infunc.closure.0.env.clone().into(), func)
+            let func = run_array_access(context, &array, index, *span)?;
+            (context.infunc.env.clone().map(|v| v.into()).unwrap_or(Value::Null), func)
         }
     };
     let env = match env {
         Value::Object(obj) => obj,
         _ => panic!("Can't call function on non-object"),
-    };
-
-    let func = match func_val {
-        Value::Function(func) => func,
-        _ => panic!("Can't call non-function"),
     };
 
     // TODO: Some better way to validate this
@@ -318,14 +312,21 @@ fn run_function_call(context: &mut Context, func: &AssignTarget, args: &[Expr]) 
         .map(|expr| run_expression(context, expr))
         .collect::<Result<Vec<_>, _>>()?;
 
-    let ast_fn = unsafe { func.0.ast_fn.as_ref() };
-    let rt_func = FuncRuntime::new(func, args);
-    let body = &ast_fn.body;
-    let mut context = Context {
-        infunc: rt_func,
-        vm_state: context.vm_state,
-    };
-    run_function(&mut context, body)
+    match func_val {
+        Value::Function(func) => {
+            let ast_fn = unsafe { func.0.ast_fn.as_ref() };
+            let rt_func = FuncRuntime::new(func, args, &context.infunc.env);
+            let body = &ast_fn.body;
+            let mut context = Context {
+                infunc: rt_func,
+                vm_state: context.vm_state,
+            };
+            run_function(&mut context, body)
+        },
+        Value::NativeFunction(func) => func(context as *mut _, args),
+        other => panic!("Can't call non-function {other:?}"),
+    }
+
 }
 
 fn run_function(context: &mut Context, body: &Statement) -> ExprResult {
@@ -349,12 +350,8 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     let key = Value::string(ident.to_string());
     let env_match = context
         .infunc
-        .closure
-        .0
-        .env
-        .0
-        .upgrade()
-        .and_then(|env| env.borrow().get_field(&key));
+        .env.as_ref()
+        .and_then(|env| env.0.borrow().get_field(&key));
     if let Some(value) = env_match {
         return Ok(value);
     }
@@ -613,8 +610,8 @@ fn run_assign(
                 *val = val.clone();
             }
             if is_newslot {
-                if let Some(env) = context.infunc.closure.0.env.0.upgrade() {
-                    env.borrow_mut()
+                if let Some(env) = context.infunc.env.as_ref() {
+                    env.0.borrow_mut()
                         .slots
                         .insert(Value::string(ident.0.clone()), val);
                 } else {
@@ -622,15 +619,15 @@ fn run_assign(
                 }
             } else {
                 // TODO: Inefficient
-                let mut current = context.infunc.closure.0.env.0.upgrade();
+                let mut current = context.infunc.env.clone();
                 while let Some(strong_current) = current {
                     current = {
-                        let mut obj = strong_current.borrow_mut();
+                        let mut obj = strong_current.0.borrow_mut();
                         if obj.slots.contains_key(&Value::string(ident.0.clone())) {
                             obj.slots.insert(Value::string(ident.0.clone()), val);
                             break;
                         }
-                        obj.delegate.clone().map(|obj_ref| obj_ref.0)
+                        obj.delegate.clone()
                     }
                 }
                 panic!("Slot does not exist: {}", ident.0)
@@ -649,7 +646,7 @@ fn run_ident(context: &mut Context, ident: &Ident) -> ExprResult {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{parser::parse, test_foreach};
+    use crate::{parser::parse, test_foreach, test_util::{exchange_data, exchange_str}};
 
     test_foreach!(sample_test);
 
@@ -659,13 +656,15 @@ mod tests {
             Err(err) => panic!("{}", err),
         };
 
-        let result = match run(&actual_ast) {
+        let mut output = Vec::new();
+        let result = match run(&actual_ast, file_name, Some(&mut output)) {
             Ok(val) => val,
             Err(err) => panic!("{:?}", err),
         };
 
-        // let expect_ast = exchange_data("parse", file_name, &actual_ast);
+        let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
+        let expect_str = exchange_str("outputs", file_name, &actual_str);
         // TODO: Have a more useful comparison for these trees
-        // assert_eq!(actual_ast, expect_ast);
+        assert_eq!(actual_str, expect_str);
     }
 }
