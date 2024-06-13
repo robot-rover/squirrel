@@ -20,9 +20,11 @@ class Module:
         return self.submodules[name]
 
     def print_mod(self, mod_name, hier, handle, indent):
+        print(f'{pad(indent)}#[rustfmt::skip]', file=handle)
         print(f'{pad(indent)}mod {mod_name} {{', file=handle)
         print(f'{pad(indent+1)}use super::*;', file=handle)
-        print(f'{pad(indent+1)}use std::fs;', file=handle)
+        if len(self.scripts) > 0:
+            print(f'{pad(indent+1)}use std::fs;', file=handle)
         for script in self.scripts:
             script_name = script.split('.', 1)[0]
             script_upper = script_name.upper()
@@ -71,6 +73,6 @@ with open(MACRO_FILE, 'wt') as handle:
     print('    ($func:tt) => {', file=handle)
     assert len(root_mod.scripts) == 0
     for name, sub_mod in root_mod.submodules.items():
-        sub_mod.print_mod(name, Path(name), handle, 1)
+        sub_mod.print_mod(name, Path(name), handle, 2)
     print('    };', file=handle)
     print('}', file=handle)
