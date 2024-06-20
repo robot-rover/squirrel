@@ -3,6 +3,8 @@ use std::{
 };
 
 use ariadne::Color;
+use sqrc::{ClosureStrg, ObjectStrg};
+use value::{Closure, Object, Value};
 
 use crate::{
     context::{Span, SqBacktrace, SquirrelError},
@@ -10,6 +12,8 @@ use crate::{
 };
 
 pub mod walker;
+pub mod value;
+pub mod sqrc;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -115,7 +119,7 @@ impl<'a> From<Option<&'a mut dyn io::Write>> for WriteOption<'a> {
 }
 
 struct VMState<'a> {
-    root_table: ObjectRef,
+    root_table: Rc<ObjectStrg>,
     stdout: WriteOption<'a>,
 }
 
@@ -124,179 +128,22 @@ struct Context<'a, 'b> {
     vm_state: &'a mut VMState<'b>,
 }
 
-#[derive(Debug, Clone)]
-struct H64(f64);
-impl PartialEq for H64 {
-    fn eq(&self, other: &Self) -> bool {
-        self.0.to_bits() == other.0.to_bits()
-    }
-}
-impl Eq for H64 {}
-impl std::hash::Hash for H64 {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.0.to_bits().hash(state)
-    }
-}
-
-impl From<f64> for H64 {
-    fn from(float: f64) -> Self {
-        H64(float)
-    }
-}
-
-impl From<H64> for f64 {
-    fn from(h64: H64) -> Self {
-        h64.0
-    }
-}
-
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
-enum Value {
-    Float(H64),
-    Integer(i64),
-    // TODO: This should be an Rc
-    String(StringRef),
-    Null,
-    Object(ObjectRef),
-    Array(ArrayRef),
-    Weak(WeakRef),
-    Function(ClosureRef),
-    NativeFunction(fn(*mut Context, Vec<Value>) -> Result<Value, ExecError>),
-    // Class(/* TODO */),
-    // Generator(/* TODO */),
-    // UserData(/* TODO */),
-    // Thread(/* TODO */),
-}
-
-impl Value {
-    fn truthy(&self) -> bool {
-        match self {
-            Value::Integer(val) if *val == 0 => false,
-            Value::Float(b) if b.0 == 0.0 => false,
-            Value::Null => false,
-            _ => true,
-        }
-    }
-
-    fn boolean(val: bool) -> Self {
-        Value::Integer(if val { 1 } else { 0 })
-    }
-
-    fn float(val: f64) -> Self {
-        Value::Float(H64::from(val))
-    }
-
-    fn string(val: String) -> Self {
-        Value::String(StringRef(Rc::new(val)))
-    }
-}
-
-#[derive(Debug, Clone)]
-struct ArrayRef(Rc<RefCell<Vec<Value>>>);
-rc_hash_eq!(ArrayRef, Array, Rc);
-impl ArrayRef {
-    fn new(vec: Vec<Value>) -> Self {
-        ArrayRef(Rc::new(RefCell::new(vec)))
-    }
-}
-
-#[derive(Debug, Clone)]
-struct ClosureRef(Rc<Closure>);
-rc_hash_eq!(ClosureRef, Function, Rc);
-
-#[derive(Debug, Clone)]
-struct ObjectRef(Rc<RefCell<Object>>);
-rc_hash_eq!(ObjectRef, Object, Rc);
-impl ObjectRef {
-    fn new(obj: Object) -> Self {
-        ObjectRef(Rc::new(RefCell::new(obj)))
-    }
-}
-
-#[derive(Debug, Clone)]
-struct WeakRef(Weak<RefCell<Object>>);
-rc_hash_eq!(WeakRef, Weak, Weak);
-impl WeakRef {
-    fn new(obj: &ObjectRef) -> Self {
-        WeakRef(Rc::downgrade(&obj.0))
-    }
-
-    fn empty() -> Self {
-        WeakRef(Weak::new())
-    }
-}
-
-#[derive(Debug, Clone, Eq)]
-struct StringRef(Rc<String>);
-impl PartialEq for StringRef {
-    fn eq(&self, other: &Self) -> bool {
-        self.0.as_str() == other.0.as_str()
-    }
-}
-impl std::hash::Hash for StringRef {
-    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.0.as_str().hash(state)
-    }
-}
-
-#[derive(Debug, Clone)]
-
-struct Object {
-    delegate: Option<ObjectRef>,
-    slots: HashMap<Value, Value>,
-    is_class_inst: bool,
-}
-
-impl Object {
-    fn get_field(&self, key: &Value) -> Option<Value> {
-        // TODO: This shouldn't be recursive
-        if let Some(value) = self.slots.get(key) {
-            return Some(value.clone());
-        }
-        match &self.delegate {
-            Some(delegate) => {
-                let parent = (*delegate.0).borrow();
-                parent.get_field(key)
-            }
-            None => return None,
-        }
-    }
-}
-
-#[derive(Debug)]
-struct Closure {
-    ast_fn: NonNull<ast::Function>,
-    default_vals: Vec<Value>,
-    root: WeakRef,
-    env: Option<WeakRef>,
-}
-
-impl ClosureRef {
-    fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, root: WeakRef) -> ClosureRef {
-        ClosureRef(Rc::new(Closure {
-            ast_fn: NonNull::from(ast_fn),
-            default_vals,
-            root,
-            env: None,
-        }))
-    }
-}
-
 #[derive(Debug)]
 struct FuncRuntime {
     locals: HashMap<String, Value>,
-    env: Option<ObjectRef>,
-    closure: ClosureRef,
+    env: Value,
+    closure: Rc<ClosureStrg>,
 }
 
 impl FuncRuntime {
-    fn new(func_ref: ClosureRef, arg_vals: Vec<Value>, env: &Option<ObjectRef>, func_span: Span, call_span: Span) -> Result<FuncRuntime, ExecError> {
+    fn new(func_ref: Rc<ClosureStrg>, arg_vals: Vec<Value>, env: Option<Value>, func_span: Span, call_span: Span) -> Result<FuncRuntime, ExecError> {
         let mut locals = HashMap::new();
-        let ast_func = unsafe { func_ref.0.ast_fn.as_ref() };
+        let func_borrow = func_ref.get_data().borrow();
+        let ast_func = unsafe { func_borrow.ast_fn.as_ref() };
 
         let n_arguments = arg_vals.len();
         let n_parameters = ast_func.args.len();
-        let n_default = func_ref.0.default_vals.len();
+        let n_default = func_borrow.default_vals.len();
         assert!(n_parameters >= n_default);
 
         let mut arg_iter = arg_vals.into_iter();
@@ -309,14 +156,14 @@ impl FuncRuntime {
             let val = if let Some(arg_val) = arg_val {
                 arg_val
             } else if arg_idx >= n_parameters - n_default {
-                func_ref.0.default_vals[arg_idx - (n_parameters - n_default)].clone()
+                func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
             } else {
                 return Err(ExecError::wrong_arg_count(
                     func_span,
                     call_span,
                     (n_parameters - n_default)..n_parameters,
                     n_arguments,
-                    Some(unsafe { func_ref.0.ast_fn.as_ref() }.arg_span),
+                    Some(ast_func.arg_span),
                 ));
             };
             locals.insert(param_name.clone(), val);
@@ -330,7 +177,7 @@ impl FuncRuntime {
             };
             locals.insert(
                 "vargv".to_string(),
-                Value::Array(ArrayRef::new(vararg_vec)),
+                Value::array(vararg_vec),
             );
         } else {
             let extra_args = arg_iter.count();
@@ -340,14 +187,11 @@ impl FuncRuntime {
                     call_span,
                     (n_parameters - n_default)..n_parameters,
                     n_arguments,
-                    Some(unsafe { func_ref.0.ast_fn.as_ref() }.arg_span),
+                    Some(ast_func.arg_span),
                 ));
             }
         }
-        let env = match func_ref.0.env.as_ref() {
-            Some(closure_ref) => closure_ref.0.upgrade().map(|rc| ObjectRef(rc)),
-            None => env.clone(),
-        };
+        let env = env.or_else(|| func_borrow.env.clone()).unwrap_or(Value::Null);
         Ok(FuncRuntime {
             closure: func_ref,
             locals,
@@ -361,7 +205,7 @@ impl From<&Literal> for Value {
         match literal {
             Literal::Integer(integer) => Value::Integer(*integer),
             Literal::Number(float) => Value::Float((*float).into()),
-            Literal::String(string) => Value::String(StringRef(Rc::new(string.clone()))),
+            Literal::String(string) => Value::string(string),
             Literal::Null => Value::Null,
         }
     }

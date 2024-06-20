@@ -1,3 +1,5 @@
+#![feature(ptr_metadata)]
+
 pub mod context;
 pub mod lexer;
 pub mod parser;

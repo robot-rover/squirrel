@@ -1,5 +1,5 @@
 use std::{
-    collections::HashMap, env, io::{self, Write}
+    collections::HashMap, env, io::{self, Write}, rc::Rc
 };
 
 use crate::{
@@ -10,10 +10,7 @@ use crate::{
     },
 };
 
-use super::{
-    ArrayRef, ClosureRef, Context, ExecError, FuncRuntime, Object, ObjectRef, VMState, Value,
-    WeakRef, H64,
-};
+use super::{sqrc::{ObjectStrg, SqRcEnum, SqRef, SqWk, SqWkEnum}, value::{Closure, HashValue, Object, Value}, Context, ExecError, FuncRuntime, VMState};
 
 type ExprResult = Result<Value, ExecError>;
 enum FlowControl {
@@ -37,9 +34,9 @@ pub fn run(
     stdout: Option<&mut dyn io::Write>,
 ) -> Result<(), SquirrelError> {
     let root = init_root();
-    let root_closure = ClosureRef::new(tree, Vec::new(), WeakRef::new(&root));
-    let arg_vals = env::args().into_iter().map(Value::string).collect();
-    let infunc = FuncRuntime::new(root_closure, arg_vals, &Some(root.clone()), Span::empty(), Span::empty()).expect(
+    let root_closure = Closure::new(tree, Vec::new(), SqWkEnum::from(Rc::downgrade(&root)).stash());
+    let arg_vals = env::args().into_iter().map(|arg| Value::string(&arg)).collect();
+    let infunc = FuncRuntime::new(root_closure, arg_vals, Some(Value::rc_enum(root.clone())), Span::empty(), Span::empty()).expect(
         "Unable to create root function runtime",
     );
     let mut vm_state = VMState {
@@ -56,31 +53,28 @@ pub fn run(
         .map_err(|err| err.with_context(file_name.to_string()))
 }
 
-fn init_root() -> ObjectRef {
+fn init_root() -> Rc<ObjectStrg> {
     let mut slots = HashMap::new();
     slots.insert(
-        Value::string("print".to_string()),
-        Value::NativeFunction(|ctx, args| {
+        HashValue::string("print"),
+        Value::NativeFn(|ctx, args| {
             let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
             assert!(args.len() == 1, "Wrong number of args");
             let arg = &args[0];
             match arg {
-                Value::Float(f) => write!(stdout, "{}", f.0).unwrap(),
+                Value::Float(f) => write!(stdout, "{}", f).unwrap(),
                 Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
-                Value::String(s) => write!(stdout, "{}", s.0).unwrap(),
                 Value::Null => write!(stdout, "null").unwrap(),
-                Value::Object(o) => todo!(),
-                Value::Array(a) => todo!(),
+                Value::Rc(rc) => match rc.by_ref() {
+                    SqRef::String(s) => write!(stdout, "{}", s).unwrap(),
+                    _ => todo!(),
+                }
                 _ => todo!(),
             }
             Ok(Value::Null)
         }),
     );
-    ObjectRef::new(Object {
-        delegate: None,
-        slots,
-        is_class_inst: false,
-    })
+    ObjectStrg::new(Object::new(None, slots, false))
 }
 
 fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
@@ -206,23 +200,22 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
     match &expr.data {
         ExprData::Literal(lit) => Ok(lit.into()),
         ExprData::TableDecl(table_decl) => run_table(context, table_decl),
-        ExprData::ArrayDecl(array_decl) => Ok(ArrayRef::new(
+        ExprData::ArrayDecl(array_decl) => Ok(Value::array(
             array_decl
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
         )
         .into()),
-        ExprData::FunctionDef(func_def) => Ok(ClosureRef::new(
+        ExprData::FunctionDef(func_def) => Ok(Value::closure(Closure::new(
             func_def,
             func_def
                 .default_expr
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
-            WeakRef::new(&context.vm_state.root_table),
-        )
-        .into()),
+            SqWkEnum::from(Rc::downgrade(&context.vm_state.root_table)).stash(),
+        ))),
         ExprData::ClassDef { parent, members } => run_class(context, parent.as_ref(), members),
         ExprData::Assign(assign) => {
             let mut val = run_expression(context, &assign.value)?;
@@ -288,21 +281,19 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
         ExprData::This => Ok(context
             .infunc
             .env
-            .clone()
-            .map(|obj_ref| obj_ref.into())
-            .unwrap_or(Value::Null)),
+            .clone()),
         ExprData::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
-            run_field_access(context, &target, &field.0, expr.span)
+            target.get_field_str(&field.0, field.1)
         }
         ExprData::Globals => Ok(context
             .infunc
             .closure
-            .0
+            .get_data()
+            .borrow()
             .root
-            .0
             .upgrade()
-            .map(|obj_ref| ObjectRef(obj_ref).into())
+            .map(Value::Rc)
             .unwrap_or(Value::Null)),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
@@ -312,15 +303,15 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .as_ref()
                 .and_then(|obj_ref| {
                     // Double check this is null and not an error
-                    let obj_ref = obj_ref.0.borrow();
-                    if obj_ref.is_class_inst {
-                        obj_ref
-                            .delegate
-                            .as_ref()
-                            .map(|del| Value::Object(del.clone()))
-                    } else {
-                        None
+                    if let Value::Rc(rc) = obj_ref {
+                        if let SqRef::Object(obj) = rc.by_ref() {
+                            let obj = obj.borrow();
+                            if obj.get_is_class_inst() {
+                                return obj.get_delegate().cloned().map(|obj_rc| Value::rc_enum(obj_rc))
+                            }
+                        }
                     }
+                    None
                 })
                 .unwrap_or(Value::Null);
             Ok(res)
@@ -332,7 +323,7 @@ fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr], ar
     let (env, func_val) = match func {
         CallTarget::FieldAccess(target, field_name) => {
             let parent = run_expression(context, target)?;
-            let func = run_field_access(context, &parent, &field_name.0, field_name.1)?;
+            let func = parent.get_field_str(&field_name.0, field_name.1)?;
             (parent, func)
         }
         CallTarget::Expr(expr) => {
@@ -352,11 +343,6 @@ fn run_function_call(context: &mut Context, func: &CallTarget, args: &[Expr], ar
 }
 
 fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr], func_span: Span, call_span: Span) -> ExprResult {
-    let env = match env {
-        Value::Object(obj) => obj,
-        _ => panic!("Can't call function on non-object"),
-    };
-
     // TODO: Some better way to validate this
     let args = args
         .iter()
@@ -364,17 +350,23 @@ fn run_rawcall(context: &mut Context, func_val: Value, env: Value, args: &[Expr]
         .collect::<Result<Vec<_>, _>>()?;
 
     match func_val {
-        Value::Function(func) => {
-            let ast_fn = unsafe { func.0.ast_fn.as_ref() };
-            let rt_func = FuncRuntime::new(func, args, &context.infunc.env, func_span, call_span)?;
-            let body = &ast_fn.body;
-            let mut context = Context {
-                infunc: rt_func,
-                vm_state: context.vm_state,
-            };
-            run_function(&mut context, body)
+        Value::Rc(rc) => {
+            match rc.by_ref() {
+                SqRef::Closure(func) => {
+                    let ast_fn = unsafe { func.borrow().ast_fn.as_ref() };
+                    // TODO: need to force func runtime to use our env here rather than the closure's
+                    let rt_func = FuncRuntime::new(func, args, Some(env), func_span, call_span)?;
+                    let body = &ast_fn.body;
+                    let mut context = Context {
+                        infunc: rt_func,
+                        vm_state: context.vm_state,
+                    };
+                    run_function(&mut context, body)
+                }
+                _ => todo!(),
+            }
         }
-        Value::NativeFunction(func) => func(context as *mut _, args),
+        Value::NativeFn(func) => func(context as *mut _, args),
         other => panic!("Can't call non-function {other:?}"),
     }
 }
@@ -397,7 +389,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         return Ok(value.clone());
     }
 
-    let key = Value::string(ident.to_string());
+    let key = Value::string(ident);
     let env_match = context
         .infunc
         .env
@@ -420,20 +412,6 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     }
 
     Err(ExecError::undefined_variable((ident.to_string(), span)))
-}
-
-fn run_field_access(context: &mut Context, target: &Value, field: &str, span: Span) -> ExprResult {
-    match target {
-        // TODO: Cloning field here!
-        Value::Object(obj) => {
-            let res = obj.0.borrow().get_field(&Value::string(field.to_string()));
-            match res {
-                Some(val) => Ok(val),
-                None => Err(ExecError::undefined_variable((field.to_string(), span))),
-            }
-        }
-        _ => panic!("Can't dereference non-object"),
-    }
 }
 
 fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, target: &AssignTarget) -> ExprResult {
@@ -466,9 +444,9 @@ fn run_class(
 }
 
 fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
-    Ok(ObjectRef::new(Object {
-        delegate: None,
-        slots: table_decl
+    Ok(Value::object(Object::new(
+        None,
+        table_decl
             .iter()
             .map(|(key, val)| {
                 let key = run_expression(context, key)?;
@@ -476,9 +454,8 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
                 Ok((key, val))
             })
             .collect::<Result<HashMap<_, _>, _>>()?,
-        is_class_inst: false,
-    })
-    .into())
+        false,
+    )))
 }
 
 fn run_array_access(context: &mut Context, array: &Value, index: Value, span: Span) -> ExprResult {
@@ -537,19 +514,19 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
             _ => panic!("Illegal operation"),
         },
         UnaryOp::TypeOf => match val {
-            Value::Null => Value::string("null".to_string()),
-            Value::Integer(_) => Value::string("integer".to_string()),
-            Value::Float(_) => Value::string("float".to_string()),
-            Value::String(_) => Value::string("string".to_string()),
-            Value::Array(_) => Value::string("array".to_string()),
-            Value::Function(_) => Value::string("function".to_string()),
-            Value::Object(_) => Value::string("object".to_string()),
+            Value::Null => Value::string("null"),
+            Value::Integer(_) => Value::string("integer"),
+            Value::Float(_) => Value::string("float"),
+            Value::Rc(rc) => match rc.by_ref() {
+                SqRef::String(_) => Value::string("string"),
+                SqRef::Array(_) => Value::string("array"),
+                SqRef::Closure(_) => Value::string("function"),
+                SqRef::Object(_) => Value::string("object"),
+            }
             _ => todo!(),
         },
         UnaryOp::Clone => match val {
-            Value::Object(_) => todo!(),
-            Value::Array(_) => todo!(),
-            Value::Weak(_) => todo!(),
+            Value::Rc(_) => todo!(),
             other => other.clone(),
         },
         UnaryOp::Resume => todo!("Resume not implemented"),
@@ -665,7 +642,7 @@ fn run_assign(
                     env.0
                         .borrow_mut()
                         .slots
-                        .insert(Value::string(ident.0.clone()), val);
+                        .insert(Value::string(&ident.0), val);
                 } else {
                     panic!("Setting field of null")
                 }
@@ -675,8 +652,8 @@ fn run_assign(
                 while let Some(strong_current) = current {
                     current = {
                         let mut obj = strong_current.0.borrow_mut();
-                        if obj.slots.contains_key(&Value::string(ident.0.clone())) {
-                            obj.slots.insert(Value::string(ident.0.clone()), val);
+                        if obj.slots.contains_key(&Value::string(&ident.0)) {
+                            obj.slots.insert(Value::string(&ident.0), val);
                             break;
                         }
                         obj.delegate.clone()
