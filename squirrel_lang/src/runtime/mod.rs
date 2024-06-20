@@ -1,5 +1,12 @@
 use std::{
-    borrow::Borrow, cell::RefCell, collections::HashMap, f32::consts::E, io, ops::{Range, RangeInclusive}, ptr::NonNull, rc::{Rc, Weak}
+    borrow::Borrow,
+    cell::RefCell,
+    collections::HashMap,
+    f32::consts::E,
+    io,
+    ops::{Range, RangeInclusive},
+    ptr::NonNull,
+    rc::{Rc, Weak},
 };
 
 use ariadne::Color;
@@ -11,9 +18,9 @@ use crate::{
     parser::ast::{self, Ident, Literal},
 };
 
-pub mod walker;
-pub mod value;
 pub mod sqrc;
+pub mod value;
+pub mod walker;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -40,8 +47,21 @@ macro_rules! rc_hash_eq {
 #[derive(Debug)]
 pub enum ExecError {
     UndefinedVariable(Ident, SqBacktrace),
+    UndefinedField(Span, Value, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
-    WrongArgCount { func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span>, bt: SqBacktrace},
+    WrongArgCount {
+        func_span: Span,
+        call_span: Span,
+        expected: Range<usize>,
+        got: usize,
+        definition_span: Option<Span>,
+        bt: SqBacktrace,
+    },
+    UnhashableType {
+        kind: String,
+        span: Span,
+        bt: SqBacktrace,
+    }
 }
 
 impl ExecError {
@@ -49,12 +69,37 @@ impl ExecError {
         ExecError::UndefinedVariable(ident, SqBacktrace::new())
     }
 
+    fn undefined_field(span: Span, value: Value) -> Self {
+        ExecError::UndefinedField(span, value, SqBacktrace::new())
+    }
+
     fn illegal_keyword(span: Span) -> Self {
         ExecError::IllegalKeyword(span, SqBacktrace::new())
     }
 
-    fn wrong_arg_count(func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span>) -> Self {
-        ExecError::WrongArgCount { func_span, call_span, expected, got, definition_span, bt: SqBacktrace::new() }
+    fn wrong_arg_count(
+        func_span: Span,
+        call_span: Span,
+        expected: Range<usize>,
+        got: usize,
+        definition_span: Option<Span>,
+    ) -> Self {
+        ExecError::WrongArgCount {
+            func_span,
+            call_span,
+            expected,
+            got,
+            definition_span,
+            bt: SqBacktrace::new(),
+        }
+    }
+
+    fn unhashable_type(kind: String, span: Span) -> Self {
+        ExecError::UnhashableType {
+            kind,
+            span,
+            bt: SqBacktrace::new(),
+        }
     }
 
     fn with_context(self, file_name: String) -> SquirrelError {
@@ -71,20 +116,52 @@ impl ExecError {
                 format!("Keyword is not valid in this context"),
                 bt,
             ),
-            ExecError::WrongArgCount { func_span, call_span, expected, got, definition_span, bt} => {
+            ExecError::WrongArgCount {
+                func_span,
+                call_span,
+                expected,
+                got,
+                definition_span,
+                bt,
+            } => {
                 let mut labels = vec![
-                    (func_span, if expected.start == expected.end {
-                        format!("Function expected {} arguments", expected.start)
-                    } else {
-                        format!("Function expected {} to {} arguments", expected.start, expected.end)
-                    }, Color::Blue),
+                    (
+                        func_span,
+                        if expected.start == expected.end {
+                            format!("Function expected {} arguments", expected.start)
+                        } else {
+                            format!(
+                                "Function expected {} to {} arguments",
+                                expected.start, expected.end
+                            )
+                        },
+                        Color::Blue,
+                    ),
                     (call_span, format!("Call has {} arguments", got), Color::Red),
                 ];
                 if let Some(dspan) = definition_span {
                     labels.push((dspan, "Function defined here".to_string(), Color::Green));
                 }
-                SquirrelError::new_labels(file_name, format!("Function called with incorrect number of arguments"), labels, bt)
-            },
+                SquirrelError::new_labels(
+                    file_name,
+                    format!("Function called with incorrect number of arguments"),
+                    labels,
+                    bt,
+                )
+            }
+            ExecError::UndefinedField(span, val, bt) => SquirrelError::new(
+                file_name,
+                span,
+                // TODO: This should use value to_string
+                format!("Undefined field: {:?}", val),
+                bt,
+            ),
+            ExecError::UnhashableType { kind, span, bt } => SquirrelError::new(
+                file_name,
+                span,
+                format!("A value of type '{}' is not hashable", kind),
+                bt,
+            ),
         }
     }
 }
@@ -136,7 +213,13 @@ struct FuncRuntime {
 }
 
 impl FuncRuntime {
-    fn new(func_ref: Rc<ClosureStrg>, arg_vals: Vec<Value>, env: Option<Value>, func_span: Span, call_span: Span) -> Result<FuncRuntime, ExecError> {
+    fn new(
+        func_ref: Rc<ClosureStrg>,
+        arg_vals: Vec<Value>,
+        env: Option<Value>,
+        func_span: Span,
+        call_span: Span,
+    ) -> Result<FuncRuntime, ExecError> {
         let mut locals = HashMap::new();
         let func_borrow = func_ref.get_data().borrow();
         let ast_func = unsafe { func_borrow.ast_fn.as_ref() };
@@ -175,10 +258,7 @@ impl FuncRuntime {
             } else {
                 Vec::new()
             };
-            locals.insert(
-                "vargv".to_string(),
-                Value::array(vararg_vec),
-            );
+            locals.insert("vargv".to_string(), Value::array(vararg_vec));
         } else {
             let extra_args = arg_iter.count();
             if extra_args > 0 {
@@ -191,7 +271,10 @@ impl FuncRuntime {
                 ));
             }
         }
-        let env = env.or_else(|| func_borrow.env.clone()).unwrap_or(Value::Null);
+        let env = env
+            .or_else(|| func_borrow.env.clone())
+            .unwrap_or(Value::Null);
+        drop(func_borrow);
         Ok(FuncRuntime {
             closure: func_ref,
             locals,

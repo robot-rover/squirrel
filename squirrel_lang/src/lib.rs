@@ -1,4 +1,5 @@
 #![feature(ptr_metadata)]
+#![feature(trace_macros)]
 
 pub mod context;
 pub mod lexer;

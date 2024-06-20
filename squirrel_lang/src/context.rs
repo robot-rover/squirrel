@@ -158,19 +158,23 @@ impl SquirrelError {
 
     pub fn write(&self, f: &mut fmt::Formatter<'_>, source: &str) -> fmt::Result {
         let mut report_vec = Vec::new();
-        Report::build(ReportKind::Error, self.file_name.as_str(), self.labels[0].0.start)
-            .with_message(self.message.as_str())
-            .with_labels(self.labels.iter().map(|(span, label, color)| {
-                Label::new((self.file_name.as_str(), (*span).into()))
-                    .with_message(label.as_str())
-                    .with_color(*color)
-            }))
-            .finish()
-            .write(
-                (self.file_name.as_str(), Source::from(source)),
-                &mut report_vec,
-            )
-            .unwrap();
+        Report::build(
+            ReportKind::Error,
+            self.file_name.as_str(),
+            self.labels[0].0.start,
+        )
+        .with_message(self.message.as_str())
+        .with_labels(self.labels.iter().map(|(span, label, color)| {
+            Label::new((self.file_name.as_str(), (*span).into()))
+                .with_message(label.as_str())
+                .with_color(*color)
+        }))
+        .finish()
+        .write(
+            (self.file_name.as_str(), Source::from(source)),
+            &mut report_vec,
+        )
+        .unwrap();
         write!(
             f,
             "{}{}",

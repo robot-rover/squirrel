@@ -1,7 +1,14 @@
-use std::{alloc::{self, handle_alloc_error, Layout}, cell::RefCell, fmt, mem, ptr::{self, addr_of, addr_of_mut, from_raw_parts, from_raw_parts_mut}, rc::{Rc, Weak}};
 use std::hash::Hash;
+use std::{
+    alloc::{self, handle_alloc_error, Layout},
+    cell::RefCell,
+    fmt,
+    mem::{self, ManuallyDrop},
+    ptr::{self, addr_of_mut, from_raw_parts, from_raw_parts_mut},
+    rc::{Rc, Weak},
+};
 
-use super::value::{Value, Object, Closure};
+use super::value::{Closure, Object, Value};
 
 macro_rules! call_with_rc_ptr {
     ($rcptr:ident, $func:path) => {{
@@ -10,12 +17,12 @@ macro_rules! call_with_rc_ptr {
             RcDiscrim::String => {
                 let len = (*($rcptr.ptr as *const StringLen)).len;
                 $func(from_raw_parts::<StringStrg>($rcptr.ptr as *const (), len))
-            },
+            }
             RcDiscrim::Object => $func($rcptr.ptr as *const ObjectStrg),
             RcDiscrim::Array => $func($rcptr.ptr as *const ArrayStrg),
             RcDiscrim::Closure => $func($rcptr.ptr as *const ClosureStrg),
-        }}
-    };
+        }
+    }};
 }
 
 // TODO: Should these be nonnull?
@@ -80,9 +87,12 @@ impl fmt::Debug for SqWk {
     }
 }
 
-unsafe fn into_ref<'a, T: ?Sized + 'a>(ptr: *const T) -> SqRef<'a> where
-SqRef<'a>: From<&'a T> {
-    (&*ptr).into()
+unsafe fn into_ref<'a, T: ?Sized + 'a>(ptr: *const T) -> SqRefAnc<'a>
+where
+    SqRefData: From<ManuallyDrop<Rc<T>>>,
+{
+    let data = ManuallyDrop::new(Rc::from_raw(ptr)).into();
+    SqRefAnc(data, std::marker::PhantomData)
 }
 
 unsafe fn increment_weak_count<T: ?Sized>(ptr: *const T) {
@@ -97,14 +107,19 @@ impl SqRc {
         SqWk { ptr: self.ptr }
     }
 
-    pub fn by_ref<'a>(&'a self) -> SqRef<'a> {
+    pub fn borrow<'a>(&'a self) -> SqRefAnc<'a> {
         unsafe { call_with_rc_ptr!(self, into_ref) }
     }
 }
 
 unsafe fn upgrade_weak<T: ?Sized>(ptr: *const T) -> Option<SqRc>
-where SqRcEnum: From<Rc<T>> {
-    Weak::from_raw(ptr).upgrade().map(SqRcEnum::from).map(SqRcEnum::stash)
+where
+    SqRcEnum: From<Rc<T>>,
+{
+    Weak::from_raw(ptr)
+        .upgrade()
+        .map(SqRcEnum::from)
+        .map(SqRcEnum::stash)
 }
 
 impl SqWk {
@@ -125,14 +140,16 @@ macro_rules! impl_ref {
         impl $name {
             pub fn new(data: $inner_data) -> Rc<Self> {
                 let data = RefCell::new(data);
-                Rc::new(Self { discrim: RcDiscrim::$variant, data })
+                Rc::new(Self {
+                    discrim: RcDiscrim::$variant,
+                    data,
+                })
             }
         }
 
         impl_ref!($name, $variant, $data);
     };
     ($name:ident, $variant:ident, $data:ty) => {
-
         impl $name {
             pub fn get_data(&self) -> &$data {
                 &self.data
@@ -142,6 +159,12 @@ macro_rules! impl_ref {
         impl<'a> From<&'a Rc<$name>> for SqRef<'a> {
             fn from(storage: &'a Rc<$name>) -> Self {
                 SqRef::$variant(storage)
+            }
+        }
+
+        impl From<ManuallyDrop<Rc<$name>>> for SqRefData {
+            fn from(rc: ManuallyDrop<Rc<$name>>) -> Self {
+                SqRefData::$variant(rc)
             }
         }
 
@@ -177,7 +200,9 @@ impl StringStrg {
         let discrim_offset = 0;
         let layout = Layout::from_size_align(0, 1).unwrap();
         let (layout, len_offset) = layout.extend(Layout::new::<usize>()).unwrap();
-        let (layout, data_offset) = layout.extend(Layout::array::<u8>(string.len()).unwrap()).unwrap();
+        let (layout, data_offset) = layout
+            .extend(Layout::array::<u8>(string.len()).unwrap())
+            .unwrap();
         let layout = layout.pad_to_align();
         let raw = unsafe { alloc::alloc(layout) };
         if raw.is_null() {
@@ -218,15 +243,25 @@ enum RcDiscrim {
     Closure,
 }
 
+macro_rules! generic_tree {
+    ($root:ident, $($t:tt),*) => {
+        $root<generic_tree!($( $t ),*)>
+    };
+    ($lt:lifetime, $($t:tt),*) => {
+        &$lt generic_tree!($( $t ),*)
+    };
+    ($root:ident) => { $root };
+}
+
 macro_rules! impl_sq_enum {
-    ($wide:ident, $ptr:ident) => {
+    ($wide:ident $(<$gen:lifetime>)?, $( $wrap:tt);+) => {
         #[derive(Debug, Clone)]
         #[repr(u8)]
-        pub enum $wide {
-            String($ptr<StringStrg>) = RcDiscrim::String as u8,
-            Object($ptr<ObjectStrg>) = RcDiscrim::Object as u8,
-            Array($ptr<ArrayStrg>) = RcDiscrim::Array as u8,
-            Closure($ptr<ClosureStrg>) = RcDiscrim::Closure as u8,
+        pub enum $wide $(<$gen>)? {
+            String( generic_tree!($( $wrap),+ , StringStrg )) = RcDiscrim::String  as u8,
+            Object( generic_tree!($( $wrap),+ , ObjectStrg )) = RcDiscrim::Object  as u8,
+            Array(  generic_tree!($( $wrap),+ , ArrayStrg  )) = RcDiscrim::Array   as u8,
+            Closure(generic_tree!($( $wrap),+ , ClosureStrg)) = RcDiscrim::Closure as u8,
         }
     };
     (impl $wide:ident, $ptr:ident, $narrow:ident) => {
@@ -257,22 +292,33 @@ macro_rules! impl_sq_enum {
     };
 }
 
-// TODO: Replace SqRcEnum with impl_sq_enum and also create SqWkEnum
-#[derive(Debug, Clone)]
-#[repr(u8)]
-pub enum SqRef<'a> {
-    String(&'a Rc<StringStrg>) = RcDiscrim::String as u8,
-    Object(&'a Rc<ObjectStrg>) = RcDiscrim::Object as u8,
-    Array(&'a Rc<ArrayStrg>) = RcDiscrim::Array as u8,
-    Closure(&'a Rc<ClosureStrg>) = RcDiscrim::Closure as u8,
-    // Class(/* TODO */),
-    // Generator(/* TODO */),
-    // UserData(/* TODO */),
-    // Thread(/* TODO */),
-}
-
 impl_sq_enum!(impl SqRcEnum, Rc, SqRc);
 impl_sq_enum!(impl SqWkEnum, Weak, SqWk);
+impl_sq_enum!(SqRefData, ManuallyDrop; Rc);
+impl_sq_enum!(SqRef<'a>, 'a; Rc);
+
+pub struct SqRefAnc<'a>(SqRefData, std::marker::PhantomData<&'a ()>);
+
+impl<'a> SqRefAnc<'a> {
+    pub fn as_ref(&'a self) -> SqRef<'a> {
+        match &self.0 {
+            SqRefData::Array(rc) => SqRef::Array(&&*rc),
+            SqRefData::Closure(rc) => SqRef::Closure(&&*rc),
+            SqRefData::Object(rc) => SqRef::Object(&&*rc),
+            SqRefData::String(rc) => SqRef::String(&&*rc),
+        }
+    }
+}
+
+impl<'a> SqRef<'a> {
+    pub fn get_field(&self, key: &Value) -> Option<Value> {
+        todo!()
+    }
+
+    pub fn get_field_str(&self, key: &str) -> Option<Value> {
+        todo!()
+    }
+}
 
 impl SqRcEnum {
     pub fn string(val: &str) -> Self {
@@ -296,19 +342,20 @@ impl SqRcEnum {
 mod tests {
     use super::*;
 
-   #[test]
-   fn basic_test() {
+    #[test]
+    fn basic_test() {
         let string = "Hello, World!";
         let ss = StringStrg::new(string);
         let rc = SqRcEnum::String(ss).stash();
         let weak = rc.downgrade();
         let rc2 = weak.upgrade();
-        match rc2.as_ref().map(SqRc::by_ref) {
-           Some(SqRef::String(str)) => assert_eq!(str.get_data(), string),
-           _ => panic!("Expected String, got {:?}", rc2),
+        let sqr = rc2.as_ref().map(SqRc::borrow);
+        match sqr.as_ref().map(|sqr| sqr.as_ref()) {
+            Some(SqRef::String(str)) => assert_eq!(str.get_data(), string),
+            _ => panic!("Expected String, got {:?}", rc2),
         }
         drop(rc);
         drop(rc2);
         assert_eq!(weak.upgrade(), None);
-   }
+    }
 }

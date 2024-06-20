@@ -1,10 +1,24 @@
 use core::fmt;
-use std::{alloc::{self, handle_alloc_error, Layout}, any, cell::RefCell, collections::HashMap, mem::MaybeUninit, ptr::{self, addr_of, addr_of_mut, from_raw_parts, from_raw_parts_mut, NonNull}, rc::{Rc, Weak}};
 use std::hash::Hash;
+use std::{
+    alloc::{self, handle_alloc_error, Layout},
+    any,
+    cell::RefCell,
+    collections::HashMap,
+    mem::MaybeUninit,
+    ptr::{self, addr_of, addr_of_mut, from_raw_parts, from_raw_parts_mut, NonNull},
+    rc::{Rc, Weak},
+};
 
-use crate::{context::Span, parser::ast::{self, ExprData}};
+use crate::{
+    context::Span,
+    parser::ast::{self, ExprData},
+};
 
-use super::{sqrc::{ArrayStrg, ClosureStrg, ObjectStrg, SqRc, SqRcEnum, SqWk, StringStrg}, Context, ExecError};
+use super::{
+    sqrc::{ArrayStrg, ClosureStrg, ObjectStrg, SqRc, SqRcEnum, SqRef, SqWk, StringStrg},
+    Context, ExecError,
+};
 
 pub type NativeFn = fn(*mut Context, Vec<Value>) -> Result<Value, ExecError>;
 
@@ -42,8 +56,7 @@ macro_rules! value_common_impl {
         pub fn object(object: Object) -> Self {
             Self::Rc(SqRcEnum::object(object).stash())
         }
-
-    }
+    };
 }
 
 impl Value {
@@ -62,14 +75,31 @@ impl Value {
         }
     }
 
-    pub fn get_field(&self, key: &Value, span: Span) -> Result<Value, ExecError> {
+    pub fn get_field(&self, key: &Value) -> Option<Value> {
         todo!()
     }
 
-    pub fn get_field_str(&self, key: &str, span: Span) -> Result<Value, ExecError> {
+    pub fn get_field_str(&self, key: &str) -> Option<Value> {
         todo!()
     }
 
+    pub fn type_str(&self) -> &'static str {
+        match self {
+            Value::Null => "null",
+            Value::Integer(_) => "integer",
+            Value::Float(_) => "float",
+            Value::NativeFn(_) => "function",
+            Value::Rc(rc) => {
+                let anc = rc.borrow();
+                match anc.as_ref() {
+                    SqRef::String(_) => "string",
+                    SqRef::Array(_) => "array",
+                    SqRef::Closure(_) => "function",
+                    SqRef::Object(_) => "object",
+                }
+            },
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]
@@ -90,7 +120,6 @@ impl HashValue {
             _ => true,
         }
     }
-
 }
 
 impl From<HashValue> for Value {
@@ -105,7 +134,7 @@ impl From<HashValue> for Value {
 }
 
 impl TryFrom<Value> for HashValue {
-    type Error = ();
+    type Error = Value;
 
     fn try_from(value: Value) -> Result<Self, Self::Error> {
         match value {
@@ -113,7 +142,7 @@ impl TryFrom<Value> for HashValue {
             Value::Null => Ok(HashValue::Null),
             Value::NativeFn(val) => Ok(HashValue::NativeFn(val)),
             Value::Rc(val) => Ok(HashValue::Rc(val)),
-            _ => Err(()),
+            other => Err(other),
         }
     }
 }
@@ -126,7 +155,11 @@ pub struct Object {
 }
 
 impl Object {
-    pub fn new(delegate: Option<Rc<ObjectStrg>>, slots: HashMap<HashValue, Value>, is_class_inst: bool) -> Object {
+    pub fn new(
+        delegate: Option<Rc<ObjectStrg>>,
+        slots: HashMap<HashValue, Value>,
+        is_class_inst: bool,
+    ) -> Object {
         Object {
             delegate,
             slots,
@@ -142,7 +175,22 @@ impl Object {
         self.delegate.as_ref()
     }
 
-    fn get_field(&self, key: &HashValue) -> Option<Value> {
+    pub fn set_field(&mut self, key: HashValue, value: Value, is_newslot: bool) -> bool {
+        if is_newslot || self.slots.contains_key(&key) {
+            self.slots.insert(key, value);
+            true
+        } else {
+            match &mut self.delegate {
+                Some(delegate) => {
+                    let mut parent = delegate.get_data().borrow_mut();
+                    parent.set_field(key, value, is_newslot)
+                }
+                None => false,
+            }
+        }
+    }
+
+    pub fn get_field(&self, key: &HashValue) -> Option<Value> {
         // Todo: Have exec error here
         // TODO: This shouldn't be recursive
         if let Some(value) = self.slots.get(key) {
