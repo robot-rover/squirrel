@@ -77,8 +77,7 @@ impl Drop for SqWk {
 
 impl fmt::Debug for SqRc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        // RcEnum::from(*self).fmt(f)
-        todo!()
+        self.borrow().as_ref().fmt(f)
     }
 }
 impl fmt::Debug for SqWk {
@@ -96,10 +95,8 @@ where
 }
 
 unsafe fn increment_weak_count<T: ?Sized>(ptr: *const T) {
-    let rc = Rc::from_raw(ptr);
-    let weak = Rc::downgrade(&rc);
-    mem::forget(rc);
-    mem::forget(weak);
+    let rc = ManuallyDrop::new(Rc::from_raw(ptr));
+    let _weak = ManuallyDrop::new(Rc::downgrade(&rc));
 }
 impl SqRc {
     pub fn downgrade(&self) -> SqWk {
@@ -116,7 +113,8 @@ unsafe fn upgrade_weak<T: ?Sized>(ptr: *const T) -> Option<SqRc>
 where
     SqRcEnum: From<Rc<T>>,
 {
-    Weak::from_raw(ptr)
+    let weak = ManuallyDrop::new(Weak::from_raw(ptr));
+        weak
         .upgrade()
         .map(SqRcEnum::from)
         .map(SqRcEnum::stash)
@@ -199,6 +197,7 @@ impl StringStrg {
     pub fn new(string: &str) -> Rc<Self> {
         let discrim_offset = 0;
         let layout = Layout::from_size_align(0, 1).unwrap();
+        let (layout, discrim_offset) = layout.extend(Layout::new::<RcDiscrim>()).unwrap();
         let (layout, len_offset) = layout.extend(Layout::new::<usize>()).unwrap();
         let (layout, data_offset) = layout
             .extend(Layout::array::<u8>(string.len()).unwrap())
@@ -346,7 +345,8 @@ mod tests {
     fn basic_test() {
         let string = "Hello, World!";
         let ss = StringStrg::new(string);
-        let rc = SqRcEnum::String(ss).stash();
+        let rce = SqRcEnum::String(ss);
+        let rc = rce.stash();
         let weak = rc.downgrade();
         let rc2 = weak.upgrade();
         let sqr = rc2.as_ref().map(SqRc::borrow);
@@ -357,5 +357,6 @@ mod tests {
         drop(rc);
         drop(rc2);
         assert_eq!(weak.upgrade(), None);
+        drop(weak);
     }
 }
