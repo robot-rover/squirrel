@@ -715,8 +715,10 @@ mod tests {
         };
 
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
-        let expect_str = exchange_str("outputs", file_name, &actual_str);
-        // TODO: Have a more useful comparison for these trees
-        assert_eq!(actual_str, expect_str);
+        #[cfg(not(miri))] {
+            let expect_str = exchange_str("outputs", file_name, &actual_str);
+            // TODO: Have a more useful comparison for these trees
+            assert_eq!(actual_str, expect_str);
+        }
     }
 }

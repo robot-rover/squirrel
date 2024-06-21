@@ -638,9 +638,11 @@ mod tests {
             Ok(ast) => ast,
             Err(err) => panic!("{}", err),
         };
-        let expect_ast = exchange_data("parse", file_name, &actual_ast);
+        #[cfg(not(miri))] {
+            let expect_ast = exchange_data("parse", file_name, &actual_ast);
 
-        // TODO: Have a more useful comparison for these trees
-        assert_eq!(actual_ast, expect_ast);
+            // TODO: Have a more useful comparison for these trees
+            assert_eq!(actual_ast, expect_ast);
+        }
     }
 }

@@ -663,13 +663,15 @@ mod tests {
             .into_iter()
             .map(|(token, _)| token)
             .collect::<Vec<_>>();
-        let expected_data = exchange_data("lexer", sample_path, &actual_data);
-        for (idx, (expected, actual)) in expected_data
-            .into_iter()
-            .zip(actual_data.into_iter())
-            .enumerate()
-        {
-            assert_eq!(expected, actual, "Token at index {} does not match", idx);
+        #[cfg(not(miri))] {
+            let expected_data = exchange_data("lexer", sample_path, &actual_data);
+            for (idx, (expected, actual)) in expected_data
+                .into_iter()
+                .zip(actual_data.into_iter())
+                .enumerate()
+            {
+                assert_eq!(expected, actual, "Token at index {} does not match", idx);
+            }
         }
     }
 
