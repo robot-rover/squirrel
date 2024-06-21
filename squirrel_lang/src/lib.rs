@@ -7,6 +7,6 @@ pub mod parser;
 pub mod runtime;
 
 #[cfg(test)]
-mod test_macro;
+pub mod test_macro;
 #[cfg(test)]
 mod test_util;

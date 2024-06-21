@@ -22,21 +22,32 @@ class Module:
     def print_mod(self, mod_name, hier, handle, indent):
         print(f'{pad(indent)}#[rustfmt::skip]', file=handle)
         print(f'{pad(indent)}mod {mod_name} {{', file=handle)
-        print(f'{pad(indent+1)}use super::*;', file=handle)
+        print(f'{pad(indent+1)}use super::$func;', file=handle)
         if len(self.scripts) > 0:
-            print(f'{pad(indent+1)}use std::fs;', file=handle)
+            print(f'{pad(indent+1)}use crate::test_macro::data::{hier}::*;', file=handle)
         for script in self.scripts:
             script_name = script.split('.', 1)[0]
             script_upper = script_name.upper()
-            print(f'{pad(indent+1)}const {script_upper}_PATH: &str = "{hier}/{script}";', file=handle)
             print(f'{pad(indent+1)}#[test]', file=handle)
             print(f'{pad(indent+1)}fn test_{script_name}() {{', file=handle)
-            print(f'{pad(indent+2)}let contents = fs::read_to_string("../resources/scripts/{hier}/{script}").expect("Unable to read script source");', file=handle)
-            print(f'{pad(indent+2)}$func({script_upper}_PATH, &contents);', file=handle)
+            print(f'{pad(indent+2)}$func({script_upper}_PATH, {script_upper}_CONTENTS);', file=handle)
             print(f'{pad(indent+1)}}}', file=handle)
 
         for mod_name, mod in self.submodules.items():
-            mod.print_mod(mod_name, hier / mod_name, handle, indent+1)
+            mod.print_mod(mod_name, f'{hier}::{mod_name}', handle, indent+1)
+
+        print(f'{pad(indent)}}}', file=handle)
+
+    def print_constants(self, mod_name, hier, handle, indent):
+        print(f'{pad(indent)}pub mod {mod_name} {{', file=handle)
+        for script in self.scripts:
+            script_name = script.split('.', 1)[0]
+            script_upper = script_name.upper()
+            print(f'{pad(indent+1)}pub const {script_upper}_PATH: &str = "{hier}/{script}";', file=handle)
+            print(f'{pad(indent+1)}pub const {script_upper}_CONTENTS: &str = include_str!("../../resources/scripts/{hier}/{script}");', file=handle)
+
+        for mod_name, mod in self.submodules.items():
+            mod.print_constants(mod_name, hier / mod_name, handle, indent+1)
 
         print(f'{pad(indent)}}}', file=handle)
 
@@ -75,4 +86,9 @@ with open(MACRO_FILE, 'wt') as handle:
     for name, sub_mod in root_mod.submodules.items():
         sub_mod.print_mod(name, Path(name), handle, 2)
     print('    };', file=handle)
+    print('}', file=handle)
+    print('#[rustfmt::skip]', file=handle)
+    print('pub mod data {', file=handle)
+    for name, sub_mod in root_mod.submodules.items():
+        sub_mod.print_constants(name, Path(name), handle, 1)
     print('}', file=handle)
