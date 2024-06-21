@@ -85,12 +85,9 @@ fn init_root() -> Rc<ObjectStrg> {
                 Value::Float(f) => write!(stdout, "{}", f).unwrap(),
                 Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
                 Value::Null => write!(stdout, "null").unwrap(),
-                Value::Rc(rc) => {
-                    let anc = rc.borrow();
-                    match anc.as_ref() {
-                        SqRef::String(s) => write!(stdout, "{}", s.get_data()).unwrap(),
-                        _ => todo!(),
-                    }
+                Value::Rc(rc) => match rc.borrow().as_ref() {
+                    SqRef::String(s) => write!(stdout, "{}", s.get_data()).unwrap(),
+                    _ => todo!(),
                 }
                 _ => todo!(),
             }
@@ -307,9 +304,11 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
             // run_array_access(context, &array, index, span)
+            let hash_index = index.try_into().map_err(|unhash: Value|
+                    ExecError::unhashable_type(unhash.type_str().to_string(), span))?;
             array
-                .get_field(&index)
-                .ok_or_else(|| ExecError::undefined_field(span, index))
+                .get_field(&hash_index)
+                .ok_or_else(|| ExecError::undefined_field(span, hash_index.into()))
         }
         ExprData::This => Ok(context.infunc.env.clone()),
         ExprData::FieldAccess(target, field) => {
@@ -332,8 +331,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let val = &context.infunc.env;
             // Double check this is null and not an error
             if let Value::Rc(rc) = val {
-                let anc = rc.borrow();
-                if let SqRef::Object(obj) = anc.as_ref() {
+                if let SqRef::Object(obj) = rc.borrow().as_ref() {
                     let obj = obj.get_data().borrow();
                     if obj.get_is_class_inst() {
                         if let Some(delegate) = obj.get_delegate() {
@@ -385,8 +383,7 @@ fn run_rawcall(
 
     match func_val {
         Value::Rc(rc) => {
-            let anc = rc.borrow();
-            match anc.as_ref() {
+            match rc.borrow().as_ref() {
                 SqRef::Closure(func) => {
                     let ast_fn = unsafe { func.get_data().borrow().ast_fn.as_ref() };
                     // TODO: need to force func runtime to use our env here rather than the closure's
@@ -438,8 +435,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         .root
         .upgrade()
         .and_then(|root| {
-            let anc = root.borrow();
-            anc.as_ref().get_field_str(&ident)
+            root.borrow().as_ref().get_field_str(&ident)
         });
     if let Some(value) = root_match {
         return Ok(value);
@@ -555,14 +551,11 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
             Value::Null => Value::string("null"),
             Value::Integer(_) => Value::string("integer"),
             Value::Float(_) => Value::string("float"),
-            Value::Rc(rc) => {
-                let anc = rc.borrow();
-                match anc.as_ref() {
-                    SqRef::String(_) => Value::string("string"),
-                    SqRef::Array(_) => Value::string("array"),
-                    SqRef::Closure(_) => Value::string("function"),
-                    SqRef::Object(_) => Value::string("object"),
-                }
+            Value::Rc(rc) => match rc.borrow().as_ref() {
+                SqRef::String(_) => Value::string("string"),
+                SqRef::Array(_) => Value::string("array"),
+                SqRef::Closure(_) => Value::string("function"),
+                SqRef::Object(_) => Value::string("object"),
             }
             _ => todo!(),
         },
@@ -657,9 +650,11 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
         AssignTarget::ArrayAccess { array, index, span } => {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
+            let hash_index = index.try_into().map_err(|unhash: Value|
+                    ExecError::unhashable_type(unhash.type_str().to_string(), *span))?;
             array
-                .get_field(&index)
-                .ok_or_else(|| ExecError::undefined_field(*span, index))
+                .get_field(&hash_index)
+                .ok_or_else(|| ExecError::undefined_field(*span, hash_index.into()))
         }
         AssignTarget::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
@@ -684,8 +679,7 @@ fn run_assign(
             }
             let env = &context.infunc.env;
             if let Value::Rc(rc) = env {
-                let anc = rc.borrow();
-                if let SqRef::Object(obj) = anc.as_ref() {
+                if let SqRef::Object(obj) = rc.borrow().as_ref() {
                     let mut obj = obj.get_data().borrow_mut();
                     if obj.set_field(HashValue::string(&ident.0), val, is_newslot) {
                         return Ok(());

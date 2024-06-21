@@ -191,7 +191,7 @@ struct VMState<'a> {
     stdout: WriteOption<'a>,
 }
 
-struct Context<'a, 'b> {
+pub struct Context<'a, 'b> {
     infunc: FuncRuntime,
     vm_state: &'a mut VMState<'b>,
 }

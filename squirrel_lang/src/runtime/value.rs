@@ -63,12 +63,24 @@ impl Value {
         }
     }
 
-    pub fn get_field(&self, key: &Value) -> Option<Value> {
-        todo!()
+    pub fn get_field(&self, key: &HashValue) -> Option<Value> {
+        match self {
+            Value::Float(f) => todo!(),
+            Value::Integer(i) => todo!(),
+            Value::Null => todo!(),
+            Value::NativeFn(n) => todo!(),
+            Value::Rc(rc) => rc.borrow().as_ref().get_field(key),
+        }
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        todo!()
+        match self {
+            Value::Float(f) => todo!(),
+            Value::Integer(i) => todo!(),
+            Value::Null => todo!(),
+            Value::NativeFn(n) => todo!(),
+            Value::Rc(rc) => rc.borrow().as_ref().get_field_str(key),
+        }
     }
 
     pub fn type_str(&self) -> &'static str {
@@ -77,14 +89,11 @@ impl Value {
             Value::Integer(_) => "integer",
             Value::Float(_) => "float",
             Value::NativeFn(_) => "function",
-            Value::Rc(rc) => {
-                let anc = rc.borrow();
-                match anc.as_ref() {
-                    SqRef::String(_) => "string",
-                    SqRef::Array(_) => "array",
-                    SqRef::Closure(_) => "function",
-                    SqRef::Object(_) => "object",
-                }
+            Value::Rc(rc) => match rc.borrow().as_ref() {
+                SqRef::String(_) => "string",
+                SqRef::Array(_) => "array",
+                SqRef::Closure(_) => "function",
+                SqRef::Object(_) => "object",
             }
         }
     }
@@ -191,6 +200,12 @@ impl Object {
             }
             None => return None,
         }
+    }
+
+    pub fn get_field_str(&self, key: &str) -> Option<Value> {
+        // TODO: Inefficient
+        let key = HashValue::string(key);
+        self.get_field(&key)
     }
 }
 

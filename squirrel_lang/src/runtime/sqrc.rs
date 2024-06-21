@@ -1,3 +1,16 @@
+//!
+//! This module contains the implementation of the reference counting system used by Chipmunk
+//! First, there are the narrow references, which are just a pointer to the data
+//! - `SqRc` (strong) and `SqWk` (weak)
+//!
+//! To actually interact with the data, you have to use the wider enums. There are 4 types
+//! 1. `SqRcEnum` is a strong reference "owns" an Rc instance. You consume a `SqRc` to create one of these
+//! 2. `SqWkEnum` is a weak reference "owns" a Weak instance. You consume a `SqWk` to create one of these
+//! 3. `SqRcAnc` is a strong reference that borrows an Rc instance. You borrow a `SqRc` to create one of these
+//! 4. `SqWkAnc` is a weak reference that borrows a Weak instance. You borrow a `SqWk` to create one of these
+//! TODO: Unfinished
+//!
+
 use std::hash::Hash;
 use std::{
     alloc::{self, handle_alloc_error, Layout},
@@ -8,7 +21,7 @@ use std::{
     rc::{Rc, Weak},
 };
 
-use super::value::{Closure, Object, Value};
+use super::value::{Closure, HashValue, Object, Value};
 
 macro_rules! call_with_rc_ptr {
     ($rcptr:ident, $func:path) => {{
@@ -36,14 +49,20 @@ pub struct SqWk {
 
 impl PartialEq for SqRc {
     fn eq(&self, other: &Self) -> bool {
-        todo!()
+        match (self.borrow().as_ref(), other.borrow().as_ref()) {
+            (SqRef::String(ss), SqRef::String(so)) => ss.get_data() == so.get_data(),
+            _ => ptr::addr_eq(self.ptr, other.ptr),
+        }
     }
 }
 
 impl Eq for SqRc {}
 impl Hash for SqRc {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        todo!()
+        match self.borrow().as_ref() {
+            SqRef::String(s) => s.get_data().hash(state),
+            _ => self.ptr.hash(state),
+        }
     }
 }
 
@@ -77,12 +96,19 @@ impl Drop for SqWk {
 
 impl fmt::Debug for SqRc {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        self.borrow().as_ref().fmt(f)
+        let mut s = f.debug_struct("SqRc");
+        s.field("ptr", &self.borrow().as_ref());
+        s.finish()
     }
 }
 impl fmt::Debug for SqWk {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        todo!()
+        let mut s = f.debug_struct("SqWk");
+        match self.upgrade() {
+            Some(rc) => s.field("ptr", &Some(rc.borrow().as_ref())),
+            None => s.field("ptr", &Option::<SqRef<'_>>::None),
+        };
+        s.finish()
     }
 }
 
@@ -293,6 +319,7 @@ impl_sq_enum!(impl SqWkEnum, Weak, SqWk);
 impl_sq_enum!(SqRefData, ManuallyDrop; Rc);
 impl_sq_enum!(SqRef<'a>, 'a; Rc);
 
+#[derive(Debug)]
 pub struct SqRefAnc<'a>(SqRefData, std::marker::PhantomData<&'a ()>);
 
 impl<'a> SqRefAnc<'a> {
@@ -307,12 +334,28 @@ impl<'a> SqRefAnc<'a> {
 }
 
 impl<'a> SqRef<'a> {
-    pub fn get_field(&self, key: &Value) -> Option<Value> {
-        todo!()
+    pub fn get_field(&self, key: &HashValue) -> Option<Value> {
+        match self {
+            SqRef::String(s) => todo!(),
+            SqRef::Object(o) => {
+                let obj = o.get_data().borrow();
+                obj.get_field(key)
+            },
+            SqRef::Array(a) => todo!(),
+            SqRef::Closure(c) => todo!(),
+        }
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        todo!()
+        match self {
+            SqRef::String(s) => todo!(),
+            SqRef::Object(o) => {
+                let obj = o.get_data().borrow();
+                obj.get_field_str(key)
+            },
+            SqRef::Array(a) => todo!(),
+            SqRef::Closure(c) => todo!(),
+        }
     }
 }
 
