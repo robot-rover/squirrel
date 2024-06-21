@@ -663,7 +663,8 @@ mod tests {
             .into_iter()
             .map(|(token, _)| token)
             .collect::<Vec<_>>();
-        #[cfg(not(miri))] {
+        #[cfg(not(miri))]
+        {
             let expected_data = exchange_data("lexer", sample_path, &actual_data);
             for (idx, (expected, actual)) in expected_data
                 .into_iter()

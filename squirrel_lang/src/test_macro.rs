@@ -1,10 +1,10 @@
 #[macro_export]
 macro_rules! test_foreach {
     ($func:tt) => {
-        #[rustfmt::skip]
+#[rustfmt::skip]
         mod verify {
             use super::$func;
-            #[rustfmt::skip]
+#[rustfmt::skip]
             mod lexical_structure {
                 use super::$func;
                 use crate::test_macro::data::verify::lexical_structure::*;
@@ -18,7 +18,7 @@ macro_rules! test_foreach {
                 }
             }
         }
-        #[rustfmt::skip]
+#[rustfmt::skip]
         mod squirrel_repo {
             use super::$func;
             use crate::test_macro::data::squirrel_repo::*;
@@ -91,7 +91,7 @@ macro_rules! test_foreach {
                 $func(COROUTINES_PATH, COROUTINES_CONTENTS);
             }
         }
-        #[rustfmt::skip]
+#[rustfmt::skip]
         mod edge_cases {
             use super::$func;
             use crate::test_macro::data::edge_cases::*;
@@ -140,7 +140,7 @@ macro_rules! test_foreach {
                 $func(PARENT_SCOPE_PATH, PARENT_SCOPE_CONTENTS);
             }
         }
-        #[rustfmt::skip]
+#[rustfmt::skip]
         mod parse_test {
             use super::$func;
             use crate::test_macro::data::parse_test::*;

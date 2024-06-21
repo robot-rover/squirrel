@@ -1,5 +1,9 @@
 use std::{
-    borrow::BorrowMut, collections::HashMap, env, io::{self, Write}, rc::Rc
+    borrow::BorrowMut,
+    collections::HashMap,
+    env,
+    io::{self, Write},
+    rc::Rc,
 };
 
 use crate::{
@@ -87,7 +91,7 @@ fn init_root() -> Rc<ObjectStrg> {
                         SqRef::String(s) => write!(stdout, "{}", s.get_data()).unwrap(),
                         _ => todo!(),
                     }
-                },
+                }
                 _ => todo!(),
             }
             Ok(Value::Null)
@@ -303,12 +307,16 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
             // run_array_access(context, &array, index, span)
-            array.get_field(&index).ok_or_else(|| ExecError::undefined_field(span, index))
+            array
+                .get_field(&index)
+                .ok_or_else(|| ExecError::undefined_field(span, index))
         }
         ExprData::This => Ok(context.infunc.env.clone()),
         ExprData::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
-            target.get_field_str(&field.0).ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
+            target
+                .get_field_str(&field.0)
+                .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
         ExprData::Globals => Ok(context
             .infunc
@@ -321,9 +329,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             .unwrap_or(Value::Null)),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
-            let val = &context
-                .infunc
-                .env;
+            let val = &context.infunc.env;
             // Double check this is null and not an error
             if let Value::Rc(rc) = val {
                 let anc = rc.borrow();
@@ -350,18 +356,14 @@ fn run_function_call(
     let (env, func_val) = match func {
         CallTarget::FieldAccess(target, field_name) => {
             let parent = run_expression(context, target)?;
-            let func = parent.get_field_str(&field_name.0).ok_or_else(|| ExecError::undefined_field(field_name.1, Value::string(&field_name.0)))?;
+            let func = parent.get_field_str(&field_name.0).ok_or_else(|| {
+                ExecError::undefined_field(field_name.1, Value::string(&field_name.0))
+            })?;
             (parent, func)
         }
         CallTarget::Expr(expr) => {
             let func = run_expression(context, expr)?;
-            (
-                context
-                    .infunc
-                    .env
-                    .clone(),
-                func,
-            )
+            (context.infunc.env.clone(), func)
         }
     };
     run_rawcall(context, func_val, env, args, func.span(), args_span)
@@ -388,7 +390,8 @@ fn run_rawcall(
                 SqRef::Closure(func) => {
                     let ast_fn = unsafe { func.get_data().borrow().ast_fn.as_ref() };
                     // TODO: need to force func runtime to use our env here rather than the closure's
-                    let rt_func = FuncRuntime::new(func.clone(), args, Some(env), func_span, call_span)?;
+                    let rt_func =
+                        FuncRuntime::new(func.clone(), args, Some(env), func_span, call_span)?;
                     let body = &ast_fn.body;
                     let mut context = Context {
                         infunc: rt_func,
@@ -422,9 +425,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         return Ok(value.clone());
     }
 
-    let env_match = context
-        .infunc
-        .env.get_field_str(&ident);
+    let env_match = context.infunc.env.get_field_str(&ident);
     if let Some(value) = env_match {
         return Ok(value);
     }
@@ -484,7 +485,9 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
             .map(|(key, val)| {
                 let key_span = key.span;
                 let key = run_expression(context, key)?;
-                let key = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), key_span))?;
+                let key = key.try_into().map_err(|unhash: Value| {
+                    ExecError::unhashable_type(unhash.type_str().to_string(), key_span)
+                })?;
                 let val = run_expression(context, val)?;
                 Ok((key, val))
             })
@@ -560,7 +563,7 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
                     SqRef::Closure(_) => Value::string("function"),
                     SqRef::Object(_) => Value::string("object"),
                 }
-            },
+            }
             _ => todo!(),
         },
         UnaryOp::Clone => match val {
@@ -654,11 +657,15 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
         AssignTarget::ArrayAccess { array, index, span } => {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
-            array.get_field(&index).ok_or_else(|| ExecError::undefined_field(*span, index))
+            array
+                .get_field(&index)
+                .ok_or_else(|| ExecError::undefined_field(*span, index))
         }
         AssignTarget::FieldAccess(target, field) => {
             let target = run_expression(context, target)?;
-            target.get_field_str(&field.0).ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
+            target
+                .get_field_str(&field.0)
+                .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
     }
 }
@@ -681,7 +688,7 @@ fn run_assign(
                 if let SqRef::Object(obj) = anc.as_ref() {
                     let mut obj = obj.get_data().borrow_mut();
                     if obj.set_field(HashValue::string(&ident.0), val, is_newslot) {
-                        return Ok(())
+                        return Ok(());
                     }
                 }
             }
@@ -715,7 +722,8 @@ mod tests {
         };
 
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
-        #[cfg(not(miri))] {
+        #[cfg(not(miri))]
+        {
             let expect_str = exchange_str("outputs", file_name, &actual_str);
             // TODO: Have a more useful comparison for these trees
             assert_eq!(actual_str, expect_str);

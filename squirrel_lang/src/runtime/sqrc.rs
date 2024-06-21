@@ -3,7 +3,7 @@ use std::{
     alloc::{self, handle_alloc_error, Layout},
     cell::RefCell,
     fmt,
-    mem::{self, ManuallyDrop},
+    mem::ManuallyDrop,
     ptr::{self, addr_of_mut, from_raw_parts, from_raw_parts_mut},
     rc::{Rc, Weak},
 };
@@ -114,10 +114,7 @@ where
     SqRcEnum: From<Rc<T>>,
 {
     let weak = ManuallyDrop::new(Weak::from_raw(ptr));
-        weak
-        .upgrade()
-        .map(SqRcEnum::from)
-        .map(SqRcEnum::stash)
+    weak.upgrade().map(SqRcEnum::from).map(SqRcEnum::stash)
 }
 
 impl SqWk {

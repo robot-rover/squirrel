@@ -638,7 +638,8 @@ mod tests {
             Ok(ast) => ast,
             Err(err) => panic!("{}", err),
         };
-        #[cfg(not(miri))] {
+        #[cfg(not(miri))]
+        {
             let expect_ast = exchange_data("parse", file_name, &actual_ast);
 
             // TODO: Have a more useful comparison for these trees

@@ -1,22 +1,10 @@
-use core::fmt;
 use std::hash::Hash;
-use std::{
-    alloc::{self, handle_alloc_error, Layout},
-    any,
-    cell::RefCell,
-    collections::HashMap,
-    mem::MaybeUninit,
-    ptr::{self, addr_of, addr_of_mut, from_raw_parts, from_raw_parts_mut, NonNull},
-    rc::{Rc, Weak},
-};
+use std::{collections::HashMap, ptr::NonNull, rc::Rc};
 
-use crate::{
-    context::Span,
-    parser::ast::{self, ExprData},
-};
+use crate::parser::ast::{self};
 
 use super::{
-    sqrc::{ArrayStrg, ClosureStrg, ObjectStrg, SqRc, SqRcEnum, SqRef, SqWk, StringStrg},
+    sqrc::{ObjectStrg, SqRc, SqRcEnum, SqRef, SqWk, StringStrg},
     Context, ExecError,
 };
 
@@ -97,7 +85,7 @@ impl Value {
                     SqRef::Closure(_) => "function",
                     SqRef::Object(_) => "object",
                 }
-            },
+            }
         }
     }
 }

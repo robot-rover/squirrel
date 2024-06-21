@@ -20,7 +20,7 @@ class Module:
         return self.submodules[name]
 
     def print_mod(self, mod_name, hier, handle, indent):
-        print(f'{pad(indent)}#[rustfmt::skip]', file=handle)
+        print('#[rustfmt::skip]', file=handle)
         print(f'{pad(indent)}mod {mod_name} {{', file=handle)
         print(f'{pad(indent+1)}use super::$func;', file=handle)
         if len(self.scripts) > 0:

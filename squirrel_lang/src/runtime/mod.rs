@@ -1,21 +1,12 @@
-use std::{
-    borrow::Borrow,
-    cell::RefCell,
-    collections::HashMap,
-    f32::consts::E,
-    io,
-    ops::{Range, RangeInclusive},
-    ptr::NonNull,
-    rc::{Rc, Weak},
-};
+use std::{borrow::Borrow, collections::HashMap, io, ops::Range, rc::Rc};
 
 use ariadne::Color;
 use sqrc::{ClosureStrg, ObjectStrg};
-use value::{Closure, Object, Value};
+use value::Value;
 
 use crate::{
     context::{Span, SqBacktrace, SquirrelError},
-    parser::ast::{self, Ident, Literal},
+    parser::ast::{Ident, Literal},
 };
 
 pub mod sqrc;
@@ -61,7 +52,7 @@ pub enum ExecError {
         kind: String,
         span: Span,
         bt: SqBacktrace,
-    }
+    },
 }
 
 impl ExecError {
