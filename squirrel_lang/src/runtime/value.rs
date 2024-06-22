@@ -1,10 +1,10 @@
-use std::hash::Hash;
+use std::{cell::RefCell, hash::Hash, mem};
 use std::{collections::HashMap, ptr::NonNull, rc::Rc};
 
 use crate::parser::ast::{self};
 
 use super::{
-    sqrc::{ObjectStrg, SqRc, SqRcEnum, SqRef, SqWk, StringStrg},
+    sqrc::{ObjectStrg, SqRc, SqRcEnum, SqRef, SqRefAnc, SqWk, StringStrg},
     Context, ExecError,
 };
 
@@ -17,6 +17,14 @@ pub enum Value {
     Null,
     NativeFn(NativeFn),
     Rc(SqRc),
+}
+
+pub enum ValueRef<'a> {
+    Float(f64),
+    Integer(i64),
+    Null,
+    NativeFn(NativeFn),
+    Rc(SqRefAnc<'a>),
 }
 
 macro_rules! value_common_impl {
@@ -47,13 +55,38 @@ macro_rules! value_common_impl {
     };
 }
 
+macro_rules! value_ref_redirect {
+    ($name:ident($($arg:ident : $argty:ty),*) -> $ret:ty) => {
+        pub fn $name(&self, $($arg : $argty),*) -> $ret {
+            self.borrow().$name($($arg),*)
+        }
+    }
+}
+
 impl Value {
     value_common_impl!();
+
+    value_ref_redirect!(truthy() -> bool);
+    value_ref_redirect!(get_field(key: &HashValue) -> Option<Value>);
+    value_ref_redirect!(get_field_str(key: &str) -> Option<Value>);
+    value_ref_redirect!(type_str() -> &'static str);
 
     pub fn float(val: f64) -> Self {
         Self::Float(val)
     }
 
+    pub fn borrow(&self) -> ValueRef {
+        match self {
+            Value::Float(f) => ValueRef::Float(*f),
+            Value::Integer(i) => ValueRef::Integer(*i),
+            Value::Null => ValueRef::Null,
+            Value::NativeFn(n) => ValueRef::NativeFn(*n),
+            Value::Rc(rc) => ValueRef::Rc(rc.borrow()),
+        }
+    }
+}
+
+impl<'a> ValueRef<'a> {
     pub fn truthy(&self) -> bool {
         match self {
             Self::Integer(val) if *val == 0 => false,
@@ -65,38 +98,39 @@ impl Value {
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
         match self {
-            Value::Float(f) => todo!(),
-            Value::Integer(i) => todo!(),
-            Value::Null => todo!(),
-            Value::NativeFn(n) => todo!(),
-            Value::Rc(rc) => rc.borrow().as_ref().get_field(key),
+            ValueRef::Float(f) => todo!(),
+            ValueRef::Integer(i) => todo!(),
+            ValueRef::Null => todo!(),
+            ValueRef::NativeFn(n) => todo!(),
+            ValueRef::Rc(rc) => rc.as_ref().get_field(key),
         }
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
         match self {
-            Value::Float(f) => todo!(),
-            Value::Integer(i) => todo!(),
-            Value::Null => todo!(),
-            Value::NativeFn(n) => todo!(),
-            Value::Rc(rc) => rc.borrow().as_ref().get_field_str(key),
+            ValueRef::Float(f) => todo!(),
+            ValueRef::Integer(i) => todo!(),
+            ValueRef::Null => todo!(),
+            ValueRef::NativeFn(n) => todo!(),
+            ValueRef::Rc(_) => todo!(),
         }
     }
 
     pub fn type_str(&self) -> &'static str {
         match self {
-            Value::Null => "null",
-            Value::Integer(_) => "integer",
-            Value::Float(_) => "float",
-            Value::NativeFn(_) => "function",
-            Value::Rc(rc) => match rc.borrow().as_ref() {
+            ValueRef::Null => "null",
+            ValueRef::Integer(_) => "integer",
+            ValueRef::Float(_) => "float",
+            ValueRef::NativeFn(_) => "function",
+            ValueRef::Rc(rc) => match rc.as_ref() {
                 SqRef::String(_) => "string",
                 SqRef::Array(_) => "array",
                 SqRef::Closure(_) => "function",
                 SqRef::Object(_) => "object",
-            }
+            },
         }
     }
+
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

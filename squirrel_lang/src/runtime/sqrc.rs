@@ -8,10 +8,12 @@
 //! 2. `SqWkEnum` is a weak reference "owns" a Weak instance. You consume a `SqWk` to create one of these
 //! 3. `SqRcAnc` is a strong reference that borrows an Rc instance. You borrow a `SqRc` to create one of these
 //! 4. `SqWkAnc` is a weak reference that borrows a Weak instance. You borrow a `SqWk` to create one of these
-//! TODO: Unfinished
+//!
+//! If you have a Strong reference (`SqRcEnum` or `SqRcAnc`)
+//! you can get access to the data by borrowing it with `as_ref()`
 //!
 
-use std::hash::Hash;
+use std::{hash::Hash, mem};
 use std::{
     alloc::{self, handle_alloc_error, Layout},
     cell::RefCell,
@@ -276,7 +278,7 @@ macro_rules! generic_tree {
 }
 
 macro_rules! impl_sq_enum {
-    ($wide:ident $(<$gen:lifetime>)?, $( $wrap:tt);+) => {
+    ($wide:ident $(<$gen:lifetime>)?; $( $wrap:tt),+) => {
         #[derive(Debug, Clone)]
         #[repr(u8)]
         pub enum $wide $(<$gen>)? {
@@ -287,7 +289,7 @@ macro_rules! impl_sq_enum {
         }
     };
     (impl $wide:ident, $ptr:ident, $narrow:ident) => {
-        impl_sq_enum!($wide, $ptr);
+        impl_sq_enum!($wide; $ptr);
         impl $wide {
             pub fn stash(self) -> $narrow {
                 let ptr = match self {
@@ -316,14 +318,15 @@ macro_rules! impl_sq_enum {
 
 impl_sq_enum!(impl SqRcEnum, Rc, SqRc);
 impl_sq_enum!(impl SqWkEnum, Weak, SqWk);
-impl_sq_enum!(SqRefData, ManuallyDrop; Rc);
-impl_sq_enum!(SqRef<'a>, 'a; Rc);
+impl_sq_enum!(SqRefData; ManuallyDrop, Rc);
+impl_sq_enum!(SqRef<'a>; 'a, Rc);
+impl_sq_enum!(SqWkRef<'a>; 'a, Weak);
 
 #[derive(Debug)]
 pub struct SqRefAnc<'a>(SqRefData, std::marker::PhantomData<&'a ()>);
 
 impl<'a> SqRefAnc<'a> {
-    pub fn as_ref(&'a self) -> SqRef<'a> {
+    pub fn as_ref(&self) -> SqRef {
         match &self.0 {
             SqRefData::Array(rc) => SqRef::Array(&&*rc),
             SqRefData::Closure(rc) => SqRef::Closure(&&*rc),
@@ -374,6 +377,15 @@ impl SqRcEnum {
 
     pub fn closure(val: Closure) -> Self {
         SqRcEnum::Closure(ClosureStrg::new(val))
+    }
+
+    pub fn as_ref(&self) -> SqRef {
+        match self {
+            SqRcEnum::Array(rc) => SqRef::Array(rc),
+            SqRcEnum::Closure(rc) => SqRef::Closure(rc),
+            SqRcEnum::Object(rc) => SqRef::Object(rc),
+            SqRcEnum::String(rc) => SqRef::String(rc),
+        }
     }
 }
 
