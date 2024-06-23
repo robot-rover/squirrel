@@ -1,15 +1,13 @@
-use std::{borrow::Borrow, collections::HashMap, io, ops::Range, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell, collections::HashMap, io, ops::{Deref, Range}, rc::Rc};
 
 use ariadne::Color;
-use sqrc::{ClosureStrg, ObjectStrg};
-use value::Value;
+use value::{Closure, Object, Value};
 
 use crate::{
     context::{Span, SqBacktrace, SquirrelError},
     parser::ast::{Ident, Literal},
 };
 
-pub mod sqrc;
 pub mod value;
 pub mod walker;
 
@@ -196,7 +194,7 @@ impl<'a> From<Option<&'a mut dyn io::Write>> for WriteOption<'a> {
 }
 
 struct VMState<'a> {
-    root_table: Rc<ObjectStrg>,
+    root_table: Rc<RefCell<Object>>,
     stdout: WriteOption<'a>,
 }
 
@@ -209,19 +207,19 @@ pub struct Context<'a, 'b> {
 struct FuncRuntime {
     locals: HashMap<String, Value>,
     env: Value,
-    closure: Rc<ClosureStrg>,
+    closure: Rc<RefCell<Closure>>,
 }
 
 impl FuncRuntime {
     fn new(
-        func_ref: Rc<ClosureStrg>,
+        func_ref: Rc<RefCell<Closure>>,
         arg_vals: Vec<Value>,
         env: Option<Value>,
         func_span: Span,
         call_span: Span,
     ) -> Result<FuncRuntime, ExecError> {
         let mut locals = HashMap::new();
-        let func_borrow = func_ref.get_data().borrow();
+        let func_borrow = func_ref.deref().borrow();
         let ast_func = unsafe { func_borrow.ast_fn.as_ref() };
 
         let n_arguments = arg_vals.len();

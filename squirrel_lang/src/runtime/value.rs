@@ -1,30 +1,24 @@
-use std::{cell::RefCell, fmt, hash::Hash, mem};
+use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{collections::HashMap, ptr::NonNull, rc::Rc};
 
 use crate::parser::ast::{self};
 
 use super::{
-    sqrc::{ArrayStrg, ClosureStrg, ObjectStrg, SqRc, SqRcEnum, SqRef, SqRefAnc, SqWk, StringStrg},
     Context, ExecError,
 };
 
 pub type NativeFn = fn(*mut Context, Vec<Value>) -> Result<Value, ExecError>;
 
-#[derive(Debug, Clone, PartialEq)]
+#[derive(Debug, Clone)]
 pub enum Value {
     Float(f64),
     Integer(i64),
     Null,
     NativeFn(NativeFn),
-    Rc(SqRc),
-}
-
-pub enum ValueRef<'a> {
-    Float(f64),
-    Integer(i64),
-    Null,
-    NativeFn(NativeFn),
-    Rc(SqRefAnc<'a>),
+    String(Rc<str>),
+    Object(Rc<RefCell<Object>>),
+    Array(Rc<RefCell<Vec<Value>>>),
+    Closure(Rc<RefCell<Closure>>),
 }
 
 macro_rules! value_common_impl {
@@ -34,23 +28,19 @@ macro_rules! value_common_impl {
         }
 
         pub fn string(val: &str) -> Self {
-            Self::Rc(SqRcEnum::String(StringStrg::new(val)).stash())
+            Self::String(Rc::from(val))
         }
 
         pub fn array(arr: Vec<Value>) -> Self {
-            Self::Rc(SqRcEnum::array(arr).stash())
+            Self::Array(Rc::new(RefCell::new(arr)))
         }
 
         pub fn closure(closure: Closure) -> Self {
-            Self::Rc(SqRcEnum::closure(closure).stash())
-        }
-
-        pub fn rc_enum<T: Into<SqRcEnum>>(val: T) -> Self {
-            Self::Rc(val.into().stash())
+            Self::Closure(Rc::new(RefCell::new(closure)))
         }
 
         pub fn object(object: Object) -> Self {
-            Self::Rc(SqRcEnum::object(object).stash())
+            Self::Object(Rc::new(RefCell::new(object)))
         }
     };
 }
@@ -66,27 +56,10 @@ macro_rules! value_ref_redirect {
 impl Value {
     value_common_impl!();
 
-    value_ref_redirect!(truthy() -> bool);
-    value_ref_redirect!(get_field(key: &HashValue) -> Option<Value>);
-    value_ref_redirect!(get_field_str(key: &str) -> Option<Value>);
-    value_ref_redirect!(type_str() -> &'static str);
-
     pub fn float(val: f64) -> Self {
         Self::Float(val)
     }
 
-    pub fn borrow(&self) -> ValueRef {
-        match self {
-            Value::Float(f) => ValueRef::Float(*f),
-            Value::Integer(i) => ValueRef::Integer(*i),
-            Value::Null => ValueRef::Null,
-            Value::NativeFn(n) => ValueRef::NativeFn(*n),
-            Value::Rc(rc) => ValueRef::Rc(rc.borrow()),
-        }
-    }
-}
-
-impl<'a> ValueRef<'a> {
     pub fn truthy(&self) -> bool {
         match self {
             Self::Integer(val) if *val == 0 => false,
@@ -98,11 +71,11 @@ impl<'a> ValueRef<'a> {
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
         match self {
-            ValueRef::Float(f) => todo!(),
-            ValueRef::Integer(i) => todo!(),
-            ValueRef::Null => todo!(),
-            ValueRef::NativeFn(n) => todo!(),
-            ValueRef::Rc(rc) => rc.as_ref().get_field(key),
+            Value::Float(f) => todo!(),
+            Value::Integer(i) => todo!(),
+            Value::Null => todo!(),
+            Value::NativeFn(n) => todo!(),
+            _ => todo!(),
         }
     }
 
@@ -113,27 +86,75 @@ impl<'a> ValueRef<'a> {
 
     pub fn type_str(&self) -> &'static str {
         match self {
-            ValueRef::Null => "null",
-            ValueRef::Integer(_) => "integer",
-            ValueRef::Float(_) => "float",
-            ValueRef::NativeFn(_) => "function",
-            ValueRef::Rc(rc) => match rc.as_ref() {
-                SqRef::String(_) => "string",
-                SqRef::Array(_) => "array",
-                SqRef::Closure(_) => "function",
-                SqRef::Object(_) => "object",
-            },
+            Value::Null => "null",
+            Value::Integer(_) => "integer",
+            Value::Float(_) => "float",
+            Value::NativeFn(_) => "function",
+            Value::String(_) => "string",
+            Value::Array(_) => "array",
+            Value::Closure(_) => "function",
+            Value::Object(_) => "object",
         }
     }
 }
 
-#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+impl PartialEq for Value {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Float(l0), Self::Float(r0)) => *l0 == *r0,
+            (Self::Integer(l0), Self::Integer(r0)) => *l0 == *r0,
+            (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
+            (Self::String(l0), Self::String(r0)) => l0 == r0,
+            (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Null, Self::Null) => true,
+            _ => false,
+        }
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum HashValue {
     Integer(i64),
     Null,
     NativeFn(NativeFn),
-    Rc(SqRc),
+    String(Rc<str>),
+    Object(Rc<RefCell<Object>>),
+    Array(Rc<RefCell<Vec<Value>>>),
+    Closure(Rc<RefCell<Closure>>),
 }
+
+impl PartialEq for HashValue {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (Self::Integer(l0), Self::Integer(r0)) => *l0 == *r0,
+            (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
+            (Self::String(l0), Self::String(r0)) => l0.deref() == r0.deref(),
+            (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Null, Self::Null) => true,
+            _ => false,
+        }
+    }
+}
+impl Eq for HashValue {}
+impl Hash for HashValue {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        core::mem::discriminant(self).hash(state);
+        match self {
+            HashValue::Integer(i) => i.hash(state),
+            HashValue::Null => {},
+            HashValue::NativeFn(nf) => nf.hash(state),
+            HashValue::String(s) => s.deref().hash(state),
+            HashValue::Object(o) => o.as_ptr().hash(state),
+            HashValue::Array(a) => a.as_ptr().hash(state),
+            HashValue::Closure(c) => c.as_ptr().hash(state),
+        }
+    }
+}
+
 
 impl HashValue {
     value_common_impl!();
@@ -153,7 +174,10 @@ impl From<HashValue> for Value {
             HashValue::Integer(val) => Value::Integer(val),
             HashValue::Null => Value::Null,
             HashValue::NativeFn(val) => Value::NativeFn(val),
-            HashValue::Rc(val) => Value::Rc(val),
+            HashValue::String(s) => Value::String(s),
+            HashValue::Object(o) => Value::Object(o),
+            HashValue::Array(a) => Value::Array(a),
+            HashValue::Closure(c) => Value::Closure(c),
         }
     }
 }
@@ -162,13 +186,17 @@ impl TryFrom<Value> for HashValue {
     type Error = Value;
 
     fn try_from(value: Value) -> Result<Self, Self::Error> {
-        match value {
-            Value::Integer(val) => Ok(HashValue::Integer(val)),
-            Value::Null => Ok(HashValue::Null),
-            Value::NativeFn(val) => Ok(HashValue::NativeFn(val)),
-            Value::Rc(val) => Ok(HashValue::Rc(val)),
-            other => Err(other),
-        }
+        let val = match value {
+            Value::Integer(val) => HashValue::Integer(val),
+            Value::Null => HashValue::Null,
+            Value::NativeFn(val) => HashValue::NativeFn(val),
+            Value::String(s) => HashValue::String(s),
+            Value::Object(o) => HashValue::Object(o),
+            Value::Array(a) => HashValue::Array(a),
+            Value::Closure(c) => HashValue::Closure(c),
+            other => return Err(other),
+        };
+        Ok(val)
     }
 }
 
@@ -185,30 +213,15 @@ macro_rules! value_variant_tryfrom {
             }
         }
     };
-    ($base:ident::Rc($inner:ident $data:ty)) => {
-        impl TryFrom<$base> for $data {
-            type Error = $base;
-
-            fn try_from(value: $base) -> Result<Self, Self::Error> {
-                match value {
-                    $base::Rc(rc) => match rc.unstash() {
-                        SqRcEnum::$inner(val) => Ok(val),
-                        other => Err($base::Rc(other.stash())),
-                    },
-                    other => Err(other),
-                }
-            }
-        }
-    };
 }
 
 value_variant_tryfrom!(Value::Integer(i64));
 value_variant_tryfrom!(Value::Float(f64));
 value_variant_tryfrom!(Value::NativeFn(NativeFn));
-value_variant_tryfrom!(Value::Rc(String Rc<StringStrg>));
-value_variant_tryfrom!(Value::Rc(Object Rc<ObjectStrg>));
-value_variant_tryfrom!(Value::Rc(Closure Rc<ClosureStrg>));
-value_variant_tryfrom!(Value::Rc(Array Rc<ArrayStrg>));
+value_variant_tryfrom!(Value::String(Rc<str>));
+value_variant_tryfrom!(Value::Object(Rc<RefCell<Object>>));
+value_variant_tryfrom!(Value::Closure(Rc<RefCell<Closure>>));
+value_variant_tryfrom!(Value::Array(Rc<RefCell<Vec<Value>>>));
 
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -216,10 +229,7 @@ impl fmt::Display for Value {
             Value::Float(n) => write!(f, "{}", n),
             Value::Integer(i) => write!(f, "{}", i),
             Value::Null => write!(f, "null"),
-            Value::Rc(rc) => match rc.borrow().as_ref() {
-                SqRef::String(s) => write!(f, "{}", s.get_data()),
-                _ => todo!(),
-            },
+            Value::String(s) => write!(f, "{}", s),
             _ => todo!(),
         }
     }
@@ -227,14 +237,14 @@ impl fmt::Display for Value {
 
 #[derive(Debug, Clone)]
 pub struct Object {
-    delegate: Option<Rc<ObjectStrg>>,
+    delegate: Option<Rc<RefCell<Object>>>,
     slots: HashMap<HashValue, Value>,
     is_class_inst: bool,
 }
 
 impl Object {
     pub fn new(
-        delegate: Option<Rc<ObjectStrg>>,
+        delegate: Option<Rc<RefCell<Object>>>,
         slots: HashMap<HashValue, Value>,
         is_class_inst: bool,
     ) -> Object {
@@ -249,7 +259,7 @@ impl Object {
         self.is_class_inst
     }
 
-    pub fn get_delegate(&self) -> Option<&Rc<ObjectStrg>> {
+    pub fn get_delegate(&self) -> Option<&Rc<RefCell<Object>>> {
         self.delegate.as_ref()
     }
 
@@ -260,7 +270,7 @@ impl Object {
         } else {
             match &mut self.delegate {
                 Some(delegate) => {
-                    let mut parent = delegate.get_data().borrow_mut();
+                    let mut parent = delegate.borrow_mut();
                     parent.set_field(key, value, is_newslot)
                 }
                 None => false,
@@ -276,7 +286,7 @@ impl Object {
         }
         match &self.delegate {
             Some(delegate) => {
-                let parent = (delegate.get_data()).borrow();
+                let parent = delegate.borrow();
                 parent.get_field(key)
             }
             None => return None,
@@ -294,12 +304,13 @@ impl Object {
 pub struct Closure {
     pub ast_fn: NonNull<ast::Function>,
     pub default_vals: Vec<Value>,
-    pub root: SqWk,
+    // TODO: This should be weak
+    pub root: Value,
     pub env: Option<Value>,
 }
 
 impl Closure {
-    pub fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, root: SqWk) -> Closure {
+    pub fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, root: Value) -> Closure {
         Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,
