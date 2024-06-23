@@ -107,13 +107,8 @@ impl<'a> ValueRef<'a> {
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        match self {
-            ValueRef::Float(f) => todo!(),
-            ValueRef::Integer(i) => todo!(),
-            ValueRef::Null => todo!(),
-            ValueRef::NativeFn(n) => todo!(),
-            ValueRef::Rc(_) => todo!(),
-        }
+        // TODO: Inefficient
+        self.get_field(&HashValue::string(key))
     }
 
     pub fn type_str(&self) -> &'static str {
@@ -130,7 +125,6 @@ impl<'a> ValueRef<'a> {
             },
         }
     }
-
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash)]

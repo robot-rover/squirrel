@@ -88,7 +88,7 @@ fn init_root() -> Rc<ObjectStrg> {
                 Value::Rc(rc) => match rc.borrow().as_ref() {
                     SqRef::String(s) => write!(stdout, "{}", s.get_data()).unwrap(),
                     _ => todo!(),
-                }
+                },
                 _ => todo!(),
             }
             Ok(Value::Null)
@@ -249,7 +249,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             };
             val = if let Some(op) = op {
                 let target_val = get_assign_target(context, &assign.target)?;
-                run_binary_op(context, &op, target_val, val)?
+                run_binary_op(context, &op, assign.op_span, target_val, assign.target.span(), val, assign.value.span)?
             } else {
                 val
             };
@@ -267,16 +267,18 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 run_expression(context, false_expr)
             }
         }
-        ExprData::BinaryOp { op, lhs, rhs } => {
+        ExprData::BinaryOp { op, op_span, lhs, rhs } => {
+            let lhs_span = lhs.span;
             let lhs = run_expression(context, lhs)?;
+            let rhs_span = rhs.span;
             let rhs = run_expression(context, rhs)?;
-            run_binary_op(context, op, lhs, rhs)
+            run_binary_op(context, op, *op_span, lhs, lhs_span, rhs, rhs_span)
         }
         ExprData::UnaryOp(op, val) => {
             let val = run_expression(context, val)?;
             run_unary_op(context, op, val)
         }
-        ExprData::UnaryRefOp(op, val) => run_unary_ref_op(context, op, val),
+        ExprData::UnaryRefOp(op, op_span, val) => run_unary_ref_op(context, op, *op_span, val),
         ExprData::FunctionCall { func, args } => run_function_call(
             context,
             func,
@@ -304,8 +306,9 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
             // run_array_access(context, &array, index, span)
-            let hash_index = index.try_into().map_err(|unhash: Value|
-                    ExecError::unhashable_type(unhash.type_str().to_string(), span))?;
+            let hash_index = index.try_into().map_err(|unhash: Value| {
+                ExecError::unhashable_type(unhash.type_str().to_string(), span)
+            })?;
             array
                 .get_field(&hash_index)
                 .ok_or_else(|| ExecError::undefined_field(span, hash_index.into()))
@@ -434,9 +437,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         .borrow()
         .root
         .upgrade()
-        .and_then(|root| {
-            root.borrow().as_ref().get_field_str(&ident)
-        });
+        .and_then(|root| root.borrow().as_ref().get_field_str(&ident));
     if let Some(value) = root_match {
         return Ok(value);
     }
@@ -444,7 +445,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     Err(ExecError::undefined_variable((ident.to_string(), span)))
 }
 
-fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, target: &AssignTarget) -> ExprResult {
+fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, op_span: Span, target: &AssignTarget) -> ExprResult {
     let val = get_assign_target(context, target)?;
     let (is_add, return_new) = match op {
         UnaryRefOp::PreIncr => (true, true),
@@ -459,8 +460,11 @@ fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, target: &AssignTarge
         } else {
             &BinaryOp::Sub
         },
+        op_span,
         val.clone(),
+        target.span(),
         Value::Integer(1),
+        op_span,
     )?;
     Ok(if return_new { new_val } else { val })
 }
@@ -470,7 +474,39 @@ fn run_class(
     parent: Option<&Ident>,
     table_decl: &[(Expr, Expr)],
 ) -> ExprResult {
-    todo!()
+    let delegate = parent.map(|parent| run_load_ident(context, &parent.0, parent.1));
+    let parent = if let Some((parent, parent_span)) = parent {
+        let parent = run_load_ident(context, parent, *parent_span)?;
+        match parent {
+            Value::Rc(parent) => match parent.borrow().as_ref() {
+                SqRef::Object(obj) => {
+                    let obj_ref = obj.get_data().borrow();
+                    if obj_ref.get_is_class_inst() {
+                        Some(obj.clone())
+                    } else {
+                        panic!("Not a class")
+                    }
+                }
+                _ => panic!("Not a class"),
+            },
+            _ => panic!("Not a class"),
+        }
+    } else {
+        None
+    };
+    let slots = table_decl
+        .iter()
+        .map(|(k, v)| {
+            let k = run_expression(context, k)?
+                .try_into()
+                .map_err(|unhash: Value| {
+                    ExecError::unhashable_type(unhash.type_str().to_string(), k.span)
+                })?;
+            let v = run_expression(context, v)?;
+            Ok((k, v))
+        })
+        .collect::<Result<HashMap<HashValue, Value>, ExecError>>()?;
+    Ok(Value::object(Object::new(parent, slots, true)))
 }
 
 fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
@@ -556,7 +592,7 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
                 SqRef::Array(_) => Value::string("array"),
                 SqRef::Closure(_) => Value::string("function"),
                 SqRef::Object(_) => Value::string("object"),
-            }
+            },
             _ => todo!(),
         },
         UnaryOp::Clone => match val {
@@ -569,79 +605,76 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
 }
 
 macro_rules! promoting_op {
-    ($lhs:ident, $rhs:ident, $op:tt) => {
-        match ($lhs, $rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Value::Integer($lhs $op $rhs),
-            (Value::Float($lhs), Value::Float($rhs)) => Value::float($lhs $op $rhs),
-            (Value::Integer($lhs), Value::Float($rhs)) => Value::float(($lhs as f64) $op $rhs),
-            (Value::Float($lhs), Value::Integer($rhs)) => Value::float($lhs $op ($rhs as f64)),
-            _ => panic!("Illegal operation"),
+    ($lhs:ident, $rhs:ident, $op:tt; $op_lit:literal) => {
+        match (&$lhs, &$rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::Integer(*$lhs $op *$rhs)),
+            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::float(*$lhs $op *$rhs)),
+            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::float((*$lhs as f64) $op *$rhs)),
+            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::float(*$lhs $op (*$rhs as f64))),
+            _ => Err($op_lit)
         }
     };
-    ($lhs:ident, $rhs:ident, $op:tt, $result:tt) => {
-        match ($lhs, $rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Value::$result($lhs $op $rhs),
-            (Value::Float($lhs), Value::Float($rhs)) => Value::$result($lhs $op $rhs),
-            (Value::Integer($lhs), Value::Float($rhs)) => Value::$result(($lhs as f64) $op $rhs),
-            (Value::Float($lhs), Value::Integer($rhs)) => Value::$result($lhs $op ($rhs as f64)),
-            _ => panic!("Illegal operation"),
+    ($lhs:ident, $rhs:ident, $op:tt, $result:tt; $op_lit:literal) => {
+        match (&$lhs, &$rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
+            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
+            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::$result((*$lhs as f64) $op *$rhs)),
+            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op (*$rhs as f64))),
+            _ => Err(stringify!($op)),
         }
     };
 }
 
 macro_rules! int_op {
-    ($lhs:ident, $rhs:ident, $op:tt) => {
-        int_op!($lhs, $rhs, $op, Integer)
+    ($lhs:ident, $rhs:ident, $op:tt; $op_lit:literal) => {
+        int_op!($lhs, $rhs, $op, Integer; $op_lit)
     };
-    ($lhs:ident, $rhs:ident, $op:tt, $result:tt) => {
-        match ($lhs, $rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Value::$result($lhs $op $rhs),
-            _ => panic!("Illegal operation"),
+    ($lhs:ident, $rhs:ident, $op:tt, $result:tt; $op_lit:literal) => {
+        match (&$lhs, &$rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
+            _ => Err($op_lit),
         }
     };
 }
 
-fn run_binary_op(context: &mut Context, op: &BinaryOp, lhs: Value, rhs: Value) -> ExprResult {
+fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value, lhs_span: Span, rhs: Value, rhs_span: Span) -> ExprResult {
     let res = match op {
-        BinaryOp::Add => promoting_op!(lhs, rhs, +),
-        BinaryOp::Sub => promoting_op!(lhs, rhs, -),
-        BinaryOp::Mul => promoting_op!(lhs, rhs, *),
-        BinaryOp::Div => promoting_op!(lhs, rhs, /),
-        BinaryOp::Mod => int_op!(lhs, rhs, %),
+        BinaryOp::Add => promoting_op!(lhs, rhs, +; "+"),
+        BinaryOp::Sub => promoting_op!(lhs, rhs, -; "-"),
+        BinaryOp::Mul => promoting_op!(lhs, rhs, *; "*"),
+        BinaryOp::Div => promoting_op!(lhs, rhs, /; "/"),
+        BinaryOp::Mod => int_op!(lhs, rhs, %; "%"),
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
-        BinaryOp::Eq => promoting_op!(lhs, rhs, ==, boolean),
-        BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean),
-        BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean),
-        BinaryOp::Compare => promoting_op!(lhs, rhs, -),
-        BinaryOp::And => {
-            if !lhs.truthy() {
-                lhs
+        BinaryOp::Eq => promoting_op!(lhs, rhs, ==, boolean; "=="),
+        BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean; ">"),
+        BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean; "<"),
+        BinaryOp::Compare => promoting_op!(lhs, rhs, -; "-"),
+        BinaryOp::And =>
+            Ok(if !lhs.truthy() {
+                lhs.clone()
             } else {
-                rhs
-            }
-        }
-        BinaryOp::Or => {
-            if lhs.truthy() {
-                lhs
+                rhs.clone()
+            }),
+        BinaryOp::Or =>
+            Ok(if lhs.truthy() {
+                lhs.clone()
             } else {
-                rhs
-            }
-        }
-        BinaryOp::BitAnd => int_op!(lhs, rhs, &),
-        BinaryOp::BitOr => int_op!(lhs, rhs, |),
-        BinaryOp::BitXor => int_op!(lhs, rhs, ^),
-        BinaryOp::Shl => int_op!(lhs, rhs, <<),
-        BinaryOp::Shr => match (lhs, rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) => {
-                Value::Integer(((lhs as u64) >> rhs) as i64)
-            }
-            _ => panic!("Illegal operation"),
+                rhs.clone()
+            }),
+        BinaryOp::BitAnd => int_op!(lhs, rhs, &; "&"),
+        BinaryOp::BitOr => int_op!(lhs, rhs, |; "|"),
+        BinaryOp::BitXor => int_op!(lhs, rhs, ^; "^"),
+        BinaryOp::Shl => int_op!(lhs, rhs, <<; "<<"),
+        BinaryOp::Shr => match (&lhs, &rhs) {
+            (Value::Integer(lhs), Value::Integer(rhs)) =>
+                Ok(Value::Integer(((*lhs as u64) >> *rhs) as i64)),
+            _ => Err(">>"),
         },
-        BinaryOp::AShr => int_op!(lhs, rhs, >>),
+        BinaryOp::AShr => int_op!(lhs, rhs, >>; ">>>"),
         BinaryOp::In => todo!("In is not implemented"),
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
     };
-    Ok(res)
+    res.map_err(|op| ExecError::illegal_operation(op.to_string(), op_span, lhs.type_str().to_string(), lhs_span, rhs.type_str().to_string(), rhs_span))
 }
 
 fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult {
@@ -650,8 +683,9 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
         AssignTarget::ArrayAccess { array, index, span } => {
             let array = run_expression(context, array)?;
             let index = run_expression(context, index)?;
-            let hash_index = index.try_into().map_err(|unhash: Value|
-                    ExecError::unhashable_type(unhash.type_str().to_string(), *span))?;
+            let hash_index = index.try_into().map_err(|unhash: Value| {
+                ExecError::unhashable_type(unhash.type_str().to_string(), *span)
+            })?;
             array
                 .get_field(&hash_index)
                 .ok_or_else(|| ExecError::undefined_field(*span, hash_index.into()))

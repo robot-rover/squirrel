@@ -335,6 +335,7 @@ pub struct Assign {
     pub target: AssignTarget,
     pub value: ExprRef,
     pub kind: AssignKind,
+    pub op_span: Span,
 }
 
 impl TryFrom<Expr> for AssignTarget {
@@ -372,11 +373,12 @@ pub enum ExprData {
     },
     BinaryOp {
         op: BinaryOp,
+        op_span: Span,
         lhs: ExprRef,
         rhs: ExprRef,
     },
     UnaryOp(UnaryOp, ExprRef),
-    UnaryRefOp(UnaryRefOp, AssignTarget),
+    UnaryRefOp(UnaryRefOp, Span, AssignTarget),
     FunctionCall {
         func: CallTarget,
         args: Vec<Expr>,
@@ -444,10 +446,11 @@ impl Expr {
         ExprData::ClassDef { parent, members }.spanning(span)
     }
 
-    pub fn assign(target: AssignTarget, value: Expr, kind: AssignKind) -> Self {
+    pub fn assign(target: AssignTarget, op_span: Span, value: Expr, kind: AssignKind) -> Self {
         let span = target.span() | value.span;
         let assign = Assign {
             target,
+            op_span,
             value: Box::new(value),
             kind,
         };
@@ -464,10 +467,11 @@ impl Expr {
         .spanning(span)
     }
 
-    pub fn binary_op(op: BinaryOp, lhs: Expr, rhs: Expr) -> Self {
+    pub fn binary_op(op: BinaryOp, op_span: Span, lhs: Expr, rhs: Expr) -> Self {
         let span = lhs.span | rhs.span;
         ExprData::BinaryOp {
             op,
+            op_span,
             lhs: Box::new(lhs),
             rhs: Box::new(rhs),
         }
@@ -481,7 +485,7 @@ impl Expr {
 
     pub fn unary_ref_op(op: UnaryRefOp, expr: AssignTarget, op_span: Span) -> Self {
         let span = op_span | expr.span();
-        ExprData::UnaryRefOp(op, expr).spanning(span)
+        ExprData::UnaryRefOp(op, op_span, expr).spanning(span)
     }
 
     pub fn function_call(func: Expr, args: Vec<Expr>, call_span: Span) -> Self {

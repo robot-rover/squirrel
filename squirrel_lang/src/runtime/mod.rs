@@ -53,45 +53,37 @@ pub enum ExecError {
         span: Span,
         bt: SqBacktrace,
     },
+    IllegalOperation {
+        op: String,
+        op_span: Span,
+        lhs_ty: String,
+        lhs_span: Span,
+        rhs_ty: String,
+        rhs_span: Span,
+        bt: SqBacktrace,
+    },
+}
+
+macro_rules! variant_constructor {
+    ($variant:ident $name:ident($($arg:ident : $argty:ty),*)) => {
+        pub fn $name($($arg : $argty),*) -> Self {
+            ExecError::$variant($($arg),*, SqBacktrace::new())
+        }
+    };
+    ($variant:ident $name:ident{$($arg:ident : $argty:ty),*}) => {
+        pub fn $name($($arg : $argty),*) -> Self {
+            ExecError::$variant { $($arg),*, bt: SqBacktrace::new() }
+        }
+    };
 }
 
 impl ExecError {
-    fn undefined_variable(ident: Ident) -> Self {
-        ExecError::UndefinedVariable(ident, SqBacktrace::new())
-    }
-
-    fn undefined_field(span: Span, value: Value) -> Self {
-        ExecError::UndefinedField(span, value, SqBacktrace::new())
-    }
-
-    fn illegal_keyword(span: Span) -> Self {
-        ExecError::IllegalKeyword(span, SqBacktrace::new())
-    }
-
-    fn wrong_arg_count(
-        func_span: Span,
-        call_span: Span,
-        expected: Range<usize>,
-        got: usize,
-        definition_span: Option<Span>,
-    ) -> Self {
-        ExecError::WrongArgCount {
-            func_span,
-            call_span,
-            expected,
-            got,
-            definition_span,
-            bt: SqBacktrace::new(),
-        }
-    }
-
-    fn unhashable_type(kind: String, span: Span) -> Self {
-        ExecError::UnhashableType {
-            kind,
-            span,
-            bt: SqBacktrace::new(),
-        }
-    }
+    variant_constructor!(UndefinedVariable undefined_variable(ident: Ident));
+    variant_constructor!(UndefinedField undefined_field(span: Span, value: Value));
+    variant_constructor!(IllegalKeyword illegal_keyword(span: Span));
+    variant_constructor!(WrongArgCount wrong_arg_count { func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span> });
+    variant_constructor!(UnhashableType unhashable_type { kind: String, span: Span });
+    variant_constructor!(IllegalOperation illegal_operation { op: String, op_span: Span, lhs_ty: String, lhs_span: Span, rhs_ty: String, rhs_span: Span });
 
     fn with_context(self, file_name: String) -> SquirrelError {
         match self {
@@ -151,6 +143,23 @@ impl ExecError {
                 file_name,
                 span,
                 format!("A value of type '{}' is not hashable", kind),
+                bt,
+            ),
+            ExecError::IllegalOperation {
+                op,
+                op_span,
+                lhs_ty,
+                lhs_span,
+                rhs_ty,
+                rhs_span,
+                bt,
+            } => SquirrelError::new_labels(
+                file_name,
+                format!("Illegal types for '{}' operator", op),
+                vec![
+                    (lhs_span, format!("Operand of type '{}'", lhs_ty), Color::Red),
+                    (op_span, format!("Operator"), Color::Blue),
+                    (rhs_span, format!("Operand of type '{}'", rhs_ty), Color::Red)],
                 bt,
             ),
         }

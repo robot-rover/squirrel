@@ -315,7 +315,7 @@ fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
             Some(base_expr) => AssignTarget::FieldAccess(Box::new(base_expr), class_name),
             None => AssignTarget::Ident(class_name),
         };
-        Ok(Expr::assign(target, body, AssignKind::NewSlot).into())
+        Ok(Expr::assign(target, class_span, body, AssignKind::NewSlot).into())
     } else {
         Ok(body.into())
     }
@@ -426,6 +426,7 @@ fn parse_function<'s>(
         }
         Some(other) => FunctionDef::Statement(Statement::expr(Expr::assign(
             other,
+            keyword_span,
             func_def,
             AssignKind::NewSlot,
         ))),

@@ -13,7 +13,6 @@
 //! you can get access to the data by borrowing it with `as_ref()`
 //!
 
-use std::{hash::Hash, mem};
 use std::{
     alloc::{self, handle_alloc_error, Layout},
     cell::RefCell,
@@ -22,6 +21,7 @@ use std::{
     ptr::{self, addr_of_mut, from_raw_parts, from_raw_parts_mut},
     rc::{Rc, Weak},
 };
+use std::{hash::Hash, mem};
 
 use super::value::{Closure, HashValue, Object, Value};
 
@@ -343,22 +343,15 @@ impl<'a> SqRef<'a> {
             SqRef::Object(o) => {
                 let obj = o.get_data().borrow();
                 obj.get_field(key)
-            },
+            }
             SqRef::Array(a) => todo!(),
             SqRef::Closure(c) => todo!(),
         }
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        match self {
-            SqRef::String(s) => todo!(),
-            SqRef::Object(o) => {
-                let obj = o.get_data().borrow();
-                obj.get_field_str(key)
-            },
-            SqRef::Array(a) => todo!(),
-            SqRef::Closure(c) => todo!(),
-        }
+        // TODO: Inefficient
+        self.get_field(&HashValue::string(key))
     }
 }
 
