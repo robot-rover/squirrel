@@ -303,12 +303,12 @@ macro_rules! impl_sq_enum {
         }
 
         impl $narrow {
-            unsafe fn into_rc_enum<'a, T: ?Sized + 'a>(ptr: *const T) -> $narrow where
+            unsafe fn into_rc_enum<'a, T: ?Sized + 'a>(ptr: *const T) -> $wide where
             $wide: From<$ptr<T>> {
-                $wide::from($ptr::from_raw(ptr)).stash()
+                $wide::from($ptr::from_raw(ptr))
             }
 
-            pub fn unstash(self) -> Self {
+            pub fn unstash(self) -> $wide {
                 unsafe { call_with_rc_ptr!(self, Self::into_rc_enum)}
             }
         }

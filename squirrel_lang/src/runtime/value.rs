@@ -1,10 +1,10 @@
-use std::{cell::RefCell, hash::Hash, mem};
+use std::{cell::RefCell, fmt, hash::Hash, mem};
 use std::{collections::HashMap, ptr::NonNull, rc::Rc};
 
 use crate::parser::ast::{self};
 
 use super::{
-    sqrc::{ObjectStrg, SqRc, SqRcEnum, SqRef, SqRefAnc, SqWk, StringStrg},
+    sqrc::{ArrayStrg, ClosureStrg, ObjectStrg, SqRc, SqRcEnum, SqRef, SqRefAnc, SqWk, StringStrg},
     Context, ExecError,
 };
 
@@ -168,6 +168,59 @@ impl TryFrom<Value> for HashValue {
             Value::NativeFn(val) => Ok(HashValue::NativeFn(val)),
             Value::Rc(val) => Ok(HashValue::Rc(val)),
             other => Err(other),
+        }
+    }
+}
+
+macro_rules! value_variant_tryfrom {
+    ($base:ident::$variant:ident($data:ty)) => {
+        impl TryFrom<$base> for $data {
+            type Error = $base;
+
+            fn try_from(value: $base) -> Result<Self, Self::Error> {
+                match value {
+                    $base::$variant(val) => Ok(val),
+                    other => Err(other),
+                }
+            }
+        }
+    };
+    ($base:ident::Rc($inner:ident $data:ty)) => {
+        impl TryFrom<$base> for $data {
+            type Error = $base;
+
+            fn try_from(value: $base) -> Result<Self, Self::Error> {
+                match value {
+                    $base::Rc(rc) => match rc.unstash() {
+                        SqRcEnum::$inner(val) => Ok(val),
+                        other => Err($base::Rc(other.stash())),
+                    },
+                    other => Err(other),
+                }
+            }
+        }
+    };
+}
+
+value_variant_tryfrom!(Value::Integer(i64));
+value_variant_tryfrom!(Value::Float(f64));
+value_variant_tryfrom!(Value::NativeFn(NativeFn));
+value_variant_tryfrom!(Value::Rc(String Rc<StringStrg>));
+value_variant_tryfrom!(Value::Rc(Object Rc<ObjectStrg>));
+value_variant_tryfrom!(Value::Rc(Closure Rc<ClosureStrg>));
+value_variant_tryfrom!(Value::Rc(Array Rc<ArrayStrg>));
+
+impl fmt::Display for Value {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Value::Float(n) => write!(f, "{}", n),
+            Value::Integer(i) => write!(f, "{}", i),
+            Value::Null => write!(f, "null"),
+            Value::Rc(rc) => match rc.borrow().as_ref() {
+                SqRef::String(s) => write!(f, "{}", s.get_data()),
+                _ => todo!(),
+            },
+            _ => todo!(),
         }
     }
 }

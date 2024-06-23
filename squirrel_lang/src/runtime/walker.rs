@@ -11,7 +11,7 @@ use crate::{
     parser::ast::{
         self, AssignKind, AssignTarget, BinaryOp, CallTarget, Expr, ExprData, Ident, Statement,
         StatementData, UnaryOp, UnaryRefOp,
-    },
+    }, runtime::sqrc::StringStrg,
 };
 
 use super::{
@@ -81,16 +81,7 @@ fn init_root() -> Rc<ObjectStrg> {
             let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
             assert!(args.len() == 1, "Wrong number of args");
             let arg = &args[0];
-            match arg {
-                Value::Float(f) => write!(stdout, "{}", f).unwrap(),
-                Value::Integer(i) => write!(stdout, "{}", i).unwrap(),
-                Value::Null => write!(stdout, "null").unwrap(),
-                Value::Rc(rc) => match rc.borrow().as_ref() {
-                    SqRef::String(s) => write!(stdout, "{}", s.get_data()).unwrap(),
-                    _ => todo!(),
-                },
-                _ => todo!(),
-            }
+            write!(stdout, "{}", arg).unwrap();
             Ok(Value::Null)
         }),
     );
@@ -606,21 +597,21 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
 
 macro_rules! promoting_op {
     ($lhs:ident, $rhs:ident, $op:tt; $op_lit:literal) => {
-        match (&$lhs, &$rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::Integer(*$lhs $op *$rhs)),
-            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::float(*$lhs $op *$rhs)),
-            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::float((*$lhs as f64) $op *$rhs)),
-            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::float(*$lhs $op (*$rhs as f64))),
-            _ => Err($op_lit)
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::Integer($lhs $op $rhs)),
+            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::float($lhs $op $rhs)),
+            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::float(($lhs as f64) $op $rhs)),
+            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::float($lhs $op ($rhs as f64))),
+            (lhs, rhs) => Err(($op_lit, lhs, rhs)),
         }
     };
     ($lhs:ident, $rhs:ident, $op:tt, $result:tt; $op_lit:literal) => {
-        match (&$lhs, &$rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
-            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
-            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::$result((*$lhs as f64) $op *$rhs)),
-            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op (*$rhs as f64))),
-            _ => Err(stringify!($op)),
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result($lhs $op $rhs)),
+            (Value::Float($lhs), Value::Float($rhs)) => Ok(Value::$result($lhs $op $rhs)),
+            (Value::Integer($lhs), Value::Float($rhs)) => Ok(Value::$result(($lhs as f64) $op $rhs)),
+            (Value::Float($lhs), Value::Integer($rhs)) => Ok(Value::$result($lhs $op ($rhs as f64))),
+            (lhs, rhs) => Err((stringify!($op), lhs, rhs)),
         }
     };
 }
@@ -630,16 +621,25 @@ macro_rules! int_op {
         int_op!($lhs, $rhs, $op, Integer; $op_lit)
     };
     ($lhs:ident, $rhs:ident, $op:tt, $result:tt; $op_lit:literal) => {
-        match (&$lhs, &$rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result(*$lhs $op *$rhs)),
-            _ => Err($op_lit),
+        match ($lhs, $rhs) {
+            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::$result($lhs $op $rhs)),
+            (lhs, rhs) => Err(($op_lit, lhs, rhs)),
         }
     };
 }
 
 fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value, lhs_span: Span, rhs: Value, rhs_span: Span) -> ExprResult {
     let res = match op {
-        BinaryOp::Add => promoting_op!(lhs, rhs, +; "+"),
+        BinaryOp::Add => {
+            let lhs_str: Result<Rc<StringStrg>, Value> = lhs.try_into();
+            let rhs_str: Result<Rc<StringStrg>, Value> = rhs.try_into();
+            match (lhs_str, rhs_str) {
+                (Ok(ls), Ok(rs)) => Ok(Value::string(&format!("{}{}", ls.get_data(), rs.get_data()))),
+                (Ok(ls), Err(r)) => Ok(Value::string(&format!("{}{}", ls.get_data(), r))),
+                (Err(l), Ok(rs)) => Ok(Value::string(&format!("{}{}", l, rs.get_data()))),
+                (Err(l), Err(r)) => promoting_op!(l, r, +; "+"),
+            }
+        },
         BinaryOp::Sub => promoting_op!(lhs, rhs, -; "-"),
         BinaryOp::Mul => promoting_op!(lhs, rhs, *; "*"),
         BinaryOp::Div => promoting_op!(lhs, rhs, /; "/"),
@@ -665,16 +665,16 @@ fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value
         BinaryOp::BitOr => int_op!(lhs, rhs, |; "|"),
         BinaryOp::BitXor => int_op!(lhs, rhs, ^; "^"),
         BinaryOp::Shl => int_op!(lhs, rhs, <<; "<<"),
-        BinaryOp::Shr => match (&lhs, &rhs) {
+        BinaryOp::Shr => match (lhs, rhs) {
             (Value::Integer(lhs), Value::Integer(rhs)) =>
-                Ok(Value::Integer(((*lhs as u64) >> *rhs) as i64)),
-            _ => Err(">>"),
+                Ok(Value::Integer(((lhs as u64) >> rhs) as i64)),
+            (lhs, rhs) => Err((">>", lhs, rhs)),
         },
         BinaryOp::AShr => int_op!(lhs, rhs, >>; ">>>"),
         BinaryOp::In => todo!("In is not implemented"),
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
     };
-    res.map_err(|op| ExecError::illegal_operation(op.to_string(), op_span, lhs.type_str().to_string(), lhs_span, rhs.type_str().to_string(), rhs_span))
+    res.map_err(|(op, lhs, rhs)| ExecError::illegal_operation(op.to_string(), op_span, lhs.type_str().to_string(), lhs_span, rhs.type_str().to_string(), rhs_span))
 }
 
 fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult {
