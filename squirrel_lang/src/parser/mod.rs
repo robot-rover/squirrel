@@ -641,7 +641,7 @@ mod tests {
         };
         #[cfg(not(miri))]
         {
-            let expect_ast = exchange_data("parse", file_name, &actual_ast);
+            let expect_ast = exchange_data("parser", file_name, &actual_ast);
 
             // TODO: Have a more useful comparison for these trees
             assert_eq!(actual_ast, expect_ast);

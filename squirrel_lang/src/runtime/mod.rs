@@ -10,6 +10,8 @@ use crate::{
 
 pub mod value;
 pub mod walker;
+pub mod builtins;
+pub mod argparse;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -33,14 +35,15 @@ macro_rules! rc_hash_eq {
     };
 }
 
+type ExprResult = Result<Value, ExecError>;
+
 #[derive(Debug)]
 pub enum ExecError {
     UndefinedVariable(Ident, SqBacktrace),
     UndefinedField(Span, Value, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
     WrongArgCount {
-        func_span: Span,
-        call_span: Span,
+        call_info: CallInfo,
         expected: Range<usize>,
         got: usize,
         definition_span: Option<Span>,
@@ -60,6 +63,27 @@ pub enum ExecError {
         rhs_span: Span,
         bt: SqBacktrace,
     },
+    WrongArgType {
+        call_info: CallInfo,
+        arg_index: usize,
+        expected: String,
+        got: String,
+        bt: SqBacktrace,
+    },
+    WrongThisType {
+        call_info: CallInfo,
+        expected: String,
+        got: String,
+        bt: SqBacktrace,
+    },
+    AssertionFailed(Span, Option<String>, SqBacktrace),
+    NumberParseError(Span, String, SqBacktrace),
+    IndexOutOfBounds {
+        index: i64,
+        len: usize,
+        span: Span,
+        bt: SqBacktrace,
+    },
 }
 
 macro_rules! variant_constructor {
@@ -75,13 +99,24 @@ macro_rules! variant_constructor {
     };
 }
 
+#[derive(Debug, Clone)]
+struct CallInfo {
+    func_span: Span,
+    call_span: Span,
+}
+
 impl ExecError {
     variant_constructor!(UndefinedVariable undefined_variable(ident: Ident));
     variant_constructor!(UndefinedField undefined_field(span: Span, value: Value));
     variant_constructor!(IllegalKeyword illegal_keyword(span: Span));
-    variant_constructor!(WrongArgCount wrong_arg_count { func_span: Span, call_span: Span, expected: Range<usize>, got: usize, definition_span: Option<Span> });
+    variant_constructor!(WrongArgCount wrong_arg_count { call_info: CallInfo, expected: Range<usize>, got: usize, definition_span: Option<Span> });
     variant_constructor!(UnhashableType unhashable_type { kind: String, span: Span });
     variant_constructor!(IllegalOperation illegal_operation { op: String, op_span: Span, lhs_ty: String, lhs_span: Span, rhs_ty: String, rhs_span: Span });
+    variant_constructor!(WrongArgType wrong_arg_type { call_info: CallInfo, arg_index: usize, expected: String, got: String });
+    variant_constructor!(WrongThisType wrong_this_type { call_info: CallInfo, expected: String, got: String });
+    variant_constructor!(AssertionFailed assertion_failed(span: Span, message: Option<String>));
+    variant_constructor!(NumberParseError number_parse_error(span: Span, message: String));
+    variant_constructor!(IndexOutOfBounds index_out_of_bounds { index: i64, len: usize, span: Span });
 
     fn with_context(self, file_name: String) -> SquirrelError {
         match self {
@@ -98,13 +133,13 @@ impl ExecError {
                 bt,
             ),
             ExecError::WrongArgCount {
-                func_span,
-                call_span,
+                call_info,
                 expected,
                 got,
                 definition_span,
                 bt,
             } => {
+                let CallInfo { func_span, call_span } = call_info;
                 let mut labels = vec![
                     (
                         func_span,
@@ -160,27 +195,73 @@ impl ExecError {
                     (rhs_span, format!("Operand of type '{}'", rhs_ty), Color::Red)],
                 bt,
             ),
+            ExecError::WrongArgType { call_info, arg_index, expected, got, bt } => {
+                let CallInfo { func_span, call_span } = call_info;
+                SquirrelError::new_labels(
+                    file_name,
+                    format!("Argument {} has the wrong type", arg_index),
+                    vec![
+                        (call_span, format!("Expected type: '{}'", expected), Color::Red),
+                        (call_span, format!("Got type: '{}'", got), Color::Red),
+                    ],
+                    bt,
+                )
+            }
+            ExecError::AssertionFailed(span, message, bt) => SquirrelError::new(
+                file_name,
+                span,
+                if let Some(message) = message {
+                    format!("Assertion failed: {}", message)
+                } else {
+                    "Assertion failed".to_string()
+                },
+                bt,
+            ),
+            ExecError::NumberParseError(span, message, bt) => SquirrelError::new(
+                file_name,
+                span,
+                format!("Failed to parse number: {}", message),
+                bt,
+            ),
+            ExecError::IndexOutOfBounds { index, len, span, bt } => SquirrelError::new(
+                file_name,
+                span,
+                format!("Index '{}' out of bounds for length '{}'", index, len),
+                bt,
+            ),
+            ExecError::WrongThisType { call_info, expected, got, bt } => SquirrelError::new_labels(
+                file_name,
+                format!("Expected 'this' to be of type '{}', got '{}'", expected, got),
+                vec![
+                    (call_info.call_span, "This call".to_string(), Color::Blue),
+                    (call_info.func_span, "This function".to_string(), Color::Red),
+                ],
+                bt,
+            ),
         }
     }
 }
 
 pub enum WriteOption<'a> {
-    DYN(&'a mut dyn io::Write),
-    DEFAULT(io::Stdout),
+    Dyn(&'a mut dyn io::Write),
+    Stdout(io::Stdout),
+    Stderr(io::Stderr),
 }
 
 impl<'a> io::Write for &mut WriteOption<'a> {
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
         match self {
-            WriteOption::DYN(write) => write.write(buf),
-            WriteOption::DEFAULT(stdout) => stdout.write(buf),
+            WriteOption::Dyn(write) => write.write(buf),
+            WriteOption::Stdout(stdout) => stdout.write(buf),
+            WriteOption::Stderr(stderr) => stderr.write(buf),
         }
     }
 
     fn flush(&mut self) -> io::Result<()> {
         match self {
-            WriteOption::DYN(write) => write.flush(),
-            WriteOption::DEFAULT(stdout) => stdout.flush(),
+            WriteOption::Dyn(write) => write.flush(),
+            WriteOption::Stdout(stdout) => stdout.flush(),
+            WriteOption::Stderr(stderr) => stderr.flush(),
         }
     }
 }
@@ -188,14 +269,15 @@ impl<'a> io::Write for &mut WriteOption<'a> {
 impl<'a> From<Option<&'a mut dyn io::Write>> for WriteOption<'a> {
     fn from(value: Option<&'a mut dyn io::Write>) -> Self {
         value
-            .map(|write| WriteOption::DYN(write))
-            .unwrap_or_else(|| WriteOption::DEFAULT(io::stdout()))
+            .map(|write| WriteOption::Dyn(write))
+            .unwrap_or_else(|| WriteOption::Stdout(io::stdout()))
     }
 }
 
 struct VMState<'a> {
     root_table: Rc<RefCell<Object>>,
     stdout: WriteOption<'a>,
+    stderr: WriteOption<'a>,
 }
 
 pub struct Context<'a, 'b> {
@@ -240,8 +322,7 @@ impl FuncRuntime {
                 func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
             } else {
                 return Err(ExecError::wrong_arg_count(
-                    func_span,
-                    call_span,
+                    CallInfo { func_span, call_span },
                     (n_parameters - n_default)..n_parameters,
                     n_arguments,
                     Some(ast_func.arg_span),
@@ -261,11 +342,11 @@ impl FuncRuntime {
             let extra_args = arg_iter.count();
             if extra_args > 0 {
                 return Err(ExecError::wrong_arg_count(
-                    func_span,
-                    call_span,
+                    CallInfo { func_span,
+                    call_span },
                     (n_parameters - n_default)..n_parameters,
                     n_arguments,
-                    Some(ast_func.arg_span),
+                    Some(ast_func.arg_span)
                 ));
             }
         }

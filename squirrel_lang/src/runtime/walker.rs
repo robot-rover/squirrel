@@ -11,11 +11,8 @@ use crate::{
 };
 
 use super::{
-    value::{Closure, HashValue, Object, Value},
-    Context, ExecError, FuncRuntime, VMState,
+    builtins, value::{Closure, HashValue, Object, TypeName, Value}, CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState
 };
-
-type ExprResult = Result<Value, ExecError>;
 enum FlowControl {
     Return(Span, Value),
     Yield(Span, Value),
@@ -57,6 +54,7 @@ pub fn run(
     let mut vm_state = VMState {
         root_table: root,
         stdout: stdout.into(),
+        stderr: super::WriteOption::Stderr(io::stderr())
     };
     let mut context = Context {
         infunc,
@@ -69,18 +67,7 @@ pub fn run(
 }
 
 fn init_root() -> Rc<RefCell<Object>> {
-    let mut slots = HashMap::new();
-    slots.insert(
-        HashValue::string("print"),
-        Value::NativeFn(|ctx, args| {
-            let mut stdout = &mut unsafe { &mut *ctx }.vm_state.stdout;
-            assert!(args.len() == 1, "Wrong number of args");
-            let arg = &args[0];
-            write!(stdout, "{}", arg).unwrap();
-            Ok(Value::Null)
-        }),
-    );
-    Rc::new(RefCell::new(Object::new(None, slots, false)))
+    Rc::new(RefCell::new(builtins::global::make_root_table()))
 }
 
 fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
@@ -377,7 +364,10 @@ fn run_rawcall(
             };
             run_function(&mut context, body)
         }
-        Value::NativeFn(func) => func(context as *mut _, args),
+        Value::NativeFn(func) => {
+            let call_info = CallInfo { func_span, call_span };
+            func(context as *mut _, args, &call_info)
+        }
         other => panic!("Can't call non-function {other:?}"),
     }
 }
@@ -601,8 +591,8 @@ macro_rules! int_op {
 fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value, lhs_span: Span, rhs: Value, rhs_span: Span) -> ExprResult {
     let res = match op {
         BinaryOp::Add => {
-            let lhs_str: Result<Rc<str>, Value> = lhs.try_into();
-            let rhs_str: Result<Rc<str>, Value> = rhs.try_into();
+            let lhs_str: Result<Rc<str>, Value> = <Rc<str>>::typed_from(lhs);
+            let rhs_str: Result<Rc<str>, Value> = <Rc<str>>::typed_from(rhs);
             match (lhs_str, rhs_str) {
                 (Ok(ls), Ok(rs)) => Ok(Value::string(&format!("{}{}", ls, rs))),
                 (Ok(ls), Err(r)) => Ok(Value::string(&format!("{}{}", ls, r))),
