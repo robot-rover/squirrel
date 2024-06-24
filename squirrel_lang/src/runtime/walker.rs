@@ -334,7 +334,6 @@ fn run_function_call(
             (context.infunc.env.clone(), func)
         }
     };
-    println!("rawcall(env: {env:?}, func: {func_val:?}");
     run_rawcall(context, func_val, env, args, func.span(), args_span)
 }
 
@@ -547,7 +546,7 @@ fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
         UnaryOp::TypeOf => Value::string(&val.type_str()),
         UnaryOp::Clone => match val {
             Value::Closure(_) => todo!(),
-            Value::Array(_) => todo!(),
+            Value::Array(arr) => Value::array(arr.deref().borrow().clone()),
             Value::Object(_) => todo!(),
             other => other.clone(),
         },
@@ -666,25 +665,48 @@ fn run_assign(
     val: Value,
     is_newslot: bool,
 ) -> Result<(), ExecError> {
-    match target {
+    let span = target.span();
+    let (target_obj, index)= match target {
         AssignTarget::Ident(ident) => {
-            if let Some(val) = context.infunc.locals.get_mut(&ident.0) {
-                assert!(is_newslot, "Can't create a local slot");
-                *val = val.clone();
+            if let Some(local) = context.infunc.locals.get_mut(&ident.0) {
+                assert!(!is_newslot, "Can't create a local slot");
+                *local = val.clone();
+                return Ok(())
             }
-            let env = &context.infunc.env;
-            if let Value::Object(obj) = env {
-                let mut obj = obj.deref().borrow_mut();
-                if obj.set_field(HashValue::string(&ident.0), val, is_newslot) {
-                    return Ok(());
-                }
-            }
-            panic!("Setting field failed");
+            let env = context.infunc.env.clone();
+            let val = HashValue::string(&ident.0);
+            (env, val)
         }
-        AssignTarget::ArrayAccess { array, index, span } => todo!(),
-        AssignTarget::FieldAccess(_, _) => todo!(),
+        AssignTarget::ArrayAccess { array, index, span } => {
+            let array = run_expression(context, array)?;
+            let index = run_expression(context, index)?;
+            let hash_index: HashValue = index.try_into().map_err(|unhash: Value| {
+                ExecError::unhashable_type(unhash.type_str().to_string(), *span)
+            })?;
+            (array, hash_index)
+        },
+        AssignTarget::FieldAccess(parent, field) => {
+            let parent = run_expression(context, parent)?;
+            let index = HashValue::string(&field.0);
+            (parent, index)
+        },
+    };
+
+    match (target_obj, index) {
+        (Value::Object(obj), any) => {
+            let mut obj = obj.deref().borrow_mut();
+            obj.set_field(any, val, is_newslot)
+                .map_err(|hash_index| { ExecError::undefined_field(span, hash_index.into()) })
+        }
+        (Value::Array(arr), HashValue::Integer(index)) => {
+            // TODO: Handle index out of bounds
+            let mut arr = arr.deref().borrow_mut();
+            arr[index as usize] = val;
+            Ok(())
+        },
+        (Value::Array(_), other) => panic!("Cannot set non-integer index of array"),
+        _ => panic!("Can't assign to non-object"),
     }
-    Ok(())
 }
 
 #[cfg(test)]

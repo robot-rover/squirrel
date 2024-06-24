@@ -43,243 +43,253 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "mkmatrix",
-                {
-                  "start": 120,
-                  "end": 128
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 111,
-                      "end": 119
-                    },
-                    "arg_span": {
-                      "start": 128,
-                      "end": 140
-                    },
-                    "args": [
-                      [
-                        "rows",
-                        {
-                          "start": 129,
-                          "end": 133
-                        }
-                      ],
-                      [
-                        "cols",
-                        {
-                          "start": 135,
-                          "end": 139
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Block": [
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "i",
-                                        {
-                                          "start": 151,
-                                          "end": 152
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 152
-                                  }
-                                },
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "j",
-                                        {
-                                          "start": 154,
-                                          "end": 155
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 155
-                                  }
-                                },
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "count",
-                                        {
-                                          "start": 157,
-                                          "end": 162
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": {
-                                            "Integer": 1
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 165,
-                                          "end": 166
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 145,
-                                    "end": 166
-                                  }
-                                }
-                              ]
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 166
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "mkmatrix",
+                      {
+                        "start": 120,
+                        "end": 128
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 111,
+                          "end": 119
+                        },
+                        "arg_span": {
+                          "start": 128,
+                          "end": 140
+                        },
+                        "args": [
+                          [
+                            "rows",
+                            {
+                              "start": 129,
+                              "end": 133
                             }
-                          },
-                          {
-                            "data": {
-                              "LocalDec": [
-                                [
-                                  "m",
-                                  {
-                                    "start": 176,
-                                    "end": 177
-                                  }
-                                ],
-                                {
-                                  "data": {
-                                    "ArrayDecl": []
-                                  },
-                                  "span": {
-                                    "start": 180,
-                                    "end": 182
-                                  }
-                                }
-                              ]
-                            },
-                            "span": {
-                              "start": 170,
-                              "end": 182
+                          ],
+                          [
+                            "cols",
+                            {
+                              "start": 135,
+                              "end": 139
                             }
-                          },
-                          {
-                            "data": {
-                              "Expr": {
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
                                 "data": {
-                                  "FunctionCall": {
-                                    "func": {
-                                      "FieldAccess": [
-                                        {
-                                          "data": {
-                                            "Ident": "m"
-                                          },
-                                          "span": {
-                                            "start": 184,
-                                            "end": 185
-                                          }
-                                        },
-                                        [
-                                          "resize",
+                                  "Block": [
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "i",
+                                            {
+                                              "start": 151,
+                                              "end": 152
+                                            }
+                                          ],
                                           {
-                                            "start": 186,
-                                            "end": 192
+                                            "data": {
+                                              "Literal": "Null"
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 0
+                                            }
                                           }
                                         ]
-                                      ]
-                                    },
-                                    "args": [
-                                      {
-                                        "data": {
-                                          "Ident": "rows"
-                                        },
-                                        "span": {
-                                          "start": 193,
-                                          "end": 197
-                                        }
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 152
                                       }
-                                    ]
+                                    },
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "j",
+                                            {
+                                              "start": 154,
+                                              "end": 155
+                                            }
+                                          ],
+                                          {
+                                            "data": {
+                                              "Literal": "Null"
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 155
+                                      }
+                                    },
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "count",
+                                            {
+                                              "start": 157,
+                                              "end": 162
+                                            }
+                                          ],
+                                          {
+                                            "data": {
+                                              "Literal": {
+                                                "Integer": 1
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 165,
+                                              "end": 166
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 145,
+                                        "end": 166
+                                      }
+                                    }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 0,
+                                  "end": 166
+                                }
+                              },
+                              {
+                                "data": {
+                                  "LocalDec": [
+                                    [
+                                      "m",
+                                      {
+                                        "start": 176,
+                                        "end": 177
+                                      }
+                                    ],
+                                    {
+                                      "data": {
+                                        "ArrayDecl": []
+                                      },
+                                      "span": {
+                                        "start": 180,
+                                        "end": 182
+                                      }
+                                    }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 170,
+                                  "end": 182
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Expr": {
+                                    "data": {
+                                      "FunctionCall": {
+                                        "func": {
+                                          "FieldAccess": [
+                                            {
+                                              "data": {
+                                                "Ident": "m"
+                                              },
+                                              "span": {
+                                                "start": 184,
+                                                "end": 185
+                                              }
+                                            },
+                                            [
+                                              "resize",
+                                              {
+                                                "start": 186,
+                                                "end": 192
+                                              }
+                                            ]
+                                          ]
+                                        },
+                                        "args": [
+                                          {
+                                            "data": {
+                                              "Ident": "rows"
+                                            },
+                                            "span": {
+                                              "start": 193,
+                                              "end": 197
+                                            }
+                                          }
+                                        ]
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 192,
+                                      "end": 198
+                                    }
                                   }
                                 },
                                 "span": {
                                   "start": 192,
                                   "end": 198
                                 }
-                              }
-                            },
-                            "span": {
-                              "start": 192,
-                              "end": 198
-                            }
-                          },
-                          {
-                            "data": {
-                              "For": {
-                                "init": {
-                                  "data": {
-                                    "Expr": {
+                              },
+                              {
+                                "data": {
+                                  "For": {
+                                    "init": {
                                       "data": {
-                                        "Assign": {
-                                          "target": {
-                                            "Ident": [
-                                              "i",
-                                              {
-                                                "start": 207,
-                                                "end": 208
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Ident": [
+                                                  "i",
+                                                  {
+                                                    "start": 207,
+                                                    "end": 208
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 0
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 211,
+                                                  "end": 212
+                                                }
+                                              },
+                                              "kind": "Normal",
+                                              "op_span": {
+                                                "start": 209,
+                                                "end": 210
                                               }
-                                            ]
-                                          },
-                                          "value": {
-                                            "data": {
-                                              "Literal": {
-                                                "Integer": 0
-                                              }
-                                            },
-                                            "span": {
-                                              "start": 211,
-                                              "end": 212
                                             }
                                           },
-                                          "kind": "Normal",
-                                          "op_span": {
-                                            "start": 209,
-                                            "end": 210
+                                          "span": {
+                                            "start": 207,
+                                            "end": 212
                                           }
                                         }
                                       },
@@ -287,75 +297,75 @@
                                         "start": 207,
                                         "end": 212
                                       }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 207,
-                                    "end": 212
-                                  }
-                                },
-                                "cond": {
-                                  "data": {
-                                    "BinaryOp": {
-                                      "op": "Less",
-                                      "op_span": {
-                                        "start": 216,
-                                        "end": 217
-                                      },
-                                      "lhs": {
-                                        "data": {
-                                          "Ident": "i"
-                                        },
-                                        "span": {
-                                          "start": 214,
-                                          "end": 215
-                                        }
-                                      },
-                                      "rhs": {
-                                        "data": {
-                                          "Ident": "rows"
-                                        },
-                                        "span": {
-                                          "start": 218,
-                                          "end": 222
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 214,
-                                    "end": 222
-                                  }
-                                },
-                                "incr": {
-                                  "data": {
-                                    "Expr": {
+                                    },
+                                    "cond": {
                                       "data": {
-                                        "Assign": {
-                                          "target": {
-                                            "Ident": [
-                                              "i",
-                                              {
-                                                "start": 224,
-                                                "end": 225
-                                              }
-                                            ]
+                                        "BinaryOp": {
+                                          "op": "Less",
+                                          "op_span": {
+                                            "start": 216,
+                                            "end": 217
                                           },
-                                          "value": {
+                                          "lhs": {
                                             "data": {
-                                              "Literal": {
-                                                "Integer": 1
-                                              }
+                                              "Ident": "i"
                                             },
                                             "span": {
-                                              "start": 227,
-                                              "end": 228
+                                              "start": 214,
+                                              "end": 215
                                             }
                                           },
-                                          "kind": "Add",
-                                          "op_span": {
-                                            "start": 225,
-                                            "end": 227
+                                          "rhs": {
+                                            "data": {
+                                              "Ident": "rows"
+                                            },
+                                            "span": {
+                                              "start": 218,
+                                              "end": 222
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 214,
+                                        "end": 222
+                                      }
+                                    },
+                                    "incr": {
+                                      "data": {
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Ident": [
+                                                  "i",
+                                                  {
+                                                    "start": 224,
+                                                    "end": 225
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 1
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 227,
+                                                  "end": 228
+                                                }
+                                              },
+                                              "kind": "Add",
+                                              "op_span": {
+                                                "start": 225,
+                                                "end": 227
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 224,
+                                            "end": 228
                                           }
                                         }
                                       },
@@ -363,60 +373,60 @@
                                         "start": 224,
                                         "end": 228
                                       }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 224,
-                                    "end": 228
-                                  }
-                                },
-                                "body": {
-                                  "data": {
-                                    "Block": [
-                                      {
-                                        "data": {
-                                          "Expr": {
+                                    },
+                                    "body": {
+                                      "data": {
+                                        "Block": [
+                                          {
                                             "data": {
-                                              "Assign": {
-                                                "target": {
-                                                  "ArrayAccess": {
-                                                    "array": {
-                                                      "data": {
-                                                        "Ident": "m"
-                                                      },
-                                                      "span": {
-                                                        "start": 236,
-                                                        "end": 237
+                                              "Expr": {
+                                                "data": {
+                                                  "Assign": {
+                                                    "target": {
+                                                      "ArrayAccess": {
+                                                        "array": {
+                                                          "data": {
+                                                            "Ident": "m"
+                                                          },
+                                                          "span": {
+                                                            "start": 236,
+                                                            "end": 237
+                                                          }
+                                                        },
+                                                        "index": {
+                                                          "data": {
+                                                            "Ident": "i"
+                                                          },
+                                                          "span": {
+                                                            "start": 238,
+                                                            "end": 239
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 237,
+                                                          "end": 240
+                                                        }
                                                       }
                                                     },
-                                                    "index": {
+                                                    "value": {
                                                       "data": {
-                                                        "Ident": "i"
+                                                        "ArrayDecl": []
                                                       },
                                                       "span": {
-                                                        "start": 238,
-                                                        "end": 239
+                                                        "start": 243,
+                                                        "end": 245
                                                       }
                                                     },
-                                                    "span": {
-                                                      "start": 237,
-                                                      "end": 240
+                                                    "kind": "Normal",
+                                                    "op_span": {
+                                                      "start": 241,
+                                                      "end": 242
                                                     }
                                                   }
                                                 },
-                                                "value": {
-                                                  "data": {
-                                                    "ArrayDecl": []
-                                                  },
-                                                  "span": {
-                                                    "start": 243,
-                                                    "end": 245
-                                                  }
-                                                },
-                                                "kind": "Normal",
-                                                "op_span": {
-                                                  "start": 241,
-                                                  "end": 242
+                                                "span": {
+                                                  "start": 237,
+                                                  "end": 245
                                                 }
                                               }
                                             },
@@ -424,113 +434,113 @@
                                               "start": 237,
                                               "end": 245
                                             }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 237,
-                                          "end": 245
-                                        }
-                                      },
-                                      {
-                                        "data": {
-                                          "Expr": {
+                                          },
+                                          {
                                             "data": {
-                                              "FunctionCall": {
-                                                "func": {
-                                                  "FieldAccess": [
-                                                    {
-                                                      "data": {
-                                                        "ArrayAccess": {
-                                                          "array": {
-                                                            "data": {
-                                                              "Ident": "m"
-                                                            },
-                                                            "span": {
-                                                              "start": 246,
-                                                              "end": 247
+                                              "Expr": {
+                                                "data": {
+                                                  "FunctionCall": {
+                                                    "func": {
+                                                      "FieldAccess": [
+                                                        {
+                                                          "data": {
+                                                            "ArrayAccess": {
+                                                              "array": {
+                                                                "data": {
+                                                                  "Ident": "m"
+                                                                },
+                                                                "span": {
+                                                                  "start": 246,
+                                                                  "end": 247
+                                                                }
+                                                              },
+                                                              "index": {
+                                                                "data": {
+                                                                  "Ident": "i"
+                                                                },
+                                                                "span": {
+                                                                  "start": 248,
+                                                                  "end": 249
+                                                                }
+                                                              }
                                                             }
                                                           },
-                                                          "index": {
-                                                            "data": {
-                                                              "Ident": "i"
-                                                            },
-                                                            "span": {
-                                                              "start": 248,
-                                                              "end": 249
-                                                            }
+                                                          "span": {
+                                                            "start": 247,
+                                                            "end": 250
                                                           }
-                                                        }
-                                                      },
-                                                      "span": {
-                                                        "start": 247,
-                                                        "end": 250
-                                                      }
+                                                        },
+                                                        [
+                                                          "resize",
+                                                          {
+                                                            "start": 251,
+                                                            "end": 257
+                                                          }
+                                                        ]
+                                                      ]
                                                     },
-                                                    [
-                                                      "resize",
+                                                    "args": [
                                                       {
-                                                        "start": 251,
-                                                        "end": 257
+                                                        "data": {
+                                                          "Ident": "cols"
+                                                        },
+                                                        "span": {
+                                                          "start": 258,
+                                                          "end": 262
+                                                        }
                                                       }
                                                     ]
-                                                  ]
-                                                },
-                                                "args": [
-                                                  {
-                                                    "data": {
-                                                      "Ident": "cols"
-                                                    },
-                                                    "span": {
-                                                      "start": 258,
-                                                      "end": 262
-                                                    }
                                                   }
-                                                ]
+                                                },
+                                                "span": {
+                                                  "start": 257,
+                                                  "end": 263
+                                                }
                                               }
                                             },
                                             "span": {
                                               "start": 257,
                                               "end": 263
                                             }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 257,
-                                          "end": 263
-                                        }
-                                      },
-                                      {
-                                        "data": {
-                                          "For": {
-                                            "init": {
-                                              "data": {
-                                                "Expr": {
+                                          },
+                                          {
+                                            "data": {
+                                              "For": {
+                                                "init": {
                                                   "data": {
-                                                    "Assign": {
-                                                      "target": {
-                                                        "Ident": [
-                                                          "j",
-                                                          {
-                                                            "start": 273,
-                                                            "end": 274
+                                                    "Expr": {
+                                                      "data": {
+                                                        "Assign": {
+                                                          "target": {
+                                                            "Ident": [
+                                                              "j",
+                                                              {
+                                                                "start": 273,
+                                                                "end": 274
+                                                              }
+                                                            ]
+                                                          },
+                                                          "value": {
+                                                            "data": {
+                                                              "Literal": {
+                                                                "Integer": 0
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 277,
+                                                              "end": 278
+                                                            }
+                                                          },
+                                                          "kind": "Normal",
+                                                          "op_span": {
+                                                            "start": 275,
+                                                            "end": 276
                                                           }
-                                                        ]
-                                                      },
-                                                      "value": {
-                                                        "data": {
-                                                          "Literal": {
-                                                            "Integer": 0
-                                                          }
-                                                        },
-                                                        "span": {
-                                                          "start": 277,
-                                                          "end": 278
                                                         }
                                                       },
-                                                      "kind": "Normal",
-                                                      "op_span": {
-                                                        "start": 275,
-                                                        "end": 276
+                                                      "span": {
+                                                        "start": 273,
+                                                        "end": 278
                                                       }
                                                     }
                                                   },
@@ -538,75 +548,75 @@
                                                     "start": 273,
                                                     "end": 278
                                                   }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 273,
-                                                "end": 278
-                                              }
-                                            },
-                                            "cond": {
-                                              "data": {
-                                                "BinaryOp": {
-                                                  "op": "Less",
-                                                  "op_span": {
-                                                    "start": 282,
-                                                    "end": 283
-                                                  },
-                                                  "lhs": {
-                                                    "data": {
-                                                      "Ident": "j"
-                                                    },
-                                                    "span": {
-                                                      "start": 280,
-                                                      "end": 281
-                                                    }
-                                                  },
-                                                  "rhs": {
-                                                    "data": {
-                                                      "Ident": "cols"
-                                                    },
-                                                    "span": {
-                                                      "start": 284,
-                                                      "end": 288
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 280,
-                                                "end": 288
-                                              }
-                                            },
-                                            "incr": {
-                                              "data": {
-                                                "Expr": {
+                                                },
+                                                "cond": {
                                                   "data": {
-                                                    "Assign": {
-                                                      "target": {
-                                                        "Ident": [
-                                                          "j",
-                                                          {
-                                                            "start": 290,
-                                                            "end": 291
-                                                          }
-                                                        ]
+                                                    "BinaryOp": {
+                                                      "op": "Less",
+                                                      "op_span": {
+                                                        "start": 282,
+                                                        "end": 283
                                                       },
-                                                      "value": {
+                                                      "lhs": {
                                                         "data": {
-                                                          "Literal": {
-                                                            "Integer": 1
-                                                          }
+                                                          "Ident": "j"
                                                         },
                                                         "span": {
-                                                          "start": 293,
-                                                          "end": 294
+                                                          "start": 280,
+                                                          "end": 281
                                                         }
                                                       },
-                                                      "kind": "Add",
-                                                      "op_span": {
-                                                        "start": 291,
-                                                        "end": 293
+                                                      "rhs": {
+                                                        "data": {
+                                                          "Ident": "cols"
+                                                        },
+                                                        "span": {
+                                                          "start": 284,
+                                                          "end": 288
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 280,
+                                                    "end": 288
+                                                  }
+                                                },
+                                                "incr": {
+                                                  "data": {
+                                                    "Expr": {
+                                                      "data": {
+                                                        "Assign": {
+                                                          "target": {
+                                                            "Ident": [
+                                                              "j",
+                                                              {
+                                                                "start": 290,
+                                                                "end": 291
+                                                              }
+                                                            ]
+                                                          },
+                                                          "value": {
+                                                            "data": {
+                                                              "Literal": {
+                                                                "Integer": 1
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 293,
+                                                              "end": 294
+                                                            }
+                                                          },
+                                                          "kind": "Add",
+                                                          "op_span": {
+                                                            "start": 291,
+                                                            "end": 293
+                                                          }
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 290,
+                                                        "end": 294
                                                       }
                                                     }
                                                   },
@@ -614,105 +624,105 @@
                                                     "start": 290,
                                                     "end": 294
                                                   }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 290,
-                                                "end": 294
-                                              }
-                                            },
-                                            "body": {
-                                              "data": {
-                                                "Block": [
-                                                  {
-                                                    "data": {
-                                                      "Expr": {
+                                                },
+                                                "body": {
+                                                  "data": {
+                                                    "Block": [
+                                                      {
                                                         "data": {
-                                                          "Assign": {
-                                                            "target": {
-                                                              "ArrayAccess": {
-                                                                "array": {
-                                                                  "data": {
-                                                                    "ArrayAccess": {
-                                                                      "array": {
-                                                                        "data": {
-                                                                          "Ident": "m"
-                                                                        },
-                                                                        "span": {
-                                                                          "start": 304,
-                                                                          "end": 305
+                                                          "Expr": {
+                                                            "data": {
+                                                              "Assign": {
+                                                                "target": {
+                                                                  "ArrayAccess": {
+                                                                    "array": {
+                                                                      "data": {
+                                                                        "ArrayAccess": {
+                                                                          "array": {
+                                                                            "data": {
+                                                                              "Ident": "m"
+                                                                            },
+                                                                            "span": {
+                                                                              "start": 304,
+                                                                              "end": 305
+                                                                            }
+                                                                          },
+                                                                          "index": {
+                                                                            "data": {
+                                                                              "Ident": "i"
+                                                                            },
+                                                                            "span": {
+                                                                              "start": 306,
+                                                                              "end": 307
+                                                                            }
+                                                                          }
                                                                         }
                                                                       },
-                                                                      "index": {
-                                                                        "data": {
-                                                                          "Ident": "i"
-                                                                        },
-                                                                        "span": {
-                                                                          "start": 306,
-                                                                          "end": 307
-                                                                        }
+                                                                      "span": {
+                                                                        "start": 305,
+                                                                        "end": 308
                                                                       }
-                                                                    }
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 305,
-                                                                    "end": 308
-                                                                  }
-                                                                },
-                                                                "index": {
-                                                                  "data": {
-                                                                    "Ident": "j"
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 309,
-                                                                    "end": 310
-                                                                  }
-                                                                },
-                                                                "span": {
-                                                                  "start": 308,
-                                                                  "end": 311
-                                                                }
-                                                              }
-                                                            },
-                                                            "value": {
-                                                              "data": {
-                                                                "Assign": {
-                                                                  "target": {
-                                                                    "Ident": [
-                                                                      "count",
-                                                                      {
-                                                                        "start": 314,
-                                                                        "end": 319
-                                                                      }
-                                                                    ]
-                                                                  },
-                                                                  "value": {
-                                                                    "data": {
-                                                                      "Literal": {
-                                                                        "Integer": 1
+                                                                    },
+                                                                    "index": {
+                                                                      "data": {
+                                                                        "Ident": "j"
+                                                                      },
+                                                                      "span": {
+                                                                        "start": 309,
+                                                                        "end": 310
                                                                       }
                                                                     },
                                                                     "span": {
-                                                                      "start": 321,
-                                                                      "end": 322
+                                                                      "start": 308,
+                                                                      "end": 311
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "value": {
+                                                                  "data": {
+                                                                    "Assign": {
+                                                                      "target": {
+                                                                        "Ident": [
+                                                                          "count",
+                                                                          {
+                                                                            "start": 314,
+                                                                            "end": 319
+                                                                          }
+                                                                        ]
+                                                                      },
+                                                                      "value": {
+                                                                        "data": {
+                                                                          "Literal": {
+                                                                            "Integer": 1
+                                                                          }
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 321,
+                                                                          "end": 322
+                                                                        }
+                                                                      },
+                                                                      "kind": "Add",
+                                                                      "op_span": {
+                                                                        "start": 319,
+                                                                        "end": 321
+                                                                      }
                                                                     }
                                                                   },
-                                                                  "kind": "Add",
-                                                                  "op_span": {
-                                                                    "start": 319,
-                                                                    "end": 321
+                                                                  "span": {
+                                                                    "start": 314,
+                                                                    "end": 322
                                                                   }
+                                                                },
+                                                                "kind": "Normal",
+                                                                "op_span": {
+                                                                  "start": 312,
+                                                                  "end": 313
                                                                 }
-                                                              },
-                                                              "span": {
-                                                                "start": 314,
-                                                                "end": 322
                                                               }
                                                             },
-                                                            "kind": "Normal",
-                                                            "op_span": {
-                                                              "start": 312,
-                                                              "end": 313
+                                                            "span": {
+                                                              "start": 308,
+                                                              "end": 322
                                                             }
                                                           }
                                                         },
@@ -721,72 +731,77 @@
                                                           "end": 322
                                                         }
                                                       }
-                                                    },
-                                                    "span": {
-                                                      "start": 308,
-                                                      "end": 322
-                                                    }
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 0,
+                                                    "end": 329
                                                   }
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 0,
-                                                "end": 329
+                                                }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 329
                                             }
                                           }
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 329
-                                        }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 333
                                       }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 333
+                                    }
                                   }
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 333
-                            }
-                          },
-                          {
-                            "data": {
-                              "Return": {
-                                "data": {
-                                  "Ident": "m"
                                 },
                                 "span": {
-                                  "start": 343,
+                                  "start": 0,
+                                  "end": 333
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Return": {
+                                    "data": {
+                                      "Ident": "m"
+                                    },
+                                    "span": {
+                                      "start": 343,
+                                      "end": 344
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 336,
                                   "end": 344
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 336,
-                              "end": 344
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 347
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 347
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 347
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 111,
+                    "end": 119
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 347
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 347
               }
-            ]
+            }
           },
           "span": {
             "start": 0,
@@ -795,213 +810,223 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "mmult",
-                {
-                  "start": 358,
-                  "end": 363
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 349,
-                      "end": 357
-                    },
-                    "arg_span": {
-                      "start": 363,
-                      "end": 388
-                    },
-                    "args": [
-                      [
-                        "rows",
-                        {
-                          "start": 364,
-                          "end": 368
-                        }
-                      ],
-                      [
-                        "cols",
-                        {
-                          "start": 370,
-                          "end": 374
-                        }
-                      ],
-                      [
-                        "m1",
-                        {
-                          "start": 377,
-                          "end": 379
-                        }
-                      ],
-                      [
-                        "m2",
-                        {
-                          "start": 381,
-                          "end": 383
-                        }
-                      ],
-                      [
-                        "m3",
-                        {
-                          "start": 385,
-                          "end": 387
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Block": [
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "i",
-                                        {
-                                          "start": 399,
-                                          "end": 400
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 400
-                                  }
-                                },
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "j",
-                                        {
-                                          "start": 402,
-                                          "end": 403
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 403
-                                  }
-                                },
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "k",
-                                        {
-                                          "start": 405,
-                                          "end": 406
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 406
-                                  }
-                                },
-                                {
-                                  "data": {
-                                    "LocalDec": [
-                                      [
-                                        "val",
-                                        {
-                                          "start": 408,
-                                          "end": 411
-                                        }
-                                      ],
-                                      {
-                                        "data": {
-                                          "Literal": "Null"
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 0
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 411
-                                  }
-                                }
-                              ]
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 411
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "mmult",
+                      {
+                        "start": 358,
+                        "end": 363
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 349,
+                          "end": 357
+                        },
+                        "arg_span": {
+                          "start": 363,
+                          "end": 388
+                        },
+                        "args": [
+                          [
+                            "rows",
+                            {
+                              "start": 364,
+                              "end": 368
                             }
-                          },
-                          {
-                            "data": {
-                              "For": {
-                                "init": {
-                                  "data": {
-                                    "Expr": {
+                          ],
+                          [
+                            "cols",
+                            {
+                              "start": 370,
+                              "end": 374
+                            }
+                          ],
+                          [
+                            "m1",
+                            {
+                              "start": 377,
+                              "end": 379
+                            }
+                          ],
+                          [
+                            "m2",
+                            {
+                              "start": 381,
+                              "end": 383
+                            }
+                          ],
+                          [
+                            "m3",
+                            {
+                              "start": 385,
+                              "end": 387
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
+                                "data": {
+                                  "Block": [
+                                    {
                                       "data": {
-                                        "Assign": {
-                                          "target": {
-                                            "Ident": [
-                                              "i",
-                                              {
-                                                "start": 420,
-                                                "end": 421
-                                              }
-                                            ]
-                                          },
-                                          "value": {
+                                        "LocalDec": [
+                                          [
+                                            "i",
+                                            {
+                                              "start": 399,
+                                              "end": 400
+                                            }
+                                          ],
+                                          {
                                             "data": {
-                                              "Literal": {
-                                                "Integer": 0
-                                              }
+                                              "Literal": "Null"
                                             },
                                             "span": {
-                                              "start": 424,
-                                              "end": 425
+                                              "start": 0,
+                                              "end": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 400
+                                      }
+                                    },
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "j",
+                                            {
+                                              "start": 402,
+                                              "end": 403
+                                            }
+                                          ],
+                                          {
+                                            "data": {
+                                              "Literal": "Null"
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 403
+                                      }
+                                    },
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "k",
+                                            {
+                                              "start": 405,
+                                              "end": 406
+                                            }
+                                          ],
+                                          {
+                                            "data": {
+                                              "Literal": "Null"
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 406
+                                      }
+                                    },
+                                    {
+                                      "data": {
+                                        "LocalDec": [
+                                          [
+                                            "val",
+                                            {
+                                              "start": 408,
+                                              "end": 411
+                                            }
+                                          ],
+                                          {
+                                            "data": {
+                                              "Literal": "Null"
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 0
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 411
+                                      }
+                                    }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 0,
+                                  "end": 411
+                                }
+                              },
+                              {
+                                "data": {
+                                  "For": {
+                                    "init": {
+                                      "data": {
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Ident": [
+                                                  "i",
+                                                  {
+                                                    "start": 420,
+                                                    "end": 421
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 0
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 424,
+                                                  "end": 425
+                                                }
+                                              },
+                                              "kind": "Normal",
+                                              "op_span": {
+                                                "start": 422,
+                                                "end": 423
+                                              }
                                             }
                                           },
-                                          "kind": "Normal",
-                                          "op_span": {
-                                            "start": 422,
-                                            "end": 423
+                                          "span": {
+                                            "start": 420,
+                                            "end": 425
                                           }
                                         }
                                       },
@@ -1009,75 +1034,75 @@
                                         "start": 420,
                                         "end": 425
                                       }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 420,
-                                    "end": 425
-                                  }
-                                },
-                                "cond": {
-                                  "data": {
-                                    "BinaryOp": {
-                                      "op": "Less",
-                                      "op_span": {
-                                        "start": 429,
-                                        "end": 430
-                                      },
-                                      "lhs": {
-                                        "data": {
-                                          "Ident": "i"
-                                        },
-                                        "span": {
-                                          "start": 427,
-                                          "end": 428
-                                        }
-                                      },
-                                      "rhs": {
-                                        "data": {
-                                          "Ident": "rows"
-                                        },
-                                        "span": {
-                                          "start": 431,
-                                          "end": 435
-                                        }
-                                      }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 427,
-                                    "end": 435
-                                  }
-                                },
-                                "incr": {
-                                  "data": {
-                                    "Expr": {
+                                    },
+                                    "cond": {
                                       "data": {
-                                        "Assign": {
-                                          "target": {
-                                            "Ident": [
-                                              "i",
-                                              {
-                                                "start": 437,
-                                                "end": 438
-                                              }
-                                            ]
+                                        "BinaryOp": {
+                                          "op": "Less",
+                                          "op_span": {
+                                            "start": 429,
+                                            "end": 430
                                           },
-                                          "value": {
+                                          "lhs": {
                                             "data": {
-                                              "Literal": {
-                                                "Integer": 1
-                                              }
+                                              "Ident": "i"
                                             },
                                             "span": {
-                                              "start": 440,
-                                              "end": 441
+                                              "start": 427,
+                                              "end": 428
                                             }
                                           },
-                                          "kind": "Add",
-                                          "op_span": {
-                                            "start": 438,
-                                            "end": 440
+                                          "rhs": {
+                                            "data": {
+                                              "Ident": "rows"
+                                            },
+                                            "span": {
+                                              "start": 431,
+                                              "end": 435
+                                            }
+                                          }
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 427,
+                                        "end": 435
+                                      }
+                                    },
+                                    "incr": {
+                                      "data": {
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Ident": [
+                                                  "i",
+                                                  {
+                                                    "start": 437,
+                                                    "end": 438
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 1
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 440,
+                                                  "end": 441
+                                                }
+                                              },
+                                              "kind": "Add",
+                                              "op_span": {
+                                                "start": 438,
+                                                "end": 440
+                                              }
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 437,
+                                            "end": 441
                                           }
                                         }
                                       },
@@ -1085,48 +1110,48 @@
                                         "start": 437,
                                         "end": 441
                                       }
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 437,
-                                    "end": 441
-                                  }
-                                },
-                                "body": {
-                                  "data": {
-                                    "Block": [
-                                      {
-                                        "data": {
-                                          "For": {
-                                            "init": {
-                                              "data": {
-                                                "Expr": {
+                                    },
+                                    "body": {
+                                      "data": {
+                                        "Block": [
+                                          {
+                                            "data": {
+                                              "For": {
+                                                "init": {
                                                   "data": {
-                                                    "Assign": {
-                                                      "target": {
-                                                        "Ident": [
-                                                          "j",
-                                                          {
-                                                            "start": 454,
-                                                            "end": 455
+                                                    "Expr": {
+                                                      "data": {
+                                                        "Assign": {
+                                                          "target": {
+                                                            "Ident": [
+                                                              "j",
+                                                              {
+                                                                "start": 454,
+                                                                "end": 455
+                                                              }
+                                                            ]
+                                                          },
+                                                          "value": {
+                                                            "data": {
+                                                              "Literal": {
+                                                                "Integer": 0
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 458,
+                                                              "end": 459
+                                                            }
+                                                          },
+                                                          "kind": "Normal",
+                                                          "op_span": {
+                                                            "start": 456,
+                                                            "end": 457
                                                           }
-                                                        ]
-                                                      },
-                                                      "value": {
-                                                        "data": {
-                                                          "Literal": {
-                                                            "Integer": 0
-                                                          }
-                                                        },
-                                                        "span": {
-                                                          "start": 458,
-                                                          "end": 459
                                                         }
                                                       },
-                                                      "kind": "Normal",
-                                                      "op_span": {
-                                                        "start": 456,
-                                                        "end": 457
+                                                      "span": {
+                                                        "start": 454,
+                                                        "end": 459
                                                       }
                                                     }
                                                   },
@@ -1134,75 +1159,75 @@
                                                     "start": 454,
                                                     "end": 459
                                                   }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 454,
-                                                "end": 459
-                                              }
-                                            },
-                                            "cond": {
-                                              "data": {
-                                                "BinaryOp": {
-                                                  "op": "Less",
-                                                  "op_span": {
-                                                    "start": 463,
-                                                    "end": 464
-                                                  },
-                                                  "lhs": {
-                                                    "data": {
-                                                      "Ident": "j"
-                                                    },
-                                                    "span": {
-                                                      "start": 461,
-                                                      "end": 462
-                                                    }
-                                                  },
-                                                  "rhs": {
-                                                    "data": {
-                                                      "Ident": "cols"
-                                                    },
-                                                    "span": {
-                                                      "start": 465,
-                                                      "end": 469
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 461,
-                                                "end": 469
-                                              }
-                                            },
-                                            "incr": {
-                                              "data": {
-                                                "Expr": {
+                                                },
+                                                "cond": {
                                                   "data": {
-                                                    "Assign": {
-                                                      "target": {
-                                                        "Ident": [
-                                                          "j",
-                                                          {
-                                                            "start": 471,
-                                                            "end": 472
-                                                          }
-                                                        ]
+                                                    "BinaryOp": {
+                                                      "op": "Less",
+                                                      "op_span": {
+                                                        "start": 463,
+                                                        "end": 464
                                                       },
-                                                      "value": {
+                                                      "lhs": {
                                                         "data": {
-                                                          "Literal": {
-                                                            "Integer": 1
-                                                          }
+                                                          "Ident": "j"
                                                         },
                                                         "span": {
-                                                          "start": 474,
-                                                          "end": 475
+                                                          "start": 461,
+                                                          "end": 462
                                                         }
                                                       },
-                                                      "kind": "Add",
-                                                      "op_span": {
-                                                        "start": 472,
-                                                        "end": 474
+                                                      "rhs": {
+                                                        "data": {
+                                                          "Ident": "cols"
+                                                        },
+                                                        "span": {
+                                                          "start": 465,
+                                                          "end": 469
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 461,
+                                                    "end": 469
+                                                  }
+                                                },
+                                                "incr": {
+                                                  "data": {
+                                                    "Expr": {
+                                                      "data": {
+                                                        "Assign": {
+                                                          "target": {
+                                                            "Ident": [
+                                                              "j",
+                                                              {
+                                                                "start": 471,
+                                                                "end": 472
+                                                              }
+                                                            ]
+                                                          },
+                                                          "value": {
+                                                            "data": {
+                                                              "Literal": {
+                                                                "Integer": 1
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 474,
+                                                              "end": 475
+                                                            }
+                                                          },
+                                                          "kind": "Add",
+                                                          "op_span": {
+                                                            "start": 472,
+                                                            "end": 474
+                                                          }
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 471,
+                                                        "end": 475
                                                       }
                                                     }
                                                   },
@@ -1210,45 +1235,45 @@
                                                     "start": 471,
                                                     "end": 475
                                                   }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 471,
-                                                "end": 475
-                                              }
-                                            },
-                                            "body": {
-                                              "data": {
-                                                "Block": [
-                                                  {
-                                                    "data": {
-                                                      "Expr": {
+                                                },
+                                                "body": {
+                                                  "data": {
+                                                    "Block": [
+                                                      {
                                                         "data": {
-                                                          "Assign": {
-                                                            "target": {
-                                                              "Ident": [
-                                                                "val",
-                                                                {
-                                                                  "start": 485,
-                                                                  "end": 488
+                                                          "Expr": {
+                                                            "data": {
+                                                              "Assign": {
+                                                                "target": {
+                                                                  "Ident": [
+                                                                    "val",
+                                                                    {
+                                                                      "start": 485,
+                                                                      "end": 488
+                                                                    }
+                                                                  ]
+                                                                },
+                                                                "value": {
+                                                                  "data": {
+                                                                    "Literal": {
+                                                                      "Integer": 0
+                                                                    }
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 491,
+                                                                    "end": 492
+                                                                  }
+                                                                },
+                                                                "kind": "Normal",
+                                                                "op_span": {
+                                                                  "start": 489,
+                                                                  "end": 490
                                                                 }
-                                                              ]
-                                                            },
-                                                            "value": {
-                                                              "data": {
-                                                                "Literal": {
-                                                                  "Integer": 0
-                                                                }
-                                                              },
-                                                              "span": {
-                                                                "start": 491,
-                                                                "end": 492
                                                               }
                                                             },
-                                                            "kind": "Normal",
-                                                            "op_span": {
-                                                              "start": 489,
-                                                              "end": 490
+                                                            "span": {
+                                                              "start": 485,
+                                                              "end": 492
                                                             }
                                                           }
                                                         },
@@ -1256,45 +1281,45 @@
                                                           "start": 485,
                                                           "end": 492
                                                         }
-                                                      }
-                                                    },
-                                                    "span": {
-                                                      "start": 485,
-                                                      "end": 492
-                                                    }
-                                                  },
-                                                  {
-                                                    "data": {
-                                                      "For": {
-                                                        "init": {
-                                                          "data": {
-                                                            "Expr": {
+                                                      },
+                                                      {
+                                                        "data": {
+                                                          "For": {
+                                                            "init": {
                                                               "data": {
-                                                                "Assign": {
-                                                                  "target": {
-                                                                    "Ident": [
-                                                                      "k",
-                                                                      {
-                                                                        "start": 505,
-                                                                        "end": 506
+                                                                "Expr": {
+                                                                  "data": {
+                                                                    "Assign": {
+                                                                      "target": {
+                                                                        "Ident": [
+                                                                          "k",
+                                                                          {
+                                                                            "start": 505,
+                                                                            "end": 506
+                                                                          }
+                                                                        ]
+                                                                      },
+                                                                      "value": {
+                                                                        "data": {
+                                                                          "Literal": {
+                                                                            "Integer": 0
+                                                                          }
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 509,
+                                                                          "end": 510
+                                                                        }
+                                                                      },
+                                                                      "kind": "Normal",
+                                                                      "op_span": {
+                                                                        "start": 507,
+                                                                        "end": 508
                                                                       }
-                                                                    ]
-                                                                  },
-                                                                  "value": {
-                                                                    "data": {
-                                                                      "Literal": {
-                                                                        "Integer": 0
-                                                                      }
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 509,
-                                                                      "end": 510
                                                                     }
                                                                   },
-                                                                  "kind": "Normal",
-                                                                  "op_span": {
-                                                                    "start": 507,
-                                                                    "end": 508
+                                                                  "span": {
+                                                                    "start": 505,
+                                                                    "end": 510
                                                                   }
                                                                 }
                                                               },
@@ -1302,75 +1327,75 @@
                                                                 "start": 505,
                                                                 "end": 510
                                                               }
-                                                            }
-                                                          },
-                                                          "span": {
-                                                            "start": 505,
-                                                            "end": 510
-                                                          }
-                                                        },
-                                                        "cond": {
-                                                          "data": {
-                                                            "BinaryOp": {
-                                                              "op": "Less",
-                                                              "op_span": {
-                                                                "start": 514,
-                                                                "end": 515
-                                                              },
-                                                              "lhs": {
-                                                                "data": {
-                                                                  "Ident": "k"
-                                                                },
-                                                                "span": {
-                                                                  "start": 512,
-                                                                  "end": 513
-                                                                }
-                                                              },
-                                                              "rhs": {
-                                                                "data": {
-                                                                  "Ident": "cols"
-                                                                },
-                                                                "span": {
-                                                                  "start": 516,
-                                                                  "end": 520
-                                                                }
-                                                              }
-                                                            }
-                                                          },
-                                                          "span": {
-                                                            "start": 512,
-                                                            "end": 520
-                                                          }
-                                                        },
-                                                        "incr": {
-                                                          "data": {
-                                                            "Expr": {
+                                                            },
+                                                            "cond": {
                                                               "data": {
-                                                                "Assign": {
-                                                                  "target": {
-                                                                    "Ident": [
-                                                                      "k",
-                                                                      {
-                                                                        "start": 522,
-                                                                        "end": 523
-                                                                      }
-                                                                    ]
+                                                                "BinaryOp": {
+                                                                  "op": "Less",
+                                                                  "op_span": {
+                                                                    "start": 514,
+                                                                    "end": 515
                                                                   },
-                                                                  "value": {
+                                                                  "lhs": {
                                                                     "data": {
-                                                                      "Literal": {
-                                                                        "Integer": 1
-                                                                      }
+                                                                      "Ident": "k"
                                                                     },
                                                                     "span": {
-                                                                      "start": 525,
-                                                                      "end": 526
+                                                                      "start": 512,
+                                                                      "end": 513
                                                                     }
                                                                   },
-                                                                  "kind": "Add",
-                                                                  "op_span": {
-                                                                    "start": 523,
-                                                                    "end": 525
+                                                                  "rhs": {
+                                                                    "data": {
+                                                                      "Ident": "cols"
+                                                                    },
+                                                                    "span": {
+                                                                      "start": 516,
+                                                                      "end": 520
+                                                                    }
+                                                                  }
+                                                                }
+                                                              },
+                                                              "span": {
+                                                                "start": 512,
+                                                                "end": 520
+                                                              }
+                                                            },
+                                                            "incr": {
+                                                              "data": {
+                                                                "Expr": {
+                                                                  "data": {
+                                                                    "Assign": {
+                                                                      "target": {
+                                                                        "Ident": [
+                                                                          "k",
+                                                                          {
+                                                                            "start": 522,
+                                                                            "end": 523
+                                                                          }
+                                                                        ]
+                                                                      },
+                                                                      "value": {
+                                                                        "data": {
+                                                                          "Literal": {
+                                                                            "Integer": 1
+                                                                          }
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 525,
+                                                                          "end": 526
+                                                                        }
+                                                                      },
+                                                                      "kind": "Add",
+                                                                      "op_span": {
+                                                                        "start": 523,
+                                                                        "end": 525
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 522,
+                                                                    "end": 526
                                                                   }
                                                                 }
                                                               },
@@ -1378,143 +1403,143 @@
                                                                 "start": 522,
                                                                 "end": 526
                                                               }
-                                                            }
-                                                          },
-                                                          "span": {
-                                                            "start": 522,
-                                                            "end": 526
-                                                          }
-                                                        },
-                                                        "body": {
-                                                          "data": {
-                                                            "Block": [
-                                                              {
-                                                                "data": {
-                                                                  "Expr": {
+                                                            },
+                                                            "body": {
+                                                              "data": {
+                                                                "Block": [
+                                                                  {
                                                                     "data": {
-                                                                      "Assign": {
-                                                                        "target": {
-                                                                          "Ident": [
-                                                                            "val",
-                                                                            {
-                                                                              "start": 534,
-                                                                              "end": 537
-                                                                            }
-                                                                          ]
-                                                                        },
-                                                                        "value": {
-                                                                          "data": {
-                                                                            "BinaryOp": {
-                                                                              "op": "Mul",
-                                                                              "op_span": {
-                                                                                "start": 550,
-                                                                                "end": 551
-                                                                              },
-                                                                              "lhs": {
-                                                                                "data": {
-                                                                                  "ArrayAccess": {
-                                                                                    "array": {
-                                                                                      "data": {
-                                                                                        "ArrayAccess": {
-                                                                                          "array": {
-                                                                                            "data": {
-                                                                                              "Ident": "m1"
-                                                                                            },
-                                                                                            "span": {
-                                                                                              "start": 541,
-                                                                                              "end": 543
+                                                                      "Expr": {
+                                                                        "data": {
+                                                                          "Assign": {
+                                                                            "target": {
+                                                                              "Ident": [
+                                                                                "val",
+                                                                                {
+                                                                                  "start": 534,
+                                                                                  "end": 537
+                                                                                }
+                                                                              ]
+                                                                            },
+                                                                            "value": {
+                                                                              "data": {
+                                                                                "BinaryOp": {
+                                                                                  "op": "Mul",
+                                                                                  "op_span": {
+                                                                                    "start": 550,
+                                                                                    "end": 551
+                                                                                  },
+                                                                                  "lhs": {
+                                                                                    "data": {
+                                                                                      "ArrayAccess": {
+                                                                                        "array": {
+                                                                                          "data": {
+                                                                                            "ArrayAccess": {
+                                                                                              "array": {
+                                                                                                "data": {
+                                                                                                  "Ident": "m1"
+                                                                                                },
+                                                                                                "span": {
+                                                                                                  "start": 541,
+                                                                                                  "end": 543
+                                                                                                }
+                                                                                              },
+                                                                                              "index": {
+                                                                                                "data": {
+                                                                                                  "Ident": "i"
+                                                                                                },
+                                                                                                "span": {
+                                                                                                  "start": 544,
+                                                                                                  "end": 545
+                                                                                                }
+                                                                                              }
                                                                                             }
                                                                                           },
-                                                                                          "index": {
-                                                                                            "data": {
-                                                                                              "Ident": "i"
-                                                                                            },
-                                                                                            "span": {
-                                                                                              "start": 544,
-                                                                                              "end": 545
-                                                                                            }
+                                                                                          "span": {
+                                                                                            "start": 543,
+                                                                                            "end": 546
+                                                                                          }
+                                                                                        },
+                                                                                        "index": {
+                                                                                          "data": {
+                                                                                            "Ident": "k"
+                                                                                          },
+                                                                                          "span": {
+                                                                                            "start": 547,
+                                                                                            "end": 548
                                                                                           }
                                                                                         }
-                                                                                      },
-                                                                                      "span": {
-                                                                                        "start": 543,
-                                                                                        "end": 546
                                                                                       }
                                                                                     },
-                                                                                    "index": {
-                                                                                      "data": {
-                                                                                        "Ident": "k"
-                                                                                      },
-                                                                                      "span": {
-                                                                                        "start": 547,
-                                                                                        "end": 548
-                                                                                      }
+                                                                                    "span": {
+                                                                                      "start": 546,
+                                                                                      "end": 549
                                                                                     }
-                                                                                  }
-                                                                                },
-                                                                                "span": {
-                                                                                  "start": 546,
-                                                                                  "end": 549
-                                                                                }
-                                                                              },
-                                                                              "rhs": {
-                                                                                "data": {
-                                                                                  "ArrayAccess": {
-                                                                                    "array": {
-                                                                                      "data": {
-                                                                                        "ArrayAccess": {
-                                                                                          "array": {
-                                                                                            "data": {
-                                                                                              "Ident": "m2"
-                                                                                            },
-                                                                                            "span": {
-                                                                                              "start": 552,
-                                                                                              "end": 554
+                                                                                  },
+                                                                                  "rhs": {
+                                                                                    "data": {
+                                                                                      "ArrayAccess": {
+                                                                                        "array": {
+                                                                                          "data": {
+                                                                                            "ArrayAccess": {
+                                                                                              "array": {
+                                                                                                "data": {
+                                                                                                  "Ident": "m2"
+                                                                                                },
+                                                                                                "span": {
+                                                                                                  "start": 552,
+                                                                                                  "end": 554
+                                                                                                }
+                                                                                              },
+                                                                                              "index": {
+                                                                                                "data": {
+                                                                                                  "Ident": "k"
+                                                                                                },
+                                                                                                "span": {
+                                                                                                  "start": 555,
+                                                                                                  "end": 556
+                                                                                                }
+                                                                                              }
                                                                                             }
                                                                                           },
-                                                                                          "index": {
-                                                                                            "data": {
-                                                                                              "Ident": "k"
-                                                                                            },
-                                                                                            "span": {
-                                                                                              "start": 555,
-                                                                                              "end": 556
-                                                                                            }
+                                                                                          "span": {
+                                                                                            "start": 554,
+                                                                                            "end": 557
+                                                                                          }
+                                                                                        },
+                                                                                        "index": {
+                                                                                          "data": {
+                                                                                            "Ident": "j"
+                                                                                          },
+                                                                                          "span": {
+                                                                                            "start": 558,
+                                                                                            "end": 559
                                                                                           }
                                                                                         }
-                                                                                      },
-                                                                                      "span": {
-                                                                                        "start": 554,
-                                                                                        "end": 557
                                                                                       }
                                                                                     },
-                                                                                    "index": {
-                                                                                      "data": {
-                                                                                        "Ident": "j"
-                                                                                      },
-                                                                                      "span": {
-                                                                                        "start": 558,
-                                                                                        "end": 559
-                                                                                      }
+                                                                                    "span": {
+                                                                                      "start": 557,
+                                                                                      "end": 560
                                                                                     }
                                                                                   }
-                                                                                },
-                                                                                "span": {
-                                                                                  "start": 557,
-                                                                                  "end": 560
                                                                                 }
+                                                                              },
+                                                                              "span": {
+                                                                                "start": 546,
+                                                                                "end": 560
                                                                               }
+                                                                            },
+                                                                            "kind": "Add",
+                                                                            "op_span": {
+                                                                              "start": 538,
+                                                                              "end": 540
                                                                             }
-                                                                          },
-                                                                          "span": {
-                                                                            "start": 546,
-                                                                            "end": 560
                                                                           }
                                                                         },
-                                                                        "kind": "Add",
-                                                                        "op_span": {
-                                                                          "start": 538,
-                                                                          "end": 540
+                                                                        "span": {
+                                                                          "start": 534,
+                                                                          "end": 560
                                                                         }
                                                                       }
                                                                     },
@@ -1523,89 +1548,89 @@
                                                                       "end": 560
                                                                     }
                                                                   }
-                                                                },
-                                                                "span": {
-                                                                  "start": 534,
-                                                                  "end": 560
-                                                                }
-                                                              }
-                                                            ]
-                                                          },
-                                                          "span": {
-                                                            "start": 0,
-                                                            "end": 569
-                                                          }
-                                                        }
-                                                      }
-                                                    },
-                                                    "span": {
-                                                      "start": 0,
-                                                      "end": 569
-                                                    }
-                                                  },
-                                                  {
-                                                    "data": {
-                                                      "Expr": {
-                                                        "data": {
-                                                          "Assign": {
-                                                            "target": {
-                                                              "ArrayAccess": {
-                                                                "array": {
-                                                                  "data": {
-                                                                    "ArrayAccess": {
-                                                                      "array": {
-                                                                        "data": {
-                                                                          "Ident": "m3"
-                                                                        },
-                                                                        "span": {
-                                                                          "start": 576,
-                                                                          "end": 578
-                                                                        }
-                                                                      },
-                                                                      "index": {
-                                                                        "data": {
-                                                                          "Ident": "i"
-                                                                        },
-                                                                        "span": {
-                                                                          "start": 579,
-                                                                          "end": 580
-                                                                        }
-                                                                      }
-                                                                    }
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 578,
-                                                                    "end": 581
-                                                                  }
-                                                                },
-                                                                "index": {
-                                                                  "data": {
-                                                                    "Ident": "j"
-                                                                  },
-                                                                  "span": {
-                                                                    "start": 582,
-                                                                    "end": 583
-                                                                  }
-                                                                },
-                                                                "span": {
-                                                                  "start": 581,
-                                                                  "end": 584
-                                                                }
-                                                              }
-                                                            },
-                                                            "value": {
-                                                              "data": {
-                                                                "Ident": "val"
+                                                                ]
                                                               },
                                                               "span": {
-                                                                "start": 587,
-                                                                "end": 590
+                                                                "start": 0,
+                                                                "end": 569
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 0,
+                                                          "end": 569
+                                                        }
+                                                      },
+                                                      {
+                                                        "data": {
+                                                          "Expr": {
+                                                            "data": {
+                                                              "Assign": {
+                                                                "target": {
+                                                                  "ArrayAccess": {
+                                                                    "array": {
+                                                                      "data": {
+                                                                        "ArrayAccess": {
+                                                                          "array": {
+                                                                            "data": {
+                                                                              "Ident": "m3"
+                                                                            },
+                                                                            "span": {
+                                                                              "start": 576,
+                                                                              "end": 578
+                                                                            }
+                                                                          },
+                                                                          "index": {
+                                                                            "data": {
+                                                                              "Ident": "i"
+                                                                            },
+                                                                            "span": {
+                                                                              "start": 579,
+                                                                              "end": 580
+                                                                            }
+                                                                          }
+                                                                        }
+                                                                      },
+                                                                      "span": {
+                                                                        "start": 578,
+                                                                        "end": 581
+                                                                      }
+                                                                    },
+                                                                    "index": {
+                                                                      "data": {
+                                                                        "Ident": "j"
+                                                                      },
+                                                                      "span": {
+                                                                        "start": 582,
+                                                                        "end": 583
+                                                                      }
+                                                                    },
+                                                                    "span": {
+                                                                      "start": 581,
+                                                                      "end": 584
+                                                                    }
+                                                                  }
+                                                                },
+                                                                "value": {
+                                                                  "data": {
+                                                                    "Ident": "val"
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 587,
+                                                                    "end": 590
+                                                                  }
+                                                                },
+                                                                "kind": "Normal",
+                                                                "op_span": {
+                                                                  "start": 585,
+                                                                  "end": 586
+                                                                }
                                                               }
                                                             },
-                                                            "kind": "Normal",
-                                                            "op_span": {
-                                                              "start": 585,
-                                                              "end": 586
+                                                            "span": {
+                                                              "start": 581,
+                                                              "end": 590
                                                             }
                                                           }
                                                         },
@@ -1614,72 +1639,77 @@
                                                           "end": 590
                                                         }
                                                       }
-                                                    },
-                                                    "span": {
-                                                      "start": 581,
-                                                      "end": 590
-                                                    }
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 0,
+                                                    "end": 597
                                                   }
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 0,
-                                                "end": 597
+                                                }
                                               }
+                                            },
+                                            "span": {
+                                              "start": 0,
+                                              "end": 597
                                             }
                                           }
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 597
-                                        }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 0,
+                                        "end": 601
                                       }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 601
+                                    }
                                   }
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 601
-                            }
-                          },
-                          {
-                            "data": {
-                              "Return": {
-                                "data": {
-                                  "Ident": "m3"
                                 },
                                 "span": {
-                                  "start": 611,
+                                  "start": 0,
+                                  "end": 601
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Return": {
+                                    "data": {
+                                      "Ident": "m3"
+                                    },
+                                    "span": {
+                                      "start": 611,
+                                      "end": 613
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 604,
                                   "end": 613
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 604,
-                              "end": 613
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 616
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 616
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 616
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 349,
+                    "end": 357
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 616
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 616
               }
-            ]
+            }
           },
           "span": {
             "start": 0,

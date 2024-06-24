@@ -58,60 +58,70 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "fn_newslot",
-                {
-                  "start": 35,
-                  "end": 45
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 26,
-                      "end": 34
-                    },
-                    "arg_span": {
-                      "start": 45,
-                      "end": 47
-                    },
-                    "args": [],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Expr": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "fn_newslot",
+                      {
+                        "start": 35,
+                        "end": 45
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 26,
+                          "end": 34
+                        },
+                        "arg_span": {
+                          "start": 45,
+                          "end": 47
+                        },
+                        "args": [],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
                                 "data": {
-                                  "Assign": {
-                                    "target": {
-                                      "Ident": [
-                                        "a",
-                                        {
-                                          "start": 54,
-                                          "end": 55
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Ident": [
+                                            "a",
+                                            {
+                                              "start": 54,
+                                              "end": 55
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "a defined in fn_newslot"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 59,
+                                            "end": 84
+                                          }
+                                        },
+                                        "kind": "NewSlot",
+                                        "op_span": {
+                                          "start": 56,
+                                          "end": 58
                                         }
-                                      ]
-                                    },
-                                    "value": {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "a defined in fn_newslot"
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 59,
-                                        "end": 84
                                       }
                                     },
-                                    "kind": "NewSlot",
-                                    "op_span": {
-                                      "start": 56,
-                                      "end": 58
+                                    "span": {
+                                      "start": 54,
+                                      "end": 84
                                     }
                                   }
                                 },
@@ -120,27 +130,32 @@
                                   "end": 84
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 54,
-                              "end": 84
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 86
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 86
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 86
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 26,
+                    "end": 34
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 86
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 86
               }
-            ]
+            }
           },
           "span": {
             "start": 0,
@@ -149,60 +164,70 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "fn_set",
-                {
-                  "start": 97,
-                  "end": 103
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 88,
-                      "end": 96
-                    },
-                    "arg_span": {
-                      "start": 103,
-                      "end": 105
-                    },
-                    "args": [],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Expr": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "fn_set",
+                      {
+                        "start": 97,
+                        "end": 103
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 88,
+                          "end": 96
+                        },
+                        "arg_span": {
+                          "start": 103,
+                          "end": 105
+                        },
+                        "args": [],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
                                 "data": {
-                                  "Assign": {
-                                    "target": {
-                                      "Ident": [
-                                        "a",
-                                        {
-                                          "start": 112,
-                                          "end": 113
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Ident": [
+                                            "a",
+                                            {
+                                              "start": 112,
+                                              "end": 113
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "a defined in fn_set"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 116,
+                                            "end": 137
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 114,
+                                          "end": 115
                                         }
-                                      ]
-                                    },
-                                    "value": {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "a defined in fn_set"
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 116,
-                                        "end": 137
                                       }
                                     },
-                                    "kind": "Normal",
-                                    "op_span": {
-                                      "start": 114,
-                                      "end": 115
+                                    "span": {
+                                      "start": 112,
+                                      "end": 137
                                     }
                                   }
                                 },
@@ -211,27 +236,32 @@
                                   "end": 137
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 112,
-                              "end": 137
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 139
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 139
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 139
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 88,
+                    "end": 96
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 139
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 139
               }
-            ]
+            }
           },
           "span": {
             "start": 0,

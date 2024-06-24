@@ -147,147 +147,157 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "array_tostring",
-                {
-                  "start": 111,
-                  "end": 125
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 102,
-                      "end": 110
-                    },
-                    "arg_span": {
-                      "start": 125,
-                      "end": 130
-                    },
-                    "args": [
-                      [
-                        "arr",
-                        {
-                          "start": 126,
-                          "end": 129
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "LocalDec": [
-                                [
-                                  "str",
-                                  {
-                                    "start": 143,
-                                    "end": 146
-                                  }
-                                ],
-                                {
-                                  "data": {
-                                    "Literal": {
-                                      "String": "["
-                                    }
-                                  },
-                                  "span": {
-                                    "start": 149,
-                                    "end": 152
-                                  }
-                                }
-                              ]
-                            },
-                            "span": {
-                              "start": 137,
-                              "end": 152
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "array_tostring",
+                      {
+                        "start": 111,
+                        "end": 125
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 102,
+                          "end": 110
+                        },
+                        "arg_span": {
+                          "start": 125,
+                          "end": 130
+                        },
+                        "args": [
+                          [
+                            "arr",
+                            {
+                              "start": 126,
+                              "end": 129
                             }
-                          },
-                          {
-                            "data": {
-                              "Foreach": {
-                                "index_id": [
-                                  "idx",
-                                  {
-                                    "start": 166,
-                                    "end": 169
-                                  }
-                                ],
-                                "value_id": [
-                                  "val",
-                                  {
-                                    "start": 171,
-                                    "end": 174
-                                  }
-                                ],
-                                "iterable": {
-                                  "data": {
-                                    "Ident": "arr"
-                                  },
-                                  "span": {
-                                    "start": 178,
-                                    "end": 181
-                                  }
-                                },
-                                "body": {
-                                  "data": {
-                                    "Block": [
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
+                                "data": {
+                                  "LocalDec": [
+                                    [
+                                      "str",
                                       {
-                                        "data": {
-                                          "Expr": {
+                                        "start": 143,
+                                        "end": 146
+                                      }
+                                    ],
+                                    {
+                                      "data": {
+                                        "Literal": {
+                                          "String": "["
+                                        }
+                                      },
+                                      "span": {
+                                        "start": 149,
+                                        "end": 152
+                                      }
+                                    }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 137,
+                                  "end": 152
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Foreach": {
+                                    "index_id": [
+                                      "idx",
+                                      {
+                                        "start": 166,
+                                        "end": 169
+                                      }
+                                    ],
+                                    "value_id": [
+                                      "val",
+                                      {
+                                        "start": 171,
+                                        "end": 174
+                                      }
+                                    ],
+                                    "iterable": {
+                                      "data": {
+                                        "Ident": "arr"
+                                      },
+                                      "span": {
+                                        "start": 178,
+                                        "end": 181
+                                      }
+                                    },
+                                    "body": {
+                                      "data": {
+                                        "Block": [
+                                          {
                                             "data": {
-                                              "Assign": {
-                                                "target": {
-                                                  "Ident": [
-                                                    "str",
-                                                    {
-                                                      "start": 193,
-                                                      "end": 196
-                                                    }
-                                                  ]
-                                                },
-                                                "value": {
-                                                  "data": {
-                                                    "BinaryOp": {
-                                                      "op": "Add",
-                                                      "op_span": {
-                                                        "start": 203,
-                                                        "end": 204
-                                                      },
-                                                      "lhs": {
-                                                        "data": {
-                                                          "Ident": "str"
-                                                        },
-                                                        "span": {
-                                                          "start": 199,
-                                                          "end": 202
+                                              "Expr": {
+                                                "data": {
+                                                  "Assign": {
+                                                    "target": {
+                                                      "Ident": [
+                                                        "str",
+                                                        {
+                                                          "start": 193,
+                                                          "end": 196
+                                                        }
+                                                      ]
+                                                    },
+                                                    "value": {
+                                                      "data": {
+                                                        "BinaryOp": {
+                                                          "op": "Add",
+                                                          "op_span": {
+                                                            "start": 203,
+                                                            "end": 204
+                                                          },
+                                                          "lhs": {
+                                                            "data": {
+                                                              "Ident": "str"
+                                                            },
+                                                            "span": {
+                                                              "start": 199,
+                                                              "end": 202
+                                                            }
+                                                          },
+                                                          "rhs": {
+                                                            "data": {
+                                                              "Ident": "val"
+                                                            },
+                                                            "span": {
+                                                              "start": 205,
+                                                              "end": 208
+                                                            }
+                                                          }
                                                         }
                                                       },
-                                                      "rhs": {
-                                                        "data": {
-                                                          "Ident": "val"
-                                                        },
-                                                        "span": {
-                                                          "start": 205,
-                                                          "end": 208
-                                                        }
+                                                      "span": {
+                                                        "start": 199,
+                                                        "end": 208
                                                       }
+                                                    },
+                                                    "kind": "Normal",
+                                                    "op_span": {
+                                                      "start": 197,
+                                                      "end": 198
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 199,
-                                                    "end": 208
                                                   }
                                                 },
-                                                "kind": "Normal",
-                                                "op_span": {
-                                                  "start": 197,
-                                                  "end": 198
+                                                "span": {
+                                                  "start": 193,
+                                                  "end": 208
                                                 }
                                               }
                                             },
@@ -295,153 +305,153 @@
                                               "start": 193,
                                               "end": 208
                                             }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 193,
-                                          "end": 208
-                                        }
-                                      },
-                                      {
-                                        "data": {
-                                          "IfElse": [
-                                            {
-                                              "data": {
-                                                "BinaryOp": {
-                                                  "op": "Less",
-                                                  "op_span": {
-                                                    "start": 225,
-                                                    "end": 226
-                                                  },
-                                                  "lhs": {
-                                                    "data": {
-                                                      "Ident": "idx"
-                                                    },
-                                                    "span": {
-                                                      "start": 221,
-                                                      "end": 224
-                                                    }
-                                                  },
-                                                  "rhs": {
-                                                    "data": {
-                                                      "BinaryOp": {
-                                                        "op": "Sub",
-                                                        "op_span": {
-                                                          "start": 237,
-                                                          "end": 238
-                                                        },
-                                                        "lhs": {
-                                                          "data": {
-                                                            "FunctionCall": {
-                                                              "func": {
-                                                                "FieldAccess": [
-                                                                  {
-                                                                    "data": {
-                                                                      "Ident": "arr"
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 227,
-                                                                      "end": 230
-                                                                    }
-                                                                  },
-                                                                  [
-                                                                    "len",
-                                                                    {
-                                                                      "start": 231,
-                                                                      "end": 234
-                                                                    }
-                                                                  ]
-                                                                ]
-                                                              },
-                                                              "args": []
-                                                            }
-                                                          },
-                                                          "span": {
-                                                            "start": 234,
-                                                            "end": 236
-                                                          }
-                                                        },
-                                                        "rhs": {
-                                                          "data": {
-                                                            "Literal": {
-                                                              "Integer": 1
-                                                            }
-                                                          },
-                                                          "span": {
-                                                            "start": 239,
-                                                            "end": 240
-                                                          }
-                                                        }
-                                                      }
-                                                    },
-                                                    "span": {
-                                                      "start": 234,
-                                                      "end": 240
-                                                    }
-                                                  }
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 221,
-                                                "end": 240
-                                              }
-                                            },
-                                            {
-                                              "data": {
-                                                "Block": [
-                                                  {
-                                                    "data": {
-                                                      "Expr": {
+                                          },
+                                          {
+                                            "data": {
+                                              "IfElse": [
+                                                {
+                                                  "data": {
+                                                    "BinaryOp": {
+                                                      "op": "Less",
+                                                      "op_span": {
+                                                        "start": 225,
+                                                        "end": 226
+                                                      },
+                                                      "lhs": {
                                                         "data": {
-                                                          "Assign": {
-                                                            "target": {
-                                                              "Ident": [
-                                                                "str",
-                                                                {
-                                                                  "start": 256,
-                                                                  "end": 259
-                                                                }
-                                                              ]
+                                                          "Ident": "idx"
+                                                        },
+                                                        "span": {
+                                                          "start": 221,
+                                                          "end": 224
+                                                        }
+                                                      },
+                                                      "rhs": {
+                                                        "data": {
+                                                          "BinaryOp": {
+                                                            "op": "Sub",
+                                                            "op_span": {
+                                                              "start": 237,
+                                                              "end": 238
                                                             },
-                                                            "value": {
+                                                            "lhs": {
                                                               "data": {
-                                                                "BinaryOp": {
-                                                                  "op": "Add",
-                                                                  "op_span": {
-                                                                    "start": 266,
-                                                                    "end": 267
+                                                                "FunctionCall": {
+                                                                  "func": {
+                                                                    "FieldAccess": [
+                                                                      {
+                                                                        "data": {
+                                                                          "Ident": "arr"
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 227,
+                                                                          "end": 230
+                                                                        }
+                                                                      },
+                                                                      [
+                                                                        "len",
+                                                                        {
+                                                                          "start": 231,
+                                                                          "end": 234
+                                                                        }
+                                                                      ]
+                                                                    ]
                                                                   },
-                                                                  "lhs": {
-                                                                    "data": {
-                                                                      "Ident": "str"
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 262,
-                                                                      "end": 265
-                                                                    }
-                                                                  },
-                                                                  "rhs": {
-                                                                    "data": {
-                                                                      "Literal": {
-                                                                        "String": ", "
-                                                                      }
-                                                                    },
-                                                                    "span": {
-                                                                      "start": 268,
-                                                                      "end": 272
-                                                                    }
-                                                                  }
+                                                                  "args": []
                                                                 }
                                                               },
                                                               "span": {
-                                                                "start": 262,
-                                                                "end": 272
+                                                                "start": 234,
+                                                                "end": 236
                                                               }
                                                             },
-                                                            "kind": "Normal",
-                                                            "op_span": {
-                                                              "start": 260,
-                                                              "end": 261
+                                                            "rhs": {
+                                                              "data": {
+                                                                "Literal": {
+                                                                  "Integer": 1
+                                                                }
+                                                              },
+                                                              "span": {
+                                                                "start": 239,
+                                                                "end": 240
+                                                              }
+                                                            }
+                                                          }
+                                                        },
+                                                        "span": {
+                                                          "start": 234,
+                                                          "end": 240
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 221,
+                                                    "end": 240
+                                                  }
+                                                },
+                                                {
+                                                  "data": {
+                                                    "Block": [
+                                                      {
+                                                        "data": {
+                                                          "Expr": {
+                                                            "data": {
+                                                              "Assign": {
+                                                                "target": {
+                                                                  "Ident": [
+                                                                    "str",
+                                                                    {
+                                                                      "start": 256,
+                                                                      "end": 259
+                                                                    }
+                                                                  ]
+                                                                },
+                                                                "value": {
+                                                                  "data": {
+                                                                    "BinaryOp": {
+                                                                      "op": "Add",
+                                                                      "op_span": {
+                                                                        "start": 266,
+                                                                        "end": 267
+                                                                      },
+                                                                      "lhs": {
+                                                                        "data": {
+                                                                          "Ident": "str"
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 262,
+                                                                          "end": 265
+                                                                        }
+                                                                      },
+                                                                      "rhs": {
+                                                                        "data": {
+                                                                          "Literal": {
+                                                                            "String": ", "
+                                                                          }
+                                                                        },
+                                                                        "span": {
+                                                                          "start": 268,
+                                                                          "end": 272
+                                                                        }
+                                                                      }
+                                                                    }
+                                                                  },
+                                                                  "span": {
+                                                                    "start": 262,
+                                                                    "end": 272
+                                                                  }
+                                                                },
+                                                                "kind": "Normal",
+                                                                "op_span": {
+                                                                  "start": 260,
+                                                                  "end": 261
+                                                                }
+                                                              }
+                                                            },
+                                                            "span": {
+                                                              "start": 256,
+                                                              "end": 272
                                                             }
                                                           }
                                                         },
@@ -450,105 +460,110 @@
                                                           "end": 272
                                                         }
                                                       }
-                                                    },
-                                                    "span": {
-                                                      "start": 256,
-                                                      "end": 272
-                                                    }
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 0,
+                                                    "end": 282
                                                   }
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 0,
-                                                "end": 282
-                                              }
+                                                },
+                                                {
+                                                  "data": "Empty",
+                                                  "span": {
+                                                    "start": 0,
+                                                    "end": 0
+                                                  }
+                                                }
+                                              ]
                                             },
-                                            {
-                                              "data": "Empty",
-                                              "span": {
-                                                "start": 0,
-                                                "end": 0
-                                              }
+                                            "span": {
+                                              "start": 0,
+                                              "end": 282
                                             }
-                                          ]
-                                        },
-                                        "span": {
-                                          "start": 0,
-                                          "end": 282
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 288
-                                  }
-                                }
-                              }
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 288
-                            }
-                          },
-                          {
-                            "data": {
-                              "Return": {
-                                "data": {
-                                  "BinaryOp": {
-                                    "op": "Add",
-                                    "op_span": {
-                                      "start": 304,
-                                      "end": 305
-                                    },
-                                    "lhs": {
-                                      "data": {
-                                        "Ident": "str"
+                                          }
+                                        ]
                                       },
                                       "span": {
-                                        "start": 300,
-                                        "end": 303
-                                      }
-                                    },
-                                    "rhs": {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "]"
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 306,
-                                        "end": 309
+                                        "start": 0,
+                                        "end": 288
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 300,
+                                  "start": 0,
+                                  "end": 288
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Return": {
+                                    "data": {
+                                      "BinaryOp": {
+                                        "op": "Add",
+                                        "op_span": {
+                                          "start": 304,
+                                          "end": 305
+                                        },
+                                        "lhs": {
+                                          "data": {
+                                            "Ident": "str"
+                                          },
+                                          "span": {
+                                            "start": 300,
+                                            "end": 303
+                                          }
+                                        },
+                                        "rhs": {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "]"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 306,
+                                            "end": 309
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 300,
+                                      "end": 309
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 293,
                                   "end": 309
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 293,
-                              "end": 309
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 311
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 311
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 311
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 102,
+                    "end": 110
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 311
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 311
               }
-            ]
+            }
           },
           "span": {
             "start": 0,
@@ -786,188 +801,198 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "is_changed",
-                {
-                  "start": 413,
-                  "end": 423
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 404,
-                      "end": 412
-                    },
-                    "arg_span": {
-                      "start": 423,
-                      "end": 430
-                    },
-                    "args": [
-                      [
-                        "print",
-                        {
-                          "start": 424,
-                          "end": 429
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Expr": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "is_changed",
+                      {
+                        "start": 413,
+                        "end": 423
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 404,
+                          "end": 412
+                        },
+                        "arg_span": {
+                          "start": 423,
+                          "end": 430
+                        },
+                        "args": [
+                          [
+                            "print",
+                            {
+                              "start": 424,
+                              "end": 429
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
                                 "data": {
-                                  "FunctionCall": {
-                                    "func": {
-                                      "Expr": {
-                                        "data": {
-                                          "Ident": "print"
-                                        },
-                                        "span": {
-                                          "start": 437,
-                                          "end": 442
-                                        }
-                                      }
-                                    },
-                                    "args": [
-                                      {
-                                        "data": {
-                                          "BinaryOp": {
-                                            "op": "Add",
-                                            "op_span": {
-                                              "start": 447,
-                                              "end": 448
+                                  "Expr": {
+                                    "data": {
+                                      "FunctionCall": {
+                                        "func": {
+                                          "Expr": {
+                                            "data": {
+                                              "Ident": "print"
                                             },
-                                            "lhs": {
-                                              "data": {
-                                                "FieldAccess": [
-                                                  {
-                                                    "data": "Globals",
-                                                    "span": {
-                                                      "start": 443,
-                                                      "end": 445
-                                                    }
-                                                  },
-                                                  [
-                                                    "a",
-                                                    {
-                                                      "start": 445,
-                                                      "end": 446
-                                                    }
-                                                  ]
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 443,
-                                                "end": 446
-                                              }
-                                            },
-                                            "rhs": {
-                                              "data": {
-                                                "Literal": {
-                                                  "String": "\n"
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 449,
-                                                "end": 453
-                                              }
+                                            "span": {
+                                              "start": 437,
+                                              "end": 442
                                             }
                                           }
                                         },
-                                        "span": {
-                                          "start": 443,
-                                          "end": 453
-                                        }
+                                        "args": [
+                                          {
+                                            "data": {
+                                              "BinaryOp": {
+                                                "op": "Add",
+                                                "op_span": {
+                                                  "start": 447,
+                                                  "end": 448
+                                                },
+                                                "lhs": {
+                                                  "data": {
+                                                    "FieldAccess": [
+                                                      {
+                                                        "data": "Globals",
+                                                        "span": {
+                                                          "start": 443,
+                                                          "end": 445
+                                                        }
+                                                      },
+                                                      [
+                                                        "a",
+                                                        {
+                                                          "start": 445,
+                                                          "end": 446
+                                                        }
+                                                      ]
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 443,
+                                                    "end": 446
+                                                  }
+                                                },
+                                                "rhs": {
+                                                  "data": {
+                                                    "Literal": {
+                                                      "String": "\n"
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 449,
+                                                    "end": 453
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 443,
+                                              "end": 453
+                                            }
+                                          }
+                                        ]
                                       }
-                                    ]
+                                    },
+                                    "span": {
+                                      "start": 442,
+                                      "end": 454
+                                    }
                                   }
                                 },
                                 "span": {
                                   "start": 442,
                                   "end": 454
                                 }
-                              }
-                            },
-                            "span": {
-                              "start": 442,
-                              "end": 454
-                            }
-                          },
-                          {
-                            "data": {
-                              "Expr": {
+                              },
+                              {
                                 "data": {
-                                  "FunctionCall": {
-                                    "func": {
-                                      "Expr": {
-                                        "data": {
-                                          "Ident": "print"
-                                        },
-                                        "span": {
-                                          "start": 459,
-                                          "end": 464
-                                        }
-                                      }
-                                    },
-                                    "args": [
-                                      {
-                                        "data": {
-                                          "BinaryOp": {
-                                            "op": "Add",
-                                            "op_span": {
-                                              "start": 469,
-                                              "end": 470
+                                  "Expr": {
+                                    "data": {
+                                      "FunctionCall": {
+                                        "func": {
+                                          "Expr": {
+                                            "data": {
+                                              "Ident": "print"
                                             },
-                                            "lhs": {
-                                              "data": {
-                                                "FieldAccess": [
-                                                  {
-                                                    "data": "Globals",
-                                                    "span": {
-                                                      "start": 465,
-                                                      "end": 467
-                                                    }
-                                                  },
-                                                  [
-                                                    "b",
-                                                    {
-                                                      "start": 467,
-                                                      "end": 468
-                                                    }
-                                                  ]
-                                                ]
-                                              },
-                                              "span": {
-                                                "start": 465,
-                                                "end": 468
-                                              }
-                                            },
-                                            "rhs": {
-                                              "data": {
-                                                "Literal": {
-                                                  "String": "\n"
-                                                }
-                                              },
-                                              "span": {
-                                                "start": 471,
-                                                "end": 475
-                                              }
+                                            "span": {
+                                              "start": 459,
+                                              "end": 464
                                             }
                                           }
                                         },
-                                        "span": {
-                                          "start": 465,
-                                          "end": 475
-                                        }
+                                        "args": [
+                                          {
+                                            "data": {
+                                              "BinaryOp": {
+                                                "op": "Add",
+                                                "op_span": {
+                                                  "start": 469,
+                                                  "end": 470
+                                                },
+                                                "lhs": {
+                                                  "data": {
+                                                    "FieldAccess": [
+                                                      {
+                                                        "data": "Globals",
+                                                        "span": {
+                                                          "start": 465,
+                                                          "end": 467
+                                                        }
+                                                      },
+                                                      [
+                                                        "b",
+                                                        {
+                                                          "start": 467,
+                                                          "end": 468
+                                                        }
+                                                      ]
+                                                    ]
+                                                  },
+                                                  "span": {
+                                                    "start": 465,
+                                                    "end": 468
+                                                  }
+                                                },
+                                                "rhs": {
+                                                  "data": {
+                                                    "Literal": {
+                                                      "String": "\n"
+                                                    }
+                                                  },
+                                                  "span": {
+                                                    "start": 471,
+                                                    "end": 475
+                                                  }
+                                                }
+                                              }
+                                            },
+                                            "span": {
+                                              "start": 465,
+                                              "end": 475
+                                            }
+                                          }
+                                        ]
                                       }
-                                    ]
+                                    },
+                                    "span": {
+                                      "start": 464,
+                                      "end": 476
+                                    }
                                   }
                                 },
                                 "span": {
@@ -975,27 +1000,32 @@
                                   "end": 476
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 464,
-                              "end": 476
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 478
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 478
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 478
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 404,
+                    "end": 412
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 478
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 478
               }
-            ]
+            }
           },
           "span": {
             "start": 0,

@@ -6,7 +6,7 @@ use crate::lexer::{SpannedLexer, Token};
 use super::{
     ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp},
     error::{ParseError, ParseResult},
-    parse_function, parse_list, parse_table_or_class, FunctionDef,
+    parse_function, parse_list, parse_table_or_class,
 };
 
 pub fn parse_expr<'s, F: Fn(&Token) -> bool>(
@@ -131,16 +131,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
             Expr::table_decl(members, ctx, end_span)
         }
         Token::Function => {
-            let func_def = parse_function(tokens, ctx)?;
-            match func_def {
-                FunctionDef::Statement(stmt) => {
-                    return Err(ParseError::syntax_error(
-                        format!("Named function declaration cannot be used as an expression"),
-                        stmt.span,
-                    ));
-                }
-                FunctionDef::Expression(expr) => expr,
-            }
+            parse_function(tokens, ctx)?
         }
         Token::LeftSquareBracket => {
             tokens.stash((first_token, ctx)); // Put the bracket back

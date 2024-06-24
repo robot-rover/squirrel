@@ -15,120 +15,135 @@
       "Block": [
         {
           "data": {
-            "LocalDec": [
-              [
-                "min",
-                {
-                  "start": 9,
-                  "end": 12
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 0,
-                      "end": 8
-                    },
-                    "arg_span": {
-                      "start": 12,
-                      "end": 17
-                    },
-                    "args": [
-                      [
-                        "x",
-                        {
-                          "start": 13,
-                          "end": 14
-                        }
-                      ],
-                      [
-                        "y",
-                        {
-                          "start": 15,
-                          "end": 16
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Return": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "min",
+                      {
+                        "start": 9,
+                        "end": 12
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 0,
+                          "end": 8
+                        },
+                        "arg_span": {
+                          "start": 12,
+                          "end": 17
+                        },
+                        "args": [
+                          [
+                            "x",
+                            {
+                              "start": 13,
+                              "end": 14
+                            }
+                          ],
+                          [
+                            "y",
+                            {
+                              "start": 15,
+                              "end": 16
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
                           "data": {
-                            "Ternary": {
-                              "cond": {
-                                "data": {
-                                  "BinaryOp": {
-                                    "op": "Less",
-                                    "op_span": {
-                                      "start": 30,
-                                      "end": 31
-                                    },
-                                    "lhs": {
-                                      "data": {
-                                        "Ident": "x"
-                                      },
-                                      "span": {
-                                        "start": 29,
-                                        "end": 30
+                            "Return": {
+                              "data": {
+                                "Ternary": {
+                                  "cond": {
+                                    "data": {
+                                      "BinaryOp": {
+                                        "op": "Less",
+                                        "op_span": {
+                                          "start": 30,
+                                          "end": 31
+                                        },
+                                        "lhs": {
+                                          "data": {
+                                            "Ident": "x"
+                                          },
+                                          "span": {
+                                            "start": 29,
+                                            "end": 30
+                                          }
+                                        },
+                                        "rhs": {
+                                          "data": {
+                                            "Ident": "y"
+                                          },
+                                          "span": {
+                                            "start": 31,
+                                            "end": 32
+                                          }
+                                        }
                                       }
                                     },
-                                    "rhs": {
-                                      "data": {
-                                        "Ident": "y"
-                                      },
-                                      "span": {
-                                        "start": 31,
-                                        "end": 32
-                                      }
+                                    "span": {
+                                      "start": 29,
+                                      "end": 32
+                                    }
+                                  },
+                                  "true_expr": {
+                                    "data": {
+                                      "Ident": "x"
+                                    },
+                                    "span": {
+                                      "start": 33,
+                                      "end": 34
+                                    }
+                                  },
+                                  "false_expr": {
+                                    "data": {
+                                      "Ident": "y"
+                                    },
+                                    "span": {
+                                      "start": 35,
+                                      "end": 36
                                     }
                                   }
-                                },
-                                "span": {
-                                  "start": 29,
-                                  "end": 32
                                 }
                               },
-                              "true_expr": {
-                                "data": {
-                                  "Ident": "x"
-                                },
-                                "span": {
-                                  "start": 33,
-                                  "end": 34
-                                }
-                              },
-                              "false_expr": {
-                                "data": {
-                                  "Ident": "y"
-                                },
-                                "span": {
-                                  "start": 35,
-                                  "end": 36
-                                }
+                              "span": {
+                                "start": 29,
+                                "end": 36
                               }
                             }
                           },
                           "span": {
-                            "start": 29,
+                            "start": 22,
                             "end": 36
                           }
                         }
-                      },
-                      "span": {
-                        "start": 22,
-                        "end": 36
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 36
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 0,
+                    "end": 8
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 36
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 36
               }
-            ]
+            }
           },
           "span": {
             "start": 0,
@@ -137,120 +152,135 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "max",
-                {
-                  "start": 48,
-                  "end": 51
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 39,
-                      "end": 47
-                    },
-                    "arg_span": {
-                      "start": 51,
-                      "end": 56
-                    },
-                    "args": [
-                      [
-                        "x",
-                        {
-                          "start": 52,
-                          "end": 53
-                        }
-                      ],
-                      [
-                        "y",
-                        {
-                          "start": 54,
-                          "end": 55
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Return": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "max",
+                      {
+                        "start": 48,
+                        "end": 51
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 39,
+                          "end": 47
+                        },
+                        "arg_span": {
+                          "start": 51,
+                          "end": 56
+                        },
+                        "args": [
+                          [
+                            "x",
+                            {
+                              "start": 52,
+                              "end": 53
+                            }
+                          ],
+                          [
+                            "y",
+                            {
+                              "start": 54,
+                              "end": 55
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
                           "data": {
-                            "Ternary": {
-                              "cond": {
-                                "data": {
-                                  "BinaryOp": {
-                                    "op": "Greater",
-                                    "op_span": {
-                                      "start": 69,
-                                      "end": 70
-                                    },
-                                    "lhs": {
-                                      "data": {
-                                        "Ident": "x"
-                                      },
-                                      "span": {
-                                        "start": 68,
-                                        "end": 69
+                            "Return": {
+                              "data": {
+                                "Ternary": {
+                                  "cond": {
+                                    "data": {
+                                      "BinaryOp": {
+                                        "op": "Greater",
+                                        "op_span": {
+                                          "start": 69,
+                                          "end": 70
+                                        },
+                                        "lhs": {
+                                          "data": {
+                                            "Ident": "x"
+                                          },
+                                          "span": {
+                                            "start": 68,
+                                            "end": 69
+                                          }
+                                        },
+                                        "rhs": {
+                                          "data": {
+                                            "Ident": "y"
+                                          },
+                                          "span": {
+                                            "start": 70,
+                                            "end": 71
+                                          }
+                                        }
                                       }
                                     },
-                                    "rhs": {
-                                      "data": {
-                                        "Ident": "y"
-                                      },
-                                      "span": {
-                                        "start": 70,
-                                        "end": 71
-                                      }
+                                    "span": {
+                                      "start": 68,
+                                      "end": 71
+                                    }
+                                  },
+                                  "true_expr": {
+                                    "data": {
+                                      "Ident": "x"
+                                    },
+                                    "span": {
+                                      "start": 72,
+                                      "end": 73
+                                    }
+                                  },
+                                  "false_expr": {
+                                    "data": {
+                                      "Ident": "y"
+                                    },
+                                    "span": {
+                                      "start": 74,
+                                      "end": 75
                                     }
                                   }
-                                },
-                                "span": {
-                                  "start": 68,
-                                  "end": 71
                                 }
                               },
-                              "true_expr": {
-                                "data": {
-                                  "Ident": "x"
-                                },
-                                "span": {
-                                  "start": 72,
-                                  "end": 73
-                                }
-                              },
-                              "false_expr": {
-                                "data": {
-                                  "Ident": "y"
-                                },
-                                "span": {
-                                  "start": 74,
-                                  "end": 75
-                                }
+                              "span": {
+                                "start": 68,
+                                "end": 75
                               }
                             }
                           },
                           "span": {
-                            "start": 68,
+                            "start": 61,
                             "end": 75
                           }
                         }
-                      },
-                      "span": {
-                        "start": 61,
-                        "end": 75
                       }
+                    },
+                    "span": {
+                      "start": 39,
+                      "end": 75
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 39,
+                    "end": 47
                   }
-                },
-                "span": {
-                  "start": 39,
-                  "end": 75
                 }
+              },
+              "span": {
+                "start": 39,
+                "end": 75
               }
-            ]
+            }
           },
           "span": {
             "start": 39,
@@ -500,161 +530,196 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "typy",
-                {
-                  "start": 227,
-                  "end": 231
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 218,
-                      "end": 226
-                    },
-                    "arg_span": {
-                      "start": 231,
-                      "end": 236
-                    },
-                    "args": [
-                      [
-                        "obj",
-                        {
-                          "start": 232,
-                          "end": 235
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Switch": [
-                                {
-                                  "data": {
-                                    "UnaryOp": [
-                                      "TypeOf",
-                                      {
-                                        "data": {
-                                          "Ident": "obj"
-                                        },
-                                        "span": {
-                                          "start": 257,
-                                          "end": 260
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 250,
-                                    "end": 260
-                                  }
-                                },
-                                [
-                                  [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "typy",
+                      {
+                        "start": 227,
+                        "end": 231
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 218,
+                          "end": 226
+                        },
+                        "arg_span": {
+                          "start": 231,
+                          "end": 236
+                        },
+                        "args": [
+                          [
+                            "obj",
+                            {
+                              "start": 232,
+                              "end": 235
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
+                                "data": {
+                                  "Switch": [
                                     {
                                       "data": {
-                                        "Literal": {
-                                          "String": "integer"
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 281,
-                                        "end": 290
-                                      }
-                                    },
-                                    {
-                                      "data": {
-                                        "Block": []
-                                      },
-                                      "span": {
-                                        "start": 0,
-                                        "end": 0
-                                      }
-                                    }
-                                  ],
-                                  [
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "float"
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 305,
-                                        "end": 312
-                                      }
-                                    },
-                                    {
-                                      "data": {
-                                        "Block": [
+                                        "UnaryOp": [
+                                          "TypeOf",
                                           {
                                             "data": {
-                                              "Return": {
+                                              "Ident": "obj"
+                                            },
+                                            "span": {
+                                              "start": 257,
+                                              "end": 260
+                                            }
+                                          }
+                                        ]
+                                      },
+                                      "span": {
+                                        "start": 250,
+                                        "end": 260
+                                      }
+                                    },
+                                    [
+                                      [
+                                        {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "integer"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 281,
+                                            "end": 290
+                                          }
+                                        },
+                                        {
+                                          "data": {
+                                            "Block": []
+                                          },
+                                          "span": {
+                                            "start": 0,
+                                            "end": 0
+                                          }
+                                        }
+                                      ],
+                                      [
+                                        {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "float"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 305,
+                                            "end": 312
+                                          }
+                                        },
+                                        {
+                                          "data": {
+                                            "Block": [
+                                              {
                                                 "data": {
-                                                  "Literal": {
-                                                    "String": "is a number"
+                                                  "Return": {
+                                                    "data": {
+                                                      "Literal": {
+                                                        "String": "is a number"
+                                                      }
+                                                    },
+                                                    "span": {
+                                                      "start": 333,
+                                                      "end": 346
+                                                    }
                                                   }
                                                 },
                                                 "span": {
-                                                  "start": 333,
+                                                  "start": 326,
                                                   "end": 346
                                                 }
                                               }
-                                            },
-                                            "span": {
-                                              "start": 326,
-                                              "end": 346
-                                            }
+                                            ]
+                                          },
+                                          "span": {
+                                            "start": 0,
+                                            "end": 346
                                           }
-                                        ]
-                                      },
-                                      "span": {
-                                        "start": 0,
-                                        "end": 346
-                                      }
-                                    }
-                                  ],
-                                  [
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "table"
                                         }
-                                      },
-                                      "span": {
-                                        "start": 361,
-                                        "end": 368
-                                      }
-                                    },
-                                    {
-                                      "data": {
-                                        "Block": []
-                                      },
-                                      "span": {
-                                        "start": 0,
-                                        "end": 0
-                                      }
-                                    }
-                                  ],
-                                  [
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "array"
+                                      ],
+                                      [
+                                        {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "table"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 361,
+                                            "end": 368
+                                          }
+                                        },
+                                        {
+                                          "data": {
+                                            "Block": []
+                                          },
+                                          "span": {
+                                            "start": 0,
+                                            "end": 0
+                                          }
                                         }
-                                      },
-                                      "span": {
-                                        "start": 383,
-                                        "end": 390
-                                      }
-                                    },
+                                      ],
+                                      [
+                                        {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "array"
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 383,
+                                            "end": 390
+                                          }
+                                        },
+                                        {
+                                          "data": {
+                                            "Block": [
+                                              {
+                                                "data": {
+                                                  "Return": {
+                                                    "data": {
+                                                      "Literal": {
+                                                        "String": "is a container"
+                                                      }
+                                                    },
+                                                    "span": {
+                                                      "start": 411,
+                                                      "end": 427
+                                                    }
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 404,
+                                                  "end": 427
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "span": {
+                                            "start": 0,
+                                            "end": 427
+                                          }
+                                        }
+                                      ]
+                                    ],
                                     {
                                       "data": {
                                         "Block": [
@@ -663,80 +728,60 @@
                                               "Return": {
                                                 "data": {
                                                   "Literal": {
-                                                    "String": "is a container"
+                                                    "String": "is other stuff"
                                                   }
                                                 },
                                                 "span": {
-                                                  "start": 411,
-                                                  "end": 427
+                                                  "start": 465,
+                                                  "end": 481
                                                 }
                                               }
                                             },
                                             "span": {
-                                              "start": 404,
-                                              "end": 427
+                                              "start": 458,
+                                              "end": 481
                                             }
                                           }
                                         ]
                                       },
                                       "span": {
                                         "start": 0,
-                                        "end": 427
+                                        "end": 481
                                       }
                                     }
                                   ]
-                                ],
-                                {
-                                  "data": {
-                                    "Block": [
-                                      {
-                                        "data": {
-                                          "Return": {
-                                            "data": {
-                                              "Literal": {
-                                                "String": "is other stuff"
-                                              }
-                                            },
-                                            "span": {
-                                              "start": 465,
-                                              "end": 481
-                                            }
-                                          }
-                                        },
-                                        "span": {
-                                          "start": 458,
-                                          "end": 481
-                                        }
-                                      }
-                                    ]
-                                  },
-                                  "span": {
-                                    "start": 0,
-                                    "end": 481
-                                  }
+                                },
+                                "span": {
+                                  "start": 243,
+                                  "end": 487
                                 }
-                              ]
-                            },
-                            "span": {
-                              "start": 243,
-                              "end": 487
-                            }
+                              }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 489
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 489
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 489
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 218,
+                    "end": 226
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 489
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 489
               }
-            ]
+            }
           },
           "span": {
             "start": 0,

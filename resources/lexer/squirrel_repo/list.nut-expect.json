@@ -69,13 +69,14 @@
   "Newline",
   "LeftCurlyBrace",
   "Newline",
+  "Newline",
   "Local",
   {
     "Identifier": "size"
   },
   "Assign",
   {
-    "Integer": 10000
+    "Integer": 10
   },
   "Newline",
   "Local",
@@ -376,7 +377,7 @@
   },
   "LeftParenthesis",
   {
-    "String": "failed"
+    "String": "failed\n"
   },
   "RightParenthesis",
   "Semicolon",
@@ -392,7 +393,7 @@
   },
   "LeftParenthesis",
   {
-    "String": "oki doki"
+    "String": "oki doki\n"
   },
   "RightParenthesis",
   "Semicolon",

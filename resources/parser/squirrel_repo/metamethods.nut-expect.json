@@ -1864,184 +1864,199 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "vector",
-                {
-                  "start": 1003,
-                  "end": 1009
-                }
-              ],
-              {
-                "data": {
-                  "FunctionDef": {
-                    "keyword_span": {
-                      "start": 994,
-                      "end": 1002
-                    },
-                    "arg_span": {
-                      "start": 1009,
-                      "end": 1019
-                    },
-                    "args": [
-                      [
-                        "_x",
-                        {
-                          "start": 1010,
-                          "end": 1012
-                        }
-                      ],
-                      [
-                        "_y",
-                        {
-                          "start": 1013,
-                          "end": 1015
-                        }
-                      ],
-                      [
-                        "_z",
-                        {
-                          "start": 1016,
-                          "end": 1018
-                        }
-                      ]
-                    ],
-                    "default_expr": [],
-                    "is_varargs": false,
-                    "body": {
-                      "data": {
-                        "Block": [
-                          {
-                            "data": {
-                              "Return": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Ident": [
+                      "vector",
+                      {
+                        "start": 1003,
+                        "end": 1009
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionDef": {
+                        "keyword_span": {
+                          "start": 994,
+                          "end": 1002
+                        },
+                        "arg_span": {
+                          "start": 1009,
+                          "end": 1019
+                        },
+                        "args": [
+                          [
+                            "_x",
+                            {
+                              "start": 1010,
+                              "end": 1012
+                            }
+                          ],
+                          [
+                            "_y",
+                            {
+                              "start": 1013,
+                              "end": 1015
+                            }
+                          ],
+                          [
+                            "_z",
+                            {
+                              "start": 1016,
+                              "end": 1018
+                            }
+                          ]
+                        ],
+                        "default_expr": [],
+                        "is_varargs": false,
+                        "body": {
+                          "data": {
+                            "Block": [
+                              {
                                 "data": {
-                                  "FunctionCall": {
-                                    "func": {
-                                      "FieldAccess": [
-                                        {
-                                          "data": {
-                                            "TableDecl": [
-                                              [
-                                                {
-                                                  "data": {
-                                                    "Literal": {
-                                                      "String": "x"
+                                  "Return": {
+                                    "data": {
+                                      "FunctionCall": {
+                                        "func": {
+                                          "FieldAccess": [
+                                            {
+                                              "data": {
+                                                "TableDecl": [
+                                                  [
+                                                    {
+                                                      "data": {
+                                                        "Literal": {
+                                                          "String": "x"
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 1034,
+                                                        "end": 1035
+                                                      }
+                                                    },
+                                                    {
+                                                      "data": {
+                                                        "Ident": "_x"
+                                                      },
+                                                      "span": {
+                                                        "start": 1036,
+                                                        "end": 1038
+                                                      }
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 1034,
-                                                    "end": 1035
-                                                  }
-                                                },
-                                                {
-                                                  "data": {
-                                                    "Ident": "_x"
-                                                  },
-                                                  "span": {
-                                                    "start": 1036,
-                                                    "end": 1038
-                                                  }
-                                                }
-                                              ],
-                                              [
-                                                {
-                                                  "data": {
-                                                    "Literal": {
-                                                      "String": "y"
+                                                  ],
+                                                  [
+                                                    {
+                                                      "data": {
+                                                        "Literal": {
+                                                          "String": "y"
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 1039,
+                                                        "end": 1040
+                                                      }
+                                                    },
+                                                    {
+                                                      "data": {
+                                                        "Ident": "_y"
+                                                      },
+                                                      "span": {
+                                                        "start": 1041,
+                                                        "end": 1043
+                                                      }
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 1039,
-                                                    "end": 1040
-                                                  }
-                                                },
-                                                {
-                                                  "data": {
-                                                    "Ident": "_y"
-                                                  },
-                                                  "span": {
-                                                    "start": 1041,
-                                                    "end": 1043
-                                                  }
-                                                }
-                                              ],
-                                              [
-                                                {
-                                                  "data": {
-                                                    "Literal": {
-                                                      "String": "z"
+                                                  ],
+                                                  [
+                                                    {
+                                                      "data": {
+                                                        "Literal": {
+                                                          "String": "z"
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 1044,
+                                                        "end": 1045
+                                                      }
+                                                    },
+                                                    {
+                                                      "data": {
+                                                        "Ident": "_z"
+                                                      },
+                                                      "span": {
+                                                        "start": 1046,
+                                                        "end": 1048
+                                                      }
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 1044,
-                                                    "end": 1045
-                                                  }
-                                                },
-                                                {
-                                                  "data": {
-                                                    "Ident": "_z"
-                                                  },
-                                                  "span": {
-                                                    "start": 1046,
-                                                    "end": 1048
-                                                  }
-                                                }
-                                              ]
+                                                  ]
+                                                ]
+                                              },
+                                              "span": {
+                                                "start": 1033,
+                                                "end": 1050
+                                              }
+                                            },
+                                            [
+                                              "setdelegate",
+                                              {
+                                                "start": 1051,
+                                                "end": 1062
+                                              }
                                             ]
-                                          },
-                                          "span": {
-                                            "start": 1033,
-                                            "end": 1050
-                                          }
+                                          ]
                                         },
-                                        [
-                                          "setdelegate",
+                                        "args": [
                                           {
-                                            "start": 1051,
-                                            "end": 1062
+                                            "data": {
+                                              "Ident": "base_vec"
+                                            },
+                                            "span": {
+                                              "start": 1063,
+                                              "end": 1071
+                                            }
                                           }
                                         ]
-                                      ]
-                                    },
-                                    "args": [
-                                      {
-                                        "data": {
-                                          "Ident": "base_vec"
-                                        },
-                                        "span": {
-                                          "start": 1063,
-                                          "end": 1071
-                                        }
                                       }
-                                    ]
+                                    },
+                                    "span": {
+                                      "start": 1062,
+                                      "end": 1072
+                                    }
                                   }
                                 },
                                 "span": {
-                                  "start": 1062,
+                                  "start": 1026,
                                   "end": 1072
                                 }
                               }
-                            },
-                            "span": {
-                              "start": 1026,
-                              "end": 1072
-                            }
+                            ]
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 1075
                           }
-                        ]
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 1075
+                        }
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 1075
                     }
+                  },
+                  "kind": "NewSlot",
+                  "op_span": {
+                    "start": 994,
+                    "end": 1002
                   }
-                },
-                "span": {
-                  "start": 0,
-                  "end": 1075
                 }
+              },
+              "span": {
+                "start": 0,
+                "end": 1075
               }
-            ]
+            }
           },
           "span": {
             "start": 0,

@@ -276,7 +276,7 @@ impl fmt::Display for Value {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Clone)]
 pub struct Object {
     delegate: Option<Rc<RefCell<Object>>>,
     slots: HashMap<HashValue, Value>,
@@ -304,17 +304,17 @@ impl Object {
         self.delegate.as_ref()
     }
 
-    pub fn set_field(&mut self, key: HashValue, value: Value, is_newslot: bool) -> bool {
+    pub fn set_field(&mut self, key: HashValue, value: Value, is_newslot: bool) -> Result<(), HashValue> {
         if is_newslot || self.slots.contains_key(&key) {
             self.slots.insert(key, value);
-            true
+            Ok(())
         } else {
-            match &mut self.delegate {
+            match self.delegate.as_ref() {
                 Some(delegate) => {
                     let mut parent = delegate.borrow_mut();
                     parent.set_field(key, value, is_newslot)
                 }
-                None => false,
+                None => Err(key),
             }
         }
     }
@@ -415,6 +415,16 @@ impl Object {
         argparse::parse0(args, call_info)?;
         let values = this.borrow().slots.values().cloned().collect::<Vec<_>>();
         Ok(Value::array(values))
+    }
+}
+
+impl fmt::Debug for Object {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Object")
+            .field("ptr", &(self as *const Object))
+            .field("delegate", &self.delegate.as_ref().map(|del| del.deref().borrow().deref() as *const Object))
+            .field("is_class_inst", &self.is_class_inst)
+            .finish_non_exhaustive()
     }
 }
 

@@ -395,24 +395,10 @@ fn parse_table_slot<'s>(tokens: &mut SpannedLexer<'s>, sep: &Token) -> ParseResu
     Ok((key, value))
 }
 
-enum FunctionDef {
-    Statement(Statement),
-    Expression(Expr),
-}
-
-impl From<FunctionDef> for Statement {
-    fn from(func_def: FunctionDef) -> Self {
-        match func_def {
-            FunctionDef::Statement(stmt) => stmt,
-            FunctionDef::Expression(expr) => expr.into(),
-        }
-    }
-}
-
 fn parse_function<'s>(
     tokens: &mut SpannedLexer<'s>,
     keyword_span: Span,
-) -> ParseResult<FunctionDef> {
+) -> ParseResult<Expr> {
     let target = match tokens.peek_token(true)?.0 {
         Token::Identifier(_) => Some(parse_hier_path(tokens)?),
         _ => None,
@@ -421,16 +407,13 @@ fn parse_function<'s>(
     let func_def = Expr::function_def(func, keyword_span);
     // TODO: Share logic with class
     let fd = match target {
-        Some(AssignTarget::Ident(ident)) => {
-            FunctionDef::Statement(Statement::local_dec(ident, func_def, keyword_span))
-        }
-        Some(other) => FunctionDef::Statement(Statement::expr(Expr::assign(
+        Some(other) => Expr::assign(
             other,
             keyword_span,
             func_def,
             AssignKind::NewSlot,
-        ))),
-        None => FunctionDef::Expression(func_def),
+        ),
+        None => func_def,
     };
     Ok(fd)
 }
