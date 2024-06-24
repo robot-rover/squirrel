@@ -4,7 +4,7 @@ use super::{value::{TypeName, Value}, CallInfo, ExecError};
 
 
 pub fn validate_num_args(expected: Range<usize>, actual: usize, call_info: &CallInfo) -> Result<(), ExecError> {
-    if expected.contains(&actual) {
+    if expected.start <= actual && actual <= expected.end {
         Ok(())
     } else {
         Err(ExecError::wrong_arg_count(call_info.clone(), expected, actual, None))

@@ -1,6 +1,7 @@
 use std::{
-    borrow::BorrowMut, cell::RefCell, collections::HashMap, env, io::{self, Write}, ops::Deref, rc::Rc
+    borrow::BorrowMut, cell::RefCell, env, io::{self, Write}, ops::Deref, rc::Rc
 };
+use hashbrown::HashMap;
 
 use crate::{
     context::{Span, SquirrelError},
@@ -198,8 +199,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
-        )
-        .into()),
+        )),
         ExprData::FunctionDef(func_def) => Ok(Value::closure(Closure::new(
             func_def,
             func_def
@@ -334,6 +334,7 @@ fn run_function_call(
             (context.infunc.env.clone(), func)
         }
     };
+    println!("rawcall(env: {env:?}, func: {func_val:?}");
     run_rawcall(context, func_val, env, args, func.span(), args_span)
 }
 
@@ -366,7 +367,7 @@ fn run_rawcall(
         }
         Value::NativeFn(func) => {
             let call_info = CallInfo { func_span, call_span };
-            func(context as *mut _, args, &call_info)
+            func(context as *mut _, env, args, &call_info)
         }
         other => panic!("Can't call non-function {other:?}"),
     }

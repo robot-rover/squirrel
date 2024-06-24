@@ -1,4 +1,5 @@
-use std::{borrow::Borrow, cell::RefCell, collections::HashMap, io, ops::{Deref, Range}, rc::Rc};
+use std::{borrow::Borrow, cell::RefCell, io, ops::{Deref, Range}, rc::Rc};
+use hashbrown::HashMap;
 
 use ariadne::Color;
 use value::{Closure, Object, Value};
@@ -100,7 +101,7 @@ macro_rules! variant_constructor {
 }
 
 #[derive(Debug, Clone)]
-struct CallInfo {
+pub struct CallInfo {
     func_span: Span,
     call_span: Span,
 }

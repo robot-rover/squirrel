@@ -1,13 +1,14 @@
 use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
-use std::{collections::HashMap, ptr::NonNull, rc::Rc};
+use std::{ptr::NonNull, rc::Rc};
+use hashbrown::{Equivalent, HashMap};
 
 use crate::parser::ast::{self, Expr};
 
 use super::{
-    argparse, CallInfo, Context, ExecError, ExprResult
+    argparse, builtins, CallInfo, Context, ExecError, ExprResult
 };
 
-pub type NativeFn = fn(*mut Context, Vec<Value>, &CallInfo) -> Result<Value, ExecError>;
+pub type NativeFn = fn(*mut Context, Value, Vec<Value>, &CallInfo) -> Result<Value, ExecError>;
 
 #[derive(Debug, Clone)]
 pub enum Value {
@@ -70,18 +71,28 @@ impl Value {
     }
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
-        match self {
-            Value::Float(f) => todo!(),
-            Value::Integer(i) => todo!(),
-            Value::Null => todo!(),
-            Value::NativeFn(n) => todo!(),
-            _ => todo!(),
+        if let HashValue::String(key) = key {
+            self.get_field_str(key)
+        } else {
+            match (self, key) {
+                (Value::Object(obj), any) => obj.borrow().get_field(any),
+                (Value::Array(arr), HashValue::Integer(i)) => arr.borrow().get(*i as usize).cloned(),
+                _ => None,
+            }
         }
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        // TODO: Inefficient
-        self.get_field(&HashValue::string(key))
+        match self {
+            Value::Float(_) => todo!(),
+            Value::Integer(_) => builtins::integer::delegate(key),
+            Value::Null => todo!(),
+            Value::NativeFn(_) => todo!(),
+            Value::String(_) => builtins::string::delegate(key),
+            Value::Object(obj) => obj.borrow().get_field_str(key),
+            Value::Array(_) => builtins::array::delegate(key),
+            Value::Closure(_) => todo!(),
+        }
     }
 
     pub fn type_str(&self) -> &'static str {
@@ -142,7 +153,8 @@ impl PartialEq for HashValue {
 impl Eq for HashValue {}
 impl Hash for HashValue {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        core::mem::discriminant(self).hash(state);
+        // Todo: This breaks impl Equivalent<HashValue> for str
+        // core::mem::discriminant(self).hash(state);
         match self {
             HashValue::Integer(i) => i.hash(state),
             HashValue::Null => {},
@@ -197,6 +209,16 @@ impl TryFrom<Value> for HashValue {
             other => return Err(other),
         };
         Ok(val)
+    }
+}
+
+impl Equivalent<HashValue> for str {
+    fn equivalent(&self, key: &HashValue) -> bool {
+        if let HashValue::String(s) = key {
+            self == Rc::deref(s)
+        } else {
+            false
+        }
     }
 }
 
@@ -303,31 +325,28 @@ impl Object {
         if let Some(value) = self.slots.get(key) {
             return Some(value.clone().into());
         }
-        match &self.delegate {
-            Some(delegate) => {
-                let parent = delegate.borrow();
-                parent.get_field(key)
-            }
-            None => return None,
-        }
+        self.delegate.as_ref().and_then(|del| del.borrow().get_field(key)).or_else(|| match key {
+            HashValue::String(s) => builtins::object::delegate(s),
+            _ => None,
+        })
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        // TODO: Inefficient
-        let key = HashValue::string(key);
-        self.get_field(&key)
+        if let Some(value) = self.slots.get(key) {
+            return Some(value.clone().into());
+        }
+        self.delegate.as_ref().and_then(|del| del.borrow().get_field_str(key)).or_else(|| builtins::object::delegate(key))
+    }
+
+    pub fn len(&self) -> usize {
+        self.slots.len()
     }
 
     // Squirrel Default Delegate Functions
     pub fn rawget(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
         let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
         this.borrow().slots.get(&hash_key).map(|v| v.clone()).ok_or_else(|| ExecError::undefined_field(call_info.call_span, hash_key.clone().into()))
-    }
-
-    pub fn len(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
-        argparse::parse0(args, call_info)?;
-        Ok(Value::Integer(this.borrow().slots.len() as i64))
     }
 
     pub fn rawset(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
@@ -338,13 +357,13 @@ impl Object {
     }
 
     pub fn rawdelete(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult { let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
         Ok(this.borrow_mut().slots.remove(&hash_key).unwrap_or(Value::Null))
     }
 
     pub fn rawin(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
         let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
         Ok(Value::boolean(this.borrow().slots.contains_key(&hash_key)))
     }
 
