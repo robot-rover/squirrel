@@ -3,7 +3,7 @@ mod pratt;
 
 use std::convert::TryInto;
 
-use ast::{AssignKind, AssignTarget};
+use ast::{AssignKind, AssignTarget, CallTarget};
 use error::{ParseError, ParseResult};
 use pratt::{parse_expr, parse_expr_line, parse_expr_token};
 
@@ -61,7 +61,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
             tokens.skip_token();
             Statement::empty_stmt()
         }
-        Token::Class => parse_class(tokens)?,
+        Token::Class => parse_class(tokens)?.into(),
         Token::If => parse_if(tokens)?,
         // TODO: Combine with Yield
         Token::Return => {
@@ -266,59 +266,34 @@ fn parse_if<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     Ok(Statement::if_else(cond, body, else_body, if_span))
 }
 
-fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
+fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
     let class_span = tokens.expect_token(Token::Class, true)?;
-    let mut first_token_span = tokens.next_token(true)?;
-    let mut decl_path = Vec::new();
-    // Todo: need a parse in loop seperated by token function
-    if let (Token::Identifier(name), name_span) = first_token_span {
-        decl_path.push((name, name_span));
-        loop {
-            first_token_span = tokens.next_token(true)?;
-            if let (Token::Period, _) = first_token_span {
-                let (ident_token, ident_span) = tokens.next_token(true)?;
-                let Token::Identifier(name) = ident_token else {
-                    return Err(ParseError::unexpected_token(ident_token, ident_span));
-                };
-                decl_path.push((name, ident_span));
-            } else {
-                break;
-            }
-        }
-    }
-    let parent = if let (Token::Extends, _) = first_token_span {
+
+    let target = if let (Token::Identifier(_), _) = tokens.peek_token(true)? {
+        Some(parse_hier_path(tokens, Token::Period)?)
+    } else {
+        None
+    };
+    let parent = if let (Token::Extends, _) = tokens.peek_token(true)? {
+        tokens.skip_token();
         let (parent_ident, ctx) = tokens.next_token(true)?;
         if let Token::Identifier(parent_name) = parent_ident {
-            let parent_option = Some((parent_name, ctx));
-            first_token_span = tokens.next_token(true)?;
-            parent_option
+            Some((parent_name, ctx))
         } else {
             return Err(ParseError::unexpected_token(parent_ident, ctx));
         }
     } else {
         None
     };
-    let (first_token, ctx) = first_token_span;
-    if first_token != Token::LeftCurlyBrace {
-        return Err(ParseError::unexpected_token(first_token, ctx));
-    }
+    tokens.expect_token(Token::LeftCurlyBrace, true)?;
     let (members, end_span) = parse_table_or_class(tokens, &Token::Semicolon, true)?;
     let body = Expr::class_def(parent, members, class_span, end_span);
-    if let Some(class_name) = decl_path.pop() {
-        let base = decl_path
-            .into_iter()
-            .fold(None, |acc, (name, span)| match acc {
-                Some(parent) => Some(Expr::field_access(parent, (name, span))),
-                None => Some((name, span).into()),
-            });
-        let target = match base {
-            Some(base_expr) => AssignTarget::FieldAccess(Box::new(base_expr), class_name),
-            None => AssignTarget::Ident(class_name),
-        };
-        Ok(Expr::assign(target, class_span, body, AssignKind::NewSlot).into())
+
+    Ok(if let Some(target) = target {
+        Expr::assign(target, class_span, body, AssignKind::NewSlot)
     } else {
-        Ok(body.into())
-    }
+        body
+    })
 }
 
 fn parse_table_or_class<'s>(
@@ -399,26 +374,26 @@ fn parse_function<'s>(
     tokens: &mut SpannedLexer<'s>,
     keyword_span: Span,
 ) -> ParseResult<Expr> {
-    let target = match tokens.peek_token(true)?.0 {
-        Token::Identifier(_) => Some(parse_hier_path(tokens)?),
-        _ => None,
+    let target = if let (Token::Identifier(_), _) = tokens.peek_token(true)? {
+        Some(parse_hier_path(tokens, Token::DoubleColon)?)
+    } else {
+        None
     };
     let func = parse_function_args_body(tokens, keyword_span)?;
     let func_def = Expr::function_def(func, keyword_span);
-    // TODO: Share logic with class
-    let fd = match target {
-        Some(other) => Expr::assign(
-            other,
+    Ok(if let Some(target) = target {
+        Expr::assign(
+            target,
             keyword_span,
             func_def,
             AssignKind::NewSlot,
-        ),
-        None => func_def,
-    };
-    Ok(fd)
+        )
+    } else {
+        func_def
+    })
 }
 
-fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<AssignTarget> {
+fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>, sep: Token) -> ParseResult<AssignTarget> {
     let mut elements = Vec::new();
     loop {
         let (token, span) = tokens.next_token(true)?;
@@ -429,7 +404,7 @@ fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<AssignTarge
             other => return Err(ParseError::unexpected_token(other, span)),
         }
         match tokens.peek_token(true)? {
-            (Token::DoubleColon, _) => tokens.skip_token(),
+            (tok, _) if tok == &sep => tokens.skip_token(),
             _ => break,
         }
     }
@@ -438,7 +413,8 @@ fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<AssignTarge
     for (name, span) in iter {
         target = Expr::field_access(target, (name, span));
     }
-    target.try_into()
+
+    Ok(target.try_into().expect("This should be infallible"))
 }
 
 fn parse_list<'s>(

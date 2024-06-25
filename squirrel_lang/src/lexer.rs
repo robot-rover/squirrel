@@ -437,7 +437,8 @@ impl SpannedLexer<'_> {
     }
 
     pub fn skip_token(&mut self) {
-        self.next().unwrap().unwrap();
+        assert!(self.stored_next.is_some(), "Can only call skip_token after a peek() call");
+        self.stored_next.take();
     }
 
     pub fn stash(&mut self, tsp: (Token, Span)) {
