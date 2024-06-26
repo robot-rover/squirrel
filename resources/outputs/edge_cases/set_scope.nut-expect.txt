@@ -1,16 +1,16 @@
 a: <I am table a>[key1, what_is_this, key2]
-root: (table : 0x0x55e13d353f80)[a, log, regexp, newthread, swapfloat, dummy, _versionnumber_, format, srand, floor, sqrt, system, setdebughook, pow, array, seterrorhandler, startswith, atan, castf2i, tan, cos, RAND_MAX, show_keys, ceil, escape, asin, endswith, _version_, a_del, stdout, compilestring, rand, setconsttable, getroottable, print, getstackinfos, remove, stderr, enabledebuginfo, casti2f, getconsttable, setroottable, PI, blob, file, split, rstrip, lstrip, strip, printf, exp, fabs, _intsize_, getenv, log10, sin, stream, time, swap2, assert, _charsize_, _floatsize_, resurrectunreachable, callee, type, collectgarbage, swap4, abs, acos, writeclosuretofile, clock, date, stdin, rename, dofile, atan2, suspend, error, loadfile]
+root: (table : 0x0x561b3c349f80)[a, log, regexp, newthread, swapfloat, dummy, _versionnumber_, format, srand, floor, sqrt, system, setdebughook, pow, array, seterrorhandler, startswith, atan, castf2i, tan, cos, RAND_MAX, show_keys, ceil, escape, asin, endswith, _version_, a_del, stdout, compilestring, rand, setconsttable, getroottable, print, getstackinfos, remove, stderr, enabledebuginfo, casti2f, getconsttable, setroottable, PI, blob, file, split, rstrip, lstrip, strip, printf, exp, fabs, _intsize_, getenv, log10, sin, stream, time, swap2, assert, _charsize_, _floatsize_, resurrectunreachable, callee, type, collectgarbage, swap4, abs, acos, writeclosuretofile, clock, date, stdin, rename, dofile, atan2, suspend, error, loadfile]
 This Check:
   this: <I am table a>
   base: null
-  del: (table : 0x0x55e13d35e710)
-  a_del: (table : 0x0x55e13d35e710)
-  root: (table : 0x0x55e13d353f80)
+  del: (table : 0x0x561b3c354710)
+  a_del: (table : 0x0x561b3c354710)
+  root: (table : 0x0x561b3c349f80)
 End This Check
 <I am table a>
-root: (table : 0x0x55e13d353f80)Set Stuff Check
-(table : 0x0x55e13d35fd10)[set_stuff, set_this, set]
-Finding a in env(table : 0x0x55e13d35fd10)[ns_this, set, ns, set_this, set_stuff]
-(table : 0x0x55e13d353f80)[a, log, b, regexp, newthread, swapfloat, dummy, _versionnumber_, format, srand, floor, sqrt, system, setdebughook, pow, array, seterrorhandler, startswith, atan, castf2i, tan, cos, RAND_MAX, show_keys, ceil, escape, asin, endswith, _version_, a_del, stdout, compilestring, rand, setconsttable, getroottable, print, getstackinfos, remove, stderr, enabledebuginfo, casti2f, getconsttable, setroottable, PI, blob, file, split, rstrip, lstrip, strip, printf, exp, fabs, _intsize_, getenv, log10, sin, stream, time, swap2, assert, _charsize_, _floatsize_, resurrectunreachable, callee, type, collectgarbage, swap4, abs, acos, writeclosuretofile, clock, date, stdin, rename, dofile, atan2, suspend, error, loadfile]
+root: (table : 0x0x561b3c349f80)Set Stuff Check
+(table : 0x0x561b3c355d10)[set_stuff, set_this, set]
+Finding a in env(table : 0x0x561b3c355d10)[ns_this, set, ns, set_this, set_stuff]
+(table : 0x0x561b3c349f80)[a, log, b, regexp, newthread, swapfloat, dummy, _versionnumber_, format, srand, floor, sqrt, system, setdebughook, pow, array, seterrorhandler, startswith, atan, castf2i, tan, cos, RAND_MAX, show_keys, ceil, escape, asin, endswith, _version_, a_del, stdout, compilestring, rand, setconsttable, getroottable, print, getstackinfos, remove, stderr, enabledebuginfo, casti2f, getconsttable, setroottable, PI, blob, file, split, rstrip, lstrip, strip, printf, exp, fabs, _intsize_, getenv, log10, sin, stream, time, swap2, assert, _charsize_, _floatsize_, resurrectunreachable, callee, type, collectgarbage, swap4, abs, acos, writeclosuretofile, clock, date, stdin, rename, dofile, atan2, suspend, error, loadfile]
 <I am table a><I am table a>null
-(table : 0x0x55e13d35fd10)[ns_this, set, ns, set_this, set_stuff]
+(table : 0x0x561b3c355d10)[ns_this, set, ns, set_this, set_stuff]

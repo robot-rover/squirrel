@@ -35,9 +35,8 @@ pub fn run(
     stdout: Option<&mut dyn io::Write>,
 ) -> Result<(), SquirrelError> {
     let root = init_root();
-    let root_closure = Closure::new(
+    let root_closure = Closure::root(
         tree,
-        Vec::new(),
         Value::Object(root.clone()),
     );
     let arg_vals = env::args()
@@ -203,6 +202,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
+                &context.infunc,
                 Value::Object(context.vm_state.root_table.clone()),
         ))),
         ExprData::ClassDef { parent, members } => run_class(context, parent.as_ref(), members),
@@ -308,7 +308,9 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             }
             return Ok(Value::Null);
         }
-        ExprData::Local(idx, span) => todo!(),
+        ExprData::Local(idx, span) => {
+            Ok(context.infunc.locals[*idx as usize].deref().borrow().clone())
+        },
     }
 }
 
@@ -382,11 +384,6 @@ fn run_function(context: &mut Context, body: &Statement) -> ExprResult {
 }
 
 fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult {
-    let local_match = context.infunc.locals.get(ident);
-    if let Some(value) = local_match {
-        return Ok(value.clone());
-    }
-
     let env_match = context.infunc.env.get_field_str(&ident);
     if let Some(value) = env_match {
         return Ok(value);
@@ -613,7 +610,9 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
                 .get_field_str(&field.0)
                 .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
-        AssignTarget::Local(idx, span) => todo!(),
+        AssignTarget::Local(idx, span) => {
+            Ok(context.infunc.locals[*idx as usize].deref().borrow().clone())
+        },
     }
 }
 
@@ -625,12 +624,12 @@ fn run_assign(
 ) -> Result<(), ExecError> {
     let span = target.span();
     let (target_obj, index)= match target {
+        AssignTarget::Local(idx, span) => {
+            assert!(!is_newslot, "Can't create a local slot");
+            *context.infunc.locals[*idx as usize].deref().borrow_mut() = val;
+            return Ok(())
+        }
         AssignTarget::Ident(ident) => {
-            if let Some(local) = context.infunc.locals.get_mut(&ident.0) {
-                assert!(!is_newslot, "Can't create a local slot");
-                *local = val.clone();
-                return Ok(())
-            }
             let env = context.infunc.env.clone();
             let val = HashValue::string(&ident.0);
             (env, val)
@@ -648,7 +647,6 @@ fn run_assign(
             let index = HashValue::string(&field.0);
             (parent, index)
         },
-        AssignTarget::Local(idx, span) => todo!(),
     };
 
     match (target_obj, index) {

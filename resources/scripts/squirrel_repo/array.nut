@@ -12,6 +12,7 @@ if(vargv.len()!=0) {
   n = 1;
 }
 
+::print("n = "+n.tostring()+"\n");
 local x = []; x.resize(n);
 local y = []; y.resize(n);
 

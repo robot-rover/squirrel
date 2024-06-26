@@ -17,7 +17,7 @@ use crate::{
 pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);
 
-    let (root_fn_body, fn_locals) = lexer.fn_scoped(iter::empty(), |lexer| {
+    let (root_fn_body, fn_locals) = lexer.fn_scoped(iter::empty(), true, |lexer| {
         let stmts = parse_statements(lexer, |tok| tok == None)
             .map_err(|err| err.with_context(&lexer))
             .map_err(|err| err.with_context(contents))?;
@@ -511,7 +511,7 @@ fn parse_function_args_body<'s>(
         }
     };
 
-    let (body, fn_locals) = tokens.fn_scoped(args.iter().map(|(name, _span)| *name), |tokens| parse_statement(tokens))?;
+    let (body, fn_locals) = tokens.fn_scoped(args.iter().map(|(name, _span)| *name), is_varargs, |tokens| parse_statement(tokens))?;
     Ok(Function::new(
         keyword_span,
         init_call_ctx | end_call_ctx,

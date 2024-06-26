@@ -288,7 +288,7 @@ pub struct Context<'a, 'b> {
 
 #[derive(Debug)]
 struct FuncRuntime {
-    locals: HashMap<String, Value>,
+    locals: Vec<Rc<RefCell<Value>>>,
     env: Value,
     closure: Rc<RefCell<Closure>>,
 }
@@ -301,7 +301,6 @@ impl FuncRuntime {
         func_span: Span,
         call_span: Span,
     ) -> Result<FuncRuntime, ExecError> {
-        let mut locals = HashMap::new();
         let func_borrow = func_ref.deref().borrow();
         let ast_func = unsafe { func_borrow.ast_fn.as_ref() };
 
@@ -315,34 +314,35 @@ impl FuncRuntime {
             .by_ref()
             .map(Option::Some)
             .chain(std::iter::repeat(None));
-        // TODO: Bind arguments
-        // for (arg_idx, ((param_name, _), arg_val)) in ast_func.args.iter().zip(zip_iter).enumerate()
-        // {
-        //     let val = if let Some(arg_val) = arg_val {
-        //         arg_val
-        //     } else if arg_idx >= n_parameters - n_default {
-        //         func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
-        //     } else {
-        //         return Err(ExecError::wrong_arg_count(
-        //             CallInfo { func_span, call_span },
-        //             (n_parameters - n_default)..n_parameters,
-        //             n_arguments,
-        //             Some(ast_func.arg_span),
-        //         ));
-        //     };
-        //     locals.insert(param_name.clone(), val);
-        // }
+        let mut locals = (0..ast_func.num_args as usize).zip(zip_iter).map(|(arg_idx, arg_val)| {
+            let val = if let Some(arg_val) = arg_val {
+                // There is an argument
+                arg_val
+            } else if arg_idx >= n_parameters - n_default {
+                // No given argument, use default
+                func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
+            } else {
+                // No default available, not enough arguments
+                return Err(ExecError::wrong_arg_count(
+                    CallInfo { func_span, call_span },
+                    (n_parameters - n_default)..n_parameters,
+                    n_arguments,
+                    Some(ast_func.arg_span),
+                ))
+            };
+            Ok(Rc::new(RefCell::new(val)))
+        }).collect::<Result<Vec<_>, _>>()?;
 
+        // TODO: Can we use default args and varargs at once?
         if ast_func.is_varargs {
             let vararg_vec = if n_arguments > n_parameters {
                 arg_iter.collect()
             } else {
                 Vec::new()
             };
-            locals.insert("vargv".to_string(), Value::array(vararg_vec));
+            locals.push(Rc::new(RefCell::new(Value::array(vararg_vec))));
         } else {
-            let extra_args = arg_iter.count();
-            if extra_args > 0 {
+            if arg_iter.count() > 0 {
                 return Err(ExecError::wrong_arg_count(
                     CallInfo { func_span,
                     call_span },
@@ -352,6 +352,12 @@ impl FuncRuntime {
                 ));
             }
         }
+        locals.resize(ast_func.num_locals as usize, Rc::new(RefCell::new(Value::Null)));
+
+        for ((_parent_idx, this_idx), upvalue) in ast_func.upvalues.iter().cloned().zip(func_borrow.upvalues.iter()) {
+            locals[this_idx as usize] = upvalue.clone()
+        }
+
         let env = env
             .or_else(|| func_borrow.env.clone())
             .unwrap_or(Value::Null);

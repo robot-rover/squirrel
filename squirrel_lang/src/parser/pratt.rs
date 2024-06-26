@@ -97,6 +97,7 @@ fn get_bp(op: &Token) -> Option<(u16, u16)> {
 }
 
 // TODO: Need to go through newlines if line starts with a binary operator
+// TODO: Switch from recursion to shuntyard parsing
 pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
     tokens: &mut SpannedLexer<'s>,
     min_bp: u16,
@@ -105,7 +106,12 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
 ) -> ParseResult<Expr> {
     let (first_token, ctx) = tokens.next_token(true)?;
     let mut lhs = match first_token {
-        Token::Identifier(name) => Expr::ident((name, ctx)),
+        // Needs to be less than the bp of period to not break field access
+        Token::Identifier(name) => if min_bp < 25 {
+            tokens.lcl().maybe_reference_local(name).map(|local_idx| Expr::local(local_idx, ctx))
+        } else {
+            None
+        }.unwrap_or_else(|| Expr::ident((name, ctx))),
         Token::Integer(num) => Expr::literal(Literal::Integer(num), ctx),
         Token::Number(num) => Expr::literal(Literal::Number(num), ctx),
         Token::String(string) => Expr::literal(Literal::String(string), ctx),
@@ -257,7 +263,6 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
         let rhs = parse_expr_bp(tokens, r_bp, is_term, ignore_newlines)?;
         lhs = match op_token {
             // Member Access (23, 24)
-            // TODO Field Access
             Token::Period => {
                 let Expr { data, span } = rhs;
                 if let ExprData::Ident(name) = data {
@@ -269,6 +274,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
                     ));
                 }
             }
+            // TODO: Some of this should be a macro
             // Multiply and Divide (19, 20)
             Token::Multiply => Expr::binary_op(BinaryOp::Mul, op_span, lhs, rhs),
             Token::Divide => Expr::binary_op(BinaryOp::Div, op_span, lhs, rhs),

@@ -5,7 +5,7 @@ use hashbrown::{Equivalent, HashMap};
 use crate::parser::ast::{self, Expr};
 
 use super::{
-    argparse, builtins, CallInfo, Context, ExecError, ExprResult
+    argparse, builtins, CallInfo, Context, ExecError, ExprResult, FuncRuntime
 };
 
 pub type NativeFn = fn(*mut Context, Value, Vec<Value>, &CallInfo) -> Result<Value, ExecError>;
@@ -432,18 +432,31 @@ impl fmt::Debug for Object {
 pub struct Closure {
     pub ast_fn: NonNull<ast::Function>,
     pub default_vals: Vec<Value>,
+    pub upvalues: Vec<Rc<RefCell<Value>>>,
     // TODO: This should be weak
     pub root: Value,
     pub env: Option<Value>,
 }
 
 impl Closure {
-    pub fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, root: Value) -> Closure {
+    pub fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, parent_rt: &FuncRuntime, root: Value) -> Self {
+        let upvalues = ast_fn.upvalues.iter().cloned().map(|(parent_idx, _this_idx)| parent_rt.locals[parent_idx as usize].clone()).collect();
         Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,
             root,
             env: None,
+            upvalues,
+        }
+    }
+
+    pub fn root(ast_fn: &ast::Function, root: Value) -> Self {
+        Closure {
+            ast_fn: NonNull::from(ast_fn),
+            default_vals: Vec::new(),
+            root,
+            env: None,
+            upvalues: Vec::new(),
         }
     }
 }

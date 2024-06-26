@@ -133,6 +133,7 @@ pub enum StatementData {
     While(Expr, StateRef),
     DoWhile(Expr, StateRef),
     Switch(Expr, Vec<(Expr, Statement)>, Option<StateRef>),
+    // TODO: Implement this with while loop in parser
     For {
         init: StateRef,
         cond: Expr,
@@ -564,6 +565,10 @@ impl Expr {
 
     pub fn ident<S: Into<String>>(ident: (S, Span)) -> Self {
         ExprData::Ident(ident.0.into()).spanning(ident.1)
+    }
+
+    pub fn local(id: u32, span: Span) -> Self {
+        ExprData::Local(id, span).spanning(span)
     }
 }
 

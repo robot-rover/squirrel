@@ -416,12 +416,15 @@ impl<'s> LocalResolution<'s> {
         self.visible_locals.pop().expect(Self::OUTSIDE_GLOBAL);
     }
 
-    fn enter_fn_scope(&mut self, args: impl IntoIterator<Item = &'s str>) {
+    fn enter_fn_scope(&mut self, args: impl IntoIterator<Item = &'s str>, is_varargs: bool) {
         self.visible_locals.push(HashMap::new());
         self.all_locals.push(FunctionLocals::new());
         args.into_iter().for_each(|arg| {
             self.add_local(arg);
         });
+        if is_varargs {
+            self.add_local("vargv");
+        }
     }
 
     fn exit_fn_scope(&mut self) -> FunctionLocals<'s> {
@@ -462,8 +465,8 @@ impl<'s> SpannedLexer<'s> {
         result
     }
 
-    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(&mut self, args: impl IntoIterator<Item = &'s str>, f: F) -> Result<(T, FunctionLocals<'s>), E> {
-        self.locals.enter_fn_scope(args);
+    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(&mut self, args: impl IntoIterator<Item = &'s str>, is_varargs: bool, f: F) -> Result<(T, FunctionLocals<'s>), E> {
+        self.locals.enter_fn_scope(args, is_varargs);
         let result = f(self);
         let fn_locals = self.locals.exit_fn_scope();
         let result = result?;

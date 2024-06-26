@@ -104,6 +104,10 @@ macro_rules! test_foreach {
                 $func(ITERATION_PATH, ITERATION_CONTENTS);
             }
             #[test]
+            fn test_freed_locals() {
+                $func(FREED_LOCALS_PATH, FREED_LOCALS_CONTENTS);
+            }
+            #[test]
             fn test_func_env() {
                 $func(FUNC_ENV_PATH, FUNC_ENV_CONTENTS);
             }
@@ -202,6 +206,8 @@ pub mod data {
         pub const ROOT_DELEGATE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/root_delegate.nut");
         pub const ITERATION_PATH: &str = "edge_cases/iteration.nut";
         pub const ITERATION_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/iteration.nut");
+        pub const FREED_LOCALS_PATH: &str = "edge_cases/freed_locals.nut";
+        pub const FREED_LOCALS_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/freed_locals.nut");
         pub const FUNC_ENV_PATH: &str = "edge_cases/func_env.nut";
         pub const FUNC_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/func_env.nut");
         pub const SET_SCOPE_PATH: &str = "edge_cases/set_scope.nut";
