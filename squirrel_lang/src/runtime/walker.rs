@@ -133,11 +133,32 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
             }
         }
         StatementData::Foreach {
-            index_id,
-            value_id,
+            index_idx,
+            value_idx,
             iterable,
             body,
-        } => todo!("Foreach is not implemented"),
+        } => {
+            let iterable = run_expression(context, iterable)?;
+            for idx in 0.. {
+                if let Some(index_idx) = index_idx {
+                    *context.infunc.locals[*index_idx as usize].deref().borrow_mut() = Value::Integer(idx);
+                }
+                let val = match &iterable {
+                    Value::Array(arr) => {
+                        let arr = arr.deref().borrow();
+                        if idx < arr.len() as i64 {
+                            arr[idx as usize].clone()
+                        } else {
+                            break;
+                        }
+                    }
+                    _ => todo!(),
+                };
+                *context.infunc.locals[*value_idx as usize].deref().borrow_mut() = val;
+
+                run_statement(context, body)?;
+            }
+        },
         StatementData::Break => return Err(FlowControl::Break(statement.span)),
         StatementData::Continue => return Err(FlowControl::Continue(statement.span)),
         StatementData::Return(val) => {
@@ -260,9 +281,10 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             let rhs = run_expression(context, rhs)?;
             run_binary_op(context, op, *op_span, lhs, lhs_span, rhs, rhs_span)
         }
-        ExprData::UnaryOp(op, val) => {
+        ExprData::UnaryOp(op, op_span, val) => {
+            let val_span = val.span;
             let val = run_expression(context, val)?;
-            run_unary_op(context, op, val)
+            run_unary_op(context, op, *op_span, val, val_span)
         }
         ExprData::UnaryRefOp(op, op_span, val) => run_unary_ref_op(context, op, *op_span, val),
         ExprData::FunctionCall { func, args } => run_function_call(
@@ -501,20 +523,17 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
     )))
 }
 
-fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
+fn run_unary_op(context: &mut Context, op: &UnaryOp, op_span: Span, val: Value, val_span: Span) -> ExprResult {
     let res = match op {
         UnaryOp::Neg => match val {
             Value::Float(val) => Value::float(-val),
             Value::Integer(val) => Value::Integer(-val),
-            _ => panic!("Illegal operation"),
+            other => return Err(ExecError::illegal_unary_op("-", op_span, (&other, val_span))),
         },
-        UnaryOp::Not => match val {
-            Value::Integer(val) => Value::Integer(if val == 0 { 1 } else { 0 }),
-            _ => panic!("Illegal operation"),
-        },
+        UnaryOp::Not => Value::boolean(val.truthy()),
         UnaryOp::BitNot => match val {
             Value::Integer(val) => Value::Integer(!val),
-            _ => panic!("Illegal operation"),
+            other => return Err(ExecError::illegal_unary_op("~", op_span, (&other, val_span))),
         },
         UnaryOp::TypeOf => Value::string(&val.type_str()),
         UnaryOp::Clone => match val {
@@ -615,13 +634,11 @@ fn run_binary_op(
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
     };
     res.map_err(|(op, lhs, rhs)| {
-        ExecError::illegal_operation(
-            op.to_string(),
+        ExecError::illegal_binary_op(
+            op,
             op_span,
-            lhs.type_str().to_string(),
-            lhs_span,
-            rhs.type_str().to_string(),
-            rhs_span,
+            (lhs, lhs_span),
+            (rhs, rhs_span),
         )
     })
 }

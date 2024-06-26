@@ -64,10 +64,8 @@ pub enum ExecError {
     IllegalOperation {
         op: String,
         op_span: Span,
-        lhs_ty: String,
-        lhs_span: Span,
-        rhs_ty: String,
-        rhs_span: Span,
+        lhs: (String, Span),
+        rhs: Option<(String, Span)>,
         bt: SqBacktrace,
     },
     WrongArgType {
@@ -118,12 +116,40 @@ impl ExecError {
     variant_constructor!(IllegalKeyword illegal_keyword(span: Span));
     variant_constructor!(WrongArgCount wrong_arg_count { call_info: CallInfo, expected: Range<usize>, got: usize, definition_span: Option<Span> });
     variant_constructor!(UnhashableType unhashable_type { kind: String, span: Span });
-    variant_constructor!(IllegalOperation illegal_operation { op: String, op_span: Span, lhs_ty: String, lhs_span: Span, rhs_ty: String, rhs_span: Span });
     variant_constructor!(WrongArgType wrong_arg_type { call_info: CallInfo, arg_index: usize, expected: String, got: String });
     variant_constructor!(WrongThisType wrong_this_type { call_info: CallInfo, expected: String, got: String });
     variant_constructor!(AssertionFailed assertion_failed(span: Span, message: Option<String>));
     variant_constructor!(NumberParseError number_parse_error(span: Span, message: String));
     variant_constructor!(IndexOutOfBounds index_out_of_bounds { index: i64, len: usize, span: Span });
+
+    fn illegal_binary_op(
+        op: &str,
+        op_span: Span,
+        lhs: (Value, Span),
+        rhs: (Value, Span),
+    ) -> ExecError {
+        ExecError::IllegalOperation {
+            op: op.to_string(),
+            op_span,
+            lhs: (lhs.0.type_str().to_string(), lhs.1),
+            rhs: Some((rhs.0.type_str().to_string(), rhs.1)),
+            bt: SqBacktrace::new(),
+        }
+    }
+
+    fn illegal_unary_op(
+        op: &str,
+        op_span: Span,
+        data: (&Value, Span),
+    ) -> ExecError {
+        ExecError::IllegalOperation {
+            op: op.to_string(),
+            op_span,
+            lhs: (data.0.type_str().to_string(), data.1),
+            rhs: None,
+            bt: SqBacktrace::new(),
+        }
+    }
 
     fn with_context(self, file_name: String) -> SquirrelError {
         match self {
@@ -187,29 +213,32 @@ impl ExecError {
             ExecError::IllegalOperation {
                 op,
                 op_span,
-                lhs_ty,
-                lhs_span,
-                rhs_ty,
-                rhs_span,
+                lhs,
+                rhs,
                 bt,
-            } => SquirrelError::new_labels(
-                file_name,
-                format!("Illegal types for '{}' operator", op),
-                vec![
+            } => {
+                let is_binary = rhs.is_some();
+                let mut labels = vec![
                     (
-                        lhs_span,
-                        format!("Operand of type '{}'", lhs_ty),
+                        lhs.1,
+                        format!("Operand of type '{}'", lhs.0),
                         Color::Red,
                     ),
                     (op_span, format!("Operator"), Color::Blue),
-                    (
-                        rhs_span,
-                        format!("Operand of type '{}'", rhs_ty),
+                ];
+                if let Some(rhs) = rhs {
+                    labels.push((
+                        rhs.1,
+                        format!("Operand of type '{}'", rhs.0),
                         Color::Red,
-                    ),
-                ],
+                    ));
+                }
+                SquirrelError::new_labels(
+                file_name,
+                format!("Illegal type{} for '{}' operator", if is_binary { "s" } else { "" }, op),
+                labels,
                 bt,
-            ),
+            )},
             ExecError::WrongArgType {
                 call_info,
                 arg_index,

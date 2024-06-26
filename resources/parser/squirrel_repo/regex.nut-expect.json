@@ -11,19 +11,23 @@
   "default_expr": [],
   "local_names": [
     [
-      "ex",
+      "vargv",
       0
     ],
     [
-      "string",
+      "ex",
       1
     ],
     [
-      "res",
+      "string",
       2
+    ],
+    [
+      "res",
+      3
     ]
   ],
-  "num_locals": 3,
+  "num_locals": 4,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -36,7 +40,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 6,
                         "end": 8
@@ -102,7 +106,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      1,
+                      2,
                       {
                         "start": 38,
                         "end": 44
@@ -145,7 +149,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      2,
+                      3,
                       {
                         "start": 79,
                         "end": 82
@@ -159,7 +163,13 @@
                           "FieldAccess": [
                             {
                               "data": {
-                                "Ident": "ex"
+                                "Local": [
+                                  1,
+                                  {
+                                    "start": 85,
+                                    "end": 87
+                                  }
+                                ]
                               },
                               "span": {
                                 "start": 85,
@@ -178,7 +188,13 @@
                         "args": [
                           {
                             "data": {
-                              "Ident": "string"
+                              "Local": [
+                                2,
+                                {
+                                  "start": 95,
+                                  "end": 101
+                                }
+                              ]
                             },
                             "span": {
                               "start": 95,
@@ -235,7 +251,13 @@
                             "FieldAccess": [
                               {
                                 "data": {
-                                  "Ident": "string"
+                                  "Local": [
+                                    2,
+                                    {
+                                      "start": 110,
+                                      "end": 116
+                                    }
+                                  ]
                                 },
                                 "span": {
                                   "start": 110,
@@ -257,7 +279,13 @@
                                 "FieldAccess": [
                                   {
                                     "data": {
-                                      "Ident": "res"
+                                      "Local": [
+                                        3,
+                                        {
+                                          "start": 123,
+                                          "end": 126
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 123,
@@ -283,7 +311,13 @@
                                 "FieldAccess": [
                                   {
                                     "data": {
-                                      "Ident": "res"
+                                      "Local": [
+                                        3,
+                                        {
+                                          "start": 133,
+                                          "end": 136
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 133,
@@ -374,8 +408,8 @@
               "data": {
                 "Assign": {
                   "target": {
-                    "Ident": [
-                      "ex",
+                    "Local": [
+                      1,
                       {
                         "start": 173,
                         "end": 175
@@ -440,8 +474,8 @@
               "data": {
                 "Assign": {
                   "target": {
-                    "Ident": [
-                      "string",
+                    "Local": [
+                      2,
                       {
                         "start": 195,
                         "end": 201
@@ -483,8 +517,8 @@
               "data": {
                 "Assign": {
                   "target": {
-                    "Ident": [
-                      "res",
+                    "Local": [
+                      3,
                       {
                         "start": 257,
                         "end": 260
@@ -498,7 +532,13 @@
                           "FieldAccess": [
                             {
                               "data": {
-                                "Ident": "ex"
+                                "Local": [
+                                  1,
+                                  {
+                                    "start": 263,
+                                    "end": 265
+                                  }
+                                ]
                               },
                               "span": {
                                 "start": 263,
@@ -517,7 +557,13 @@
                         "args": [
                           {
                             "data": {
-                              "Ident": "string"
+                              "Local": [
+                                2,
+                                {
+                                  "start": 273,
+                                  "end": 279
+                                }
+                              ]
                             },
                             "span": {
                               "start": 273,
@@ -574,7 +620,13 @@
                             "FieldAccess": [
                               {
                                 "data": {
-                                  "Ident": "string"
+                                  "Local": [
+                                    2,
+                                    {
+                                      "start": 288,
+                                      "end": 294
+                                    }
+                                  ]
                                 },
                                 "span": {
                                   "start": 288,
@@ -596,7 +648,13 @@
                                 "FieldAccess": [
                                   {
                                     "data": {
-                                      "Ident": "res"
+                                      "Local": [
+                                        3,
+                                        {
+                                          "start": 301,
+                                          "end": 304
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 301,
@@ -622,7 +680,13 @@
                                 "FieldAccess": [
                                   {
                                     "data": {
-                                      "Ident": "res"
+                                      "Local": [
+                                        3,
+                                        {
+                                          "start": 311,
+                                          "end": 314
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 311,

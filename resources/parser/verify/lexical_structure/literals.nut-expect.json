@@ -11,47 +11,51 @@
   "default_expr": [],
   "local_names": [
     [
-      "int_b10",
+      "vargv",
       0
     ],
     [
-      "int_hex",
+      "int_b10",
       1
     ],
     [
-      "int_oct",
+      "int_hex",
       2
     ],
     [
-      "int_char",
+      "int_oct",
       3
     ],
     [
-      "float",
+      "int_char",
       4
     ],
     [
-      "float_sci",
+      "float",
       5
     ],
     [
-      "float_sci2",
+      "float_sci",
       6
     ],
     [
-      "str",
+      "float_sci2",
       7
     ],
     [
-      "str_verb",
+      "str",
       8
     ],
     [
-      "str_verb_multi",
+      "str_verb",
       9
+    ],
+    [
+      "str_verb_multi",
+      10
     ]
   ],
-  "num_locals": 10,
+  "num_locals": 11,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -130,7 +134,13 @@
                                                 },
                                                 "lhs": {
                                                   "data": {
-                                                    "Ident": "val"
+                                                    "Local": [
+                                                      0,
+                                                      {
+                                                        "start": 36,
+                                                        "end": 39
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 36,
@@ -208,7 +218,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 57,
                         "end": 64
@@ -263,7 +273,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "int_b10"
+                        "Local": [
+                          1,
+                          {
+                            "start": 78,
+                            "end": 85
+                          }
+                        ]
                       },
                       "span": {
                         "start": 78,
@@ -291,7 +307,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      1,
+                      2,
                       {
                         "start": 93,
                         "end": 100
@@ -346,7 +362,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "int_hex"
+                        "Local": [
+                          2,
+                          {
+                            "start": 122,
+                            "end": 129
+                          }
+                        ]
                       },
                       "span": {
                         "start": 122,
@@ -374,7 +396,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      2,
+                      3,
                       {
                         "start": 137,
                         "end": 144
@@ -429,7 +451,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "int_oct"
+                        "Local": [
+                          3,
+                          {
+                            "start": 160,
+                            "end": 167
+                          }
+                        ]
                       },
                       "span": {
                         "start": 160,
@@ -457,7 +485,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      3,
+                      4,
                       {
                         "start": 175,
                         "end": 183
@@ -512,7 +540,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "int_char"
+                        "Local": [
+                          4,
+                          {
+                            "start": 198,
+                            "end": 206
+                          }
+                        ]
                       },
                       "span": {
                         "start": 198,
@@ -540,7 +574,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      4,
+                      5,
                       {
                         "start": 215,
                         "end": 220
@@ -595,7 +629,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "float"
+                        "Local": [
+                          5,
+                          {
+                            "start": 236,
+                            "end": 241
+                          }
+                        ]
                       },
                       "span": {
                         "start": 236,
@@ -623,7 +663,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      5,
+                      6,
                       {
                         "start": 249,
                         "end": 258
@@ -678,7 +718,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "float_sci"
+                        "Local": [
+                          6,
+                          {
+                            "start": 275,
+                            "end": 284
+                          }
+                        ]
                       },
                       "span": {
                         "start": 275,
@@ -706,7 +752,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      6,
+                      7,
                       {
                         "start": 292,
                         "end": 302
@@ -761,7 +807,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "float_sci2"
+                        "Local": [
+                          7,
+                          {
+                            "start": 319,
+                            "end": 329
+                          }
+                        ]
                       },
                       "span": {
                         "start": 319,
@@ -789,7 +841,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      7,
+                      8,
                       {
                         "start": 458,
                         "end": 461
@@ -844,7 +896,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "str"
+                        "Local": [
+                          8,
+                          {
+                            "start": 487,
+                            "end": 490
+                          }
+                        ]
                       },
                       "span": {
                         "start": 487,
@@ -872,7 +930,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      8,
+                      9,
                       {
                         "start": 498,
                         "end": 506
@@ -927,7 +985,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "str_verb"
+                        "Local": [
+                          9,
+                          {
+                            "start": 542,
+                            "end": 550
+                          }
+                        ]
                       },
                       "span": {
                         "start": 542,
@@ -955,7 +1019,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      9,
+                      10,
                       {
                         "start": 558,
                         "end": 572
@@ -1010,7 +1074,13 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "str_verb_multi"
+                        "Local": [
+                          10,
+                          {
+                            "start": 634,
+                            "end": 648
+                          }
+                        ]
                       },
                       "span": {
                         "start": 634,

@@ -245,6 +245,20 @@
     "Identifier": "print"
   },
   "LeftParenthesis",
+  "Typeof",
+  {
+    "Identifier": "a"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
   {
     "String": "a "
   },
@@ -268,6 +282,20 @@
     "Identifier": "print"
   },
   "LeftParenthesis",
+  "Typeof",
+  {
+    "Identifier": "b"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
   {
     "String": "b "
   },
@@ -286,6 +314,20 @@
   },
   "RightParenthesis",
   "Semicolon",
+  "Newline",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  "Typeof",
+  {
+    "Identifier": "c"
+  },
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
   "Newline",
   {
     "Identifier": "print"

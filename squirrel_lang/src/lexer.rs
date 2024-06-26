@@ -72,6 +72,8 @@ pub enum Token<'s> {
     Try,
     #[token("typeof")]
     Typeof,
+    #[token("do")]
+    Do,
     #[token("while")]
     While,
     #[token("yield")]

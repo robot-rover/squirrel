@@ -11,11 +11,15 @@
   "default_expr": [],
   "local_names": [
     [
-      "player",
+      "vargv",
       0
+    ],
+    [
+      "player",
+      1
     ]
   ],
-  "num_locals": 1,
+  "num_locals": 2,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -674,6 +678,10 @@
                                             "UnaryOp": [
                                               "Clone",
                                               {
+                                                "start": 291,
+                                                "end": 296
+                                              },
+                                              {
                                                 "data": {
                                                   "FieldAccess": [
                                                     {
@@ -727,7 +735,13 @@
                                   "IfElse": [
                                     {
                                       "data": {
-                                        "Ident": "name"
+                                        "Local": [
+                                          0,
+                                          {
+                                            "start": 315,
+                                            "end": 319
+                                          }
+                                        ]
                                       },
                                       "span": {
                                         "start": 315,
@@ -743,7 +757,13 @@
                                                 "FieldAccess": [
                                                   {
                                                     "data": {
-                                                      "Ident": "newentity"
+                                                      "Local": [
+                                                        2,
+                                                        {
+                                                          "start": 329,
+                                                          "end": 338
+                                                        }
+                                                      ]
                                                     },
                                                     "span": {
                                                       "start": 329,
@@ -761,7 +781,13 @@
                                               },
                                               "value": {
                                                 "data": {
-                                                  "Ident": "name"
+                                                  "Local": [
+                                                    0,
+                                                    {
+                                                      "start": 344,
+                                                      "end": 348
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
                                                   "start": 344,
@@ -805,7 +831,13 @@
                                   "IfElse": [
                                     {
                                       "data": {
-                                        "Ident": "pos"
+                                        "Local": [
+                                          1,
+                                          {
+                                            "start": 357,
+                                            "end": 360
+                                          }
+                                        ]
                                       },
                                       "span": {
                                         "start": 357,
@@ -821,7 +853,13 @@
                                                 "FieldAccess": [
                                                   {
                                                     "data": {
-                                                      "Ident": "newentity"
+                                                      "Local": [
+                                                        2,
+                                                        {
+                                                          "start": 370,
+                                                          "end": 379
+                                                        }
+                                                      ]
                                                     },
                                                     "span": {
                                                       "start": 370,
@@ -839,7 +877,13 @@
                                               },
                                               "value": {
                                                 "data": {
-                                                  "Ident": "pos"
+                                                  "Local": [
+                                                    1,
+                                                    {
+                                                      "start": 384,
+                                                      "end": 387
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
                                                   "start": 384,
@@ -882,7 +926,13 @@
                                 "data": {
                                   "Return": {
                                     "data": {
-                                      "Ident": "newentity"
+                                      "Local": [
+                                        2,
+                                        {
+                                          "start": 400,
+                                          "end": 409
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 400,
@@ -1170,6 +1220,10 @@
                                             "UnaryOp": [
                                               "Clone",
                                               {
+                                                "start": 597,
+                                                "end": 602
+                                              },
+                                              {
                                                 "data": {
                                                   "FieldAccess": [
                                                     {
@@ -1273,7 +1327,13 @@
                                               "args": [
                                                 {
                                                   "data": {
-                                                    "Ident": "name"
+                                                    "Local": [
+                                                      0,
+                                                      {
+                                                        "start": 650,
+                                                        "end": 654
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 650,
@@ -1282,7 +1342,13 @@
                                                 },
                                                 {
                                                   "data": {
-                                                    "Ident": "pos"
+                                                    "Local": [
+                                                      1,
+                                                      {
+                                                        "start": 655,
+                                                        "end": 658
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 655,
@@ -1324,7 +1390,13 @@
                                           "FieldAccess": [
                                             {
                                               "data": {
-                                                "Ident": "newplayer"
+                                                "Local": [
+                                                  3,
+                                                  {
+                                                    "start": 665,
+                                                    "end": 674
+                                                  }
+                                                ]
                                               },
                                               "span": {
                                                 "start": 665,
@@ -1343,7 +1415,13 @@
                                         "args": [
                                           {
                                             "data": {
-                                              "Ident": "p"
+                                              "Local": [
+                                                2,
+                                                {
+                                                  "start": 687,
+                                                  "end": 688
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 687,
@@ -1368,7 +1446,13 @@
                                 "data": {
                                   "Return": {
                                     "data": {
-                                      "Ident": "newplayer"
+                                      "Local": [
+                                        3,
+                                        {
+                                          "start": 702,
+                                          "end": 711
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 702,
@@ -1420,7 +1504,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 722,
                         "end": 728
@@ -1626,7 +1710,13 @@
                                     "FieldAccess": [
                                       {
                                         "data": {
-                                          "Ident": "player"
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 794,
+                                              "end": 800
+                                            }
+                                          ]
                                         },
                                         "span": {
                                           "start": 794,
@@ -1742,8 +1832,18 @@
                                     "UnaryOp": [
                                       "TypeOf",
                                       {
+                                        "start": 835,
+                                        "end": 841
+                                      },
+                                      {
                                         "data": {
-                                          "Ident": "player"
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 842,
+                                              "end": 848
+                                            }
+                                          ]
                                         },
                                         "span": {
                                           "start": 842,
@@ -1805,7 +1905,13 @@
                     "FieldAccess": [
                       {
                         "data": {
-                          "Ident": "player"
+                          "Local": [
+                            1,
+                            {
+                              "start": 857,
+                              "end": 863
+                            }
+                          ]
                         },
                         "span": {
                           "start": 857,
@@ -1847,7 +1953,13 @@
                           "FieldAccess": [
                             {
                               "data": {
-                                "Ident": "player"
+                                "Local": [
+                                  1,
+                                  {
+                                    "start": 877,
+                                    "end": 883
+                                  }
+                                ]
                               },
                               "span": {
                                 "start": 877,
@@ -1915,7 +2027,13 @@
                     "FieldAccess": [
                       {
                         "data": {
-                          "Ident": "player"
+                          "Local": [
+                            1,
+                            {
+                              "start": 896,
+                              "end": 902
+                            }
+                          ]
                         },
                         "span": {
                           "start": 896,

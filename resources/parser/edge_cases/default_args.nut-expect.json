@@ -9,8 +9,13 @@
   },
   "num_args": 0,
   "default_expr": [],
-  "local_names": [],
-  "num_locals": 0,
+  "local_names": [
+    [
+      "vargv",
+      0
+    ]
+  ],
+  "num_locals": 1,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -305,7 +310,13 @@
                                                 },
                                                 "lhs": {
                                                   "data": {
-                                                    "Ident": "a_arg"
+                                                    "Local": [
+                                                      0,
+                                                      {
+                                                        "start": 108,
+                                                        "end": 113
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 108,
@@ -590,7 +601,13 @@
                                           "FieldAccess": [
                                             {
                                               "data": {
-                                                "Ident": "b_arg"
+                                                "Local": [
+                                                  0,
+                                                  {
+                                                    "start": 222,
+                                                    "end": 227
+                                                  }
+                                                ]
                                               },
                                               "span": {
                                                 "start": 222,
@@ -619,7 +636,13 @@
                                                   "FieldAccess": [
                                                     {
                                                       "data": {
-                                                        "Ident": "b_arg"
+                                                        "Local": [
+                                                          0,
+                                                          {
+                                                            "start": 234,
+                                                            "end": 239
+                                                          }
+                                                        ]
                                                       },
                                                       "span": {
                                                         "start": 234,
@@ -713,7 +736,13 @@
                                                     "FieldAccess": [
                                                       {
                                                         "data": {
-                                                          "Ident": "b_arg"
+                                                          "Local": [
+                                                            0,
+                                                            {
+                                                              "start": 260,
+                                                              "end": 265
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 260,

@@ -9,8 +9,13 @@
   },
   "num_args": 0,
   "default_expr": [],
-  "local_names": [],
-  "num_locals": 0,
+  "local_names": [
+    [
+      "vargv",
+      0
+    ]
+  ],
+  "num_locals": 1,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -117,9 +122,17 @@
                           [
                             "str",
                             1
+                          ],
+                          [
+                            "idx",
+                            2
+                          ],
+                          [
+                            "val",
+                            3
                           ]
                         ],
-                        "num_locals": 2,
+                        "num_locals": 4,
                         "upvalues": [],
                         "is_varargs": false,
                         "body": {
@@ -171,23 +184,17 @@
                               {
                                 "data": {
                                   "Foreach": {
-                                    "index_id": [
-                                      "idx",
-                                      {
-                                        "start": 99,
-                                        "end": 102
-                                      }
-                                    ],
-                                    "value_id": [
-                                      "val",
-                                      {
-                                        "start": 104,
-                                        "end": 107
-                                      }
-                                    ],
+                                    "index_idx": 2,
+                                    "value_idx": 3,
                                     "iterable": {
                                       "data": {
-                                        "Ident": "arr"
+                                        "Local": [
+                                          0,
+                                          {
+                                            "start": 111,
+                                            "end": 114
+                                          }
+                                        ]
                                       },
                                       "span": {
                                         "start": 111,
@@ -203,8 +210,8 @@
                                                 "data": {
                                                   "Assign": {
                                                     "target": {
-                                                      "Ident": [
-                                                        "str",
+                                                      "Local": [
+                                                        1,
                                                         {
                                                           "start": 126,
                                                           "end": 129
@@ -221,7 +228,13 @@
                                                           },
                                                           "lhs": {
                                                             "data": {
-                                                              "Ident": "str"
+                                                              "Local": [
+                                                                1,
+                                                                {
+                                                                  "start": 132,
+                                                                  "end": 135
+                                                                }
+                                                              ]
                                                             },
                                                             "span": {
                                                               "start": 132,
@@ -230,7 +243,13 @@
                                                           },
                                                           "rhs": {
                                                             "data": {
-                                                              "Ident": "val"
+                                                              "Local": [
+                                                                3,
+                                                                {
+                                                                  "start": 138,
+                                                                  "end": 141
+                                                                }
+                                                              ]
                                                             },
                                                             "span": {
                                                               "start": 138,
@@ -275,7 +294,13 @@
                                                       },
                                                       "lhs": {
                                                         "data": {
-                                                          "Ident": "idx"
+                                                          "Local": [
+                                                            2,
+                                                            {
+                                                              "start": 154,
+                                                              "end": 157
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 154,
@@ -297,7 +322,13 @@
                                                                     "FieldAccess": [
                                                                       {
                                                                         "data": {
-                                                                          "Ident": "arr"
+                                                                          "Local": [
+                                                                            0,
+                                                                            {
+                                                                              "start": 160,
+                                                                              "end": 163
+                                                                            }
+                                                                          ]
                                                                         },
                                                                         "span": {
                                                                           "start": 160,
@@ -355,8 +386,8 @@
                                                             "data": {
                                                               "Assign": {
                                                                 "target": {
-                                                                  "Ident": [
-                                                                    "str",
+                                                                  "Local": [
+                                                                    1,
                                                                     {
                                                                       "start": 189,
                                                                       "end": 192
@@ -373,7 +404,13 @@
                                                                       },
                                                                       "lhs": {
                                                                         "data": {
-                                                                          "Ident": "str"
+                                                                          "Local": [
+                                                                            1,
+                                                                            {
+                                                                              "start": 195,
+                                                                              "end": 198
+                                                                            }
+                                                                          ]
                                                                         },
                                                                         "span": {
                                                                           "start": 195,
@@ -463,7 +500,13 @@
                                         },
                                         "lhs": {
                                           "data": {
-                                            "Ident": "str"
+                                            "Local": [
+                                              1,
+                                              {
+                                                "start": 233,
+                                                "end": 236
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 233,

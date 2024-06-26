@@ -11,11 +11,15 @@
   "default_expr": [],
   "local_names": [
     [
-      "n",
+      "vargv",
       0
+    ],
+    [
+      "n",
+      1
     ]
   ],
-  "num_locals": 1,
+  "num_locals": 2,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -73,7 +77,13 @@
                                           },
                                           "lhs": {
                                             "data": {
-                                              "Ident": "n"
+                                              "Local": [
+                                                0,
+                                                {
+                                                  "start": 122,
+                                                  "end": 123
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 122,
@@ -166,7 +176,13 @@
                                                       },
                                                       "lhs": {
                                                         "data": {
-                                                          "Ident": "n"
+                                                          "Local": [
+                                                            0,
+                                                            {
+                                                              "start": 153,
+                                                              "end": 154
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 153,
@@ -224,7 +240,13 @@
                                                       },
                                                       "lhs": {
                                                         "data": {
-                                                          "Ident": "n"
+                                                          "Local": [
+                                                            0,
+                                                            {
+                                                              "start": 164,
+                                                              "end": 165
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 164,
@@ -309,7 +331,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 178,
                         "end": 179
@@ -334,7 +356,13 @@
                                       "FieldAccess": [
                                         {
                                           "data": {
-                                            "Ident": "vargv"
+                                            "Local": [
+                                              0,
+                                              {
+                                                "start": 182,
+                                                "end": 187
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 182,
@@ -386,7 +414,13 @@
                                       "ArrayAccess": {
                                         "array": {
                                           "data": {
-                                            "Ident": "vargv"
+                                            "Local": [
+                                              0,
+                                              {
+                                                "start": 197,
+                                                "end": 202
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 197,
@@ -506,7 +540,13 @@
                                 "args": [
                                   {
                                     "data": {
-                                      "Ident": "n"
+                                      "Local": [
+                                        1,
+                                        {
+                                          "start": 231,
+                                          "end": 232
+                                        }
+                                      ]
                                     },
                                     "span": {
                                       "start": 231,

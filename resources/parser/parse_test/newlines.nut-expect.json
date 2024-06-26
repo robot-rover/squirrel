@@ -9,8 +9,13 @@
   },
   "num_args": 0,
   "default_expr": [],
-  "local_names": [],
-  "num_locals": 0,
+  "local_names": [
+    [
+      "vargv",
+      0
+    ]
+  ],
+  "num_locals": 1,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -176,7 +181,13 @@
                                         "args": [
                                           {
                                             "data": {
-                                              "Ident": "a"
+                                              "Local": [
+                                                0,
+                                                {
+                                                  "start": 107,
+                                                  "end": 108
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 107,
@@ -223,7 +234,13 @@
                                         "args": [
                                           {
                                             "data": {
-                                              "Ident": "b"
+                                              "Local": [
+                                                1,
+                                                {
+                                                  "start": 122,
+                                                  "end": 123
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 122,
@@ -270,7 +287,13 @@
                                         "args": [
                                           {
                                             "data": {
-                                              "Ident": "c"
+                                              "Local": [
+                                                2,
+                                                {
+                                                  "start": 137,
+                                                  "end": 138
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 137,

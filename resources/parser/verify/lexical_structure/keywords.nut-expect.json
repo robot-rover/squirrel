@@ -11,15 +11,19 @@
   "default_expr": [],
   "local_names": [
     [
-      "foo",
+      "vargv",
       0
     ],
     [
-      "Foo",
+      "foo",
       1
+    ],
+    [
+      "Foo",
+      2
     ]
   ],
-  "num_locals": 2,
+  "num_locals": 3,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -32,7 +36,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 6,
                         "end": 9
@@ -75,7 +79,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      1,
+                      2,
                       {
                         "start": 24,
                         "end": 27
@@ -145,7 +149,13 @@
                           },
                           "lhs": {
                             "data": {
-                              "Ident": "foo"
+                              "Local": [
+                                1,
+                                {
+                                  "start": 45,
+                                  "end": 48
+                                }
+                              ]
                             },
                             "span": {
                               "start": 45,
@@ -154,7 +164,13 @@
                           },
                           "rhs": {
                             "data": {
-                              "Ident": "Foo"
+                              "Local": [
+                                2,
+                                {
+                                  "start": 51,
+                                  "end": 54
+                                }
+                              ]
                             },
                             "span": {
                               "start": 51,
@@ -257,13 +273,62 @@
                   "args": [
                     {
                       "data": {
-                        "Literal": {
-                          "String": "verify/lexical_structure/keywords.nut"
+                        "FunctionCall": {
+                          "func": {
+                            "FieldAccess": [
+                              {
+                                "data": {
+                                  "Literal": {
+                                    "String": "verify/lexical_structure/keywords.nut"
+                                  }
+                                },
+                                "span": {
+                                  "start": 83,
+                                  "end": 91
+                                }
+                              },
+                              [
+                                "slice",
+                                {
+                                  "start": 92,
+                                  "end": 97
+                                }
+                              ]
+                            ]
+                          },
+                          "args": [
+                            {
+                              "data": {
+                                "UnaryOp": [
+                                  "Neg",
+                                  {
+                                    "start": 98,
+                                    "end": 99
+                                  },
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "Integer": 12
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 99,
+                                      "end": 101
+                                    }
+                                  }
+                                ]
+                              },
+                              "span": {
+                                "start": 98,
+                                "end": 101
+                              }
+                            }
+                          ]
                         }
                       },
                       "span": {
-                        "start": 83,
-                        "end": 91
+                        "start": 97,
+                        "end": 102
                       }
                     }
                   ]
@@ -271,20 +336,20 @@
               },
               "span": {
                 "start": 82,
-                "end": 92
+                "end": 103
               }
             }
           },
           "span": {
             "start": 82,
-            "end": 92
+            "end": 103
           }
         }
       ]
     },
     "span": {
       "start": 0,
-      "end": 92
+      "end": 103
     }
   }
 }

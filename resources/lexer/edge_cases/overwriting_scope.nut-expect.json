@@ -336,6 +336,8 @@
   "RightParenthesis",
   "LeftCurlyBrace",
   "Newline",
+  "Newline",
+  "Newline",
   "DoubleColon",
   {
     "Identifier": "print"
@@ -345,8 +347,6 @@
     "String": "insane: "
   },
   "Plus",
-  "This",
-  "Period",
   {
     "Identifier": "c"
   },

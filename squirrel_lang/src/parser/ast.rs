@@ -147,8 +147,8 @@ pub enum StatementData {
         body: StateRef,
     },
     Foreach {
-        index_id: Option<Ident>,
-        value_id: Ident,
+        index_idx: Option<u32>,
+        value_idx: u32,
         iterable: Expr,
         body: StateRef,
     },
@@ -228,16 +228,16 @@ impl Statement {
     }
 
     pub fn foreach(
-        index_id: Option<Ident>,
-        value_id: Ident,
+        index_idx: Option<u32>,
+        value_idx: u32,
         iterable: Expr,
         body: Statement,
         for_span: Span,
     ) -> Self {
         let span = for_span | body.span;
         StatementData::Foreach {
-            index_id,
-            value_id,
+            index_idx,
+            value_idx,
             iterable,
             body: Box::new(body),
         }
@@ -420,7 +420,7 @@ pub enum ExprData {
         lhs: ExprRef,
         rhs: ExprRef,
     },
-    UnaryOp(UnaryOp, ExprRef),
+    UnaryOp(UnaryOp, Span, ExprRef),
     UnaryRefOp(UnaryRefOp, Span, AssignTarget),
     FunctionCall {
         func: CallTarget,
@@ -524,7 +524,7 @@ impl Expr {
 
     pub fn unary_op(op: UnaryOp, expr: Expr, op_span: Span) -> Self {
         let span = op_span | expr.span;
-        ExprData::UnaryOp(op, Box::new(expr)).spanning(span)
+        ExprData::UnaryOp(op, op_span, Box::new(expr)).spanning(span)
     }
 
     pub fn unary_ref_op(op: UnaryRefOp, expr: AssignTarget, op_span: Span) -> Self {

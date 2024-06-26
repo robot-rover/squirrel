@@ -11,15 +11,19 @@
   "default_expr": [],
   "local_names": [
     [
-      "statethread",
+      "vargv",
       0
     ],
     [
-      "i",
+      "statethread",
       1
+    ],
+    [
+      "i",
+      2
     ]
   ],
-  "num_locals": 2,
+  "num_locals": 3,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -467,7 +471,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 213,
                         "end": 224
@@ -570,7 +574,13 @@
                                   "FieldAccess": [
                                     {
                                       "data": {
-                                        "Ident": "statethread"
+                                        "Local": [
+                                          1,
+                                          {
+                                            "start": 256,
+                                            "end": 267
+                                          }
+                                        ]
                                       },
                                       "span": {
                                         "start": 256,
@@ -636,7 +646,7 @@
                       "Assign": {
                         "target": {
                           "Local": [
-                            1,
+                            2,
                             {
                               "start": 293,
                               "end": 294
@@ -682,7 +692,13 @@
                     },
                     "lhs": {
                       "data": {
-                        "Ident": "i"
+                        "Local": [
+                          2,
+                          {
+                            "start": 300,
+                            "end": 301
+                          }
+                        ]
                       },
                       "span": {
                         "start": 300,
@@ -718,8 +734,8 @@
                           "end": 314
                         },
                         {
-                          "Ident": [
-                            "i",
+                          "Local": [
+                            2,
                             {
                               "start": 311,
                               "end": 312
@@ -778,7 +794,13 @@
                                         "FieldAccess": [
                                           {
                                             "data": {
-                                              "Ident": "statethread"
+                                              "Local": [
+                                                1,
+                                                {
+                                                  "start": 328,
+                                                  "end": 339
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 328,

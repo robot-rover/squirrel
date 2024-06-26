@@ -51,6 +51,16 @@
   {
     "String": "verify/lexical_structure/keywords.nut"
   },
+  "Period",
+  {
+    "Identifier": "slice"
+  },
+  "LeftParenthesis",
+  "Minus",
+  {
+    "Integer": 12
+  },
+  "RightParenthesis",
   "RightParenthesis",
   "Newline"
 ]

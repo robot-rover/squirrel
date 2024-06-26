@@ -11,27 +11,31 @@
   "default_expr": [],
   "local_names": [
     [
-      "n",
+      "vargv",
       0
     ],
     [
-      "i",
+      "n",
       1
     ],
     [
-      "k",
+      "i",
       2
     ],
     [
-      "x",
+      "k",
       3
     ],
     [
-      "y",
+      "x",
       4
+    ],
+    [
+      "y",
+      5
     ]
   ],
-  "num_locals": 5,
+  "num_locals": 6,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -64,7 +68,13 @@
                             "FieldAccess": [
                               {
                                 "data": {
-                                  "Ident": "vargv"
+                                  "Local": [
+                                    0,
+                                    {
+                                      "start": 114,
+                                      "end": 119
+                                    }
+                                  ]
                                 },
                                 "span": {
                                   "start": 114,
@@ -115,8 +125,8 @@
                           "data": {
                             "Assign": {
                               "target": {
-                                "Ident": [
-                                  "n",
+                                "Local": [
+                                  1,
                                   {
                                     "start": 135,
                                     "end": 136
@@ -133,7 +143,13 @@
                                             "ArrayAccess": {
                                               "array": {
                                                 "data": {
-                                                  "Ident": "vargv"
+                                                  "Local": [
+                                                    0,
+                                                    {
+                                                      "start": 139,
+                                                      "end": 144
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
                                                   "start": 139,
@@ -206,7 +222,13 @@
                                 },
                                 "lhs": {
                                   "data": {
-                                    "Ident": "n"
+                                    "Local": [
+                                      1,
+                                      {
+                                        "start": 166,
+                                        "end": 167
+                                      }
+                                    ]
                                   },
                                   "span": {
                                     "start": 166,
@@ -237,8 +259,8 @@
                                 "data": {
                                   "Assign": {
                                     "target": {
-                                      "Ident": [
-                                        "n",
+                                      "Local": [
+                                        1,
                                         {
                                           "start": 173,
                                           "end": 174
@@ -304,8 +326,8 @@
                           "data": {
                             "Assign": {
                               "target": {
-                                "Ident": [
-                                  "n",
+                                "Local": [
+                                  1,
                                   {
                                     "start": 191,
                                     "end": 192
@@ -359,64 +381,21 @@
           "data": {
             "Expr": {
               "data": {
-                "Assign": {
-                  "target": {
-                    "Local": [
-                      3,
-                      {
-                        "start": 207,
-                        "end": 208
-                      }
-                    ]
-                  },
-                  "value": {
-                    "data": {
-                      "ArrayDecl": []
-                    },
-                    "span": {
-                      "start": 211,
-                      "end": 213
-                    }
-                  },
-                  "kind": "Normal",
-                  "op_span": {
-                    "start": 209,
-                    "end": 210
-                  }
-                }
-              },
-              "span": {
-                "start": 207,
-                "end": 213
-              }
-            }
-          },
-          "span": {
-            "start": 207,
-            "end": 213
-          }
-        },
-        {
-          "data": {
-            "Expr": {
-              "data": {
                 "FunctionCall": {
                   "func": {
                     "FieldAccess": [
                       {
-                        "data": {
-                          "Ident": "x"
-                        },
+                        "data": "Globals",
                         "span": {
-                          "start": 215,
-                          "end": 216
+                          "start": 201,
+                          "end": 203
                         }
                       },
                       [
-                        "resize",
+                        "print",
                         {
-                          "start": 217,
-                          "end": 223
+                          "start": 203,
+                          "end": 208
                         }
                       ]
                     ]
@@ -424,25 +403,105 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "n"
+                        "BinaryOp": {
+                          "op": "Add",
+                          "op_span": {
+                            "start": 228,
+                            "end": 229
+                          },
+                          "lhs": {
+                            "data": {
+                              "BinaryOp": {
+                                "op": "Add",
+                                "op_span": {
+                                  "start": 215,
+                                  "end": 216
+                                },
+                                "lhs": {
+                                  "data": {
+                                    "Literal": {
+                                      "String": "n = "
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 209,
+                                    "end": 215
+                                  }
+                                },
+                                "rhs": {
+                                  "data": {
+                                    "FunctionCall": {
+                                      "func": {
+                                        "FieldAccess": [
+                                          {
+                                            "data": {
+                                              "Local": [
+                                                1,
+                                                {
+                                                  "start": 216,
+                                                  "end": 217
+                                                }
+                                              ]
+                                            },
+                                            "span": {
+                                              "start": 216,
+                                              "end": 217
+                                            }
+                                          },
+                                          [
+                                            "tostring",
+                                            {
+                                              "start": 218,
+                                              "end": 226
+                                            }
+                                          ]
+                                        ]
+                                      },
+                                      "args": []
+                                    }
+                                  },
+                                  "span": {
+                                    "start": 226,
+                                    "end": 228
+                                  }
+                                }
+                              }
+                            },
+                            "span": {
+                              "start": 209,
+                              "end": 228
+                            }
+                          },
+                          "rhs": {
+                            "data": {
+                              "Literal": {
+                                "String": "\n"
+                              }
+                            },
+                            "span": {
+                              "start": 229,
+                              "end": 233
+                            }
+                          }
+                        }
                       },
                       "span": {
-                        "start": 224,
-                        "end": 225
+                        "start": 209,
+                        "end": 233
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 223,
-                "end": 226
+                "start": 208,
+                "end": 234
               }
             }
           },
           "span": {
-            "start": 223,
-            "end": 226
+            "start": 208,
+            "end": 234
           }
         },
         {
@@ -454,8 +513,8 @@
                     "Local": [
                       4,
                       {
-                        "start": 234,
-                        "end": 235
+                        "start": 242,
+                        "end": 243
                       }
                     ]
                   },
@@ -464,26 +523,26 @@
                       "ArrayDecl": []
                     },
                     "span": {
-                      "start": 238,
-                      "end": 240
+                      "start": 246,
+                      "end": 248
                     }
                   },
                   "kind": "Normal",
                   "op_span": {
-                    "start": 236,
-                    "end": 237
+                    "start": 244,
+                    "end": 245
                   }
                 }
               },
               "span": {
-                "start": 234,
-                "end": 240
+                "start": 242,
+                "end": 248
               }
             }
           },
           "span": {
-            "start": 234,
-            "end": 240
+            "start": 242,
+            "end": 248
           }
         },
         {
@@ -495,18 +554,24 @@
                     "FieldAccess": [
                       {
                         "data": {
-                          "Ident": "y"
+                          "Local": [
+                            4,
+                            {
+                              "start": 250,
+                              "end": 251
+                            }
+                          ]
                         },
                         "span": {
-                          "start": 242,
-                          "end": 243
+                          "start": 250,
+                          "end": 251
                         }
                       },
                       [
                         "resize",
                         {
-                          "start": 244,
-                          "end": 250
+                          "start": 252,
+                          "end": 258
                         }
                       ]
                     ]
@@ -514,25 +579,133 @@
                   "args": [
                     {
                       "data": {
-                        "Ident": "n"
+                        "Local": [
+                          1,
+                          {
+                            "start": 259,
+                            "end": 260
+                          }
+                        ]
                       },
                       "span": {
-                        "start": 251,
-                        "end": 252
+                        "start": 259,
+                        "end": 260
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 250,
-                "end": 253
+                "start": 258,
+                "end": 261
               }
             }
           },
           "span": {
-            "start": 250,
-            "end": 253
+            "start": 258,
+            "end": 261
+          }
+        },
+        {
+          "data": {
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      5,
+                      {
+                        "start": 269,
+                        "end": 270
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "ArrayDecl": []
+                    },
+                    "span": {
+                      "start": 273,
+                      "end": 275
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 271,
+                    "end": 272
+                  }
+                }
+              },
+              "span": {
+                "start": 269,
+                "end": 275
+              }
+            }
+          },
+          "span": {
+            "start": 269,
+            "end": 275
+          }
+        },
+        {
+          "data": {
+            "Expr": {
+              "data": {
+                "FunctionCall": {
+                  "func": {
+                    "FieldAccess": [
+                      {
+                        "data": {
+                          "Local": [
+                            5,
+                            {
+                              "start": 277,
+                              "end": 278
+                            }
+                          ]
+                        },
+                        "span": {
+                          "start": 277,
+                          "end": 278
+                        }
+                      },
+                      [
+                        "resize",
+                        {
+                          "start": 279,
+                          "end": 285
+                        }
+                      ]
+                    ]
+                  },
+                  "args": [
+                    {
+                      "data": {
+                        "Local": [
+                          1,
+                          {
+                            "start": 286,
+                            "end": 287
+                          }
+                        ]
+                      },
+                      "span": {
+                        "start": 286,
+                        "end": 287
+                      }
+                    }
+                  ]
+                }
+              },
+              "span": {
+                "start": 285,
+                "end": 288
+              }
+            }
+          },
+          "span": {
+            "start": 285,
+            "end": 288
           }
         },
         {
@@ -544,11 +717,11 @@
                     "data": {
                       "Assign": {
                         "target": {
-                          "Ident": [
-                            "i",
+                          "Local": [
+                            2,
                             {
-                              "start": 261,
-                              "end": 262
+                              "start": 296,
+                              "end": 297
                             }
                           ]
                         },
@@ -559,26 +732,26 @@
                             }
                           },
                           "span": {
-                            "start": 265,
-                            "end": 266
+                            "start": 300,
+                            "end": 301
                           }
                         },
                         "kind": "Normal",
                         "op_span": {
-                          "start": 263,
-                          "end": 264
+                          "start": 298,
+                          "end": 299
                         }
                       }
                     },
                     "span": {
-                      "start": 261,
-                      "end": 266
+                      "start": 296,
+                      "end": 301
                     }
                   }
                 },
                 "span": {
-                  "start": 261,
-                  "end": 266
+                  "start": 296,
+                  "end": 301
                 }
               },
               "cond": {
@@ -586,32 +759,44 @@
                   "BinaryOp": {
                     "op": "Less",
                     "op_span": {
-                      "start": 270,
-                      "end": 271
+                      "start": 305,
+                      "end": 306
                     },
                     "lhs": {
                       "data": {
-                        "Ident": "i"
+                        "Local": [
+                          2,
+                          {
+                            "start": 303,
+                            "end": 304
+                          }
+                        ]
                       },
                       "span": {
-                        "start": 268,
-                        "end": 269
+                        "start": 303,
+                        "end": 304
                       }
                     },
                     "rhs": {
                       "data": {
-                        "Ident": "n"
+                        "Local": [
+                          1,
+                          {
+                            "start": 307,
+                            "end": 308
+                          }
+                        ]
                       },
                       "span": {
-                        "start": 272,
-                        "end": 273
+                        "start": 307,
+                        "end": 308
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 268,
-                  "end": 273
+                  "start": 303,
+                  "end": 308
                 }
               },
               "incr": {
@@ -620,11 +805,11 @@
                     "data": {
                       "Assign": {
                         "target": {
-                          "Ident": [
-                            "i",
+                          "Local": [
+                            2,
                             {
-                              "start": 275,
-                              "end": 276
+                              "start": 310,
+                              "end": 311
                             }
                           ]
                         },
@@ -635,26 +820,26 @@
                             }
                           },
                           "span": {
-                            "start": 278,
-                            "end": 279
+                            "start": 313,
+                            "end": 314
                           }
                         },
                         "kind": "Add",
                         "op_span": {
-                          "start": 276,
-                          "end": 278
+                          "start": 311,
+                          "end": 313
                         }
                       }
                     },
                     "span": {
-                      "start": 275,
-                      "end": 279
+                      "start": 310,
+                      "end": 314
                     }
                   }
                 },
                 "span": {
-                  "start": 275,
-                  "end": 279
+                  "start": 310,
+                  "end": 314
                 }
               },
               "body": {
@@ -669,25 +854,37 @@
                                 "ArrayAccess": {
                                   "array": {
                                     "data": {
-                                      "Ident": "x"
+                                      "Local": [
+                                        4,
+                                        {
+                                          "start": 320,
+                                          "end": 321
+                                        }
+                                      ]
                                     },
                                     "span": {
-                                      "start": 285,
-                                      "end": 286
+                                      "start": 320,
+                                      "end": 321
                                     }
                                   },
                                   "index": {
                                     "data": {
-                                      "Ident": "i"
+                                      "Local": [
+                                        2,
+                                        {
+                                          "start": 322,
+                                          "end": 323
+                                        }
+                                      ]
                                     },
                                     "span": {
-                                      "start": 287,
-                                      "end": 288
+                                      "start": 322,
+                                      "end": 323
                                     }
                                   },
                                   "span": {
-                                    "start": 286,
-                                    "end": 289
+                                    "start": 321,
+                                    "end": 324
                                   }
                                 }
                               },
@@ -696,16 +893,22 @@
                                   "BinaryOp": {
                                     "op": "Add",
                                     "op_span": {
-                                      "start": 294,
-                                      "end": 295
+                                      "start": 329,
+                                      "end": 330
                                     },
                                     "lhs": {
                                       "data": {
-                                        "Ident": "i"
+                                        "Local": [
+                                          2,
+                                          {
+                                            "start": 327,
+                                            "end": 328
+                                          }
+                                        ]
                                       },
                                       "span": {
-                                        "start": 292,
-                                        "end": 293
+                                        "start": 327,
+                                        "end": 328
                                       }
                                     },
                                     "rhs": {
@@ -715,33 +918,33 @@
                                         }
                                       },
                                       "span": {
-                                        "start": 296,
-                                        "end": 297
+                                        "start": 331,
+                                        "end": 332
                                       }
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 292,
-                                  "end": 297
+                                  "start": 327,
+                                  "end": 332
                                 }
                               },
                               "kind": "Normal",
                               "op_span": {
-                                "start": 290,
-                                "end": 291
+                                "start": 325,
+                                "end": 326
                               }
                             }
                           },
                           "span": {
-                            "start": 286,
-                            "end": 297
+                            "start": 321,
+                            "end": 332
                           }
                         }
                       },
                       "span": {
-                        "start": 286,
-                        "end": 297
+                        "start": 321,
+                        "end": 332
                       }
                     },
                     {
@@ -753,25 +956,37 @@
                                 "ArrayAccess": {
                                   "array": {
                                     "data": {
-                                      "Ident": "y"
+                                      "Local": [
+                                        5,
+                                        {
+                                          "start": 336,
+                                          "end": 337
+                                        }
+                                      ]
                                     },
                                     "span": {
-                                      "start": 301,
-                                      "end": 302
+                                      "start": 336,
+                                      "end": 337
                                     }
                                   },
                                   "index": {
                                     "data": {
-                                      "Ident": "i"
+                                      "Local": [
+                                        2,
+                                        {
+                                          "start": 338,
+                                          "end": 339
+                                        }
+                                      ]
                                     },
                                     "span": {
-                                      "start": 303,
-                                      "end": 304
+                                      "start": 338,
+                                      "end": 339
                                     }
                                   },
                                   "span": {
-                                    "start": 302,
-                                    "end": 305
+                                    "start": 337,
+                                    "end": 340
                                   }
                                 }
                               },
@@ -782,40 +997,40 @@
                                   }
                                 },
                                 "span": {
-                                  "start": 308,
-                                  "end": 309
+                                  "start": 343,
+                                  "end": 344
                                 }
                               },
                               "kind": "Normal",
                               "op_span": {
-                                "start": 306,
-                                "end": 307
+                                "start": 341,
+                                "end": 342
                               }
                             }
                           },
                           "span": {
-                            "start": 302,
-                            "end": 309
+                            "start": 337,
+                            "end": 344
                           }
                         }
                       },
                       "span": {
-                        "start": 302,
-                        "end": 309
+                        "start": 337,
+                        "end": 344
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 0,
-                  "end": 312
+                  "end": 347
                 }
               }
             }
           },
           "span": {
             "start": 0,
-            "end": 312
+            "end": 347
           }
         },
         {
@@ -827,11 +1042,11 @@
                     "data": {
                       "Assign": {
                         "target": {
-                          "Ident": [
-                            "k",
+                          "Local": [
+                            3,
                             {
-                              "start": 319,
-                              "end": 320
+                              "start": 354,
+                              "end": 355
                             }
                           ]
                         },
@@ -842,26 +1057,26 @@
                             }
                           },
                           "span": {
-                            "start": 323,
-                            "end": 324
+                            "start": 358,
+                            "end": 359
                           }
                         },
                         "kind": "Normal",
                         "op_span": {
-                          "start": 321,
-                          "end": 322
+                          "start": 356,
+                          "end": 357
                         }
                       }
                     },
                     "span": {
-                      "start": 319,
-                      "end": 324
+                      "start": 354,
+                      "end": 359
                     }
                   }
                 },
                 "span": {
-                  "start": 319,
-                  "end": 324
+                  "start": 354,
+                  "end": 359
                 }
               },
               "cond": {
@@ -869,32 +1084,44 @@
                   "BinaryOp": {
                     "op": "Less",
                     "op_span": {
-                      "start": 329,
-                      "end": 330
+                      "start": 364,
+                      "end": 365
                     },
                     "lhs": {
                       "data": {
-                        "Ident": "k"
+                        "Local": [
+                          3,
+                          {
+                            "start": 362,
+                            "end": 363
+                          }
+                        ]
                       },
                       "span": {
-                        "start": 327,
-                        "end": 328
+                        "start": 362,
+                        "end": 363
                       }
                     },
                     "rhs": {
                       "data": {
-                        "Ident": "n"
+                        "Local": [
+                          1,
+                          {
+                            "start": 366,
+                            "end": 367
+                          }
+                        ]
                       },
                       "span": {
-                        "start": 331,
-                        "end": 332
+                        "start": 366,
+                        "end": 367
                       }
                     }
                   }
                 },
                 "span": {
-                  "start": 327,
-                  "end": 332
+                  "start": 362,
+                  "end": 367
                 }
               },
               "incr": {
@@ -903,11 +1130,11 @@
                     "data": {
                       "Assign": {
                         "target": {
-                          "Ident": [
-                            "k",
+                          "Local": [
+                            3,
                             {
-                              "start": 334,
-                              "end": 335
+                              "start": 369,
+                              "end": 370
                             }
                           ]
                         },
@@ -918,26 +1145,26 @@
                             }
                           },
                           "span": {
-                            "start": 337,
-                            "end": 338
+                            "start": 372,
+                            "end": 373
                           }
                         },
                         "kind": "Add",
                         "op_span": {
-                          "start": 335,
-                          "end": 337
+                          "start": 370,
+                          "end": 372
                         }
                       }
                     },
                     "span": {
-                      "start": 334,
-                      "end": 338
+                      "start": 369,
+                      "end": 373
                     }
                   }
                 },
                 "span": {
-                  "start": 334,
-                  "end": 338
+                  "start": 369,
+                  "end": 373
                 }
               },
               "body": {
@@ -952,11 +1179,11 @@
                                 "data": {
                                   "Assign": {
                                     "target": {
-                                      "Ident": [
-                                        "i",
+                                      "Local": [
+                                        2,
                                         {
-                                          "start": 349,
-                                          "end": 350
+                                          "start": 384,
+                                          "end": 385
                                         }
                                       ]
                                     },
@@ -965,16 +1192,22 @@
                                         "BinaryOp": {
                                           "op": "Sub",
                                           "op_span": {
-                                            "start": 354,
-                                            "end": 355
+                                            "start": 389,
+                                            "end": 390
                                           },
                                           "lhs": {
                                             "data": {
-                                              "Ident": "n"
+                                              "Local": [
+                                                1,
+                                                {
+                                                  "start": 388,
+                                                  "end": 389
+                                                }
+                                              ]
                                             },
                                             "span": {
-                                              "start": 353,
-                                              "end": 354
+                                              "start": 388,
+                                              "end": 389
                                             }
                                           },
                                           "rhs": {
@@ -984,33 +1217,33 @@
                                               }
                                             },
                                             "span": {
-                                              "start": 355,
-                                              "end": 356
+                                              "start": 390,
+                                              "end": 391
                                             }
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 353,
-                                        "end": 356
+                                        "start": 388,
+                                        "end": 391
                                       }
                                     },
                                     "kind": "Normal",
                                     "op_span": {
-                                      "start": 351,
-                                      "end": 352
+                                      "start": 386,
+                                      "end": 387
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 349,
-                                  "end": 356
+                                  "start": 384,
+                                  "end": 391
                                 }
                               }
                             },
                             "span": {
-                              "start": 349,
-                              "end": 356
+                              "start": 384,
+                              "end": 391
                             }
                           },
                           "cond": {
@@ -1018,20 +1251,30 @@
                               "UnaryOp": [
                                 "Not",
                                 {
+                                  "start": 395,
+                                  "end": 397
+                                },
+                                {
                                   "data": {
                                     "BinaryOp": {
                                       "op": "Less",
                                       "op_span": {
-                                        "start": 360,
-                                        "end": 362
+                                        "start": 395,
+                                        "end": 397
                                       },
                                       "lhs": {
                                         "data": {
-                                          "Ident": "i"
+                                          "Local": [
+                                            2,
+                                            {
+                                              "start": 393,
+                                              "end": 394
+                                            }
+                                          ]
                                         },
                                         "span": {
-                                          "start": 358,
-                                          "end": 359
+                                          "start": 393,
+                                          "end": 394
                                         }
                                       },
                                       "rhs": {
@@ -1041,22 +1284,22 @@
                                           }
                                         },
                                         "span": {
-                                          "start": 363,
-                                          "end": 364
+                                          "start": 398,
+                                          "end": 399
                                         }
                                       }
                                     }
                                   },
                                   "span": {
-                                    "start": 358,
-                                    "end": 364
+                                    "start": 393,
+                                    "end": 399
                                   }
                                 }
                               ]
                             },
                             "span": {
-                              "start": 358,
-                              "end": 364
+                              "start": 393,
+                              "end": 399
                             }
                           },
                           "incr": {
@@ -1065,11 +1308,11 @@
                                 "data": {
                                   "Assign": {
                                     "target": {
-                                      "Ident": [
-                                        "i",
+                                      "Local": [
+                                        2,
                                         {
-                                          "start": 366,
-                                          "end": 367
+                                          "start": 401,
+                                          "end": 402
                                         }
                                       ]
                                     },
@@ -1080,26 +1323,26 @@
                                         }
                                       },
                                       "span": {
-                                        "start": 369,
-                                        "end": 370
+                                        "start": 404,
+                                        "end": 405
                                       }
                                     },
                                     "kind": "Sub",
                                     "op_span": {
-                                      "start": 367,
-                                      "end": 369
+                                      "start": 402,
+                                      "end": 404
                                     }
                                   }
                                 },
                                 "span": {
-                                  "start": 366,
-                                  "end": 370
+                                  "start": 401,
+                                  "end": 405
                                 }
                               }
                             },
                             "span": {
-                              "start": 366,
-                              "end": 370
+                              "start": 401,
+                              "end": 405
                             }
                           },
                           "body": {
@@ -1114,25 +1357,37 @@
                                             "ArrayAccess": {
                                               "array": {
                                                 "data": {
-                                                  "Ident": "y"
+                                                  "Local": [
+                                                    5,
+                                                    {
+                                                      "start": 413,
+                                                      "end": 414
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
-                                                  "start": 378,
-                                                  "end": 379
+                                                  "start": 413,
+                                                  "end": 414
                                                 }
                                               },
                                               "index": {
                                                 "data": {
-                                                  "Ident": "i"
+                                                  "Local": [
+                                                    2,
+                                                    {
+                                                      "start": 415,
+                                                      "end": 416
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
-                                                  "start": 380,
-                                                  "end": 381
+                                                  "start": 415,
+                                                  "end": 416
                                                 }
                                               },
                                               "span": {
-                                                "start": 379,
-                                                "end": 382
+                                                "start": 414,
+                                                "end": 417
                                               }
                                             }
                                           },
@@ -1141,35 +1396,47 @@
                                               "BinaryOp": {
                                                 "op": "Add",
                                                 "op_span": {
-                                                  "start": 389,
-                                                  "end": 390
+                                                  "start": 424,
+                                                  "end": 425
                                                 },
                                                 "lhs": {
                                                   "data": {
                                                     "ArrayAccess": {
                                                       "array": {
                                                         "data": {
-                                                          "Ident": "y"
+                                                          "Local": [
+                                                            5,
+                                                            {
+                                                              "start": 420,
+                                                              "end": 421
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
-                                                          "start": 385,
-                                                          "end": 386
+                                                          "start": 420,
+                                                          "end": 421
                                                         }
                                                       },
                                                       "index": {
                                                         "data": {
-                                                          "Ident": "i"
+                                                          "Local": [
+                                                            2,
+                                                            {
+                                                              "start": 422,
+                                                              "end": 423
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
-                                                          "start": 387,
-                                                          "end": 388
+                                                          "start": 422,
+                                                          "end": 423
                                                         }
                                                       }
                                                     }
                                                   },
                                                   "span": {
-                                                    "start": 386,
-                                                    "end": 389
+                                                    "start": 421,
+                                                    "end": 424
                                                   }
                                                 },
                                                 "rhs": {
@@ -1177,80 +1444,92 @@
                                                     "ArrayAccess": {
                                                       "array": {
                                                         "data": {
-                                                          "Ident": "x"
+                                                          "Local": [
+                                                            4,
+                                                            {
+                                                              "start": 426,
+                                                              "end": 427
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
-                                                          "start": 391,
-                                                          "end": 392
+                                                          "start": 426,
+                                                          "end": 427
                                                         }
                                                       },
                                                       "index": {
                                                         "data": {
-                                                          "Ident": "i"
+                                                          "Local": [
+                                                            2,
+                                                            {
+                                                              "start": 428,
+                                                              "end": 429
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
-                                                          "start": 393,
-                                                          "end": 394
+                                                          "start": 428,
+                                                          "end": 429
                                                         }
                                                       }
                                                     }
                                                   },
                                                   "span": {
-                                                    "start": 392,
-                                                    "end": 395
+                                                    "start": 427,
+                                                    "end": 430
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
-                                              "start": 386,
-                                              "end": 395
+                                              "start": 421,
+                                              "end": 430
                                             }
                                           },
                                           "kind": "Normal",
                                           "op_span": {
-                                            "start": 383,
-                                            "end": 384
+                                            "start": 418,
+                                            "end": 419
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 379,
-                                        "end": 395
+                                        "start": 414,
+                                        "end": 430
                                       }
                                     }
                                   },
                                   "span": {
-                                    "start": 379,
-                                    "end": 395
+                                    "start": 414,
+                                    "end": 430
                                   }
                                 }
                               ]
                             },
                             "span": {
                               "start": 0,
-                              "end": 400
+                              "end": 435
                             }
                           }
                         }
                       },
                       "span": {
                         "start": 0,
-                        "end": 400
+                        "end": 435
                       }
                     }
                   ]
                 },
                 "span": {
                   "start": 0,
-                  "end": 402
+                  "end": 437
                 }
               }
             }
           },
           "span": {
             "start": 0,
-            "end": 402
+            "end": 437
           }
         },
         {
@@ -1264,8 +1543,8 @@
                         "Ident": "print"
                       },
                       "span": {
-                        "start": 403,
-                        "end": 408
+                        "start": 438,
+                        "end": 443
                       }
                     }
                   },
@@ -1275,16 +1554,16 @@
                         "BinaryOp": {
                           "op": "Add",
                           "op_span": {
-                            "start": 428,
-                            "end": 429
+                            "start": 463,
+                            "end": 464
                           },
                           "lhs": {
                             "data": {
                               "BinaryOp": {
                                 "op": "Add",
                                 "op_span": {
-                                  "start": 424,
-                                  "end": 425
+                                  "start": 459,
+                                  "end": 460
                                 },
                                 "lhs": {
                                   "data": {
@@ -1296,11 +1575,17 @@
                                               "ArrayAccess": {
                                                 "array": {
                                                   "data": {
-                                                    "Ident": "y"
+                                                    "Local": [
+                                                      5,
+                                                      {
+                                                        "start": 444,
+                                                        "end": 445
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
-                                                    "start": 409,
-                                                    "end": 410
+                                                    "start": 444,
+                                                    "end": 445
                                                   }
                                                 },
                                                 "index": {
@@ -1310,22 +1595,22 @@
                                                     }
                                                   },
                                                   "span": {
-                                                    "start": 411,
-                                                    "end": 412
+                                                    "start": 446,
+                                                    "end": 447
                                                   }
                                                 }
                                               }
                                             },
                                             "span": {
-                                              "start": 410,
-                                              "end": 413
+                                              "start": 445,
+                                              "end": 448
                                             }
                                           },
                                           [
                                             "tostring",
                                             {
-                                              "start": 414,
-                                              "end": 422
+                                              "start": 449,
+                                              "end": 457
                                             }
                                           ]
                                         ]
@@ -1334,8 +1619,8 @@
                                     }
                                   },
                                   "span": {
-                                    "start": 422,
-                                    "end": 424
+                                    "start": 457,
+                                    "end": 459
                                   }
                                 },
                                 "rhs": {
@@ -1345,15 +1630,15 @@
                                     }
                                   },
                                   "span": {
-                                    "start": 425,
-                                    "end": 428
+                                    "start": 460,
+                                    "end": 463
                                   }
                                 }
                               }
                             },
                             "span": {
-                              "start": 422,
-                              "end": 428
+                              "start": 457,
+                              "end": 463
                             }
                           },
                           "rhs": {
@@ -1361,11 +1646,17 @@
                               "ArrayAccess": {
                                 "array": {
                                   "data": {
-                                    "Ident": "y"
+                                    "Local": [
+                                      5,
+                                      {
+                                        "start": 464,
+                                        "end": 465
+                                      }
+                                    ]
                                   },
                                   "span": {
-                                    "start": 429,
-                                    "end": 430
+                                    "start": 464,
+                                    "end": 465
                                   }
                                 },
                                 "index": {
@@ -1373,16 +1664,22 @@
                                     "BinaryOp": {
                                       "op": "Sub",
                                       "op_span": {
-                                        "start": 432,
-                                        "end": 433
+                                        "start": 467,
+                                        "end": 468
                                       },
                                       "lhs": {
                                         "data": {
-                                          "Ident": "n"
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 466,
+                                              "end": 467
+                                            }
+                                          ]
                                         },
                                         "span": {
-                                          "start": 431,
-                                          "end": 432
+                                          "start": 466,
+                                          "end": 467
                                         }
                                       },
                                       "rhs": {
@@ -1392,50 +1689,50 @@
                                           }
                                         },
                                         "span": {
-                                          "start": 433,
-                                          "end": 434
+                                          "start": 468,
+                                          "end": 469
                                         }
                                       }
                                     }
                                   },
                                   "span": {
-                                    "start": 431,
-                                    "end": 434
+                                    "start": 466,
+                                    "end": 469
                                   }
                                 }
                               }
                             },
                             "span": {
-                              "start": 430,
-                              "end": 435
+                              "start": 465,
+                              "end": 470
                             }
                           }
                         }
                       },
                       "span": {
-                        "start": 422,
-                        "end": 435
+                        "start": 457,
+                        "end": 470
                       }
                     }
                   ]
                 }
               },
               "span": {
-                "start": 408,
-                "end": 436
+                "start": 443,
+                "end": 471
               }
             }
           },
           "span": {
-            "start": 408,
-            "end": 436
+            "start": 443,
+            "end": 471
           }
         }
       ]
     },
     "span": {
       "start": 0,
-      "end": 436
+      "end": 471
     }
   }
 }

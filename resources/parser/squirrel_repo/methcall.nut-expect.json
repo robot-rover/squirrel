@@ -11,11 +11,15 @@
   "default_expr": [],
   "local_names": [
     [
-      "start",
+      "vargv",
       0
+    ],
+    [
+      "start",
+      1
     ]
   ],
-  "num_locals": 1,
+  "num_locals": 2,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -154,7 +158,13 @@
                                         },
                                         "value": {
                                           "data": {
-                                            "Ident": "startstate"
+                                            "Local": [
+                                              0,
+                                              {
+                                                "start": 167,
+                                                "end": 177
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 167,
@@ -368,6 +378,10 @@
                                           "data": {
                                             "UnaryOp": [
                                               "Not",
+                                              {
+                                                "start": 269,
+                                                "end": 270
+                                              },
                                               {
                                                 "data": {
                                                   "Ident": "bool"
@@ -626,7 +640,13 @@
                                         "args": [
                                           {
                                             "data": {
-                                              "Ident": "start_state"
+                                              "Local": [
+                                                0,
+                                                {
+                                                  "start": 443,
+                                                  "end": 454
+                                                }
+                                              ]
                                             },
                                             "span": {
                                               "start": 443,
@@ -663,7 +683,13 @@
                                         },
                                         "value": {
                                           "data": {
-                                            "Ident": "max_counter"
+                                            "Local": [
+                                              1,
+                                              {
+                                                "start": 473,
+                                                "end": 484
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 473,
@@ -804,6 +830,10 @@
                                       "data": {
                                         "UnaryOp": [
                                           "Not",
+                                          {
+                                            "start": 549,
+                                            "end": 551
+                                          },
                                           {
                                             "data": {
                                               "BinaryOp": {
@@ -1025,27 +1055,36 @@
                         "local_names": [
                           [
                             "n",
-                            0
-                          ],
-                          [
-                            "val",
-                            1
-                          ],
-                          [
-                            "toggle",
                             2
                           ],
                           [
-                            "i",
+                            "val",
                             3
                           ],
                           [
-                            "ntoggle",
+                            "toggle",
                             4
+                          ],
+                          [
+                            "i",
+                            5
+                          ],
+                          [
+                            "ntoggle",
+                            6
                           ]
                         ],
-                        "num_locals": 5,
-                        "upvalues": [],
+                        "num_locals": 7,
+                        "upvalues": [
+                          [
+                            0,
+                            0
+                          ],
+                          [
+                            0,
+                            1
+                          ]
+                        ],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -1057,7 +1096,7 @@
                                       "Assign": {
                                         "target": {
                                           "Local": [
-                                            0,
+                                            2,
                                             {
                                               "start": 661,
                                               "end": 662
@@ -1082,7 +1121,13 @@
                                                             "FieldAccess": [
                                                               {
                                                                 "data": {
-                                                                  "Ident": "vargv"
+                                                                  "Local": [
+                                                                    0,
+                                                                    {
+                                                                      "start": 665,
+                                                                      "end": 670
+                                                                    }
+                                                                  ]
                                                                 },
                                                                 "span": {
                                                                   "start": 665,
@@ -1134,7 +1179,13 @@
                                                             "ArrayAccess": {
                                                               "array": {
                                                                 "data": {
-                                                                  "Ident": "vargv"
+                                                                  "Local": [
+                                                                    1,
+                                                                    {
+                                                                      "start": 680,
+                                                                      "end": 685
+                                                                    }
+                                                                  ]
                                                                 },
                                                                 "span": {
                                                                   "start": 680,
@@ -1219,7 +1270,7 @@
                                       "Assign": {
                                         "target": {
                                           "Local": [
-                                            1,
+                                            3,
                                             {
                                               "start": 716,
                                               "end": 719
@@ -1262,7 +1313,7 @@
                                       "Assign": {
                                         "target": {
                                           "Local": [
-                                            2,
+                                            4,
                                             {
                                               "start": 735,
                                               "end": 741
@@ -1286,7 +1337,13 @@
                                               "args": [
                                                 {
                                                   "data": {
-                                                    "Ident": "val"
+                                                    "Local": [
+                                                      3,
+                                                      {
+                                                        "start": 751,
+                                                        "end": 754
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 751,
@@ -1326,7 +1383,7 @@
                                       "Assign": {
                                         "target": {
                                           "Local": [
-                                            3,
+                                            5,
                                             {
                                               "start": 767,
                                               "end": 768
@@ -1335,7 +1392,13 @@
                                         },
                                         "value": {
                                           "data": {
-                                            "Ident": "n"
+                                            "Local": [
+                                              2,
+                                              {
+                                                "start": 771,
+                                                "end": 772
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 771,
@@ -1372,8 +1435,8 @@
                                             "end": 787
                                           },
                                           {
-                                            "Ident": [
-                                              "i",
+                                            "Local": [
+                                              5,
                                               {
                                                 "start": 784,
                                                 "end": 785
@@ -1396,8 +1459,8 @@
                                                 "data": {
                                                   "Assign": {
                                                     "target": {
-                                                      "Ident": [
-                                                        "val",
+                                                      "Local": [
+                                                        3,
                                                         {
                                                           "start": 797,
                                                           "end": 800
@@ -1416,7 +1479,13 @@
                                                                       "FieldAccess": [
                                                                         {
                                                                           "data": {
-                                                                            "Ident": "toggle"
+                                                                            "Local": [
+                                                                              4,
+                                                                              {
+                                                                                "start": 803,
+                                                                                "end": 809
+                                                                              }
+                                                                            ]
                                                                           },
                                                                           "span": {
                                                                             "start": 803,
@@ -1516,7 +1585,13 @@
                                                         "FieldAccess": [
                                                           {
                                                             "data": {
-                                                              "Ident": "toggle"
+                                                              "Local": [
+                                                                4,
+                                                                {
+                                                                  "start": 847,
+                                                                  "end": 853
+                                                                }
+                                                              ]
                                                             },
                                                             "span": {
                                                               "start": 847,
@@ -1589,8 +1664,8 @@
                                     "data": {
                                       "Assign": {
                                         "target": {
-                                          "Ident": [
-                                            "val",
+                                          "Local": [
+                                            3,
                                             {
                                               "start": 892,
                                               "end": 895
@@ -1633,7 +1708,7 @@
                                       "Assign": {
                                         "target": {
                                           "Local": [
-                                            4,
+                                            6,
                                             {
                                               "start": 911,
                                               "end": 918
@@ -1657,7 +1732,13 @@
                                               "args": [
                                                 {
                                                   "data": {
-                                                    "Ident": "val"
+                                                    "Local": [
+                                                      3,
+                                                      {
+                                                        "start": 931,
+                                                        "end": 934
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 931,
@@ -1707,8 +1788,8 @@
                                     "data": {
                                       "Assign": {
                                         "target": {
-                                          "Ident": [
-                                            "i",
+                                          "Local": [
+                                            5,
                                             {
                                               "start": 944,
                                               "end": 945
@@ -1717,7 +1798,13 @@
                                         },
                                         "value": {
                                           "data": {
-                                            "Ident": "n"
+                                            "Local": [
+                                              2,
+                                              {
+                                                "start": 948,
+                                                "end": 949
+                                              }
+                                            ]
                                           },
                                           "span": {
                                             "start": 948,
@@ -1754,8 +1841,8 @@
                                             "end": 964
                                           },
                                           {
-                                            "Ident": [
-                                              "i",
+                                            "Local": [
+                                              5,
                                               {
                                                 "start": 961,
                                                 "end": 962
@@ -1778,8 +1865,8 @@
                                                 "data": {
                                                   "Assign": {
                                                     "target": {
-                                                      "Ident": [
-                                                        "val",
+                                                      "Local": [
+                                                        3,
                                                         {
                                                           "start": 974,
                                                           "end": 977
@@ -1798,7 +1885,13 @@
                                                                       "FieldAccess": [
                                                                         {
                                                                           "data": {
-                                                                            "Ident": "ntoggle"
+                                                                            "Local": [
+                                                                              6,
+                                                                              {
+                                                                                "start": 980,
+                                                                                "end": 987
+                                                                              }
+                                                                            ]
                                                                           },
                                                                           "span": {
                                                                             "start": 980,
@@ -1898,7 +1991,13 @@
                                                         "FieldAccess": [
                                                           {
                                                             "data": {
-                                                              "Ident": "ntoggle"
+                                                              "Local": [
+                                                                6,
+                                                                {
+                                                                  "start": 1024,
+                                                                  "end": 1031
+                                                                }
+                                                              ]
                                                             },
                                                             "span": {
                                                               "start": 1024,
@@ -2004,7 +2103,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 1074,
                         "end": 1079
@@ -2157,7 +2256,13 @@
                                       },
                                       "rhs": {
                                         "data": {
-                                          "Ident": "start"
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 1120,
+                                              "end": 1125
+                                            }
+                                          ]
                                         },
                                         "span": {
                                           "start": 1120,

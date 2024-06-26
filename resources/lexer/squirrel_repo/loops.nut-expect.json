@@ -267,9 +267,7 @@
   },
   "Semicolon",
   "Newline",
-  {
-    "Identifier": "do"
-  },
+  "Do",
   "Newline",
   "LeftCurlyBrace",
   "Newline",

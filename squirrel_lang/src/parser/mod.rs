@@ -90,19 +90,32 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         Token::For => parse_for(tokens)?,
         Token::ForEach => parse_foreach(tokens)?,
         Token::Switch => parse_switch(tokens)?,
-        Token::While => parse_while(tokens)?,
+        Token::While | Token::Do => parse_while(tokens)?,
         _ => parse_expr_line(tokens)?.into(),
     };
     Ok(stmt)
 }
 
 fn parse_while<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
-    let while_span = tokens.expect_token(Token::While, true)?;
+    let (loop_token, loop_token_span) = tokens.next_token(true)?;
+    let is_do = match loop_token {
+        Token::While => false,
+        Token::Do => true,
+        _ => unreachable!("This function should not be called with a non-loop token"),
+    };
+    let mut body = None;
+    if is_do {
+        body = Some(tokens.scoped(|tokens| parse_statement(tokens))?);
+        tokens.expect_token(Token::While, true)?;
+    }
     tokens.expect_token(Token::LeftParenthesis, true)?;
     let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
     tokens.expect_token(Token::RightParenthesis, true)?;
-    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
-    Ok(Statement::while_loop(cond, body, while_span))
+    if !is_do {
+        body = Some(tokens.scoped(|tokens| parse_statement(tokens))?);
+    }
+
+    Ok(Statement::while_loop(cond, body.unwrap(), loop_token_span))
 }
 
 fn parse_switch<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -159,7 +172,7 @@ fn parse_foreach<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     tokens.expect_token(Token::LeftParenthesis, true)?;
     let (token, span) = tokens.next_token(true)?;
     let ident1 = match token {
-        Token::Identifier(name) => (name.to_string(), span),
+        Token::Identifier(name) => (name, span),
         other => return Err(ParseError::unexpected_token(other, span)),
     };
     let ident2 = match tokens.peek_token(true)? {
@@ -167,7 +180,7 @@ fn parse_foreach<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
             tokens.skip_token();
             let (token, ctx) = tokens.next_token(true)?;
             match token {
-                Token::Identifier(name) => Some((name.to_string(), ctx)),
+                Token::Identifier(name) => Some((name, ctx)),
                 other => return Err(ParseError::unexpected_token(other, ctx)),
             }
         }
@@ -176,11 +189,15 @@ fn parse_foreach<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     tokens.expect_token(Token::In, true)?;
     let iterable = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
     tokens.expect_token(Token::RightParenthesis, true)?;
-    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
     let (index, value) = match ident2 {
         Some(ident2) => (Some(ident1), ident2),
         None => (None, ident1),
     };
+
+    let index = index.map(|(name, _ctx)| tokens.lcl().add_local(&name));
+    let value = tokens.lcl().add_local(&value.0);
+
+    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
     Ok(Statement::foreach(index, value, iterable, body, for_span))
 }
 
@@ -243,7 +260,7 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
             Token::Identifier(name) => (name, ctx),
             other => return Err(ParseError::unexpected_token(other, ctx)),
         };
-        let val = if let (Token::Assign, assign_span) = tokens.peek_token(true)? {
+        let val = if let (Token::Assign, assign_span) = tokens.peek_token(false)? {
             let assign_span = *assign_span;
             tokens.skip_token();
             let val = parse_expr(

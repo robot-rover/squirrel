@@ -9,8 +9,13 @@
   },
   "num_args": 0,
   "default_expr": [],
-  "local_names": [],
-  "num_locals": 0,
+  "local_names": [
+    [
+      "vargv",
+      0
+    ]
+  ],
+  "num_locals": 1,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -317,7 +322,13 @@
                                           "FieldAccess": [
                                             {
                                               "data": {
-                                                "Ident": "child"
+                                                "Local": [
+                                                  0,
+                                                  {
+                                                    "start": 175,
+                                                    "end": 180
+                                                  }
+                                                ]
                                               },
                                               "span": {
                                                 "start": 175,

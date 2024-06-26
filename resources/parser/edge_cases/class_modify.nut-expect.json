@@ -11,11 +11,15 @@
   "default_expr": [],
   "local_names": [
     [
-      "fooinst",
+      "vargv",
       0
+    ],
+    [
+      "fooinst",
+      1
     ]
   ],
-  "num_locals": 1,
+  "num_locals": 2,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -175,7 +179,7 @@
                 "Assign": {
                   "target": {
                     "Local": [
-                      0,
+                      1,
                       {
                         "start": 53,
                         "end": 60

@@ -88,6 +88,31 @@
   "RightCurlyBrace",
   "Newline",
   "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "n = "
+  },
+  "Plus",
+  {
+    "Identifier": "n"
+  },
+  "Period",
+  {
+    "Identifier": "tostring"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
   "Local",
   {
     "Identifier": "x"

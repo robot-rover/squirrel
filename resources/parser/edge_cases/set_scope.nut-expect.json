@@ -9,8 +9,13 @@
   },
   "num_args": 0,
   "default_expr": [],
-  "local_names": [],
-  "num_locals": 0,
+  "local_names": [
+    [
+      "vargv",
+      0
+    ]
+  ],
+  "num_locals": 1,
   "upvalues": [],
   "is_varargs": true,
   "body": {
@@ -47,9 +52,17 @@
                           [
                             "t",
                             0
+                          ],
+                          [
+                            "idx",
+                            1
+                          ],
+                          [
+                            "key",
+                            2
                           ]
                         ],
-                        "num_locals": 1,
+                        "num_locals": 3,
                         "upvalues": [],
                         "is_varargs": false,
                         "body": {
@@ -89,7 +102,13 @@
                                                 },
                                                 "lhs": {
                                                   "data": {
-                                                    "Ident": "t"
+                                                    "Local": [
+                                                      0,
+                                                      {
+                                                        "start": 36,
+                                                        "end": 37
+                                                      }
+                                                    ]
                                                   },
                                                   "span": {
                                                     "start": 36,
@@ -131,20 +150,8 @@
                               {
                                 "data": {
                                   "Foreach": {
-                                    "index_id": [
-                                      "idx",
-                                      {
-                                        "start": 58,
-                                        "end": 61
-                                      }
-                                    ],
-                                    "value_id": [
-                                      "key",
-                                      {
-                                        "start": 63,
-                                        "end": 66
-                                      }
-                                    ],
+                                    "index_idx": 1,
+                                    "value_idx": 2,
                                     "iterable": {
                                       "data": {
                                         "FunctionCall": {
@@ -152,7 +159,13 @@
                                             "FieldAccess": [
                                               {
                                                 "data": {
-                                                  "Ident": "t"
+                                                  "Local": [
+                                                    0,
+                                                    {
+                                                      "start": 70,
+                                                      "end": 71
+                                                    }
+                                                  ]
                                                 },
                                                 "span": {
                                                   "start": 70,
@@ -205,7 +218,13 @@
                                                     "args": [
                                                       {
                                                         "data": {
-                                                          "Ident": "key"
+                                                          "Local": [
+                                                            2,
+                                                            {
+                                                              "start": 98,
+                                                              "end": 101
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 98,
@@ -239,7 +258,13 @@
                                                       },
                                                       "lhs": {
                                                         "data": {
-                                                          "Ident": "idx"
+                                                          "Local": [
+                                                            1,
+                                                            {
+                                                              "start": 115,
+                                                              "end": 118
+                                                            }
+                                                          ]
                                                         },
                                                         "span": {
                                                           "start": 115,
@@ -261,7 +286,13 @@
                                                                     "FieldAccess": [
                                                                       {
                                                                         "data": {
-                                                                          "Ident": "t"
+                                                                          "Local": [
+                                                                            0,
+                                                                            {
+                                                                              "start": 121,
+                                                                              "end": 122
+                                                                            }
+                                                                          ]
                                                                         },
                                                                         "span": {
                                                                           "start": 121,
