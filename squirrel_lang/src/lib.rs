@@ -1,5 +1,7 @@
 #![feature(ptr_metadata)]
 #![feature(trace_macros)]
+// TODO: Remove this
+#![allow(unused)]
 
 pub mod context;
 pub mod lexer;

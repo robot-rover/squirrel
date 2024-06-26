@@ -144,10 +144,6 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
             ))
         }
         StatementData::Yield(val) => todo!("Yield not implemented"),
-        StatementData::LocalDec(ident, val) => {
-            let val = run_expression(context, val)?;
-            context.infunc.locals.insert(ident.0.clone(), val);
-        }
         StatementData::TryCatch(_, _, _) => todo!("Try Catch not implemented"),
         StatementData::Throw(_) => todo!("Throw not implemented"),
         StatementData::Const(_, _) => todo!("Const not implemented"),
@@ -312,6 +308,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             }
             return Ok(Value::Null);
         }
+        ExprData::Local(idx, span) => todo!(),
     }
 }
 
@@ -488,46 +485,6 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
     )))
 }
 
-// fn run_array_access(context: &mut Context, array: &Value, index: Value, span: Span) -> ExprResult {
-//     match array {
-//         Value::String(string) => {
-//             let index = match index {
-//                 Value::Integer(val) => val as usize,
-//                 _ => panic!("Illegal operation"),
-//             };
-//             Ok(Value::string(
-//                 string.0.chars().nth(index).unwrap().to_string(),
-//             ))
-//         }
-//         Value::Object(obj) => obj
-//             .0
-//             .borrow()
-//             .get_field(&index)
-//             .ok_or_else(|| panic!("Key not in object")),
-//         Value::Array(arr) => {
-//             let index = match index {
-//                 Value::Integer(val) => val as usize,
-//                 _ => panic!("Illegal operation"),
-//             };
-//             Ok(arr
-//                 .0
-//                 .borrow()
-//                 .get(index)
-//                 .cloned()
-//                 .unwrap_or_else(|| panic!("Array index out of bounds")))
-//         }
-//         Value::Weak(weak) => {
-//             let obj = weak.0.upgrade().expect("Weak reference is null");
-//             let val = obj
-//                 .borrow()
-//                 .get_field(&index)
-//                 .ok_or_else(|| panic!("Key not in object"));
-//             val
-//         }
-//         _ => panic!("illegal operation"),
-//     }
-// }
-
 fn run_unary_op(context: &mut Context, op: &UnaryOp, val: Value) -> ExprResult {
     let res = match op {
         UnaryOp::Neg => match val {
@@ -656,6 +613,7 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
                 .get_field_str(&field.0)
                 .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
+        AssignTarget::Local(idx, span) => todo!(),
     }
 }
 
@@ -690,6 +648,7 @@ fn run_assign(
             let index = HashValue::string(&field.0);
             (parent, index)
         },
+        AssignTarget::Local(idx, span) => todo!(),
     };
 
     match (target_obj, index) {

@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -81,8 +84,11 @@
                           "start": 45,
                           "end": 47
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -187,8 +193,11 @@
                           "start": 103,
                           "end": 105
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -660,8 +669,11 @@
                                   "start": 294,
                                   "end": 296
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -747,8 +759,11 @@
                                   "start": 368,
                                   "end": 370
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -1316,8 +1331,11 @@
                                   "start": 591,
                                   "end": 593
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -1403,8 +1421,11 @@
                                   "start": 666,
                                   "end": 668
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -1490,8 +1511,11 @@
                                   "start": 737,
                                   "end": 739
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -1586,8 +1610,11 @@
                                   "start": 814,
                                   "end": 816
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -2466,8 +2493,11 @@
                                   "start": 1139,
                                   "end": 1141
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -2553,8 +2583,11 @@
                                   "start": 1214,
                                   "end": 1216
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -2640,8 +2673,11 @@
                                   "start": 1285,
                                   "end": 1287
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {

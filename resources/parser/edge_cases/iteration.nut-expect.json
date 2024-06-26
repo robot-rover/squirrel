@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -227,8 +230,16 @@
                           "start": 80,
                           "end": 82
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [
+                          [
+                            "i",
+                            0
+                          ]
+                        ],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -238,29 +249,44 @@
                                   "For": {
                                     "init": {
                                       "data": {
-                                        "LocalDec": [
-                                          [
-                                            "i",
-                                            {
-                                              "start": 100,
-                                              "end": 101
-                                            }
-                                          ],
-                                          {
-                                            "data": {
-                                              "Literal": {
-                                                "Integer": 0
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Local": [
+                                                  0,
+                                                  {
+                                                    "start": 100,
+                                                    "end": 101
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 0
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 104,
+                                                  "end": 105
+                                                }
+                                              },
+                                              "kind": "Normal",
+                                              "op_span": {
+                                                "start": 102,
+                                                "end": 103
                                               }
-                                            },
-                                            "span": {
-                                              "start": 104,
-                                              "end": 105
                                             }
+                                          },
+                                          "span": {
+                                            "start": 100,
+                                            "end": 105
                                           }
-                                        ]
+                                        }
                                       },
                                       "span": {
-                                        "start": 94,
+                                        "start": 100,
                                         "end": 105
                                       }
                                     },

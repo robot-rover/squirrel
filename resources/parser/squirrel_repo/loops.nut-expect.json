@@ -7,69 +7,104 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "arr",
+      0
+    ],
+    [
+      "i",
+      1
+    ],
+    [
+      "i",
+      2
+    ],
+    [
+      "i",
+      3
+    ]
+  ],
+  "num_locals": 4,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
       "Block": [
         {
           "data": {
-            "LocalDec": [
-              [
-                "arr",
-                {
-                  "start": 6,
-                  "end": 9
-                }
-              ],
-              {
-                "data": {
-                  "ArrayDecl": [
-                    {
-                      "data": {
-                        "Literal": {
-                          "String": "one"
-                        }
-                      },
-                      "span": {
-                        "start": 11,
-                        "end": 16
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
+                      {
+                        "start": 6,
+                        "end": 9
                       }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "ArrayDecl": [
+                        {
+                          "data": {
+                            "Literal": {
+                              "String": "one"
+                            }
+                          },
+                          "span": {
+                            "start": 11,
+                            "end": 16
+                          }
+                        },
+                        {
+                          "data": {
+                            "Literal": {
+                              "String": "two"
+                            }
+                          },
+                          "span": {
+                            "start": 17,
+                            "end": 22
+                          }
+                        },
+                        {
+                          "data": {
+                            "Literal": {
+                              "String": "three"
+                            }
+                          },
+                          "span": {
+                            "start": 23,
+                            "end": 30
+                          }
+                        }
+                      ]
                     },
-                    {
-                      "data": {
-                        "Literal": {
-                          "String": "two"
-                        }
-                      },
-                      "span": {
-                        "start": 17,
-                        "end": 22
-                      }
-                    },
-                    {
-                      "data": {
-                        "Literal": {
-                          "String": "three"
-                        }
-                      },
-                      "span": {
-                        "start": 23,
-                        "end": 30
-                      }
+                    "span": {
+                      "start": 10,
+                      "end": 31
                     }
-                  ]
-                },
-                "span": {
-                  "start": 10,
-                  "end": 31
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 9,
+                    "end": 10
+                  }
                 }
+              },
+              "span": {
+                "start": 6,
+                "end": 31
               }
-            ]
+            }
           },
           "span": {
-            "start": 0,
+            "start": 6,
             "end": 31
           }
         },
@@ -368,29 +403,44 @@
             "For": {
               "init": {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "i",
-                      {
-                        "start": 152,
-                        "end": 153
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": {
-                          "Integer": 0
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            1,
+                            {
+                              "start": 152,
+                              "end": 153
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 0
+                            }
+                          },
+                          "span": {
+                            "start": 154,
+                            "end": 155
+                          }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 153,
+                          "end": 154
                         }
-                      },
-                      "span": {
-                        "start": 154,
-                        "end": 155
                       }
+                    },
+                    "span": {
+                      "start": 152,
+                      "end": 155
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 146,
+                  "start": 152,
                   "end": 155
                 }
               },
@@ -728,29 +778,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "i",
-                {
-                  "start": 249,
-                  "end": 250
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 0
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      2,
+                      {
+                        "start": 249,
+                        "end": 250
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 0
+                      }
+                    },
+                    "span": {
+                      "start": 251,
+                      "end": 252
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 250,
+                    "end": 251
                   }
-                },
-                "span": {
-                  "start": 251,
-                  "end": 252
                 }
+              },
+              "span": {
+                "start": 249,
+                "end": 252
               }
-            ]
+            }
           },
           "span": {
-            "start": 243,
+            "start": 249,
             "end": 252
           }
         },
@@ -1091,29 +1156,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "i",
-                {
-                  "start": 360,
-                  "end": 361
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 0
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      3,
+                      {
+                        "start": 360,
+                        "end": 361
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 0
+                      }
+                    },
+                    "span": {
+                      "start": 362,
+                      "end": 363
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 361,
+                    "end": 362
                   }
-                },
-                "span": {
-                  "start": 362,
-                  "end": 363
                 }
+              },
+              "span": {
+                "start": 360,
+                "end": 363
               }
-            ]
+            }
           },
           "span": {
-            "start": 354,
+            "start": 360,
             "end": 363
           }
         },

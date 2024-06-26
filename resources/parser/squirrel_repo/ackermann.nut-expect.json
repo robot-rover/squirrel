@@ -7,8 +7,16 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "n",
+      0
+    ]
+  ],
+  "num_locals": 1,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,23 +46,20 @@
                           "start": 108,
                           "end": 114
                         },
-                        "args": [
+                        "num_args": 2,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "M",
-                            {
-                              "start": 109,
-                              "end": 110
-                            }
+                            0
                           ],
                           [
                             "N",
-                            {
-                              "start": 112,
-                              "end": 113
-                            }
+                            1
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 2,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -450,28 +455,11 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "n",
-                {
-                  "start": 243,
-                  "end": 244
-                }
-              ],
-              {
-                "data": {
-                  "Literal": "Null"
-                },
-                "span": {
-                  "start": 0,
-                  "end": 0
-                }
-              }
-            ]
+            "Block": []
           },
           "span": {
             "start": 0,
-            "end": 244
+            "end": 242
           }
         },
         {

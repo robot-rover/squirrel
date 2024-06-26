@@ -2,7 +2,7 @@ use std::convert::TryFrom;
 
 use serde::{Deserialize, Serialize};
 
-use crate::context::Span;
+use crate::{context::Span, lexer::{FunctionLocals, LocalResolution}};
 
 use super::error::ParseError;
 
@@ -14,6 +14,12 @@ pub enum Literal {
     Number(f64),
     String(String),
     Null,
+}
+
+impl Literal {
+    pub fn string(val: impl Into<String>) -> Self {
+        Literal::String(val.into())
+    }
 }
 
 impl PartialEq for Literal {
@@ -82,10 +88,39 @@ pub enum UnaryRefOp {
 pub struct Function {
     pub keyword_span: Span,
     pub arg_span: Span,
-    pub args: Vec<Ident>,
+    pub num_args: u32,
     pub default_expr: Vec<Expr>,
+    pub local_names: Vec<(String, u32)>,
+    pub num_locals: u32,
+    // Outer local idx, Inner local idx
+    pub upvalues: Vec<(u32, u32)>,
     pub is_varargs: bool,
     pub body: StateRef,
+}
+
+impl Function {
+    pub fn new(
+        keyword_span: Span,
+        arg_span: Span,
+        num_args: u32,
+        default_expr: Vec<Expr>,
+        is_varargs: bool,
+        locals: FunctionLocals,
+        body: Statement,
+    ) -> Self {
+
+        Function {
+            keyword_span,
+            arg_span,
+            num_args,
+            default_expr,
+            num_locals: locals.local_count(),
+            local_names: locals.locals.into_iter().map(|(name, idx)| (name.to_string(), idx)).collect(),
+            upvalues: locals.upvalues,
+            is_varargs,
+            body: Box::new(body),
+        }
+    }
 }
 
 pub type StateRef = Box<Statement>;
@@ -114,7 +149,6 @@ pub enum StatementData {
     Continue,
     Return(Expr),
     Yield(Expr),
-    LocalDec(Ident, Expr),
     TryCatch(StateRef, Ident, StateRef),
     Throw(Expr),
     Const(Ident, Literal),
@@ -221,11 +255,6 @@ impl Statement {
         StatementData::Yield(expr).spanning(span)
     }
 
-    pub fn local_dec(ident: Ident, val: Expr, local_span: Span) -> Self {
-        let span = ident.1 | local_span | val.span;
-        StatementData::LocalDec(ident, val).spanning(span)
-    }
-
     pub fn try_catch(
         try_body: Statement,
         catch_id: Ident,
@@ -272,6 +301,7 @@ pub enum AssignTarget {
         span: Span,
     },
     FieldAccess(ExprRef, Ident),
+    Local(u32, Span),
 }
 
 impl AssignTarget {
@@ -280,6 +310,7 @@ impl AssignTarget {
             AssignTarget::Ident(ident) => ident.1,
             AssignTarget::ArrayAccess { span, .. } => *span,
             AssignTarget::FieldAccess(path, ident) => path.span | ident.1,
+            AssignTarget::Local(_, span) => *span,
         }
     }
 
@@ -293,6 +324,28 @@ impl AssignTarget {
 
     pub fn field_access(path: ExprRef, ident: Ident) -> Self {
         AssignTarget::FieldAccess(path, ident)
+    }
+
+    pub fn local(id: u32, span: Span) -> Self {
+        AssignTarget::Local(id, span)
+    }
+}
+
+impl TryFrom<Expr> for AssignTarget {
+    type Error = ParseError;
+
+    fn try_from(value: Expr) -> Result<Self, Self::Error> {
+        let Expr { data, span } = value;
+        let target = match data {
+            ExprData::Ident(ident) => AssignTarget::ident((ident, span)),
+            ExprData::ArrayAccess { array, index } => {
+                AssignTarget::array_access(array, index, span)
+            }
+            ExprData::FieldAccess(path, ident) => AssignTarget::field_access(path, ident),
+            ExprData::Local(id, span) => AssignTarget::local(id, span),
+            _ => return Err(ParseError::invalid_assignment(span, data.to_string())),
+        };
+        Ok(target)
     }
 }
 
@@ -338,23 +391,6 @@ pub struct Assign {
     pub op_span: Span,
 }
 
-impl TryFrom<Expr> for AssignTarget {
-    type Error = ParseError;
-
-    fn try_from(value: Expr) -> Result<Self, Self::Error> {
-        let Expr { data, span } = value;
-        let target = match data {
-            ExprData::Ident(ident) => AssignTarget::ident((ident, span)),
-            ExprData::ArrayAccess { array, index } => {
-                AssignTarget::array_access(array, index, span)
-            }
-            ExprData::FieldAccess(path, ident) => AssignTarget::field_access(path, ident),
-            _ => return Err(ParseError::invalid_assignment(span, data.to_string())),
-        };
-        Ok(target)
-    }
-}
-
 #[derive(strum_macros::Display, Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub enum ExprData {
     Literal(Literal),
@@ -397,6 +433,7 @@ pub enum ExprData {
         this: ExprRef,
         parameters: Vec<Expr>,
     },
+    Local(u32, Span),
 }
 
 impl ExprData {
@@ -524,11 +561,9 @@ impl Expr {
         }
         .spanning(rawcall_span | end_span)
     }
-}
 
-impl From<Ident> for Expr {
-    fn from(value: Ident) -> Self {
-        ExprData::Ident(value.0).spanning(value.1)
+    pub fn ident<S: Into<String>>(ident: (S, Span)) -> Self {
+        ExprData::Ident(ident.0.into()).spanning(ident.1)
     }
 }
 

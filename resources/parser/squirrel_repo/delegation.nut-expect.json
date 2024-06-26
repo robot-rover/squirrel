@@ -7,8 +7,16 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "player",
+      0
+    ]
+  ],
+  "num_locals": 1,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -196,8 +204,11 @@
                                   "start": 110,
                                   "end": 112
                                 },
-                                "args": [],
+                                "num_args": 0,
                                 "default_expr": [],
+                                "local_names": [],
+                                "num_locals": 0,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {
@@ -295,8 +306,11 @@
                           "start": 175,
                           "end": 177
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -619,76 +633,92 @@
                           "start": 258,
                           "end": 268
                         },
-                        "args": [
+                        "num_args": 2,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "name",
-                            {
-                              "start": 259,
-                              "end": 263
-                            }
+                            0
                           ],
                           [
                             "pos",
-                            {
-                              "start": 264,
-                              "end": 267
-                            }
+                            1
+                          ],
+                          [
+                            "newentity",
+                            2
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 3,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
                             "Block": [
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "newentity",
-                                      {
-                                        "start": 281,
-                                        "end": 290
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "UnaryOp": [
-                                          "Clone",
-                                          {
-                                            "data": {
-                                              "FieldAccess": [
-                                                {
-                                                  "data": "Globals",
-                                                  "span": {
-                                                    "start": 297,
-                                                    "end": 299
-                                                  }
-                                                },
-                                                [
-                                                  "PEntity",
-                                                  {
-                                                    "start": 299,
-                                                    "end": 306
-                                                  }
-                                                ]
-                                              ]
-                                            },
-                                            "span": {
-                                              "start": 297,
-                                              "end": 306
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            2,
+                                            {
+                                              "start": 281,
+                                              "end": 290
                                             }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "UnaryOp": [
+                                              "Clone",
+                                              {
+                                                "data": {
+                                                  "FieldAccess": [
+                                                    {
+                                                      "data": "Globals",
+                                                      "span": {
+                                                        "start": 297,
+                                                        "end": 299
+                                                      }
+                                                    },
+                                                    [
+                                                      "PEntity",
+                                                      {
+                                                        "start": 299,
+                                                        "end": 306
+                                                      }
+                                                    ]
+                                                  ]
+                                                },
+                                                "span": {
+                                                  "start": 297,
+                                                  "end": 306
+                                                }
+                                              }
+                                            ]
+                                          },
+                                          "span": {
+                                            "start": 291,
+                                            "end": 306
                                           }
-                                        ]
-                                      },
-                                      "span": {
-                                        "start": 291,
-                                        "end": 306
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 290,
+                                          "end": 291
+                                        }
                                       }
+                                    },
+                                    "span": {
+                                      "start": 281,
+                                      "end": 306
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 275,
+                                  "start": 281,
                                   "end": 306
                                 }
                               },
@@ -1095,158 +1125,193 @@
                           "start": 570,
                           "end": 580
                         },
-                        "args": [
+                        "num_args": 2,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "name",
-                            {
-                              "start": 571,
-                              "end": 575
-                            }
+                            0
                           ],
                           [
                             "pos",
-                            {
-                              "start": 576,
-                              "end": 579
-                            }
+                            1
+                          ],
+                          [
+                            "p",
+                            2
+                          ],
+                          [
+                            "newplayer",
+                            3
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 4,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
                             "Block": [
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "p",
-                                      {
-                                        "start": 593,
-                                        "end": 594
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "UnaryOp": [
-                                          "Clone",
-                                          {
-                                            "data": {
-                                              "FieldAccess": [
-                                                {
-                                                  "data": "Globals",
-                                                  "span": {
-                                                    "start": 603,
-                                                    "end": 605
-                                                  }
-                                                },
-                                                [
-                                                  "PPlayer",
-                                                  {
-                                                    "start": 605,
-                                                    "end": 612
-                                                  }
-                                                ]
-                                              ]
-                                            },
-                                            "span": {
-                                              "start": 603,
-                                              "end": 612
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            2,
+                                            {
+                                              "start": 593,
+                                              "end": 594
                                             }
-                                          }
-                                        ]
-                                      },
-                                      "span": {
-                                        "start": 597,
-                                        "end": 612
-                                      }
-                                    }
-                                  ]
-                                },
-                                "span": {
-                                  "start": 587,
-                                  "end": 612
-                                }
-                              },
-                              {
-                                "data": {
-                                  "LocalDec": [
-                                    [
-                                      "newplayer",
-                                      {
-                                        "start": 624,
-                                        "end": 633
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "FunctionCall": {
-                                          "func": {
-                                            "FieldAccess": [
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "UnaryOp": [
+                                              "Clone",
                                               {
                                                 "data": {
                                                   "FieldAccess": [
                                                     {
                                                       "data": "Globals",
                                                       "span": {
-                                                        "start": 636,
-                                                        "end": 638
+                                                        "start": 603,
+                                                        "end": 605
                                                       }
                                                     },
                                                     [
-                                                      "PEntity",
+                                                      "PPlayer",
                                                       {
-                                                        "start": 638,
-                                                        "end": 645
+                                                        "start": 605,
+                                                        "end": 612
                                                       }
                                                     ]
                                                   ]
                                                 },
                                                 "span": {
-                                                  "start": 636,
-                                                  "end": 645
+                                                  "start": 603,
+                                                  "end": 612
                                                 }
-                                              },
-                                              [
-                                                "new",
-                                                {
-                                                  "start": 646,
-                                                  "end": 649
-                                                }
-                                              ]
+                                              }
                                             ]
                                           },
-                                          "args": [
-                                            {
-                                              "data": {
-                                                "Ident": "name"
-                                              },
-                                              "span": {
-                                                "start": 650,
-                                                "end": 654
-                                              }
-                                            },
-                                            {
-                                              "data": {
-                                                "Ident": "pos"
-                                              },
-                                              "span": {
-                                                "start": 655,
-                                                "end": 658
-                                              }
-                                            }
-                                          ]
+                                          "span": {
+                                            "start": 597,
+                                            "end": 612
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 595,
+                                          "end": 596
                                         }
-                                      },
-                                      "span": {
-                                        "start": 649,
-                                        "end": 659
                                       }
+                                    },
+                                    "span": {
+                                      "start": 593,
+                                      "end": 612
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 618,
+                                  "start": 593,
+                                  "end": 612
+                                }
+                              },
+                              {
+                                "data": {
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            3,
+                                            {
+                                              "start": 624,
+                                              "end": 633
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "FunctionCall": {
+                                              "func": {
+                                                "FieldAccess": [
+                                                  {
+                                                    "data": {
+                                                      "FieldAccess": [
+                                                        {
+                                                          "data": "Globals",
+                                                          "span": {
+                                                            "start": 636,
+                                                            "end": 638
+                                                          }
+                                                        },
+                                                        [
+                                                          "PEntity",
+                                                          {
+                                                            "start": 638,
+                                                            "end": 645
+                                                          }
+                                                        ]
+                                                      ]
+                                                    },
+                                                    "span": {
+                                                      "start": 636,
+                                                      "end": 645
+                                                    }
+                                                  },
+                                                  [
+                                                    "new",
+                                                    {
+                                                      "start": 646,
+                                                      "end": 649
+                                                    }
+                                                  ]
+                                                ]
+                                              },
+                                              "args": [
+                                                {
+                                                  "data": {
+                                                    "Ident": "name"
+                                                  },
+                                                  "span": {
+                                                    "start": 650,
+                                                    "end": 654
+                                                  }
+                                                },
+                                                {
+                                                  "data": {
+                                                    "Ident": "pos"
+                                                  },
+                                                  "span": {
+                                                    "start": 655,
+                                                    "end": 658
+                                                  }
+                                                }
+                                              ]
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 649,
+                                            "end": 659
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 634,
+                                          "end": 635
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 624,
+                                      "end": 659
+                                    }
+                                  }
+                                },
+                                "span": {
+                                  "start": 624,
                                   "end": 659
                                 }
                               },
@@ -1350,143 +1415,158 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "player",
-                {
-                  "start": 722,
-                  "end": 728
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "FieldAccess": [
-                        {
-                          "data": {
-                            "Ident": "PPlayer"
-                          },
-                          "span": {
-                            "start": 729,
-                            "end": 736
-                          }
-                        },
-                        [
-                          "new",
-                          {
-                            "start": 737,
-                            "end": 740
-                          }
-                        ]
-                      ]
-                    },
-                    "args": [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
                       {
-                        "data": {
-                          "Literal": {
-                            "String": "godzilla"
-                          }
-                        },
-                        "span": {
-                          "start": 741,
-                          "end": 751
-                        }
-                      },
-                      {
-                        "data": {
-                          "TableDecl": [
-                            [
-                              {
-                                "data": {
-                                  "Literal": {
-                                    "String": "x"
-                                  }
-                                },
-                                "span": {
-                                  "start": 753,
-                                  "end": 754
-                                }
+                        "start": 722,
+                        "end": 728
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "FieldAccess": [
+                            {
+                              "data": {
+                                "Ident": "PPlayer"
                               },
-                              {
-                                "data": {
-                                  "Literal": {
-                                    "Integer": 10
-                                  }
-                                },
-                                "span": {
-                                  "start": 755,
-                                  "end": 757
-                                }
+                              "span": {
+                                "start": 729,
+                                "end": 736
                               }
-                            ],
+                            },
                             [
+                              "new",
                               {
-                                "data": {
-                                  "Literal": {
-                                    "String": "y"
-                                  }
-                                },
-                                "span": {
-                                  "start": 758,
-                                  "end": 759
-                                }
-                              },
-                              {
-                                "data": {
-                                  "Literal": {
-                                    "Integer": 20
-                                  }
-                                },
-                                "span": {
-                                  "start": 760,
-                                  "end": 762
-                                }
-                              }
-                            ],
-                            [
-                              {
-                                "data": {
-                                  "Literal": {
-                                    "String": "z"
-                                  }
-                                },
-                                "span": {
-                                  "start": 763,
-                                  "end": 764
-                                }
-                              },
-                              {
-                                "data": {
-                                  "Literal": {
-                                    "Integer": 30
-                                  }
-                                },
-                                "span": {
-                                  "start": 765,
-                                  "end": 767
-                                }
+                                "start": 737,
+                                "end": 740
                               }
                             ]
                           ]
                         },
-                        "span": {
-                          "start": 752,
-                          "end": 768
-                        }
+                        "args": [
+                          {
+                            "data": {
+                              "Literal": {
+                                "String": "godzilla"
+                              }
+                            },
+                            "span": {
+                              "start": 741,
+                              "end": 751
+                            }
+                          },
+                          {
+                            "data": {
+                              "TableDecl": [
+                                [
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "String": "x"
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 753,
+                                      "end": 754
+                                    }
+                                  },
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "Integer": 10
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 755,
+                                      "end": 757
+                                    }
+                                  }
+                                ],
+                                [
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "String": "y"
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 758,
+                                      "end": 759
+                                    }
+                                  },
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "Integer": 20
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 760,
+                                      "end": 762
+                                    }
+                                  }
+                                ],
+                                [
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "String": "z"
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 763,
+                                      "end": 764
+                                    }
+                                  },
+                                  {
+                                    "data": {
+                                      "Literal": {
+                                        "Integer": 30
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 765,
+                                      "end": 767
+                                    }
+                                  }
+                                ]
+                              ]
+                            },
+                            "span": {
+                              "start": 752,
+                              "end": 768
+                            }
+                          }
+                        ]
                       }
-                    ]
+                    },
+                    "span": {
+                      "start": 740,
+                      "end": 769
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 728,
+                    "end": 729
                   }
-                },
-                "span": {
-                  "start": 740,
-                  "end": 769
                 }
+              },
+              "span": {
+                "start": 722,
+                "end": 769
               }
-            ]
+            }
           },
           "span": {
-            "start": 716,
+            "start": 722,
             "end": 769
           }
         },

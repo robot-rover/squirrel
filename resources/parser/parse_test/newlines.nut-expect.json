@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -125,30 +128,24 @@
                           "start": 64,
                           "end": 92
                         },
-                        "args": [
+                        "num_args": 3,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "a",
-                            {
-                              "start": 70,
-                              "end": 71
-                            }
+                            0
                           ],
                           [
                             "b",
-                            {
-                              "start": 82,
-                              "end": 83
-                            }
+                            1
                           ],
                           [
                             "c",
-                            {
-                              "start": 89,
-                              "end": 90
-                            }
+                            2
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 3,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -795,8 +792,11 @@
                                     "start": 329,
                                     "end": 331
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -838,8 +838,11 @@
                                     "start": 363,
                                     "end": 365
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {

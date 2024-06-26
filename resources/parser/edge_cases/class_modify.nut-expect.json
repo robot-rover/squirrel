@@ -7,8 +7,16 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "fooinst",
+      0
+    ]
+  ],
+  "num_locals": 1,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -162,40 +170,55 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "fooinst",
-                {
-                  "start": 53,
-                  "end": 60
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "Expr": {
-                        "data": {
-                          "Ident": "Foo"
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
+                      {
+                        "start": 53,
+                        "end": 60
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "Expr": {
+                            "data": {
+                              "Ident": "Foo"
+                            },
+                            "span": {
+                              "start": 63,
+                              "end": 66
+                            }
+                          }
                         },
-                        "span": {
-                          "start": 63,
-                          "end": 66
-                        }
+                        "args": []
                       }
                     },
-                    "args": []
+                    "span": {
+                      "start": 66,
+                      "end": 68
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 61,
+                    "end": 62
                   }
-                },
-                "span": {
-                  "start": 66,
-                  "end": 68
                 }
+              },
+              "span": {
+                "start": 53,
+                "end": 68
               }
-            ]
+            }
           },
           "span": {
-            "start": 47,
+            "start": 53,
             "end": 68
           }
         }

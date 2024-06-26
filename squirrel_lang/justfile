@@ -1,3 +1,7 @@
 debug *TESTS:
     cargo test --no-run 2> /dev/null
     gdb --args ../target/debug/deps/squirrel_lang-8a33b775a42ce5c3 {{ TESTS }} --nocapture
+
+check:
+    -cargo check --color always 2> target/tmp/build.log
+    less -R < target/tmp/build.log

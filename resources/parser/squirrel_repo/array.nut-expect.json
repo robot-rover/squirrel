@@ -7,98 +7,43 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "n",
+      0
+    ],
+    [
+      "i",
+      1
+    ],
+    [
+      "k",
+      2
+    ],
+    [
+      "x",
+      3
+    ],
+    [
+      "y",
+      4
+    ]
+  ],
+  "num_locals": 5,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
       "Block": [
         {
           "data": {
-            "Block": [
-              {
-                "data": {
-                  "LocalDec": [
-                    [
-                      "n",
-                      {
-                        "start": 101,
-                        "end": 102
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": "Null"
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 0
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 0,
-                  "end": 102
-                }
-              },
-              {
-                "data": {
-                  "LocalDec": [
-                    [
-                      "i",
-                      {
-                        "start": 104,
-                        "end": 105
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": "Null"
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 0
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 0,
-                  "end": 105
-                }
-              },
-              {
-                "data": {
-                  "LocalDec": [
-                    [
-                      "k",
-                      {
-                        "start": 107,
-                        "end": 108
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": "Null"
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 0
-                      }
-                    }
-                  ]
-                },
-                "span": {
-                  "start": 0,
-                  "end": 108
-                }
-              }
-            ]
+            "Block": []
           },
           "span": {
             "start": 0,
-            "end": 108
+            "end": 100
           }
         },
         {
@@ -412,27 +357,42 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "x",
-                {
-                  "start": 207,
-                  "end": 208
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      3,
+                      {
+                        "start": 207,
+                        "end": 208
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "ArrayDecl": []
+                    },
+                    "span": {
+                      "start": 211,
+                      "end": 213
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 209,
+                    "end": 210
+                  }
                 }
-              ],
-              {
-                "data": {
-                  "ArrayDecl": []
-                },
-                "span": {
-                  "start": 211,
-                  "end": 213
-                }
+              },
+              "span": {
+                "start": 207,
+                "end": 213
               }
-            ]
+            }
           },
           "span": {
-            "start": 201,
+            "start": 207,
             "end": 213
           }
         },
@@ -487,27 +447,42 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "y",
-                {
-                  "start": 234,
-                  "end": 235
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      4,
+                      {
+                        "start": 234,
+                        "end": 235
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "ArrayDecl": []
+                    },
+                    "span": {
+                      "start": 238,
+                      "end": 240
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 236,
+                    "end": 237
+                  }
                 }
-              ],
-              {
-                "data": {
-                  "ArrayDecl": []
-                },
-                "span": {
-                  "start": 238,
-                  "end": 240
-                }
+              },
+              "span": {
+                "start": 234,
+                "end": 240
               }
-            ]
+            }
           },
           "span": {
-            "start": 228,
+            "start": 234,
             "end": 240
           }
         },

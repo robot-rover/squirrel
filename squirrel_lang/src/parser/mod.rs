@@ -1,7 +1,7 @@
 pub mod ast;
 mod pratt;
 
-use std::convert::TryInto;
+use std::{convert::TryInto, iter};
 
 use ast::{AssignKind, AssignTarget, CallTarget};
 use error::{ParseError, ParseResult};
@@ -16,25 +16,26 @@ use crate::{
 
 pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
     let mut lexer = SpannedLexer::new(contents, path);
-    let stmts = parse_statements(&mut lexer, |tok| tok == None)
-        .map_err(|err| err.with_context(&lexer))
-        .map_err(|err| err.with_context(contents))?;
-    let body = Statement::block(stmts, Span::empty(), Span::empty());
-    Ok(Function {
-        keyword_span: Span::empty(),
-        arg_span: Span::empty(),
-        args: Vec::new(),
-        default_expr: Vec::new(),
-        is_varargs: true,
-        body: Box::new(body),
-    })
+
+    let (root_fn_body, fn_locals) = lexer.fn_scoped(iter::empty(), |lexer| {
+        let stmts = parse_statements(lexer, |tok| tok == None)
+            .map_err(|err| err.with_context(&lexer))
+            .map_err(|err| err.with_context(contents))?;
+        Ok(Statement::block(stmts, Span::empty(), Span::empty()))
+    })?;
+    assert!(fn_locals.upvalues.is_empty(), "Root function cannot have upvalues");
+
+
+    Ok(Function::new(Span::empty(), Span::empty(), 0, Vec::new(), true, fn_locals, root_fn_body))
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
-    let start_span = lexer.expect_token(Token::LeftCurlyBrace, true)?;
-    let statements = parse_statements(lexer, |tok| tok == Some(&Token::RightCurlyBrace))?;
-    let end_span = lexer.expect_token(Token::RightCurlyBrace, true)?;
-    Ok(Statement::block(statements, start_span, end_span))
+    lexer.scoped(|lexer| {
+        let start_span = lexer.expect_token(Token::LeftCurlyBrace, true)?;
+        let statements = parse_statements(lexer, |tok| tok == Some(&Token::RightCurlyBrace))?;
+        let end_span = lexer.expect_token(Token::RightCurlyBrace, true)?;
+        Ok(Statement::block(statements, start_span, end_span))
+    })
 }
 
 fn parse_statements<'s, F: Fn(Option<&Token>) -> bool>(
@@ -63,29 +64,10 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         }
         Token::Class => parse_class(tokens)?.into(),
         Token::If => parse_if(tokens)?,
-        // TODO: Combine with Yield
-        Token::Return => {
-            let return_span = tokens.expect_token(Token::Return, true)?;
-            let expr = match tokens.peek_token(true)? {
-                (Token::Newline, _) | (Token::Semicolon, _) => {
-                    tokens.skip_token();
-                    Expr::literal(Literal::Null, Span::empty())
-                }
-                _ => parse_expr_line(tokens)?,
-            };
-            Statement::return_stmt(expr, return_span)
-        }
-        Token::Yield => {
-            let return_span = tokens.expect_token(Token::Yield, true)?;
-            let expr = match tokens.peek_token(true)? {
-                (Token::Newline, _) | (Token::Semicolon, _) => {
-                    tokens.skip_token();
-                    Expr::literal(Literal::Null, Span::empty())
-                }
-                _ => parse_expr_line(tokens)?,
-            };
-            Statement::yield_stmt(expr, return_span)
-        }
+        Token::Return | Token::Yield => {
+            let is_yield = matches!(initial_token, Token::Yield);
+            parse_return_yield(tokens, is_yield)?
+        },
         Token::Throw => {
             let throw_span = tokens.expect_token(Token::Throw, true)?;
             let expr = parse_expr_line(tokens)?;
@@ -96,116 +78,142 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
             let fn_span = tokens.expect_token(Token::Function, true)?;
             parse_function(tokens, fn_span)?.into()
         }
-        Token::For => {
-            let for_span = tokens.expect_token(Token::For, true)?;
-            tokens.expect_token(Token::LeftParenthesis, true)?;
-            let init = match tokens.peek_token(true)?.0 {
-                Token::Local => parse_local(tokens, false)?,
-                Token::Semicolon => {
-                    tokens.skip_token();
-                    Statement::empty_stmt()
-                }
-                _ => parse_expr_token(tokens, Token::Semicolon)?.0.into(),
-            };
-            let cond = match tokens.peek_token(true)? {
-                (Token::Semicolon, _) => {
-                    let semi_span = tokens.expect_token(Token::Semicolon, true)?;
-                    Expr::literal(Literal::Integer(1), semi_span)
-                }
-                _ => parse_expr_token(tokens, Token::Semicolon)?.0,
-            };
-            let step = match tokens.peek_token(true)? {
-                (Token::RightParenthesis, _) => {
-                    tokens.skip_token();
-                    Statement::empty_stmt()
-                }
-                _ => parse_expr_token(tokens, Token::RightParenthesis)?.0.into(),
-            };
-            let body = parse_statement(tokens)?;
-            Statement::for_loop(init, cond, step, body, for_span)
-        }
-        Token::ForEach => {
-            let for_span = tokens.expect_token(Token::ForEach, true)?;
-            tokens.expect_token(Token::LeftParenthesis, true)?;
-            let (token, span) = tokens.next_token(true)?;
-            let ident1 = match token {
-                Token::Identifier(name) => (name, span),
-                other => return Err(ParseError::unexpected_token(other, span)),
-            };
-            let ident2 = match tokens.peek_token(true)? {
-                (Token::Comma, _) => {
-                    tokens.skip_token();
-                    let (token, ctx) = tokens.next_token(true)?;
-                    match token {
-                        Token::Identifier(name) => Some((name, ctx)),
-                        other => return Err(ParseError::unexpected_token(other, ctx)),
-                    }
-                }
-                _ => None,
-            };
-            tokens.expect_token(Token::In, true)?;
-            let iterable = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
-            tokens.expect_token(Token::RightParenthesis, true)?;
-            let body = parse_statement(tokens)?;
-            let (index, value) = match ident2 {
-                Some(ident2) => (Some(ident1), ident2),
-                None => (None, ident1),
-            };
-            Statement::foreach(index, value, iterable, body, for_span)
-        }
-        Token::Switch => {
-            let switch_span = tokens.expect_token(Token::Switch, true)?;
-            tokens.expect_token(Token::LeftParenthesis, true)?;
-            let expr = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
-            tokens.expect_token(Token::RightParenthesis, true)?;
-            tokens.expect_token(Token::LeftCurlyBrace, true)?;
-            let mut cases = Vec::new();
-            let mut default = None;
-            let end_span = loop {
-                let (next, span) = tokens.next_token(true)?;
-                match next {
-                    Token::Case => {
-                        if default.is_some() {
-                            return Err(ParseError::syntax_error(
-                                "Case statement is not allowed after default".to_string(),
-                                span,
-                            ));
-                        }
-                        let case_expr = parse_expr(tokens, |tok| tok == &Token::Colon, true)?;
-                        tokens.expect_token(Token::Colon, true)?;
-                        let body = parse_statements(tokens, |tok| {
-                            tok == Some(&Token::Case) || tok == Some(&Token::Default)
-                        })?;
-                        cases.push((
-                            case_expr,
-                            Statement::block(body, Span::empty(), Span::empty()),
-                        ));
-                    }
-                    Token::Default => {
-                        tokens.expect_token(Token::Colon, true)?;
-                        let body =
-                            parse_statements(tokens, |tok| tok == Some(&Token::RightCurlyBrace))?;
-                        default = Some(Statement::block(body, Span::empty(), Span::empty()))
-                    }
-                    Token::RightCurlyBrace => {
-                        break span;
-                    }
-                    other => return Err(ParseError::unexpected_token(other, span)),
-                }
-            };
-            Statement::switch(expr, cases, default, switch_span, end_span)
-        }
-        Token::While => {
-            let while_span = tokens.expect_token(Token::While, true)?;
-            tokens.expect_token(Token::LeftParenthesis, true)?;
-            let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
-            tokens.expect_token(Token::RightParenthesis, true)?;
-            let body = parse_statement(tokens)?;
-            Statement::while_loop(cond, body, while_span)
-        }
+        Token::For => parse_for(tokens)?,
+        Token::ForEach => parse_foreach(tokens)?,
+        Token::Switch => parse_switch(tokens)?,
+        Token::While => parse_while(tokens)?,
         _ => parse_expr_line(tokens)?.into(),
     };
     Ok(stmt)
+}
+
+fn parse_while<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
+    let while_span = tokens.expect_token(Token::While, true)?;
+    tokens.expect_token(Token::LeftParenthesis, true)?;
+    let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
+    tokens.expect_token(Token::RightParenthesis, true)?;
+    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
+    Ok(Statement::while_loop(cond, body, while_span))
+}
+
+fn parse_switch<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
+    let switch_span = tokens.expect_token(Token::Switch, true)?;
+    tokens.expect_token(Token::LeftParenthesis, true)?;
+    let expr = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
+    tokens.expect_token(Token::RightParenthesis, true)?;
+    tokens.expect_token(Token::LeftCurlyBrace, true)?;
+    let mut cases = Vec::new();
+    let mut default = None;
+    // TODO: How do switch statements and local resolution interact
+    let end_span = tokens.scoped(|tokens| loop {
+        let (next, span) = tokens.next_token(true)?;
+        match next {
+            Token::Case => {
+                if default.is_some() {
+                    return Err(ParseError::syntax_error(
+                        "Case statement is not allowed after default".to_string(),
+                        span,
+                    ));
+                }
+                let case_expr = parse_expr(tokens, |tok| tok == &Token::Colon, true)?;
+                tokens.expect_token(Token::Colon, true)?;
+                let body = parse_statements(tokens, |tok| {
+                    tok == Some(&Token::Case) || tok == Some(&Token::Default)
+                })?;
+                cases.push((
+                    case_expr,
+                    Statement::block(body, Span::empty(), Span::empty()),
+                ));
+            }
+            Token::Default => {
+                tokens.expect_token(Token::Colon, true)?;
+                let body =
+                    parse_statements(tokens, |tok| tok == Some(&Token::RightCurlyBrace))?;
+                default = Some(Statement::block(body, Span::empty(), Span::empty()))
+            }
+            Token::RightCurlyBrace => {
+                break Ok(span);
+            }
+            other => return Err(ParseError::unexpected_token(other, span)),
+        }
+    })?;
+    Ok(Statement::switch(expr, cases, default, switch_span, end_span))
+}
+
+fn parse_foreach<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
+    let for_span = tokens.expect_token(Token::ForEach, true)?;
+    tokens.expect_token(Token::LeftParenthesis, true)?;
+    let (token, span) = tokens.next_token(true)?;
+    let ident1 = match token {
+        Token::Identifier(name) => (name.to_string(), span),
+        other => return Err(ParseError::unexpected_token(other, span)),
+    };
+    let ident2 = match tokens.peek_token(true)? {
+        (Token::Comma, _) => {
+            tokens.skip_token();
+            let (token, ctx) = tokens.next_token(true)?;
+            match token {
+                Token::Identifier(name) => Some((name.to_string(), ctx)),
+                other => return Err(ParseError::unexpected_token(other, ctx)),
+            }
+        }
+        _ => None,
+    };
+    tokens.expect_token(Token::In, true)?;
+    let iterable = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
+    tokens.expect_token(Token::RightParenthesis, true)?;
+    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
+    let (index, value) = match ident2 {
+        Some(ident2) => (Some(ident1), ident2),
+        None => (None, ident1),
+    };
+    Ok(Statement::foreach(index, value, iterable, body, for_span))
+}
+
+fn parse_for<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
+    let for_span = tokens.expect_token(Token::For, true)?;
+    tokens.expect_token(Token::LeftParenthesis, true)?;
+    let init = match tokens.peek_token(true)?.0 {
+        Token::Local => parse_local(tokens, false)?,
+        Token::Semicolon => {
+            tokens.skip_token();
+            Statement::empty_stmt()
+        }
+        _ => parse_expr_token(tokens, Token::Semicolon)?.0.into(),
+    };
+    let cond = match tokens.peek_token(true)? {
+        (Token::Semicolon, _) => {
+            let semi_span = tokens.expect_token(Token::Semicolon, true)?;
+            Expr::literal(Literal::Integer(1), semi_span)
+        }
+        _ => parse_expr_token(tokens, Token::Semicolon)?.0,
+    };
+    let step = match tokens.peek_token(true)? {
+        (Token::RightParenthesis, _) => {
+            tokens.skip_token();
+            Statement::empty_stmt()
+        }
+        _ => parse_expr_token(tokens, Token::RightParenthesis)?.0.into(),
+    };
+    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
+    Ok(Statement::for_loop(init, cond, step, body, for_span))
+}
+
+fn parse_return_yield<'s>(tokens: &mut SpannedLexer<'s>, is_yield: bool) -> ParseResult<Statement> {
+    let expect_token = if is_yield { Token::Yield } else { Token::Return };
+    let kw_span = tokens.expect_token(expect_token, true)?;
+    let expr = match tokens.peek_token(true)? {
+        (Token::Newline, _) | (Token::Semicolon, _) => {
+            tokens.skip_token();
+            Expr::literal(Literal::Null, Span::empty())
+        }
+        _ => parse_expr_line(tokens)?,
+    };
+    if is_yield {
+        Ok(Statement::yield_stmt(expr, kw_span))
+    } else {
+        Ok(Statement::return_stmt(expr, kw_span))
+    }
 }
 
 fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> ParseResult<Statement> {
@@ -217,15 +225,17 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
             Token::Identifier(name) => (name, ctx),
             other => return Err(ParseError::unexpected_token(other, ctx)),
         };
-        let val = if let (Token::Assign, _) = tokens.peek_token(true)? {
+        let val = if let (Token::Assign, assign_span) = tokens.peek_token(true)? {
+            let assign_span = *assign_span;
             tokens.skip_token();
-            parse_expr(
+            let val = parse_expr(
                 tokens,
                 |tok| tok == &Token::Comma || tok == &Token::Newline || tok == &Token::Semicolon,
                 false,
-            )?
+            )?;
+            Some((assign_span, val))
         } else {
-            Expr::literal(Literal::Null, Span::empty())
+            None
         };
         decls.push((ident, val));
         let (term, ctx) = tokens.next_token(false)?;
@@ -237,14 +247,24 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
         }
     }
     debug_assert!(!decls.is_empty());
-    let statements = decls
+    let statements: Vec<Statement> = decls
         .into_iter()
-        .map(|(ident, val)| Statement::local_dec(ident, val, local_span))
+        .filter_map(|(ident, val)| {
+            let local_id = tokens.lcl().add_local(&ident.0);
+            val.map(|(assign_span, val)| {
+                Expr::assign(
+                    AssignTarget::Local(local_id, ident.1),
+                    assign_span,
+                    val,
+                    AssignKind::Normal,
+                ).into()
+            })
+        })
         .collect::<Vec<_>>();
     let statement = if statements.len() == 1 {
-        statements.into_iter().next().unwrap()
+        statements.into_iter().next().unwrap().into()
     } else {
-        let end_span = statements.last().unwrap().span;
+        let end_span = statements.last().map(|stmt| stmt.span).unwrap_or(Span::empty());
         Statement::block(statements, local_span, end_span)
     };
     Ok(statement)
@@ -255,10 +275,10 @@ fn parse_if<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     tokens.expect_token(Token::LeftParenthesis, true)?;
     let cond = parse_expr(tokens, |tok| tok == &Token::RightParenthesis, true)?;
     tokens.expect_token(Token::RightParenthesis, true)?;
-    let body = parse_statement(tokens)?;
+    let body = tokens.scoped(|tokens| parse_statement(tokens))?;
     let else_body = if let Some((Token::Else, _)) = tokens.try_peek_token(true)? {
         tokens.skip_token();
-        parse_statement(tokens)?
+        tokens.scoped(|tokens| parse_statement(tokens))?
     } else {
         Statement::empty_stmt()
     };
@@ -278,7 +298,7 @@ fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
         tokens.skip_token();
         let (parent_ident, ctx) = tokens.next_token(true)?;
         if let Token::Identifier(parent_name) = parent_ident {
-            Some((parent_name, ctx))
+            Some((parent_name.to_string(), ctx))
         } else {
             return Err(ParseError::unexpected_token(parent_ident, ctx));
         }
@@ -309,7 +329,7 @@ fn parse_table_or_class<'s>(
                 let end_span = tokens.expect_token(Token::RightCurlyBrace, true)?;
                 break end_span;
             }
-            (Token::Identifier(constructor), keyword_span) if constructor == "constructor" => {
+            (Token::Identifier(constructor), keyword_span) if *constructor == "constructor" => {
                 let keyword_span = *keyword_span;
                 if !allow_constructor_sugar {
                     return Err(ParseError::syntax_error(
@@ -320,7 +340,7 @@ fn parse_table_or_class<'s>(
                 tokens.skip_token();
                 let constructor = parse_function_args_body(tokens, keyword_span)?;
                 members.push((
-                    Expr::literal(Literal::String("constructor".to_string()), keyword_span),
+                    Expr::literal(Literal::string("constructor"), keyword_span),
                     Expr::function_def(constructor, keyword_span),
                 ));
             }
@@ -328,12 +348,12 @@ fn parse_table_or_class<'s>(
                 let keyword_span = *keyword_span;
                 let fn_span = tokens.expect_token(Token::Function, true)?;
                 let ident = match tokens.next_token(true)? {
-                    (Token::Identifier(name), ctx) => (name, ctx),
+                    (Token::Identifier(name), ctx) => (name.to_string(), ctx),
                     other => return Err(ParseError::unexpected_token(other.0, other.1)),
                 };
                 let func = parse_function_args_body(tokens, keyword_span)?;
                 members.push((
-                    Expr::literal(Literal::String(ident.0), ident.1),
+                    Expr::literal(Literal::string(ident.0), ident.1),
                     Expr::function_def(func, fn_span),
                 ));
             }
@@ -353,7 +373,7 @@ fn parse_table_or_class<'s>(
 fn parse_table_slot<'s>(tokens: &mut SpannedLexer<'s>, sep: &Token) -> ParseResult<(Expr, Expr)> {
     let (init_token, ctx) = tokens.next_token(true)?;
     let key = match init_token {
-        Token::Identifier(name) => Expr::literal(Literal::String(name), ctx),
+        Token::Identifier(name) => Expr::literal(Literal::string(name), ctx),
         Token::LeftSquareBracket => {
             let key = parse_expr(tokens, |tok| tok == &Token::RightSquareBracket, true)?;
             tokens.expect_token(Token::RightSquareBracket, true)?;
@@ -409,9 +429,9 @@ fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>, sep: Token) -> ParseResult
         }
     }
     let mut iter = elements.into_iter();
-    let mut target = iter.next().unwrap().into();
+    let mut target = Expr::ident(iter.next().unwrap());
     for (name, span) in iter {
-        target = Expr::field_access(target, (name, span));
+        target = Expr::field_access(target, (name.to_string(), span));
     }
 
     Ok(target.try_into().expect("This should be infallible"))
@@ -419,8 +439,8 @@ fn parse_hier_path<'s>(tokens: &mut SpannedLexer<'s>, sep: Token) -> ParseResult
 
 fn parse_list<'s>(
     tokens: &mut SpannedLexer<'s>,
-    start: Token,
-    end: Token,
+    start: Token<'s>,
+    end: Token<'s>,
 ) -> ParseResult<(Vec<Expr>, Span)> {
     let start_span = tokens.expect_token(start, true)?;
     let mut args = Vec::new();
@@ -491,15 +511,16 @@ fn parse_function_args_body<'s>(
         }
     };
 
-    let body = parse_statement(tokens)?;
-    Ok(Function {
-        args,
-        arg_span: init_call_ctx | end_call_ctx,
+    let (body, fn_locals) = tokens.fn_scoped(args.iter().map(|(name, _span)| *name), |tokens| parse_statement(tokens))?;
+    Ok(Function::new(
+        keyword_span,
+        init_call_ctx | end_call_ctx,
+        args.len() as u32,
         default_expr,
         is_varargs,
-        body: Box::new(body),
-        keyword_span,
-    })
+        fn_locals,
+        body
+    ))
 }
 
 pub mod error {
@@ -510,7 +531,7 @@ pub mod error {
     pub type ParseResult<T> = Result<T, ParseError>;
     #[derive(Debug)]
     pub enum ParseError {
-        UnexpectedToken(Token, Span, SqBacktrace),
+        UnexpectedToken(String, Span, SqBacktrace),
         UnexpectedEof(SqBacktrace),
         SyntaxError(String, Span, SqBacktrace),
         ErrorContext(SquirrelError),
@@ -562,8 +583,8 @@ pub mod error {
             }
         }
 
-        pub fn unexpected_token(tok: Token, span: Span) -> Self {
-            Self::UnexpectedToken(tok, span, SqBacktrace::new())
+        pub fn unexpected_token<'s>(tok: Token<'s>, span: Span) -> Self {
+            Self::UnexpectedToken(format!("{:?}", tok), span, SqBacktrace::new())
         }
 
         pub fn unexpected_eof() -> Self {
@@ -600,7 +621,8 @@ mod tests {
         };
         #[cfg(not(miri))]
         {
-            let expect_ast = exchange_data("parser", file_name, &actual_ast);
+            let mut expect_strg = String::new();
+            let expect_ast = exchange_data("parser", file_name, &actual_ast, &mut expect_strg);
 
             // TODO: Have a more useful comparison for these trees
             assert_eq!(actual_ast, expect_ast);

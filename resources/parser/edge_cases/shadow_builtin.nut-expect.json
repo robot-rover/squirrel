@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -53,16 +56,16 @@
                                   "start": 35,
                                   "end": 45
                                 },
-                                "args": [
+                                "num_args": 1,
+                                "default_expr": [],
+                                "local_names": [
                                   [
                                     "delegate",
-                                    {
-                                      "start": 36,
-                                      "end": 44
-                                    }
+                                    0
                                   ]
                                 ],
-                                "default_expr": [],
+                                "num_locals": 1,
+                                "upvalues": [],
                                 "is_varargs": false,
                                 "body": {
                                   "data": {

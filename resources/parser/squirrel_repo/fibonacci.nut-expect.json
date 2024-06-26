@@ -7,8 +7,16 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "n",
+      0
+    ]
+  ],
+  "num_locals": 1,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,16 +46,16 @@
                           "start": 108,
                           "end": 111
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "n",
-                            {
-                              "start": 109,
-                              "end": 110
-                            }
+                            0
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -296,148 +304,163 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "n",
-                {
-                  "start": 178,
-                  "end": 179
-                }
-              ],
-              {
-                "data": {
-                  "Ternary": {
-                    "cond": {
-                      "data": {
-                        "BinaryOp": {
-                          "op": "Eq",
-                          "op_span": {
-                            "start": 193,
-                            "end": 195
-                          },
-                          "lhs": {
-                            "data": {
-                              "FunctionCall": {
-                                "func": {
-                                  "FieldAccess": [
-                                    {
-                                      "data": {
-                                        "Ident": "vargv"
-                                      },
-                                      "span": {
-                                        "start": 182,
-                                        "end": 187
-                                      }
-                                    },
-                                    [
-                                      "len",
-                                      {
-                                        "start": 188,
-                                        "end": 191
-                                      }
-                                    ]
-                                  ]
-                                },
-                                "args": []
-                              }
-                            },
-                            "span": {
-                              "start": 191,
-                              "end": 193
-                            }
-                          },
-                          "rhs": {
-                            "data": {
-                              "Literal": {
-                                "Integer": 0
-                              }
-                            },
-                            "span": {
-                              "start": 195,
-                              "end": 196
-                            }
-                          }
-                        }
-                      },
-                      "span": {
-                        "start": 191,
-                        "end": 196
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
+                      {
+                        "start": 178,
+                        "end": 179
                       }
-                    },
-                    "true_expr": {
-                      "data": {
-                        "FunctionCall": {
-                          "func": {
-                            "FieldAccess": [
-                              {
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Ternary": {
+                        "cond": {
+                          "data": {
+                            "BinaryOp": {
+                              "op": "Eq",
+                              "op_span": {
+                                "start": 193,
+                                "end": 195
+                              },
+                              "lhs": {
                                 "data": {
-                                  "ArrayAccess": {
-                                    "array": {
-                                      "data": {
-                                        "Ident": "vargv"
-                                      },
-                                      "span": {
-                                        "start": 197,
-                                        "end": 202
-                                      }
+                                  "FunctionCall": {
+                                    "func": {
+                                      "FieldAccess": [
+                                        {
+                                          "data": {
+                                            "Ident": "vargv"
+                                          },
+                                          "span": {
+                                            "start": 182,
+                                            "end": 187
+                                          }
+                                        },
+                                        [
+                                          "len",
+                                          {
+                                            "start": 188,
+                                            "end": 191
+                                          }
+                                        ]
+                                      ]
                                     },
-                                    "index": {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 0
-                                        }
-                                      },
-                                      "span": {
-                                        "start": 203,
-                                        "end": 204
-                                      }
-                                    }
+                                    "args": []
                                   }
                                 },
                                 "span": {
-                                  "start": 202,
-                                  "end": 205
+                                  "start": 191,
+                                  "end": 193
                                 }
                               },
-                              [
-                                "tointeger",
-                                {
-                                  "start": 206,
-                                  "end": 215
+                              "rhs": {
+                                "data": {
+                                  "Literal": {
+                                    "Integer": 0
+                                  }
+                                },
+                                "span": {
+                                  "start": 195,
+                                  "end": 196
                                 }
-                              ]
-                            ]
+                              }
+                            }
                           },
-                          "args": []
+                          "span": {
+                            "start": 191,
+                            "end": 196
+                          }
+                        },
+                        "true_expr": {
+                          "data": {
+                            "FunctionCall": {
+                              "func": {
+                                "FieldAccess": [
+                                  {
+                                    "data": {
+                                      "ArrayAccess": {
+                                        "array": {
+                                          "data": {
+                                            "Ident": "vargv"
+                                          },
+                                          "span": {
+                                            "start": 197,
+                                            "end": 202
+                                          }
+                                        },
+                                        "index": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 0
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 203,
+                                            "end": 204
+                                          }
+                                        }
+                                      }
+                                    },
+                                    "span": {
+                                      "start": 202,
+                                      "end": 205
+                                    }
+                                  },
+                                  [
+                                    "tointeger",
+                                    {
+                                      "start": 206,
+                                      "end": 215
+                                    }
+                                  ]
+                                ]
+                              },
+                              "args": []
+                            }
+                          },
+                          "span": {
+                            "start": 215,
+                            "end": 217
+                          }
+                        },
+                        "false_expr": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 1
+                            }
+                          },
+                          "span": {
+                            "start": 218,
+                            "end": 219
+                          }
                         }
-                      },
-                      "span": {
-                        "start": 215,
-                        "end": 217
                       }
                     },
-                    "false_expr": {
-                      "data": {
-                        "Literal": {
-                          "Integer": 1
-                        }
-                      },
-                      "span": {
-                        "start": 218,
-                        "end": 219
-                      }
+                    "span": {
+                      "start": 191,
+                      "end": 219
                     }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 180,
+                    "end": 181
                   }
-                },
-                "span": {
-                  "start": 191,
-                  "end": 219
                 }
+              },
+              "span": {
+                "start": 178,
+                "end": 219
               }
-            ]
+            }
           },
           "span": {
-            "start": 172,
+            "start": 178,
             "end": 219
           }
         },

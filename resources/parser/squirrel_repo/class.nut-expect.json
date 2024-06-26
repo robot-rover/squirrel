@@ -7,8 +7,28 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "v0",
+      0
+    ],
+    [
+      "v1",
+      1
+    ],
+    [
+      "v2",
+      2
+    ],
+    [
+      "testy",
+      3
+    ]
+  ],
+  "num_locals": 4,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -55,8 +75,11 @@
                                     "start": 200,
                                     "end": 205
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": true,
                                   "body": {
                                     "data": {
@@ -503,16 +526,16 @@
                                     "start": 427,
                                     "end": 434
                                   },
-                                  "args": [
+                                  "num_args": 1,
+                                  "default_expr": [],
+                                  "local_names": [
                                     [
                                       "other",
-                                      {
-                                        "start": 428,
-                                        "end": 433
-                                      }
+                                      0
                                     ]
                                   ],
-                                  "default_expr": [],
+                                  "num_locals": 1,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -825,8 +848,11 @@
                                     "start": 621,
                                     "end": 623
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -1047,197 +1073,242 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "v0",
-                {
-                  "start": 682,
-                  "end": 684
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "Expr": {
-                        "data": {
-                          "Ident": "Vector3"
-                        },
-                        "span": {
-                          "start": 687,
-                          "end": 694
-                        }
-                      }
-                    },
-                    "args": [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
                       {
-                        "data": {
-                          "Literal": {
-                            "Integer": 1
-                          }
-                        },
-                        "span": {
-                          "start": 695,
-                          "end": 696
-                        }
-                      },
-                      {
-                        "data": {
-                          "Literal": {
-                            "Integer": 2
-                          }
-                        },
-                        "span": {
-                          "start": 697,
-                          "end": 698
-                        }
-                      },
-                      {
-                        "data": {
-                          "Literal": {
-                            "Integer": 3
-                          }
-                        },
-                        "span": {
-                          "start": 699,
-                          "end": 700
-                        }
+                        "start": 682,
+                        "end": 684
                       }
                     ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "Expr": {
+                            "data": {
+                              "Ident": "Vector3"
+                            },
+                            "span": {
+                              "start": 687,
+                              "end": 694
+                            }
+                          }
+                        },
+                        "args": [
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 1
+                              }
+                            },
+                            "span": {
+                              "start": 695,
+                              "end": 696
+                            }
+                          },
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 2
+                              }
+                            },
+                            "span": {
+                              "start": 697,
+                              "end": 698
+                            }
+                          },
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 3
+                              }
+                            },
+                            "span": {
+                              "start": 699,
+                              "end": 700
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 694,
+                      "end": 701
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 685,
+                    "end": 686
                   }
-                },
-                "span": {
-                  "start": 694,
-                  "end": 701
                 }
+              },
+              "span": {
+                "start": 682,
+                "end": 701
               }
-            ]
+            }
           },
           "span": {
-            "start": 676,
+            "start": 682,
             "end": 701
           }
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "v1",
-                {
-                  "start": 708,
-                  "end": 710
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "Expr": {
-                        "data": {
-                          "Ident": "Vector3"
-                        },
-                        "span": {
-                          "start": 713,
-                          "end": 720
-                        }
-                      }
-                    },
-                    "args": [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      1,
                       {
-                        "data": {
-                          "Literal": {
-                            "Integer": 11
-                          }
-                        },
-                        "span": {
-                          "start": 721,
-                          "end": 723
-                        }
-                      },
-                      {
-                        "data": {
-                          "Literal": {
-                            "Integer": 12
-                          }
-                        },
-                        "span": {
-                          "start": 724,
-                          "end": 726
-                        }
-                      },
-                      {
-                        "data": {
-                          "Literal": {
-                            "Integer": 13
-                          }
-                        },
-                        "span": {
-                          "start": 727,
-                          "end": 729
-                        }
+                        "start": 708,
+                        "end": 710
                       }
                     ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "Expr": {
+                            "data": {
+                              "Ident": "Vector3"
+                            },
+                            "span": {
+                              "start": 713,
+                              "end": 720
+                            }
+                          }
+                        },
+                        "args": [
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 11
+                              }
+                            },
+                            "span": {
+                              "start": 721,
+                              "end": 723
+                            }
+                          },
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 12
+                              }
+                            },
+                            "span": {
+                              "start": 724,
+                              "end": 726
+                            }
+                          },
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 13
+                              }
+                            },
+                            "span": {
+                              "start": 727,
+                              "end": 729
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 720,
+                      "end": 730
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 711,
+                    "end": 712
                   }
-                },
-                "span": {
-                  "start": 720,
-                  "end": 730
                 }
+              },
+              "span": {
+                "start": 708,
+                "end": 730
               }
-            ]
+            }
           },
           "span": {
-            "start": 702,
+            "start": 708,
             "end": 730
           }
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "v2",
-                {
-                  "start": 737,
-                  "end": 739
-                }
-              ],
-              {
-                "data": {
-                  "BinaryOp": {
-                    "op": "Add",
-                    "op_span": {
-                      "start": 745,
-                      "end": 746
-                    },
-                    "lhs": {
-                      "data": {
-                        "Ident": "v0"
-                      },
-                      "span": {
-                        "start": 742,
-                        "end": 744
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      2,
+                      {
+                        "start": 737,
+                        "end": 739
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "BinaryOp": {
+                        "op": "Add",
+                        "op_span": {
+                          "start": 745,
+                          "end": 746
+                        },
+                        "lhs": {
+                          "data": {
+                            "Ident": "v0"
+                          },
+                          "span": {
+                            "start": 742,
+                            "end": 744
+                          }
+                        },
+                        "rhs": {
+                          "data": {
+                            "Ident": "v1"
+                          },
+                          "span": {
+                            "start": 747,
+                            "end": 749
+                          }
+                        }
                       }
                     },
-                    "rhs": {
-                      "data": {
-                        "Ident": "v1"
-                      },
-                      "span": {
-                        "start": 747,
-                        "end": 749
-                      }
+                    "span": {
+                      "start": 742,
+                      "end": 749
                     }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 740,
+                    "end": 741
                   }
-                },
-                "span": {
-                  "start": 742,
-                  "end": 749
                 }
+              },
+              "span": {
+                "start": 737,
+                "end": 749
               }
-            ]
+            }
           },
           "span": {
-            "start": 731,
+            "start": 737,
             "end": 749
           }
         },
@@ -1414,8 +1485,11 @@
                                     "start": 855,
                                     "end": 857
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -1512,66 +1586,81 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "testy",
-                {
-                  "start": 929,
-                  "end": 934
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "FieldAccess": [
-                        {
-                          "data": {
-                            "FieldAccess": [
-                              {
-                                "data": {
-                                  "Ident": "FakeNamespace"
-                                },
-                                "span": {
-                                  "start": 937,
-                                  "end": 950
-                                }
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      3,
+                      {
+                        "start": 929,
+                        "end": 934
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "FieldAccess": [
+                            {
+                              "data": {
+                                "FieldAccess": [
+                                  {
+                                    "data": {
+                                      "Ident": "FakeNamespace"
+                                    },
+                                    "span": {
+                                      "start": 937,
+                                      "end": 950
+                                    }
+                                  },
+                                  [
+                                    "Utils",
+                                    {
+                                      "start": 951,
+                                      "end": 956
+                                    }
+                                  ]
+                                ]
                               },
-                              [
-                                "Utils",
-                                {
-                                  "start": 951,
-                                  "end": 956
-                                }
-                              ]
+                              "span": {
+                                "start": 937,
+                                "end": 956
+                              }
+                            },
+                            [
+                              "SuperClass",
+                              {
+                                "start": 957,
+                                "end": 967
+                              }
                             ]
-                          },
-                          "span": {
-                            "start": 937,
-                            "end": 956
-                          }
+                          ]
                         },
-                        [
-                          "SuperClass",
-                          {
-                            "start": 957,
-                            "end": 967
-                          }
-                        ]
-                      ]
+                        "args": []
+                      }
                     },
-                    "args": []
+                    "span": {
+                      "start": 967,
+                      "end": 969
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 935,
+                    "end": 936
                   }
-                },
-                "span": {
-                  "start": 967,
-                  "end": 969
                 }
+              },
+              "span": {
+                "start": 929,
+                "end": 969
               }
-            ]
+            }
           },
           "span": {
-            "start": 923,
+            "start": 929,
             "end": 969
           }
         }

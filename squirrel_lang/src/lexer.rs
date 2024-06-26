@@ -1,6 +1,7 @@
-use std::str::FromStr;
+use std::{convert::{self, identity}, str::FromStr};
 
 use ariadne::{Label, Report, ReportKind};
+use hashbrown::HashMap;
 use logos::{Lexer, Logos, Skip};
 use serde::{Deserialize, Serialize};
 
@@ -14,7 +15,7 @@ use self::error::{LexError, LexResult};
 #[logos(extras = LexerContext)]
 #[logos(error = LexError)]
 #[logos(skip r"[ \t\r\f]+")]
-pub enum Token {
+pub enum Token<'s> {
     // Keywords
     #[token("base")]
     Base,
@@ -175,8 +176,8 @@ pub enum Token {
     #[token("...")]
     Varargs,
     // Identifiers
-    #[regex(r"[a-zA-Z_][a-zA-Z0-9_]*", |lex| lex.slice().to_string())]
-    Identifier(String),
+    #[regex(r"[a-zA-Z_][a-zA-Z0-9_]*", |lex| lex.slice())]
+    Identifier(&'s str),
     // Literals
     #[token("\"", |lex| escape_str::<EscapedString>(lex, false))]
     #[token("@\"", |lex| escape_str::<VerbString>(lex, true))]
@@ -265,7 +266,7 @@ fn escape_lookup(s: &str) -> Option<&'static str> {
     }
 }
 
-fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token>, allow_newlines: bool) -> LexResult<String>
+fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token<'s>>, allow_newlines: bool) -> LexResult<String>
 where
     T: Logos<'s, Source = str> + Into<EscapedString<'s>>,
     <T as Logos<'s>>::Extras: Default,
@@ -303,7 +304,7 @@ where
 }
 
 // TODO: This would be faster if it is rolled into the escaping logic for strings
-fn find_newlines<'s>(lexer: &mut Lexer<'s, Token>) -> &'s str {
+fn find_newlines<'s>(lexer: &mut Lexer<'s, Token<'s>>) -> &'s str {
     let slice = lexer.slice();
     lexer
         .extras
@@ -311,7 +312,7 @@ fn find_newlines<'s>(lexer: &mut Lexer<'s, Token>) -> &'s str {
     slice
 }
 
-fn parse_sci<'s>(lexer: &Lexer<'s, Token>) -> LexResult<f64> {
+fn parse_sci<'s>(lexer: &Lexer<'s, Token<'s>>) -> LexResult<f64> {
     // TODO: Error handling
     let s = lexer.slice();
     let e_loc = s.find('e').unwrap();
@@ -322,7 +323,7 @@ fn parse_sci<'s>(lexer: &Lexer<'s, Token>) -> LexResult<f64> {
     Ok(base * 10f64.powi(exp))
 }
 
-fn parse_char_lit<'s>(lexer: &Lexer<'s, Token>) -> LexResult<i64> {
+fn parse_char_lit<'s>(lexer: &Lexer<'s, Token<'s>>) -> LexResult<i64> {
     let mut chars = lexer.slice().chars();
     let open_quote = chars.next().unwrap();
     debug_assert!(open_quote == '\'');
@@ -335,9 +336,110 @@ fn parse_char_lit<'s>(lexer: &Lexer<'s, Token>) -> LexResult<i64> {
     Ok(target as i64)
 }
 
+#[derive(Debug, Clone)]
+struct VisibleLocal {
+    func_idx: u32,
+    local_idx: u32
+}
+
+pub struct FunctionLocals<'s> {
+    pub locals: Vec<(&'s str, u32)>,
+    // Outer local index, Inner local index
+    pub upvalues: Vec<(u32, u32)>,
+}
+
+impl FunctionLocals<'_> {
+    pub fn local_count(&self) -> u32 {
+        self.locals.len() as u32 + self.upvalues.len() as u32
+    }
+
+    fn new() -> Self {
+        Self { locals: Vec::new(), upvalues: Vec::new() }
+    }
+
+    fn validate(&self) -> bool {
+        let mut locals_found = vec![false; self.locals.len() + self.upvalues.len()];
+        for (_name, idx) in self.locals.iter() {
+            if let Some(iref) = locals_found.get_mut(*idx as usize) {
+                if *iref {
+                    return false;
+                }
+                *iref = true;
+            } else {
+                return false;
+            }
+        }
+
+        locals_found.into_iter().all(convert::identity)
+    }
+}
+
+pub struct LocalResolution<'s> {
+    visible_locals: Vec<HashMap<&'s str, VisibleLocal>>,
+    all_locals: Vec<FunctionLocals<'s>>,
+}
+
+impl<'s> LocalResolution<'s> {
+    const OUTSIDE_GLOBAL: &'static str = "Cannot call add_local when outside of global scope";
+
+    pub fn add_local(&mut self, local: &'s str) -> u32 {
+        let local_idx = self.all_locals.last().expect(Self::OUTSIDE_GLOBAL).local_count();
+        let visible = VisibleLocal {
+            func_idx: self.all_locals.len() as u32 - 1,
+            local_idx
+        };
+        self.visible_locals.last_mut().expect(Self::OUTSIDE_GLOBAL).insert(local, visible);
+        self.all_locals.last_mut().expect(Self::OUTSIDE_GLOBAL).locals.push((local, local_idx));
+        local_idx
+    }
+
+    pub fn maybe_reference_local(&mut self, local: &'s str) -> Option<u32> {
+        let local = self.visible_locals.iter().rev().find_map(|scope| scope.get(local))?.clone();
+        // Need to propogate this local upwards through upvalues
+        let VisibleLocal { func_idx, mut local_idx } = local;
+        let current_func_idx = self.all_locals.len() as u32 - 1;
+        for func_scope_idx in func_idx..current_func_idx {
+            let next_func_idx = func_scope_idx + 1;
+            let upvalue_idx = self.all_locals[next_func_idx as usize].local_count();
+            self.all_locals[func_scope_idx as usize].upvalues.push((local_idx, upvalue_idx));
+            local_idx = upvalue_idx;
+        }
+
+        Some(local_idx)
+    }
+
+    fn enter_scope(&mut self) {
+        self.visible_locals.push(HashMap::new());
+    }
+
+    fn exit_scope(&mut self) {
+        self.visible_locals.pop().expect(Self::OUTSIDE_GLOBAL);
+    }
+
+    fn enter_fn_scope(&mut self, args: impl IntoIterator<Item = &'s str>) {
+        self.visible_locals.push(HashMap::new());
+        self.all_locals.push(FunctionLocals::new());
+        args.into_iter().for_each(|arg| {
+            self.add_local(arg);
+        });
+    }
+
+    fn exit_fn_scope(&mut self) -> FunctionLocals<'s> {
+        self.visible_locals.pop().expect(Self::OUTSIDE_GLOBAL);
+        self.all_locals.pop().expect(Self::OUTSIDE_GLOBAL)
+    }
+
+    fn new() -> Self {
+        Self { visible_locals: Vec::new(), all_locals: Vec::new() }
+    }
+
+
+}
+
 pub struct SpannedLexer<'s> {
-    logos: logos::Lexer<'s, Token>,
-    stored_next: Option<(Token, Span)>,
+    logos: logos::Lexer<'s, Token<'s>>,
+    stored_next: Option<(Token<'s>, Span)>,
+    locals: LocalResolution<'s>,
 }
 
 impl<'s> SpannedLexer<'s> {
@@ -345,7 +447,28 @@ impl<'s> SpannedLexer<'s> {
         Self {
             logos: Token::lexer_with_extras(input, LexerContext::new(file_name)),
             stored_next: None,
+            locals: LocalResolution::new(),
         }
+    }
+
+    pub fn lcl(&mut self) -> &mut LocalResolution<'s> {
+        &mut self.locals
+    }
+
+    pub fn scoped<T, F: FnOnce(&mut Self) -> T>(&mut self, f: F) -> T {
+        self.locals.enter_scope();
+        let result = f(self);
+        self.locals.exit_scope();
+        result
+    }
+
+    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(&mut self, args: impl IntoIterator<Item = &'s str>, f: F) -> Result<(T, FunctionLocals<'s>), E> {
+        self.locals.enter_fn_scope(args);
+        let result = f(self);
+        let fn_locals = self.locals.exit_fn_scope();
+        let result = result?;
+        assert!(fn_locals.validate(), "Function locals are invalid");
+        Ok((result, fn_locals))
     }
 
     pub fn get_file_name(&self) -> &str {
@@ -365,8 +488,9 @@ impl<'s> SpannedLexer<'s> {
     }
 }
 
-impl SpannedLexer<'_> {
-    fn next_internal(&mut self) -> Result<Option<(Token, Span)>, SquirrelError> {
+// TODO: Skip newlines is true in nearly every case. Maybe it should be the default behavior
+impl<'s> SpannedLexer<'s> {
+    fn next_internal(&mut self) -> Result<(), SquirrelError> {
         let token = self.logos.next();
         let op = match token {
             Some(Ok(token)) => {
@@ -378,12 +502,13 @@ impl SpannedLexer<'_> {
             }
             None => None,
         };
-        Ok(op)
+        self.stored_next = op;
+        Ok(())
     }
 
-    fn peek(&mut self) -> Result<Option<&(Token, Span)>, SquirrelError> {
+    fn peek(&mut self) -> Result<Option<&(Token<'s>, Span)>, SquirrelError> {
         if self.stored_next.is_none() {
-            self.stored_next = self.next_internal()?;
+            self.next_internal()?;
         }
         Ok(self.stored_next.as_ref())
     }
@@ -394,7 +519,7 @@ impl SpannedLexer<'_> {
         }
     }
 
-    pub fn next_token(&mut self, skip_newlines: bool) -> Result<(Token, Span), ParseError> {
+    pub fn next_token(&mut self, skip_newlines: bool) -> Result<(Token<'s>, Span), ParseError> {
         if skip_newlines {
             self.skip_newlines();
         }
@@ -403,7 +528,8 @@ impl SpannedLexer<'_> {
             .map_err(Into::into)
     }
 
-    pub fn peek_token(&mut self, skip_newlines: bool) -> Result<&(Token, Span), ParseError> {
+    // TODO: Maybe this should be (&Token, Span)
+    pub fn peek_token(&mut self, skip_newlines: bool) -> Result<&(Token<'s>, Span), ParseError> {
         self.try_peek_token(skip_newlines)
             .and_then(|op| op.ok_or_else(ParseError::unexpected_eof))
     }
@@ -411,13 +537,13 @@ impl SpannedLexer<'_> {
     pub fn try_peek_token(
         &mut self,
         skip_newlines: bool,
-    ) -> Result<Option<&(Token, Span)>, ParseError> {
+    ) -> Result<Option<&(Token<'s>, Span)>, ParseError> {
         if skip_newlines {
             self.skip_newlines();
         }
         // First, fill stored_next
         if self.stored_next.is_none() {
-            self.stored_next = self.next_internal()?;
+            self.next_internal()?;
         }
 
         Ok(self.stored_next.as_ref())
@@ -425,7 +551,7 @@ impl SpannedLexer<'_> {
 
     pub fn expect_token(
         &mut self,
-        expected: Token,
+        expected: Token<'s>,
         skip_newlines: bool,
     ) -> Result<Span, ParseError> {
         let (token, span) = self.next_token(skip_newlines)?;
@@ -441,7 +567,7 @@ impl SpannedLexer<'_> {
         self.stored_next.take();
     }
 
-    pub fn stash(&mut self, tsp: (Token, Span)) {
+    pub fn stash(&mut self, tsp: (Token<'s>, Span)) {
         assert!(
             self.stored_next.is_none(),
             "Can only call stash after a next() call"
@@ -465,18 +591,14 @@ impl SpannedLexer<'_> {
     }
 }
 
-impl Iterator for SpannedLexer<'_> {
-    type Item = Result<(Token, Span), SquirrelError>;
+impl<'s> Iterator for SpannedLexer<'s> {
+    type Item = Result<(Token<'s>, Span), SquirrelError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(next) = self.stored_next.take() {
             Some(Ok(next))
         } else {
-            match self.next_internal() {
-                Ok(Some(next)) => Some(Ok(next)),
-                Ok(None) => None,
-                Err(err) => Some(Err(err)),
-            }
+            self.next_internal().map(|_| self.stored_next.take()).transpose()
         }
     }
 }
@@ -534,7 +656,7 @@ mod error {
     impl LexError {
         pub fn with_context<'s>(
             self,
-            lexer: &Lexer<'s, Token>,
+            lexer: &Lexer<'s, Token<'s>>,
             file_name: String,
         ) -> SquirrelError {
             let token_location = lexer.span().into();
@@ -666,7 +788,8 @@ mod tests {
             .collect::<Vec<_>>();
         #[cfg(not(miri))]
         {
-            let expected_data = exchange_data("lexer", sample_path, &actual_data);
+            let mut expect_strg = String::new();
+            let expected_data = exchange_data("lexer", sample_path, &actual_data, &mut expect_strg);
             for (idx, (expected, actual)) in expected_data
                 .into_iter()
                 .zip(actual_data.into_iter())

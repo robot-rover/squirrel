@@ -1,14 +1,14 @@
 use std::{
-    fs,
-    path::{Path, PathBuf},
+    fs, io::Read, path::{Path, PathBuf}
 };
 
-use serde::{de::DeserializeOwned, Serialize};
+use serde::{de::DeserializeOwned, Deserialize, Serialize};
 
-pub fn exchange_data<'a, T: Serialize + DeserializeOwned>(
-    test_type: &str,
-    test_file: &str,
+pub fn exchange_data<'a, T: Serialize + Deserialize<'a>>(
+    test_type: &'a str,
+    test_file: &'a str,
     actual_data: &T,
+    expect_strg: &'a mut String,
 ) -> T {
     let actual_path: PathBuf = [
         "../target/tmp",
@@ -32,14 +32,15 @@ pub fn exchange_data<'a, T: Serialize + DeserializeOwned>(
     ]
     .iter()
     .collect();
-    let expect_str = exchange_internal(
+    exchange_internal(
         test_type,
         test_file,
         &actual_str,
         &actual_path,
+        expect_strg,
         &expect_path,
     );
-    let expect_data: T = serde_json::from_str(&expect_str).expect(
+    let expect_data: T = serde_json::from_str(expect_strg).expect(
         format!(
             "Failed to parse expected data from {}",
             expect_path.display()
@@ -67,7 +68,10 @@ pub fn exchange_str<'a>(test_type: &str, test_file: &str, actual_str: &str) -> S
     .iter()
     .collect();
 
-    exchange_internal(test_type, test_file, actual_str, &actual_path, &expect_path)
+    let mut expect_strg = String::new();
+
+    exchange_internal(test_type, test_file, actual_str, &actual_path, &mut expect_strg, &expect_path);
+    expect_strg
 }
 
 fn exchange_internal<'a>(
@@ -75,22 +79,19 @@ fn exchange_internal<'a>(
     test_file: &str,
     actual_str: &str,
     actual_path: &Path,
+    expect_strg: &mut String,
     expect_path: &Path,
-) -> String {
+) {
     fs::create_dir_all(actual_path.parent().unwrap())
         .expect(format!("Failed to create directory {}", actual_path.display()).as_str());
     fs::write(&actual_path, actual_str)
         .expect(format!("Failed to write to {}", actual_path.display()).as_str());
 
-    let expect_str = match fs::read_to_string(&expect_path) {
-        other => other.expect(
+    fs::File::open(&expect_path).and_then(|mut file| file.read_to_string(expect_strg)).expect(
             format!(
                 "Failed to read expected data from {}",
                 expect_path.display()
             )
             .as_str(),
-        ),
-    };
-
-    expect_str
+        );
 }

@@ -7,8 +7,24 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "a",
+      0
+    ],
+    [
+      "b",
+      1
+    ],
+    [
+      "c",
+      2
+    ]
+  ],
+  "num_locals": 3,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,23 +54,20 @@
                           "start": 12,
                           "end": 17
                         },
-                        "args": [
+                        "num_args": 2,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "x",
-                            {
-                              "start": 13,
-                              "end": 14
-                            }
+                            0
                           ],
                           [
                             "y",
-                            {
-                              "start": 15,
-                              "end": 16
-                            }
+                            1
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 2,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -175,23 +188,20 @@
                           "start": 51,
                           "end": 56
                         },
-                        "args": [
+                        "num_args": 2,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "x",
-                            {
-                              "start": 52,
-                              "end": 53
-                            }
+                            0
                           ],
                           [
                             "y",
-                            {
-                              "start": 54,
-                              "end": 55
-                            }
+                            1
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 2,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -553,16 +563,16 @@
                           "start": 231,
                           "end": 236
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "obj",
-                            {
-                              "start": 232,
-                              "end": 235
-                            }
+                            0
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -793,156 +803,198 @@
             "Block": [
               {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "a",
-                      {
-                        "start": 497,
-                        "end": 498
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": {
-                          "Integer": 1
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            0,
+                            {
+                              "start": 497,
+                              "end": 498
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 1
+                            }
+                          },
+                          "span": {
+                            "start": 499,
+                            "end": 500
+                          }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 498,
+                          "end": 499
                         }
-                      },
-                      "span": {
-                        "start": 499,
-                        "end": 500
                       }
+                    },
+                    "span": {
+                      "start": 497,
+                      "end": 500
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 491,
+                  "start": 497,
                   "end": 500
                 }
               },
               {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "b",
-                      {
-                        "start": 501,
-                        "end": 502
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            1,
+                            {
+                              "start": 501,
+                              "end": 502
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "TableDecl": []
+                          },
+                          "span": {
+                            "start": 503,
+                            "end": 505
+                          }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 502,
+                          "end": 503
+                        }
                       }
-                    ],
-                    {
-                      "data": {
-                        "TableDecl": []
-                      },
-                      "span": {
-                        "start": 503,
-                        "end": 505
-                      }
+                    },
+                    "span": {
+                      "start": 501,
+                      "end": 505
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 491,
+                  "start": 501,
                   "end": 505
                 }
               },
               {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "c",
-                      {
-                        "start": 506,
-                        "end": 507
-                      }
-                    ],
-                    {
-                      "data": {
-                        "FunctionDef": {
-                          "keyword_span": {
-                            "start": 508,
-                            "end": 516
-                          },
-                          "arg_span": {
-                            "start": 516,
-                            "end": 521
-                          },
-                          "args": [
-                            [
-                              "a",
-                              {
-                                "start": 517,
-                                "end": 518
-                              }
-                            ],
-                            [
-                              "b",
-                              {
-                                "start": 519,
-                                "end": 520
-                              }
-                            ]
-                          ],
-                          "default_expr": [],
-                          "is_varargs": false,
-                          "body": {
-                            "data": {
-                              "Block": [
-                                {
-                                  "data": {
-                                    "Return": {
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            2,
+                            {
+                              "start": 506,
+                              "end": 507
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "FunctionDef": {
+                              "keyword_span": {
+                                "start": 508,
+                                "end": 516
+                              },
+                              "arg_span": {
+                                "start": 516,
+                                "end": 521
+                              },
+                              "num_args": 2,
+                              "default_expr": [],
+                              "local_names": [
+                                [
+                                  "a",
+                                  0
+                                ],
+                                [
+                                  "b",
+                                  1
+                                ]
+                              ],
+                              "num_locals": 2,
+                              "upvalues": [],
+                              "is_varargs": false,
+                              "body": {
+                                "data": {
+                                  "Block": [
+                                    {
                                       "data": {
-                                        "BinaryOp": {
-                                          "op": "Add",
-                                          "op_span": {
-                                            "start": 530,
-                                            "end": 531
-                                          },
-                                          "lhs": {
-                                            "data": {
-                                              "Ident": "a"
-                                            },
-                                            "span": {
-                                              "start": 529,
-                                              "end": 530
+                                        "Return": {
+                                          "data": {
+                                            "BinaryOp": {
+                                              "op": "Add",
+                                              "op_span": {
+                                                "start": 530,
+                                                "end": 531
+                                              },
+                                              "lhs": {
+                                                "data": {
+                                                  "Ident": "a"
+                                                },
+                                                "span": {
+                                                  "start": 529,
+                                                  "end": 530
+                                                }
+                                              },
+                                              "rhs": {
+                                                "data": {
+                                                  "Ident": "b"
+                                                },
+                                                "span": {
+                                                  "start": 531,
+                                                  "end": 532
+                                                }
+                                              }
                                             }
                                           },
-                                          "rhs": {
-                                            "data": {
-                                              "Ident": "b"
-                                            },
-                                            "span": {
-                                              "start": 531,
-                                              "end": 532
-                                            }
+                                          "span": {
+                                            "start": 529,
+                                            "end": 532
                                           }
                                         }
                                       },
                                       "span": {
-                                        "start": 529,
+                                        "start": 522,
                                         "end": 532
                                       }
                                     }
-                                  },
-                                  "span": {
-                                    "start": 522,
-                                    "end": 532
-                                  }
+                                  ]
+                                },
+                                "span": {
+                                  "start": 0,
+                                  "end": 534
                                 }
-                              ]
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 534
+                              }
                             }
+                          },
+                          "span": {
+                            "start": 0,
+                            "end": 534
                           }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 507,
+                          "end": 508
                         }
-                      },
-                      "span": {
-                        "start": 0,
-                        "end": 534
                       }
+                    },
+                    "span": {
+                      "start": 0,
+                      "end": 534
                     }
-                  ]
+                  }
                 },
                 "span": {
                   "start": 0,

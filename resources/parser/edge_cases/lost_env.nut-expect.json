@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -104,45 +107,64 @@
                           "start": 58,
                           "end": 63
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "arr",
-                            {
-                              "start": 59,
-                              "end": 62
-                            }
+                            0
+                          ],
+                          [
+                            "str",
+                            1
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 2,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
                             "Block": [
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "str",
-                                      {
-                                        "start": 76,
-                                        "end": 79
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "String": "["
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 76,
+                                              "end": 79
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "String": "["
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 82,
+                                            "end": 85
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 80,
+                                          "end": 81
                                         }
-                                      },
-                                      "span": {
-                                        "start": 82,
-                                        "end": 85
                                       }
+                                    },
+                                    "span": {
+                                      "start": 76,
+                                      "end": 85
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 70,
+                                  "start": 76,
                                   "end": 85
                                 }
                               },
@@ -529,8 +551,11 @@
                           "start": 268,
                           "end": 270
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {

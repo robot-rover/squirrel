@@ -7,8 +7,16 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "attr",
+      0
+    ]
+  ],
+  "num_locals": 1,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -55,16 +63,16 @@
                                     "start": 45,
                                     "end": 48
                                   },
-                                  "args": [
+                                  "num_args": 1,
+                                  "default_expr": [],
+                                  "local_names": [
                                     [
                                       "a",
-                                      {
-                                        "start": 46,
-                                        "end": 47
-                                      }
+                                      0
                                     ]
                                   ],
-                                  "default_expr": [],
+                                  "num_locals": 1,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -193,8 +201,11 @@
                                     "start": 184,
                                     "end": 186
                                   },
-                                  "args": [],
+                                  "num_args": 0,
                                   "default_expr": [],
+                                  "local_names": [],
+                                  "num_locals": 0,
+                                  "upvalues": [],
                                   "is_varargs": false,
                                   "body": {
                                     "data": {
@@ -558,28 +569,11 @@
                     },
                     {
                       "data": {
-                        "LocalDec": [
-                          [
-                            "attr",
-                            {
-                              "start": 454,
-                              "end": 458
-                            }
-                          ],
-                          {
-                            "data": {
-                              "Literal": "Null"
-                            },
-                            "span": {
-                              "start": 0,
-                              "end": 0
-                            }
-                          }
-                        ]
+                        "Block": []
                       },
                       "span": {
                         "start": 0,
-                        "end": 458
+                        "end": 453
                       }
                     },
                     {

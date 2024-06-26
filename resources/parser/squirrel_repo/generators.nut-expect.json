@@ -7,8 +7,20 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "randtor",
+      0
+    ],
+    [
+      "i",
+      1
+    ]
+  ],
+  "num_locals": 2,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,129 +50,205 @@
                           "start": 123,
                           "end": 128
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "max",
-                            {
-                              "start": 124,
-                              "end": 127
-                            }
+                            0
+                          ],
+                          [
+                            "last",
+                            1
+                          ],
+                          [
+                            "IM",
+                            2
+                          ],
+                          [
+                            "IA",
+                            3
+                          ],
+                          [
+                            "IC",
+                            4
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 5,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
                             "Block": [
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "last",
-                                      {
-                                        "start": 141,
-                                        "end": 145
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 42
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 141,
+                                              "end": 145
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 42
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 146,
+                                            "end": 148
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 145,
+                                          "end": 146
                                         }
-                                      },
-                                      "span": {
-                                        "start": 146,
-                                        "end": 148
                                       }
+                                    },
+                                    "span": {
+                                      "start": 141,
+                                      "end": 148
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 135,
+                                  "start": 141,
                                   "end": 148
                                 }
                               },
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "IM",
-                                      {
-                                        "start": 159,
-                                        "end": 161
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 139968
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            2,
+                                            {
+                                              "start": 159,
+                                              "end": 161
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 139968
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 164,
+                                            "end": 170
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 162,
+                                          "end": 163
                                         }
-                                      },
-                                      "span": {
-                                        "start": 164,
-                                        "end": 170
                                       }
+                                    },
+                                    "span": {
+                                      "start": 159,
+                                      "end": 170
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 153,
+                                  "start": 159,
                                   "end": 170
                                 }
                               },
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "IA",
-                                      {
-                                        "start": 182,
-                                        "end": 184
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 3877
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            3,
+                                            {
+                                              "start": 182,
+                                              "end": 184
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 3877
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 187,
+                                            "end": 191
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 185,
+                                          "end": 186
                                         }
-                                      },
-                                      "span": {
-                                        "start": 187,
-                                        "end": 191
                                       }
+                                    },
+                                    "span": {
+                                      "start": 182,
+                                      "end": 191
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 176,
+                                  "start": 182,
                                   "end": 191
                                 }
                               },
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "IC",
-                                      {
-                                        "start": 203,
-                                        "end": 205
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 29573
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            4,
+                                            {
+                                              "start": 203,
+                                              "end": 205
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 29573
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 208,
+                                            "end": 213
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 206,
+                                          "end": 207
                                         }
-                                      },
-                                      "span": {
-                                        "start": 208,
-                                        "end": 213
                                       }
+                                    },
+                                    "span": {
+                                      "start": 203,
+                                      "end": 213
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 197,
+                                  "start": 203,
                                   "end": 213
                                 }
                               },
@@ -404,52 +492,67 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "randtor",
-                {
-                  "start": 319,
-                  "end": 326
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "Expr": {
-                        "data": {
-                          "Ident": "gen_random"
-                        },
-                        "span": {
-                          "start": 327,
-                          "end": 337
-                        }
-                      }
-                    },
-                    "args": [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
                       {
-                        "data": {
-                          "Literal": {
-                            "Integer": 100
-                          }
-                        },
-                        "span": {
-                          "start": 338,
-                          "end": 341
-                        }
+                        "start": 319,
+                        "end": 326
                       }
                     ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "Expr": {
+                            "data": {
+                              "Ident": "gen_random"
+                            },
+                            "span": {
+                              "start": 327,
+                              "end": 337
+                            }
+                          }
+                        },
+                        "args": [
+                          {
+                            "data": {
+                              "Literal": {
+                                "Integer": 100
+                              }
+                            },
+                            "span": {
+                              "start": 338,
+                              "end": 341
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 337,
+                      "end": 342
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 326,
+                    "end": 327
                   }
-                },
-                "span": {
-                  "start": 337,
-                  "end": 342
                 }
+              },
+              "span": {
+                "start": 319,
+                "end": 342
               }
-            ]
+            }
           },
           "span": {
-            "start": 313,
+            "start": 319,
             "end": 342
           }
         },
@@ -500,29 +603,44 @@
             "For": {
               "init": {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "i",
-                      {
-                        "start": 381,
-                        "end": 382
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": {
-                          "Integer": 0
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            1,
+                            {
+                              "start": 381,
+                              "end": 382
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 0
+                            }
+                          },
+                          "span": {
+                            "start": 383,
+                            "end": 384
+                          }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 382,
+                          "end": 383
                         }
-                      },
-                      "span": {
-                        "start": 383,
-                        "end": 384
                       }
+                    },
+                    "span": {
+                      "start": 381,
+                      "end": 384
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 375,
+                  "start": 381,
                   "end": 384
                 }
               },
@@ -781,73 +899,119 @@
                           "start": 469,
                           "end": 472
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "n",
-                            {
-                              "start": 470,
-                              "end": 471
-                            }
+                            0
+                          ],
+                          [
+                            "prev",
+                            1
+                          ],
+                          [
+                            "curr",
+                            2
+                          ],
+                          [
+                            "i",
+                            3
+                          ],
+                          [
+                            "res",
+                            4
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 5,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
                             "Block": [
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "prev",
-                                      {
-                                        "start": 485,
-                                        "end": 489
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 0
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            1,
+                                            {
+                                              "start": 485,
+                                              "end": 489
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 0
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 490,
+                                            "end": 491
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 489,
+                                          "end": 490
                                         }
-                                      },
-                                      "span": {
-                                        "start": 490,
-                                        "end": 491
                                       }
+                                    },
+                                    "span": {
+                                      "start": 485,
+                                      "end": 491
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 479,
+                                  "start": 485,
                                   "end": 491
                                 }
                               },
                               {
                                 "data": {
-                                  "LocalDec": [
-                                    [
-                                      "curr",
-                                      {
-                                        "start": 503,
-                                        "end": 507
-                                      }
-                                    ],
-                                    {
-                                      "data": {
-                                        "Literal": {
-                                          "Integer": 1
+                                  "Expr": {
+                                    "data": {
+                                      "Assign": {
+                                        "target": {
+                                          "Local": [
+                                            2,
+                                            {
+                                              "start": 503,
+                                              "end": 507
+                                            }
+                                          ]
+                                        },
+                                        "value": {
+                                          "data": {
+                                            "Literal": {
+                                              "Integer": 1
+                                            }
+                                          },
+                                          "span": {
+                                            "start": 508,
+                                            "end": 509
+                                          }
+                                        },
+                                        "kind": "Normal",
+                                        "op_span": {
+                                          "start": 507,
+                                          "end": 508
                                         }
-                                      },
-                                      "span": {
-                                        "start": 508,
-                                        "end": 509
                                       }
+                                    },
+                                    "span": {
+                                      "start": 503,
+                                      "end": 509
                                     }
-                                  ]
+                                  }
                                 },
                                 "span": {
-                                  "start": 497,
+                                  "start": 503,
                                   "end": 509
                                 }
                               },
@@ -875,29 +1039,44 @@
                                   "For": {
                                     "init": {
                                       "data": {
-                                        "LocalDec": [
-                                          [
-                                            "i",
-                                            {
-                                              "start": 539,
-                                              "end": 540
-                                            }
-                                          ],
-                                          {
-                                            "data": {
-                                              "Literal": {
-                                                "Integer": 0
+                                        "Expr": {
+                                          "data": {
+                                            "Assign": {
+                                              "target": {
+                                                "Local": [
+                                                  3,
+                                                  {
+                                                    "start": 539,
+                                                    "end": 540
+                                                  }
+                                                ]
+                                              },
+                                              "value": {
+                                                "data": {
+                                                  "Literal": {
+                                                    "Integer": 0
+                                                  }
+                                                },
+                                                "span": {
+                                                  "start": 541,
+                                                  "end": 542
+                                                }
+                                              },
+                                              "kind": "Normal",
+                                              "op_span": {
+                                                "start": 540,
+                                                "end": 541
                                               }
-                                            },
-                                            "span": {
-                                              "start": 541,
-                                              "end": 542
                                             }
+                                          },
+                                          "span": {
+                                            "start": 539,
+                                            "end": 542
                                           }
-                                        ]
+                                        }
                                       },
                                       "span": {
-                                        "start": 533,
+                                        "start": 539,
                                         "end": 542
                                       }
                                     },
@@ -1008,51 +1187,66 @@
                                         "Block": [
                                           {
                                             "data": {
-                                              "LocalDec": [
-                                                [
-                                                  "res",
-                                                  {
-                                                    "start": 575,
-                                                    "end": 578
-                                                  }
-                                                ],
-                                                {
-                                                  "data": {
-                                                    "BinaryOp": {
-                                                      "op": "Add",
-                                                      "op_span": {
-                                                        "start": 583,
-                                                        "end": 584
-                                                      },
-                                                      "lhs": {
-                                                        "data": {
-                                                          "Ident": "prev"
-                                                        },
-                                                        "span": {
-                                                          "start": 579,
-                                                          "end": 583
+                                              "Expr": {
+                                                "data": {
+                                                  "Assign": {
+                                                    "target": {
+                                                      "Local": [
+                                                        4,
+                                                        {
+                                                          "start": 575,
+                                                          "end": 578
+                                                        }
+                                                      ]
+                                                    },
+                                                    "value": {
+                                                      "data": {
+                                                        "BinaryOp": {
+                                                          "op": "Add",
+                                                          "op_span": {
+                                                            "start": 583,
+                                                            "end": 584
+                                                          },
+                                                          "lhs": {
+                                                            "data": {
+                                                              "Ident": "prev"
+                                                            },
+                                                            "span": {
+                                                              "start": 579,
+                                                              "end": 583
+                                                            }
+                                                          },
+                                                          "rhs": {
+                                                            "data": {
+                                                              "Ident": "curr"
+                                                            },
+                                                            "span": {
+                                                              "start": 584,
+                                                              "end": 588
+                                                            }
+                                                          }
                                                         }
                                                       },
-                                                      "rhs": {
-                                                        "data": {
-                                                          "Ident": "curr"
-                                                        },
-                                                        "span": {
-                                                          "start": 584,
-                                                          "end": 588
-                                                        }
+                                                      "span": {
+                                                        "start": 579,
+                                                        "end": 588
                                                       }
+                                                    },
+                                                    "kind": "Normal",
+                                                    "op_span": {
+                                                      "start": 578,
+                                                      "end": 579
                                                     }
-                                                  },
-                                                  "span": {
-                                                    "start": 579,
-                                                    "end": 588
                                                   }
+                                                },
+                                                "span": {
+                                                  "start": 575,
+                                                  "end": 588
                                                 }
-                                              ]
+                                              }
                                             },
                                             "span": {
-                                              "start": 569,
+                                              "start": 575,
                                               "end": 588
                                             }
                                           },

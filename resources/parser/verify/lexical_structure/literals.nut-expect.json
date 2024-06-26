@@ -7,8 +7,52 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "int_b10",
+      0
+    ],
+    [
+      "int_hex",
+      1
+    ],
+    [
+      "int_oct",
+      2
+    ],
+    [
+      "int_char",
+      3
+    ],
+    [
+      "float",
+      4
+    ],
+    [
+      "float_sci",
+      5
+    ],
+    [
+      "float_sci2",
+      6
+    ],
+    [
+      "str",
+      7
+    ],
+    [
+      "str_verb",
+      8
+    ],
+    [
+      "str_verb_multi",
+      9
+    ]
+  ],
+  "num_locals": 10,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,16 +82,16 @@
                           "start": 16,
                           "end": 21
                         },
-                        "args": [
+                        "num_args": 1,
+                        "default_expr": [],
+                        "local_names": [
                           [
                             "val",
-                            {
-                              "start": 17,
-                              "end": 20
-                            }
+                            0
                           ]
                         ],
-                        "default_expr": [],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -159,29 +203,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "int_b10",
-                {
-                  "start": 57,
-                  "end": 64
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 34
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
+                      {
+                        "start": 57,
+                        "end": 64
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 34
+                      }
+                    },
+                    "span": {
+                      "start": 67,
+                      "end": 69
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 65,
+                    "end": 66
                   }
-                },
-                "span": {
-                  "start": 67,
-                  "end": 69
                 }
+              },
+              "span": {
+                "start": 57,
+                "end": 69
               }
-            ]
+            }
           },
           "span": {
-            "start": 51,
+            "start": 57,
             "end": 69
           }
         },
@@ -227,29 +286,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "int_hex",
-                {
-                  "start": 93,
-                  "end": 100
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 4278231328
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      1,
+                      {
+                        "start": 93,
+                        "end": 100
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 4278231328
+                      }
+                    },
+                    "span": {
+                      "start": 103,
+                      "end": 113
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 101,
+                    "end": 102
                   }
-                },
-                "span": {
-                  "start": 103,
-                  "end": 113
                 }
+              },
+              "span": {
+                "start": 93,
+                "end": 113
               }
-            ]
+            }
           },
           "span": {
-            "start": 87,
+            "start": 93,
             "end": 113
           }
         },
@@ -295,29 +369,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "int_oct",
-                {
-                  "start": 137,
-                  "end": 144
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 491
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      2,
+                      {
+                        "start": 137,
+                        "end": 144
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 491
+                      }
+                    },
+                    "span": {
+                      "start": 147,
+                      "end": 151
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 145,
+                    "end": 146
                   }
-                },
-                "span": {
-                  "start": 147,
-                  "end": 151
                 }
+              },
+              "span": {
+                "start": 137,
+                "end": 151
               }
-            ]
+            }
           },
           "span": {
-            "start": 131,
+            "start": 137,
             "end": 151
           }
         },
@@ -363,29 +452,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "int_char",
-                {
-                  "start": 175,
-                  "end": 183
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Integer": 97
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      3,
+                      {
+                        "start": 175,
+                        "end": 183
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Integer": 97
+                      }
+                    },
+                    "span": {
+                      "start": 186,
+                      "end": 189
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 184,
+                    "end": 185
                   }
-                },
-                "span": {
-                  "start": 186,
-                  "end": 189
                 }
+              },
+              "span": {
+                "start": 175,
+                "end": 189
               }
-            ]
+            }
           },
           "span": {
-            "start": 169,
+            "start": 175,
             "end": 189
           }
         },
@@ -431,29 +535,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "float",
-                {
-                  "start": 215,
-                  "end": 220
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Number": 1.52
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      4,
+                      {
+                        "start": 215,
+                        "end": 220
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Number": 1.52
+                      }
+                    },
+                    "span": {
+                      "start": 223,
+                      "end": 227
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 221,
+                    "end": 222
                   }
-                },
-                "span": {
-                  "start": 223,
-                  "end": 227
                 }
+              },
+              "span": {
+                "start": 215,
+                "end": 227
               }
-            ]
+            }
           },
           "span": {
-            "start": 209,
+            "start": 215,
             "end": 227
           }
         },
@@ -499,29 +618,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "float_sci",
-                {
-                  "start": 249,
-                  "end": 258
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Number": 0.01
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      5,
+                      {
+                        "start": 249,
+                        "end": 258
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Number": 0.01
+                      }
+                    },
+                    "span": {
+                      "start": 261,
+                      "end": 266
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 259,
+                    "end": 260
                   }
-                },
-                "span": {
-                  "start": 261,
-                  "end": 266
                 }
+              },
+              "span": {
+                "start": 249,
+                "end": 266
               }
-            ]
+            }
           },
           "span": {
-            "start": 243,
+            "start": 249,
             "end": 266
           }
         },
@@ -567,29 +701,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "float_sci2",
-                {
-                  "start": 292,
-                  "end": 302
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "Number": 120.0
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      6,
+                      {
+                        "start": 292,
+                        "end": 302
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "Number": 120.0
+                      }
+                    },
+                    "span": {
+                      "start": 305,
+                      "end": 310
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 303,
+                    "end": 304
                   }
-                },
-                "span": {
-                  "start": 305,
-                  "end": 310
                 }
+              },
+              "span": {
+                "start": 292,
+                "end": 310
               }
-            ]
+            }
           },
           "span": {
-            "start": 286,
+            "start": 292,
             "end": 310
           }
         },
@@ -635,29 +784,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "str",
-                {
-                  "start": 458,
-                  "end": 461
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "String": "I'm a string"
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      7,
+                      {
+                        "start": 458,
+                        "end": 461
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "String": "I'm a string"
+                      }
+                    },
+                    "span": {
+                      "start": 464,
+                      "end": 478
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 462,
+                    "end": 463
                   }
-                },
-                "span": {
-                  "start": 464,
-                  "end": 478
                 }
+              },
+              "span": {
+                "start": 458,
+                "end": 478
               }
-            ]
+            }
           },
           "span": {
-            "start": 452,
+            "start": 458,
             "end": 478
           }
         },
@@ -703,29 +867,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "str_verb",
-                {
-                  "start": 498,
-                  "end": 506
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "String": "I'm a verbatim string"
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      8,
+                      {
+                        "start": 498,
+                        "end": 506
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "String": "I'm a verbatim string"
+                      }
+                    },
+                    "span": {
+                      "start": 509,
+                      "end": 533
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 507,
+                    "end": 508
                   }
-                },
-                "span": {
-                  "start": 509,
-                  "end": 533
                 }
+              },
+              "span": {
+                "start": 498,
+                "end": 533
               }
-            ]
+            }
           },
           "span": {
-            "start": 492,
+            "start": 498,
             "end": 533
           }
         },
@@ -771,29 +950,44 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "str_verb_multi",
-                {
-                  "start": 558,
-                  "end": 572
-                }
-              ],
-              {
-                "data": {
-                  "Literal": {
-                    "String": "I'm a verbatim string\nthat spans multiple lines"
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      9,
+                      {
+                        "start": 558,
+                        "end": 572
+                      }
+                    ]
+                  },
+                  "value": {
+                    "data": {
+                      "Literal": {
+                        "String": "I'm a verbatim string\nthat spans multiple lines"
+                      }
+                    },
+                    "span": {
+                      "start": 575,
+                      "end": 625
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 573,
+                    "end": 574
                   }
-                },
-                "span": {
-                  "start": 575,
-                  "end": 625
                 }
+              },
+              "span": {
+                "start": 558,
+                "end": 625
               }
-            ]
+            }
           },
           "span": {
-            "start": 552,
+            "start": 558,
             "end": 625
           }
         },

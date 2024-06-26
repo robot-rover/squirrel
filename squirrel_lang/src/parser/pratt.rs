@@ -19,7 +19,7 @@ pub fn parse_expr<'s, F: Fn(&Token) -> bool>(
 
 pub fn parse_expr_token<'s>(
     tokens: &mut SpannedLexer<'s>,
-    token: Token,
+    token: Token<'s>,
 ) -> ParseResult<(Expr, Span)> {
     let expr = parse_expr(tokens, |tok| tok == &token, true)?;
     let span = tokens.expect_token(token, true)?;
@@ -97,7 +97,7 @@ fn get_bp(op: &Token) -> Option<(u16, u16)> {
 }
 
 // TODO: Need to go through newlines if line starts with a binary operator
-pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
+pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
     tokens: &mut SpannedLexer<'s>,
     min_bp: u16,
     is_term: &F,
@@ -105,7 +105,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
 ) -> ParseResult<Expr> {
     let (first_token, ctx) = tokens.next_token(true)?;
     let mut lhs = match first_token {
-        Token::Identifier(name) => (name, ctx).into(),
+        Token::Identifier(name) => Expr::ident((name, ctx)),
         Token::Integer(num) => Expr::literal(Literal::Integer(num), ctx),
         Token::Number(num) => Expr::literal(Literal::Number(num), ctx),
         Token::String(string) => Expr::literal(Literal::String(string), ctx),
@@ -124,7 +124,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token) -> bool>(
             } else {
                 return Err(ParseError::unexpected_token(next_tok, ctx2));
             };
-            Expr::field_access(ExprData::Globals.spanning(ctx), (name, ctx2))
+            Expr::field_access(ExprData::Globals.spanning(ctx), (name.to_string(), ctx2))
         }
         Token::LeftCurlyBrace => {
             let (members, end_span) = parse_table_or_class(tokens, &Token::Comma, false)?;

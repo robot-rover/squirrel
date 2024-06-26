@@ -306,7 +306,7 @@ impl FuncRuntime {
         let ast_func = unsafe { func_borrow.ast_fn.as_ref() };
 
         let n_arguments = arg_vals.len();
-        let n_parameters = ast_func.args.len();
+        let n_parameters = ast_func.num_args as usize;
         let n_default = func_borrow.default_vals.len();
         assert!(n_parameters >= n_default);
 
@@ -315,22 +315,23 @@ impl FuncRuntime {
             .by_ref()
             .map(Option::Some)
             .chain(std::iter::repeat(None));
-        for (arg_idx, ((param_name, _), arg_val)) in ast_func.args.iter().zip(zip_iter).enumerate()
-        {
-            let val = if let Some(arg_val) = arg_val {
-                arg_val
-            } else if arg_idx >= n_parameters - n_default {
-                func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
-            } else {
-                return Err(ExecError::wrong_arg_count(
-                    CallInfo { func_span, call_span },
-                    (n_parameters - n_default)..n_parameters,
-                    n_arguments,
-                    Some(ast_func.arg_span),
-                ));
-            };
-            locals.insert(param_name.clone(), val);
-        }
+        // TODO: Bind arguments
+        // for (arg_idx, ((param_name, _), arg_val)) in ast_func.args.iter().zip(zip_iter).enumerate()
+        // {
+        //     let val = if let Some(arg_val) = arg_val {
+        //         arg_val
+        //     } else if arg_idx >= n_parameters - n_default {
+        //         func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
+        //     } else {
+        //         return Err(ExecError::wrong_arg_count(
+        //             CallInfo { func_span, call_span },
+        //             (n_parameters - n_default)..n_parameters,
+        //             n_arguments,
+        //             Some(ast_func.arg_span),
+        //         ));
+        //     };
+        //     locals.insert(param_name.clone(), val);
+        // }
 
         if ast_func.is_varargs {
             let vararg_vec = if n_arguments > n_parameters {

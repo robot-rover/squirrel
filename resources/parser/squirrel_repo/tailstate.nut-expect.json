@@ -7,8 +7,20 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [
+    [
+      "statethread",
+      0
+    ],
+    [
+      "i",
+      1
+    ]
+  ],
+  "num_locals": 2,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -38,8 +50,11 @@
                           "start": 15,
                           "end": 17
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -180,8 +195,11 @@
                           "start": 84,
                           "end": 86
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -322,8 +340,11 @@
                           "start": 153,
                           "end": 155
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -441,57 +462,72 @@
         },
         {
           "data": {
-            "LocalDec": [
-              [
-                "statethread",
-                {
-                  "start": 213,
-                  "end": 224
-                }
-              ],
-              {
-                "data": {
-                  "FunctionCall": {
-                    "func": {
-                      "FieldAccess": [
-                        {
-                          "data": "Globals",
-                          "span": {
-                            "start": 227,
-                            "end": 229
-                          }
-                        },
-                        [
-                          "newthread",
-                          {
-                            "start": 229,
-                            "end": 238
-                          }
-                        ]
-                      ]
-                    },
-                    "args": [
+            "Expr": {
+              "data": {
+                "Assign": {
+                  "target": {
+                    "Local": [
+                      0,
                       {
-                        "data": {
-                          "Ident": "state1"
-                        },
-                        "span": {
-                          "start": 239,
-                          "end": 245
-                        }
+                        "start": 213,
+                        "end": 224
                       }
                     ]
+                  },
+                  "value": {
+                    "data": {
+                      "FunctionCall": {
+                        "func": {
+                          "FieldAccess": [
+                            {
+                              "data": "Globals",
+                              "span": {
+                                "start": 227,
+                                "end": 229
+                              }
+                            },
+                            [
+                              "newthread",
+                              {
+                                "start": 229,
+                                "end": 238
+                              }
+                            ]
+                          ]
+                        },
+                        "args": [
+                          {
+                            "data": {
+                              "Ident": "state1"
+                            },
+                            "span": {
+                              "start": 239,
+                              "end": 245
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "span": {
+                      "start": 238,
+                      "end": 246
+                    }
+                  },
+                  "kind": "Normal",
+                  "op_span": {
+                    "start": 225,
+                    "end": 226
                   }
-                },
-                "span": {
-                  "start": 238,
-                  "end": 246
                 }
+              },
+              "span": {
+                "start": 213,
+                "end": 246
               }
-            ]
+            }
           },
           "span": {
-            "start": 207,
+            "start": 213,
             "end": 246
           }
         },
@@ -595,29 +631,44 @@
             "For": {
               "init": {
                 "data": {
-                  "LocalDec": [
-                    [
-                      "i",
-                      {
-                        "start": 293,
-                        "end": 294
-                      }
-                    ],
-                    {
-                      "data": {
-                        "Literal": {
-                          "Integer": 0
+                  "Expr": {
+                    "data": {
+                      "Assign": {
+                        "target": {
+                          "Local": [
+                            1,
+                            {
+                              "start": 293,
+                              "end": 294
+                            }
+                          ]
+                        },
+                        "value": {
+                          "data": {
+                            "Literal": {
+                              "Integer": 0
+                            }
+                          },
+                          "span": {
+                            "start": 297,
+                            "end": 298
+                          }
+                        },
+                        "kind": "Normal",
+                        "op_span": {
+                          "start": 295,
+                          "end": 296
                         }
-                      },
-                      "span": {
-                        "start": 297,
-                        "end": 298
                       }
+                    },
+                    "span": {
+                      "start": 293,
+                      "end": 298
                     }
-                  ]
+                  }
                 },
                 "span": {
-                  "start": 287,
+                  "start": 293,
                   "end": 298
                 }
               },

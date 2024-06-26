@@ -7,8 +7,11 @@
     "start": 0,
     "end": 0
   },
-  "args": [],
+  "num_args": 0,
   "default_expr": [],
+  "local_names": [],
+  "num_locals": 0,
+  "upvalues": [],
   "is_varargs": true,
   "body": {
     "data": {
@@ -81,8 +84,11 @@
                           "start": 22,
                           "end": 24
                         },
-                        "args": [],
+                        "num_args": 0,
                         "default_expr": [],
+                        "local_names": [],
+                        "num_locals": 0,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -228,15 +234,7 @@
                           "start": 76,
                           "end": 93
                         },
-                        "args": [
-                          [
-                            "a_arg",
-                            {
-                              "start": 77,
-                              "end": 82
-                            }
-                          ]
-                        ],
+                        "num_args": 1,
                         "default_expr": [
                           {
                             "data": {
@@ -261,6 +259,14 @@
                             }
                           }
                         ],
+                        "local_names": [
+                          [
+                            "a_arg",
+                            0
+                          ]
+                        ],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
@@ -551,15 +557,7 @@
                           "start": 202,
                           "end": 215
                         },
-                        "args": [
-                          [
-                            "b_arg",
-                            {
-                              "start": 203,
-                              "end": 208
-                            }
-                          ]
-                        ],
+                        "num_args": 1,
                         "default_expr": [
                           {
                             "data": {
@@ -571,6 +569,14 @@
                             }
                           }
                         ],
+                        "local_names": [
+                          [
+                            "b_arg",
+                            0
+                          ]
+                        ],
+                        "num_locals": 1,
+                        "upvalues": [],
                         "is_varargs": false,
                         "body": {
                           "data": {
