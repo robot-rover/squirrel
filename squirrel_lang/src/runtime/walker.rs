@@ -309,7 +309,8 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             return Ok(Value::Null);
         }
         ExprData::Local(idx, span) => {
-            Ok(context.infunc.locals[*idx as usize].deref().borrow().clone())
+            let val = context.infunc.locals[*idx as usize].deref().borrow().clone();
+            Ok(val)
         },
     }
 }

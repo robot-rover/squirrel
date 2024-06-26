@@ -262,7 +262,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
         };
         let rhs = parse_expr_bp(tokens, r_bp, is_term, ignore_newlines)?;
         lhs = match op_token {
-            // Member Access (23, 24)
+            // Member Access
             Token::Period => {
                 let Expr { data, span } = rhs;
                 if let ExprData::Ident(name) = data {
@@ -275,18 +275,18 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
                 }
             }
             // TODO: Some of this should be a macro
-            // Multiply and Divide (19, 20)
+            // Multiply and Divide
             Token::Multiply => Expr::binary_op(BinaryOp::Mul, op_span, lhs, rhs),
             Token::Divide => Expr::binary_op(BinaryOp::Div, op_span, lhs, rhs),
             Token::Modulus => Expr::binary_op(BinaryOp::Mod, op_span, lhs, rhs),
-            // Addition and Subtraction (17, 18)
+            // Addition and Subtraction
             Token::Plus => Expr::binary_op(BinaryOp::Add, op_span, lhs, rhs),
             Token::Minus => Expr::binary_op(BinaryOp::Sub, op_span, lhs, rhs),
-            // Shift Operators (15, 16)
+            // Shift Operators
             Token::RightShiftArith => Expr::binary_op(BinaryOp::AShr, op_span, lhs, rhs),
             Token::RightShift => Expr::binary_op(BinaryOp::Shr, op_span, lhs, rhs),
             Token::LeftShift => Expr::binary_op(BinaryOp::Shl, op_span, lhs, rhs),
-            // Comparison Operators (13, 14)
+            // Comparison Operators
             // TODO: These give wrong values for NaNs
             Token::LessThan => Expr::binary_op(BinaryOp::Less, op_span, lhs, rhs),
             Token::LessThanEquals => Expr::unary_op(
@@ -301,18 +301,18 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
                 op_span,
             ),
             Token::InstaceOf => Expr::binary_op(BinaryOp::InstanceOf, op_span, lhs, rhs),
-            // Equality Operators (11, 12)
+            // Equality Operators
             Token::Equals => Expr::binary_op(BinaryOp::Eq, op_span, lhs, rhs),
             Token::DoesNotEqual => Expr::binary_op(BinaryOp::Eq, op_span, lhs, rhs),
             Token::Compare => Expr::binary_op(BinaryOp::Compare, op_span, lhs, rhs),
-            // Bitwise And (9, 10)
+            // Bitwise And
             Token::BitAnd => Expr::binary_op(BinaryOp::BitAnd, op_span, lhs, rhs),
-            // Bitwise Xor (7, 8)
+            // Bitwise Xor
             Token::BitXor => Expr::binary_op(BinaryOp::BitXor, op_span, lhs, rhs),
-            // Logical And and In (5, 6)
+            // Logical And and In
             Token::In => Expr::binary_op(BinaryOp::In, op_span, lhs, rhs),
             Token::And => Expr::binary_op(BinaryOp::And, op_span, lhs, rhs),
-            // TODO: Assignment Operators (3, 3)
+            // Assignment Operators
             Token::Assign => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::Normal),
             Token::NewSlot => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::NewSlot),
             Token::PlusAssign => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::Add),

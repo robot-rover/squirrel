@@ -303,7 +303,6 @@ where
     Err(LexError::UnterminatedString)
 }
 
-// TODO: This would be faster if it is rolled into the escaping logic for strings
 fn find_newlines<'s>(lexer: &mut Lexer<'s, Token<'s>>) -> &'s str {
     let slice = lexer.slice();
     lexer
@@ -384,6 +383,7 @@ impl<'s> LocalResolution<'s> {
 
     pub fn add_local(&mut self, local: &'s str) -> u32 {
         let local_idx = self.all_locals.last().expect(Self::OUTSIDE_GLOBAL).local_count();
+        // println!("Declaring local {local} -> {local_idx}");
         let visible = VisibleLocal {
             func_idx: self.all_locals.len() as u32 - 1,
             local_idx
@@ -394,9 +394,9 @@ impl<'s> LocalResolution<'s> {
     }
 
     pub fn maybe_reference_local(&mut self, local: &'s str) -> Option<u32> {
-        let local = self.visible_locals.iter().rev().find_map(|scope| scope.get(local))?.clone();
+        let VisibleLocal { func_idx, mut local_idx } = self.visible_locals.iter().rev().find_map(|scope| scope.get(local))?.clone();
+
         // Need to propogate this local upwards through upvalues
-        let VisibleLocal { func_idx, mut local_idx } = local;
         let current_func_idx = self.all_locals.len() as u32 - 1;
         for func_scope_idx in func_idx..current_func_idx {
             let next_func_idx = func_scope_idx + 1;
@@ -404,6 +404,7 @@ impl<'s> LocalResolution<'s> {
             self.all_locals[func_scope_idx as usize].upvalues.push((local_idx, upvalue_idx));
             local_idx = upvalue_idx;
         }
+        // println!("Resolved local reference: {local} -> {local_idx}");
 
         Some(local_idx)
     }

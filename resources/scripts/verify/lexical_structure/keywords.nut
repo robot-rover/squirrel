@@ -4,4 +4,4 @@ local Foo = "Foo"
 ::print(foo + Foo)
 
 ::print(__LINE__)
-::print(__FILE__)
+::print(__FILE__.slice(-12))

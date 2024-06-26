@@ -28,6 +28,9 @@ function typy(obj)
 
 local a=1,b={},c=function(a,b){return a+b;}
 
+print(typeof a + "\n")
 print("a "+typy(a)+"\n");
+print(typeof b + "\n")
 print("b "+typy(b)+"\n");
+print(typeof c + "\n")
 print("c "+typy(c)+"\n");

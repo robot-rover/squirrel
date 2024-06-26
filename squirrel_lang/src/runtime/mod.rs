@@ -352,7 +352,7 @@ impl FuncRuntime {
                 ));
             }
         }
-        locals.resize(ast_func.num_locals as usize, Rc::new(RefCell::new(Value::Null)));
+        locals.resize_with(ast_func.num_locals as usize, || Rc::new(RefCell::new(Value::Null)));
 
         for ((_parent_idx, this_idx), upvalue) in ast_func.upvalues.iter().cloned().zip(func_borrow.upvalues.iter()) {
             locals[this_idx as usize] = upvalue.clone()

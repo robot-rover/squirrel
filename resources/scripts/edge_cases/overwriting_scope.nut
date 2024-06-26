@@ -51,7 +51,9 @@ tab2 <- {
     }
 
     function insane() {
-        ::print("insane: " + this.c + "\n")
+        // This works in reference squirrel but I don't want to support it
+        // ::print("insane: " + this.c + "\n")
+        ::print("insane: " + c + "\n")
     }
 }
 

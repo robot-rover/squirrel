@@ -27,6 +27,36 @@ macro_rules! forward_functions {
     };
 }
 
+fn adjust_index(start: i64, end: Option<i64>, len: usize, span: Span) -> Result<(usize, usize), ExecError> {
+    let ilen = len as i64;
+    if start < -ilen || start >= ilen {
+        return Err(ExecError::index_out_of_bounds(start, len, span));
+    }
+    let start = if start < 0 {
+        start + ilen
+    } else {
+        start
+    } as usize;
+
+    let end = if let Some(end) = end {
+        if end < -ilen || end > ilen {
+            return Err(ExecError::index_out_of_bounds(end, len, span));
+        }
+        (if end < 0 {
+            end + ilen
+        } else {
+            end
+        } as usize)
+    } else {
+        len
+    };
+
+    if start > end {
+        return Err(ExecError::index_out_of_bounds(end as i64, len, span));
+    }
+
+    Ok((start, end))
+}
 
 fn get_this<T: TypeName>(this: Value, call_info: &CallInfo) -> Result<T, ExecError> {
     Ok(T::typed_from(this).map_err(|wrong| ExecError::wrong_this_type(call_info.clone(), T::type_name().to_string(), wrong.type_str().to_string()))?)
@@ -77,6 +107,30 @@ fn len(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInf
     Ok(Value::Integer(l as i64))
 }
 
+fn slice(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    argparse::validate_num_args(1..2, args.len(), call_info)?;
+    let mut arg_iter = args.into_iter();
+    let mut start = argparse::convert_arg::<i64>(arg_iter.next().unwrap(), 0, call_info)?;
+    let mut end = arg_iter.next().map(|v| argparse::convert_arg::<i64>(v, 0, call_info)).transpose()?;
+
+    let span = call_info.call_span;
+    match this {
+        Value::String(s) => {
+            let len = s.len() as i64;
+            let (start, end) = adjust_index(start, end, len as usize, span)?;
+            Ok(Value::string(&s[start as usize..end as usize]))
+        }
+        Value::Array(a) => {
+            let a = a.borrow();
+            let len = a.len() as i64;
+            let (start, end) = adjust_index(start, end, len as usize, span)?;
+            Ok(Value::array(a[start as usize..end as usize].iter().cloned().collect()))
+        },
+        _ => return Err(ExecError::wrong_this_type(call_info.clone(), "String, Array".to_string(), this.type_str().to_string()))
+    }
+}
+
+
 pub mod integer {
     use super::*;
 
@@ -93,30 +147,6 @@ pub mod string {
     use std::ops::Deref;
 
     use super::*;
-
-    fn slice(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
-        let this = get_this::<Rc<str>>(this, call_info)?;
-        argparse::validate_num_args(1..2, args.len(), call_info)?;
-        let mut arg_iter = args.into_iter();
-        let mut start = argparse::convert_arg::<i64>(arg_iter.next().unwrap(), 0, call_info)?;
-        let mut end = arg_iter.next().map(|v| argparse::convert_arg::<i64>(v, 0, call_info)).unwrap_or(Ok(this.len() as i64))?;
-
-        if start < -(this.len() as i64) || start >= this.len() as i64 {
-            return Err(ExecError::index_out_of_bounds(start, this.len(), call_info.call_span));
-        }
-        if start < 0 {
-            start += this.len() as i64;
-        }
-
-        if end < -(this.len() as i64) || end >= this.len() as i64 {
-            return Err(ExecError::index_out_of_bounds(end, this.len(), call_info.call_span));
-        }
-        if end < 0 {
-            end += this.len() as i64;
-        }
-
-        Ok(Value::String(Rc::from(&this[start as usize..end as usize])))
-    }
 
     fn find(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
         let this = get_this::<Rc<str>>(this, call_info)?;
@@ -242,10 +272,6 @@ pub mod array {
         argparse::parse0(args, call_info)?;
         this.borrow_mut().reverse();
         Ok(Value::Array(this))
-    }
-
-    fn slice(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
-        todo!("Clean up string slice method then make it a top level func in builtins")
     }
 
     fn clear(context: *mut Context, this: Value, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {

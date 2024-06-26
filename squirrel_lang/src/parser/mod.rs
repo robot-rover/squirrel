@@ -53,7 +53,6 @@ fn parse_statements<'s, F: Fn(Option<&Token>) -> bool>(
     Ok(statements)
 }
 
-// TODO: This function is a mess, needs to be refactored into seperate functions
 fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     let (initial_token, _ctx) = tokens.peek_token(true)?;
     let stmt = match initial_token {
