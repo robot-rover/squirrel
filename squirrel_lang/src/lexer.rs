@@ -344,6 +344,7 @@ struct VisibleLocal {
     local_idx: u32,
 }
 
+#[derive(Debug)]
 pub struct FunctionLocals<'s> {
     pub locals: Vec<(&'s str, u32)>,
     // Outer local index, Inner local index
@@ -375,6 +376,17 @@ impl FunctionLocals<'_> {
             }
         }
 
+        for (_outer_idx, this_idx) in self.upvalues.iter().cloned() {
+            if let Some(iref) = locals_found.get_mut(this_idx as usize) {
+                if *iref {
+                    return false;
+                }
+                *iref = true;
+            } else {
+                return false;
+            }
+        }
+
         locals_found.into_iter().all(convert::identity)
     }
 }
@@ -393,7 +405,7 @@ impl<'s> LocalResolution<'s> {
             .last()
             .expect(Self::OUTSIDE_GLOBAL)
             .local_count();
-        // println!("Declaring local {local} -> {local_idx}");
+        // println!("{}Declaring local {local} -> {local_idx}", " ".repeat(self.visible_locals.len()));
         let visible = VisibleLocal {
             func_idx: self.all_locals.len() as u32 - 1,
             local_idx,
@@ -426,12 +438,12 @@ impl<'s> LocalResolution<'s> {
         for func_scope_idx in func_idx..current_func_idx {
             let next_func_idx = func_scope_idx + 1;
             let upvalue_idx = self.all_locals[next_func_idx as usize].local_count();
-            self.all_locals[func_scope_idx as usize]
+            self.all_locals[next_func_idx as usize]
                 .upvalues
                 .push((local_idx, upvalue_idx));
             local_idx = upvalue_idx;
         }
-        // println!("Resolved local reference: {local} -> {local_idx}");
+        // println!("{}Resolved local reference: {local} -> {local_idx}", " ".repeat(self.visible_locals.len()));
 
         Some(local_idx)
     }
@@ -504,7 +516,11 @@ impl<'s> SpannedLexer<'s> {
         let result = f(self);
         let fn_locals = self.locals.exit_fn_scope();
         let result = result?;
-        assert!(fn_locals.validate(), "Function locals are invalid");
+        assert!(
+            fn_locals.validate(),
+            "Function locals are invalid: {:?}",
+            fn_locals
+        );
         Ok((result, fn_locals))
     }
 

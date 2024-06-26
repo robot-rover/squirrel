@@ -175,12 +175,9 @@ impl ExecError {
                     bt,
                 )
             }
-            ExecError::UndefinedField(span, val, bt) => SquirrelError::new(
-                file_name,
-                span,
-                format!("Undefined field: {}", val),
-                bt,
-            ),
+            ExecError::UndefinedField(span, val, bt) => {
+                SquirrelError::new(file_name, span, format!("Undefined field: {}", val), bt)
+            }
             ExecError::UnhashableType { kind, span, bt } => SquirrelError::new(
                 file_name,
                 span,
