@@ -1,20 +1,43 @@
-use std::{any::type_name, ops::{Range, RangeBounds}};
+use std::{
+    any::type_name,
+    ops::{Range, RangeBounds},
+};
 
-use super::{value::{TypeName, Value}, CallInfo, ExecError};
+use super::{
+    value::{TypeName, Value},
+    CallInfo, ExecError,
+};
 
-
-pub fn validate_num_args(expected: Range<usize>, actual: usize, call_info: &CallInfo) -> Result<(), ExecError> {
+pub fn validate_num_args(
+    expected: Range<usize>,
+    actual: usize,
+    call_info: &CallInfo,
+) -> Result<(), ExecError> {
     if expected.start <= actual && actual <= expected.end {
         Ok(())
     } else {
-        Err(ExecError::wrong_arg_count(call_info.clone(), expected, actual, None))
+        Err(ExecError::wrong_arg_count(
+            call_info.clone(),
+            expected,
+            actual,
+            None,
+        ))
     }
 }
 
-pub fn convert_arg<T: TypeName>(value: Value, arg_index: usize, call_info: &CallInfo) -> Result<T, ExecError> {
+pub fn convert_arg<T: TypeName>(
+    value: Value,
+    arg_index: usize,
+    call_info: &CallInfo,
+) -> Result<T, ExecError> {
     match T::typed_from(value) {
         Ok(conv) => Ok(conv),
-        Err(unconv) => Err(ExecError::wrong_arg_type(call_info.clone(), arg_index, T::type_name().to_string(), unconv.type_str().to_string()))
+        Err(unconv) => Err(ExecError::wrong_arg_type(
+            call_info.clone(),
+            arg_index,
+            T::type_name().to_string(),
+            unconv.type_str().to_string(),
+        )),
     }
 }
 
@@ -31,10 +54,15 @@ where
     Ok(arg)
 }
 
-pub fn takeN<const N: usize>(args: Vec<Value>, n: usize, call_info: &CallInfo) -> Result<[Value; N], ExecError> {
-    validate_num_args(n..n, args.len(), call_info)?;
-    Ok(args.try_into().unwrap())
-}
+// Uncomment this if we ever need > 3 arguments
+// pub fn take_n<const N: usize>(
+//     args: Vec<Value>,
+//     n: usize,
+//     call_info: &CallInfo,
+// ) -> Result<[Value; N], ExecError> {
+//     validate_num_args(n..n, args.len(), call_info)?;
+//     Ok(args.try_into().unwrap())
+// }
 
 pub fn parse0(args: Vec<Value>, call_info: &CallInfo) -> Result<(), ExecError> {
     validate_num_args(0..0, args.len(), call_info)

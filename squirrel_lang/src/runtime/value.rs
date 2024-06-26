@@ -1,12 +1,10 @@
+use hashbrown::{Equivalent, HashMap};
 use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{ptr::NonNull, rc::Rc};
-use hashbrown::{Equivalent, HashMap};
 
 use crate::parser::ast::{self, Expr};
 
-use super::{
-    argparse, builtins, CallInfo, Context, ExecError, ExprResult, FuncRuntime
-};
+use super::{argparse, builtins, CallInfo, Context, ExecError, ExprResult, FuncRuntime};
 
 pub type NativeFn = fn(*mut Context, Value, Vec<Value>, &CallInfo) -> Result<Value, ExecError>;
 
@@ -76,7 +74,9 @@ impl Value {
         } else {
             match (self, key) {
                 (Value::Object(obj), any) => obj.borrow().get_field(any),
-                (Value::Array(arr), HashValue::Integer(i)) => arr.borrow().get(*i as usize).cloned(),
+                (Value::Array(arr), HashValue::Integer(i)) => {
+                    arr.borrow().get(*i as usize).cloned()
+                }
                 _ => None,
             }
         }
@@ -157,7 +157,7 @@ impl Hash for HashValue {
         // core::mem::discriminant(self).hash(state);
         match self {
             HashValue::Integer(i) => i.hash(state),
-            HashValue::Null => {},
+            HashValue::Null => {}
             HashValue::NativeFn(nf) => nf.hash(state),
             HashValue::String(s) => s.deref().hash(state),
             HashValue::Object(o) => o.as_ptr().hash(state),
@@ -166,7 +166,6 @@ impl Hash for HashValue {
         }
     }
 }
-
 
 impl HashValue {
     value_common_impl!();
@@ -304,7 +303,12 @@ impl Object {
         self.delegate.as_ref()
     }
 
-    pub fn set_field(&mut self, key: HashValue, value: Value, is_newslot: bool) -> Result<(), HashValue> {
+    pub fn set_field(
+        &mut self,
+        key: HashValue,
+        value: Value,
+        is_newslot: bool,
+    ) -> Result<(), HashValue> {
         if is_newslot || self.slots.contains_key(&key) {
             self.slots.insert(key, value);
             Ok(())
@@ -320,22 +324,27 @@ impl Object {
     }
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
-        // Todo: Have exec error here
         // TODO: This shouldn't be recursive
         if let Some(value) = self.slots.get(key) {
             return Some(value.clone().into());
         }
-        self.delegate.as_ref().and_then(|del| del.borrow().get_field(key)).or_else(|| match key {
-            HashValue::String(s) => builtins::object::delegate(s),
-            _ => None,
-        })
+        self.delegate
+            .as_ref()
+            .and_then(|del| del.borrow().get_field(key))
+            .or_else(|| match key {
+                HashValue::String(s) => builtins::object::delegate(s),
+                _ => None,
+            })
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
         if let Some(value) = self.slots.get(key) {
             return Some(value.clone().into());
         }
-        self.delegate.as_ref().and_then(|del| del.borrow().get_field_str(key)).or_else(|| builtins::object::delegate(key))
+        self.delegate
+            .as_ref()
+            .and_then(|del| del.borrow().get_field_str(key))
+            .or_else(|| builtins::object::delegate(key))
     }
 
     pub fn len(&self) -> usize {
@@ -343,57 +352,133 @@ impl Object {
     }
 
     // Squirrel Default Delegate Functions
-    pub fn rawget(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn rawget(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
-        this.borrow().slots.get(&hash_key).map(|v| v.clone()).ok_or_else(|| ExecError::undefined_field(call_info.call_span, hash_key.clone().into()))
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| {
+            ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span)
+        })?;
+        this.borrow()
+            .slots
+            .get(&hash_key)
+            .map(|v| v.clone())
+            .ok_or_else(|| ExecError::undefined_field(call_info.call_span, hash_key.clone().into()))
     }
 
-    pub fn rawset(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn rawset(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         let (key, val) = argparse::parse2::<Value, Value>(args, call_info)?;
-        let hash_key = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
+        let hash_key = key.try_into().map_err(|unhash: Value| {
+            ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span)
+        })?;
         this.borrow_mut().slots.insert(hash_key, val);
         Ok(Value::Object(this.clone()))
     }
 
-    pub fn rawdelete(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult { let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
-        Ok(this.borrow_mut().slots.remove(&hash_key).unwrap_or(Value::Null))
+    pub fn rawdelete(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
+        let key = argparse::parse1::<Value>(args, call_info)?;
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| {
+            ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span)
+        })?;
+        Ok(this
+            .borrow_mut()
+            .slots
+            .remove(&hash_key)
+            .unwrap_or(Value::Null))
     }
 
-    pub fn rawin(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn rawin(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         let key = argparse::parse1::<Value>(args, call_info)?;
-        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span))?;
+        let hash_key: HashValue = key.try_into().map_err(|unhash: Value| {
+            ExecError::unhashable_type(unhash.type_str().to_string(), call_info.call_span)
+        })?;
         Ok(Value::boolean(this.borrow().slots.contains_key(&hash_key)))
     }
 
-    pub fn clear(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn clear(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         this.borrow_mut().slots.clear();
         Ok(Value::Object(this.clone()))
     }
 
-    pub fn setdelegate(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn setdelegate(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         let delegate = argparse::parse1::<Value>(args, call_info)?;
         let delegate = match delegate {
             Value::Null => None,
             Value::Object(obj) => Some(obj),
-            _ => return Err(ExecError::wrong_arg_type(call_info.clone(), 0, String::from("object|null"), delegate.type_str().to_string())),
+            _ => {
+                return Err(ExecError::wrong_arg_type(
+                    call_info.clone(),
+                    0,
+                    String::from("object|null"),
+                    delegate.type_str().to_string(),
+                ))
+            }
         };
         this.borrow_mut().delegate = delegate;
         Ok(Value::Object(this.clone()))
     }
 
-    pub fn getdelegate(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn getdelegate(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         argparse::parse0(args, call_info)?;
-        Ok(this.borrow().delegate.clone().map(|d| Value::Object(d)).unwrap_or(Value::Null))
+        Ok(this
+            .borrow()
+            .delegate
+            .clone()
+            .map(|d| Value::Object(d))
+            .unwrap_or(Value::Null))
     }
 
-    pub fn filter(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn filter(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         todo!();
         let filter_fn = argparse::parse1::<Value>(args, call_info)?;
         let filter_fn = match filter_fn {
             Value::Closure(closure) => closure,
-            _ => return Err(ExecError::wrong_arg_type(call_info.clone(), 0, String::from("function"), filter_fn.type_str().to_string())),
+            _ => {
+                return Err(ExecError::wrong_arg_type(
+                    call_info.clone(),
+                    0,
+                    String::from("function"),
+                    filter_fn.type_str().to_string(),
+                ))
+            }
         };
         let mut new_obj = Object::new(None, HashMap::new(), false);
         // for (key, val) in this.borrow().slots.iter() {
@@ -405,13 +490,29 @@ impl Object {
         Ok(Value::Object(Rc::new(RefCell::new(new_obj))))
     }
 
-    pub fn keys(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn keys(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         argparse::parse0(args, call_info)?;
-        let keys = this.borrow().slots.keys().cloned().map(|k| k.into()).collect::<Vec<_>>();
+        let keys = this
+            .borrow()
+            .slots
+            .keys()
+            .cloned()
+            .map(|k| k.into())
+            .collect::<Vec<_>>();
         Ok(Value::array(keys))
     }
 
-    pub fn values(context: *mut Context, this: Rc<RefCell<Object>>, args: Vec<Value>, call_info: &CallInfo) -> ExprResult {
+    pub fn values(
+        context: *mut Context,
+        this: Rc<RefCell<Object>>,
+        args: Vec<Value>,
+        call_info: &CallInfo,
+    ) -> ExprResult {
         argparse::parse0(args, call_info)?;
         let values = this.borrow().slots.values().cloned().collect::<Vec<_>>();
         Ok(Value::array(values))
@@ -422,7 +523,13 @@ impl fmt::Debug for Object {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         f.debug_struct("Object")
             .field("ptr", &(self as *const Object))
-            .field("delegate", &self.delegate.as_ref().map(|del| del.deref().borrow().deref() as *const Object))
+            .field(
+                "delegate",
+                &self
+                    .delegate
+                    .as_ref()
+                    .map(|del| del.deref().borrow().deref() as *const Object),
+            )
             .field("is_class_inst", &self.is_class_inst)
             .finish_non_exhaustive()
     }
@@ -439,8 +546,18 @@ pub struct Closure {
 }
 
 impl Closure {
-    pub fn new(ast_fn: &ast::Function, default_vals: Vec<Value>, parent_rt: &FuncRuntime, root: Value) -> Self {
-        let upvalues = ast_fn.upvalues.iter().cloned().map(|(parent_idx, _this_idx)| parent_rt.locals[parent_idx as usize].clone()).collect();
+    pub fn new(
+        ast_fn: &ast::Function,
+        default_vals: Vec<Value>,
+        parent_rt: &FuncRuntime,
+        root: Value,
+    ) -> Self {
+        let upvalues = ast_fn
+            .upvalues
+            .iter()
+            .cloned()
+            .map(|(parent_idx, _this_idx)| parent_rt.locals[parent_idx as usize].clone())
+            .collect();
         Closure {
             ast_fn: NonNull::from(ast_fn),
             default_vals,

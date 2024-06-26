@@ -2,7 +2,10 @@ use std::convert::TryFrom;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{context::Span, lexer::{FunctionLocals, LocalResolution}};
+use crate::{
+    context::Span,
+    lexer::{FunctionLocals, LocalResolution},
+};
 
 use super::error::ParseError;
 
@@ -108,14 +111,17 @@ impl Function {
         locals: FunctionLocals,
         body: Statement,
     ) -> Self {
-
         Function {
             keyword_span,
             arg_span,
             num_args,
             default_expr,
             num_locals: locals.local_count(),
-            local_names: locals.locals.into_iter().map(|(name, idx)| (name.to_string(), idx)).collect(),
+            local_names: locals
+                .locals
+                .into_iter()
+                .map(|(name, idx)| (name.to_string(), idx))
+                .collect(),
             upvalues: locals.upvalues,
             is_varargs,
             body: Box::new(body),

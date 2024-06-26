@@ -23,10 +23,20 @@ pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorCont
             .map_err(|err| err.with_context(contents))?;
         Ok(Statement::block(stmts, Span::empty(), Span::empty()))
     })?;
-    assert!(fn_locals.upvalues.is_empty(), "Root function cannot have upvalues");
+    assert!(
+        fn_locals.upvalues.is_empty(),
+        "Root function cannot have upvalues"
+    );
 
-
-    Ok(Function::new(Span::empty(), Span::empty(), 0, Vec::new(), true, fn_locals, root_fn_body))
+    Ok(Function::new(
+        Span::empty(),
+        Span::empty(),
+        0,
+        Vec::new(),
+        true,
+        fn_locals,
+        root_fn_body,
+    ))
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -66,7 +76,7 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         Token::Return | Token::Yield => {
             let is_yield = matches!(initial_token, Token::Yield);
             parse_return_yield(tokens, is_yield)?
-        },
+        }
         Token::Throw => {
             let throw_span = tokens.expect_token(Token::Throw, true)?;
             let expr = parse_expr_line(tokens)?;
@@ -126,8 +136,7 @@ fn parse_switch<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
             }
             Token::Default => {
                 tokens.expect_token(Token::Colon, true)?;
-                let body =
-                    parse_statements(tokens, |tok| tok == Some(&Token::RightCurlyBrace))?;
+                let body = parse_statements(tokens, |tok| tok == Some(&Token::RightCurlyBrace))?;
                 default = Some(Statement::block(body, Span::empty(), Span::empty()))
             }
             Token::RightCurlyBrace => {
@@ -136,7 +145,13 @@ fn parse_switch<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
             other => return Err(ParseError::unexpected_token(other, span)),
         }
     })?;
-    Ok(Statement::switch(expr, cases, default, switch_span, end_span))
+    Ok(Statement::switch(
+        expr,
+        cases,
+        default,
+        switch_span,
+        end_span,
+    ))
 }
 
 fn parse_foreach<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
@@ -199,7 +214,11 @@ fn parse_for<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
 }
 
 fn parse_return_yield<'s>(tokens: &mut SpannedLexer<'s>, is_yield: bool) -> ParseResult<Statement> {
-    let expect_token = if is_yield { Token::Yield } else { Token::Return };
+    let expect_token = if is_yield {
+        Token::Yield
+    } else {
+        Token::Return
+    };
     let kw_span = tokens.expect_token(expect_token, true)?;
     let expr = match tokens.peek_token(true)? {
         (Token::Newline, _) | (Token::Semicolon, _) => {
@@ -256,14 +275,18 @@ fn parse_local<'s>(tokens: &mut SpannedLexer<'s>, stop_at_newline: bool) -> Pars
                     assign_span,
                     val,
                     AssignKind::Normal,
-                ).into()
+                )
+                .into()
             })
         })
         .collect::<Vec<_>>();
     let statement = if statements.len() == 1 {
         statements.into_iter().next().unwrap().into()
     } else {
-        let end_span = statements.last().map(|stmt| stmt.span).unwrap_or(Span::empty());
+        let end_span = statements
+            .last()
+            .map(|stmt| stmt.span)
+            .unwrap_or(Span::empty());
         Statement::block(statements, local_span, end_span)
     };
     Ok(statement)
@@ -389,10 +412,7 @@ fn parse_table_slot<'s>(tokens: &mut SpannedLexer<'s>, sep: &Token) -> ParseResu
     Ok((key, value))
 }
 
-fn parse_function<'s>(
-    tokens: &mut SpannedLexer<'s>,
-    keyword_span: Span,
-) -> ParseResult<Expr> {
+fn parse_function<'s>(tokens: &mut SpannedLexer<'s>, keyword_span: Span) -> ParseResult<Expr> {
     let target = if let (Token::Identifier(_), _) = tokens.peek_token(true)? {
         Some(parse_hier_path(tokens, Token::DoubleColon)?)
     } else {
@@ -401,12 +421,7 @@ fn parse_function<'s>(
     let func = parse_function_args_body(tokens, keyword_span)?;
     let func_def = Expr::function_def(func, keyword_span);
     Ok(if let Some(target) = target {
-        Expr::assign(
-            target,
-            keyword_span,
-            func_def,
-            AssignKind::NewSlot,
-        )
+        Expr::assign(target, keyword_span, func_def, AssignKind::NewSlot)
     } else {
         func_def
     })
@@ -510,7 +525,11 @@ fn parse_function_args_body<'s>(
         }
     };
 
-    let (body, fn_locals) = tokens.fn_scoped(args.iter().map(|(name, _span)| *name), is_varargs, |tokens| parse_statement(tokens))?;
+    let (body, fn_locals) = tokens.fn_scoped(
+        args.iter().map(|(name, _span)| *name),
+        is_varargs,
+        |tokens| parse_statement(tokens),
+    )?;
     Ok(Function::new(
         keyword_span,
         init_call_ctx | end_call_ctx,
@@ -518,7 +537,7 @@ fn parse_function_args_body<'s>(
         default_expr,
         is_varargs,
         fn_locals,
-        body
+        body,
     ))
 }
 

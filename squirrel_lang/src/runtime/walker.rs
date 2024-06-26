@@ -1,7 +1,12 @@
-use std::{
-    borrow::BorrowMut, cell::RefCell, env, io::{self, Write}, ops::Deref, rc::Rc
-};
 use hashbrown::HashMap;
+use std::{
+    borrow::BorrowMut,
+    cell::RefCell,
+    env,
+    io::{self, Write},
+    ops::Deref,
+    rc::Rc,
+};
 
 use crate::{
     context::{Span, SquirrelError},
@@ -12,7 +17,9 @@ use crate::{
 };
 
 use super::{
-    builtins, value::{Closure, HashValue, Object, TypeName, Value}, CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState
+    builtins,
+    value::{Closure, HashValue, Object, TypeName, Value},
+    CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState,
 };
 enum FlowControl {
     Return(Span, Value),
@@ -35,10 +42,7 @@ pub fn run(
     stdout: Option<&mut dyn io::Write>,
 ) -> Result<(), SquirrelError> {
     let root = init_root();
-    let root_closure = Closure::root(
-        tree,
-        Value::Object(root.clone()),
-    );
+    let root_closure = Closure::root(tree, Value::Object(root.clone()));
     let arg_vals = env::args()
         .into_iter()
         .map(|arg| Value::string(&arg))
@@ -54,7 +58,7 @@ pub fn run(
     let mut vm_state = VMState {
         root_table: root,
         stdout: stdout.into(),
-        stderr: super::WriteOption::Stderr(io::stderr())
+        stderr: super::WriteOption::Stderr(io::stderr()),
     };
     let mut context = Context {
         infunc,
@@ -202,8 +206,8 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .iter()
                 .map(|expr| run_expression(context, expr))
                 .collect::<Result<Vec<_>, _>>()?,
-                &context.infunc,
-                Value::Object(context.vm_state.root_table.clone()),
+            &context.infunc,
+            Value::Object(context.vm_state.root_table.clone()),
         ))),
         ExprData::ClassDef { parent, members } => run_class(context, parent.as_ref(), members),
         ExprData::Assign(assign) => {
@@ -218,7 +222,15 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             };
             val = if let Some(op) = op {
                 let target_val = get_assign_target(context, &assign.target)?;
-                run_binary_op(context, &op, assign.op_span, target_val, assign.target.span(), val, assign.value.span)?
+                run_binary_op(
+                    context,
+                    &op,
+                    assign.op_span,
+                    target_val,
+                    assign.target.span(),
+                    val,
+                    assign.value.span,
+                )?
             } else {
                 val
             };
@@ -236,7 +248,12 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 run_expression(context, false_expr)
             }
         }
-        ExprData::BinaryOp { op, op_span, lhs, rhs } => {
+        ExprData::BinaryOp {
+            op,
+            op_span,
+            lhs,
+            rhs,
+        } => {
             let lhs_span = lhs.span;
             let lhs = run_expression(context, lhs)?;
             let rhs_span = rhs.span;
@@ -289,11 +306,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .get_field_str(&field.0)
                 .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
-        ExprData::Globals => Ok(context
-            .infunc
-            .closure
-            .borrow()
-            .root.clone()),
+        ExprData::Globals => Ok(context.infunc.closure.borrow().root.clone()),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
             let val = &context.infunc.env;
@@ -309,9 +322,12 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
             return Ok(Value::Null);
         }
         ExprData::Local(idx, span) => {
-            let val = context.infunc.locals[*idx as usize].deref().borrow().clone();
+            let val = context.infunc.locals[*idx as usize]
+                .deref()
+                .borrow()
+                .clone();
             Ok(val)
-        },
+        }
     }
 }
 
@@ -355,8 +371,7 @@ fn run_rawcall(
         Value::Closure(func) => {
             let ast_fn = unsafe { func.borrow().ast_fn.as_ref() };
             // TODO: need to force func runtime to use our env here rather than the closure's
-            let rt_func =
-                FuncRuntime::new(func.clone(), args, Some(env), func_span, call_span)?;
+            let rt_func = FuncRuntime::new(func.clone(), args, Some(env), func_span, call_span)?;
             let body = &ast_fn.body;
             let mut context = Context {
                 infunc: rt_func,
@@ -365,7 +380,10 @@ fn run_rawcall(
             run_function(&mut context, body)
         }
         Value::NativeFn(func) => {
-            let call_info = CallInfo { func_span, call_span };
+            let call_info = CallInfo {
+                func_span,
+                call_span,
+            };
             func(context as *mut _, env, args, &call_info)
         }
         other => panic!("Can't call non-function {other:?}"),
@@ -390,12 +408,7 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
         return Ok(value);
     }
 
-    let root_match = context
-        .infunc
-        .closure
-        .borrow()
-        .root
-        .get_field_str(&ident);
+    let root_match = context.infunc.closure.borrow().root.get_field_str(&ident);
     if let Some(value) = root_match {
         return Ok(value);
     }
@@ -403,7 +416,12 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     Err(ExecError::undefined_variable((ident.to_string(), span)))
 }
 
-fn run_unary_ref_op(context: &mut Context, op: &UnaryRefOp, op_span: Span, target: &AssignTarget) -> ExprResult {
+fn run_unary_ref_op(
+    context: &mut Context,
+    op: &UnaryRefOp,
+    op_span: Span,
+    target: &AssignTarget,
+) -> ExprResult {
     let val = get_assign_target(context, target)?;
     let (is_add, return_new) = match op {
         UnaryRefOp::PreIncr => (true, true),
@@ -443,7 +461,7 @@ fn run_class(
                 } else {
                     panic!("Not a class")
                 }
-            },
+            }
             _ => panic!("Not a class"),
         }
     } else {
@@ -543,7 +561,15 @@ macro_rules! int_op {
     };
 }
 
-fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value, lhs_span: Span, rhs: Value, rhs_span: Span) -> ExprResult {
+fn run_binary_op(
+    context: &mut Context,
+    op: &BinaryOp,
+    op_span: Span,
+    lhs: Value,
+    lhs_span: Span,
+    rhs: Value,
+    rhs_span: Span,
+) -> ExprResult {
     let res = match op {
         BinaryOp::Add => {
             let lhs_str: Result<Rc<str>, Value> = <Rc<str>>::typed_from(lhs);
@@ -554,7 +580,7 @@ fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value
                 (Err(l), Ok(rs)) => Ok(Value::string(&format!("{}{}", l, rs))),
                 (Err(l), Err(r)) => promoting_op!(l, r, +; "+"),
             }
-        },
+        }
         BinaryOp::Sub => promoting_op!(lhs, rhs, -; "-"),
         BinaryOp::Mul => promoting_op!(lhs, rhs, *; "*"),
         BinaryOp::Div => promoting_op!(lhs, rhs, /; "/"),
@@ -564,32 +590,40 @@ fn run_binary_op(context: &mut Context, op: &BinaryOp, op_span: Span, lhs: Value
         BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean; ">"),
         BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean; "<"),
         BinaryOp::Compare => promoting_op!(lhs, rhs, -; "-"),
-        BinaryOp::And =>
-            Ok(if !lhs.truthy() {
-                lhs.clone()
-            } else {
-                rhs.clone()
-            }),
-        BinaryOp::Or =>
-            Ok(if lhs.truthy() {
-                lhs.clone()
-            } else {
-                rhs.clone()
-            }),
+        BinaryOp::And => Ok(if !lhs.truthy() {
+            lhs.clone()
+        } else {
+            rhs.clone()
+        }),
+        BinaryOp::Or => Ok(if lhs.truthy() {
+            lhs.clone()
+        } else {
+            rhs.clone()
+        }),
         BinaryOp::BitAnd => int_op!(lhs, rhs, &; "&"),
         BinaryOp::BitOr => int_op!(lhs, rhs, |; "|"),
         BinaryOp::BitXor => int_op!(lhs, rhs, ^; "^"),
         BinaryOp::Shl => int_op!(lhs, rhs, <<; "<<"),
         BinaryOp::Shr => match (lhs, rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) =>
-                Ok(Value::Integer(((lhs as u64) >> rhs) as i64)),
+            (Value::Integer(lhs), Value::Integer(rhs)) => {
+                Ok(Value::Integer(((lhs as u64) >> rhs) as i64))
+            }
             (lhs, rhs) => Err((">>", lhs, rhs)),
         },
         BinaryOp::AShr => int_op!(lhs, rhs, >>; ">>>"),
         BinaryOp::In => todo!("In is not implemented"),
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
     };
-    res.map_err(|(op, lhs, rhs)| ExecError::illegal_operation(op.to_string(), op_span, lhs.type_str().to_string(), lhs_span, rhs.type_str().to_string(), rhs_span))
+    res.map_err(|(op, lhs, rhs)| {
+        ExecError::illegal_operation(
+            op.to_string(),
+            op_span,
+            lhs.type_str().to_string(),
+            lhs_span,
+            rhs.type_str().to_string(),
+            rhs_span,
+        )
+    })
 }
 
 fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult {
@@ -611,9 +645,10 @@ fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult
                 .get_field_str(&field.0)
                 .ok_or_else(|| ExecError::undefined_field(field.1, Value::string(&field.0)))
         }
-        AssignTarget::Local(idx, span) => {
-            Ok(context.infunc.locals[*idx as usize].deref().borrow().clone())
-        },
+        AssignTarget::Local(idx, span) => Ok(context.infunc.locals[*idx as usize]
+            .deref()
+            .borrow()
+            .clone()),
     }
 }
 
@@ -624,11 +659,11 @@ fn run_assign(
     is_newslot: bool,
 ) -> Result<(), ExecError> {
     let span = target.span();
-    let (target_obj, index)= match target {
+    let (target_obj, index) = match target {
         AssignTarget::Local(idx, span) => {
             assert!(!is_newslot, "Can't create a local slot");
             *context.infunc.locals[*idx as usize].deref().borrow_mut() = val;
-            return Ok(())
+            return Ok(());
         }
         AssignTarget::Ident(ident) => {
             let env = context.infunc.env.clone();
@@ -642,26 +677,26 @@ fn run_assign(
                 ExecError::unhashable_type(unhash.type_str().to_string(), *span)
             })?;
             (array, hash_index)
-        },
+        }
         AssignTarget::FieldAccess(parent, field) => {
             let parent = run_expression(context, parent)?;
             let index = HashValue::string(&field.0);
             (parent, index)
-        },
+        }
     };
 
     match (target_obj, index) {
         (Value::Object(obj), any) => {
             let mut obj = obj.deref().borrow_mut();
             obj.set_field(any, val, is_newslot)
-                .map_err(|hash_index| { ExecError::undefined_field(span, hash_index.into()) })
+                .map_err(|hash_index| ExecError::undefined_field(span, hash_index.into()))
         }
         (Value::Array(arr), HashValue::Integer(index)) => {
             // TODO: Handle index out of bounds
             let mut arr = arr.deref().borrow_mut();
             arr[index as usize] = val;
             Ok(())
-        },
+        }
         (Value::Array(_), other) => panic!("Cannot set non-integer index of array"),
         _ => panic!("Can't assign to non-object"),
     }

@@ -1,5 +1,11 @@
-use std::{borrow::Borrow, cell::RefCell, io, ops::{Deref, Range}, rc::Rc};
 use hashbrown::HashMap;
+use std::{
+    borrow::Borrow,
+    cell::RefCell,
+    io,
+    ops::{Deref, Range},
+    rc::Rc,
+};
 
 use ariadne::Color;
 use value::{Closure, Object, Value};
@@ -9,10 +15,10 @@ use crate::{
     parser::ast::{Ident, Literal},
 };
 
+pub mod argparse;
+pub mod builtins;
 pub mod value;
 pub mod walker;
-pub mod builtins;
-pub mod argparse;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -140,7 +146,10 @@ impl ExecError {
                 definition_span,
                 bt,
             } => {
-                let CallInfo { func_span, call_span } = call_info;
+                let CallInfo {
+                    func_span,
+                    call_span,
+                } = call_info;
                 let mut labels = vec![
                     (
                         func_span,
@@ -169,8 +178,7 @@ impl ExecError {
             ExecError::UndefinedField(span, val, bt) => SquirrelError::new(
                 file_name,
                 span,
-                // TODO: This should use value to_string
-                format!("Undefined field: {:?}", val),
+                format!("Undefined field: {}", val),
                 bt,
             ),
             ExecError::UnhashableType { kind, span, bt } => SquirrelError::new(
@@ -191,18 +199,40 @@ impl ExecError {
                 file_name,
                 format!("Illegal types for '{}' operator", op),
                 vec![
-                    (lhs_span, format!("Operand of type '{}'", lhs_ty), Color::Red),
+                    (
+                        lhs_span,
+                        format!("Operand of type '{}'", lhs_ty),
+                        Color::Red,
+                    ),
                     (op_span, format!("Operator"), Color::Blue),
-                    (rhs_span, format!("Operand of type '{}'", rhs_ty), Color::Red)],
+                    (
+                        rhs_span,
+                        format!("Operand of type '{}'", rhs_ty),
+                        Color::Red,
+                    ),
+                ],
                 bt,
             ),
-            ExecError::WrongArgType { call_info, arg_index, expected, got, bt } => {
-                let CallInfo { func_span, call_span } = call_info;
+            ExecError::WrongArgType {
+                call_info,
+                arg_index,
+                expected,
+                got,
+                bt,
+            } => {
+                let CallInfo {
+                    func_span,
+                    call_span,
+                } = call_info;
                 SquirrelError::new_labels(
                     file_name,
                     format!("Argument {} has the wrong type", arg_index),
                     vec![
-                        (call_span, format!("Expected type: '{}'", expected), Color::Red),
+                        (
+                            call_span,
+                            format!("Expected type: '{}'", expected),
+                            Color::Red,
+                        ),
                         (call_span, format!("Got type: '{}'", got), Color::Red),
                     ],
                     bt,
@@ -224,15 +254,28 @@ impl ExecError {
                 format!("Failed to parse number: {}", message),
                 bt,
             ),
-            ExecError::IndexOutOfBounds { index, len, span, bt } => SquirrelError::new(
+            ExecError::IndexOutOfBounds {
+                index,
+                len,
+                span,
+                bt,
+            } => SquirrelError::new(
                 file_name,
                 span,
                 format!("Index '{}' out of bounds for length '{}'", index, len),
                 bt,
             ),
-            ExecError::WrongThisType { call_info, expected, got, bt } => SquirrelError::new_labels(
+            ExecError::WrongThisType {
+                call_info,
+                expected,
+                got,
+                bt,
+            } => SquirrelError::new_labels(
                 file_name,
-                format!("Expected 'this' to be of type '{}', got '{}'", expected, got),
+                format!(
+                    "Expected 'this' to be of type '{}', got '{}'",
+                    expected, got
+                ),
                 vec![
                     (call_info.call_span, "This call".to_string(), Color::Blue),
                     (call_info.func_span, "This function".to_string(), Color::Red),
@@ -287,7 +330,7 @@ pub struct Context<'a, 'b> {
 }
 
 #[derive(Debug)]
-struct FuncRuntime {
+pub struct FuncRuntime {
     locals: Vec<Rc<RefCell<Value>>>,
     env: Value,
     closure: Rc<RefCell<Closure>>,
@@ -314,24 +357,30 @@ impl FuncRuntime {
             .by_ref()
             .map(Option::Some)
             .chain(std::iter::repeat(None));
-        let mut locals = (0..ast_func.num_args as usize).zip(zip_iter).map(|(arg_idx, arg_val)| {
-            let val = if let Some(arg_val) = arg_val {
-                // There is an argument
-                arg_val
-            } else if arg_idx >= n_parameters - n_default {
-                // No given argument, use default
-                func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
-            } else {
-                // No default available, not enough arguments
-                return Err(ExecError::wrong_arg_count(
-                    CallInfo { func_span, call_span },
-                    (n_parameters - n_default)..n_parameters,
-                    n_arguments,
-                    Some(ast_func.arg_span),
-                ))
-            };
-            Ok(Rc::new(RefCell::new(val)))
-        }).collect::<Result<Vec<_>, _>>()?;
+        let mut locals = (0..ast_func.num_args as usize)
+            .zip(zip_iter)
+            .map(|(arg_idx, arg_val)| {
+                let val = if let Some(arg_val) = arg_val {
+                    // There is an argument
+                    arg_val
+                } else if arg_idx >= n_parameters - n_default {
+                    // No given argument, use default
+                    func_borrow.default_vals[arg_idx - (n_parameters - n_default)].clone()
+                } else {
+                    // No default available, not enough arguments
+                    return Err(ExecError::wrong_arg_count(
+                        CallInfo {
+                            func_span,
+                            call_span,
+                        },
+                        (n_parameters - n_default)..n_parameters,
+                        n_arguments,
+                        Some(ast_func.arg_span),
+                    ));
+                };
+                Ok(Rc::new(RefCell::new(val)))
+            })
+            .collect::<Result<Vec<_>, _>>()?;
 
         // TODO: Can we use default args and varargs at once?
         if ast_func.is_varargs {
@@ -344,17 +393,26 @@ impl FuncRuntime {
         } else {
             if arg_iter.count() > 0 {
                 return Err(ExecError::wrong_arg_count(
-                    CallInfo { func_span,
-                    call_span },
+                    CallInfo {
+                        func_span,
+                        call_span,
+                    },
                     (n_parameters - n_default)..n_parameters,
                     n_arguments,
-                    Some(ast_func.arg_span)
+                    Some(ast_func.arg_span),
                 ));
             }
         }
-        locals.resize_with(ast_func.num_locals as usize, || Rc::new(RefCell::new(Value::Null)));
+        locals.resize_with(ast_func.num_locals as usize, || {
+            Rc::new(RefCell::new(Value::Null))
+        });
 
-        for ((_parent_idx, this_idx), upvalue) in ast_func.upvalues.iter().cloned().zip(func_borrow.upvalues.iter()) {
+        for ((_parent_idx, this_idx), upvalue) in ast_func
+            .upvalues
+            .iter()
+            .cloned()
+            .zip(func_borrow.upvalues.iter())
+        {
             locals[this_idx as usize] = upvalue.clone()
         }
 

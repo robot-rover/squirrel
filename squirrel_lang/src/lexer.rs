@@ -1,4 +1,7 @@
-use std::{convert::{self, identity}, str::FromStr};
+use std::{
+    convert::{self, identity},
+    str::FromStr,
+};
 
 use ariadne::{Label, Report, ReportKind};
 use hashbrown::HashMap;
@@ -338,7 +341,7 @@ fn parse_char_lit<'s>(lexer: &Lexer<'s, Token<'s>>) -> LexResult<i64> {
 #[derive(Debug, Clone)]
 struct VisibleLocal {
     func_idx: u32,
-    local_idx: u32
+    local_idx: u32,
 }
 
 pub struct FunctionLocals<'s> {
@@ -353,7 +356,10 @@ impl FunctionLocals<'_> {
     }
 
     fn new() -> Self {
-        Self { locals: Vec::new(), upvalues: Vec::new() }
+        Self {
+            locals: Vec::new(),
+            upvalues: Vec::new(),
+        }
     }
 
     fn validate(&self) -> bool {
@@ -382,26 +388,47 @@ impl<'s> LocalResolution<'s> {
     const OUTSIDE_GLOBAL: &'static str = "Cannot call add_local when outside of global scope";
 
     pub fn add_local(&mut self, local: &'s str) -> u32 {
-        let local_idx = self.all_locals.last().expect(Self::OUTSIDE_GLOBAL).local_count();
+        let local_idx = self
+            .all_locals
+            .last()
+            .expect(Self::OUTSIDE_GLOBAL)
+            .local_count();
         // println!("Declaring local {local} -> {local_idx}");
         let visible = VisibleLocal {
             func_idx: self.all_locals.len() as u32 - 1,
-            local_idx
+            local_idx,
         };
-        self.visible_locals.last_mut().expect(Self::OUTSIDE_GLOBAL).insert(local, visible);
-        self.all_locals.last_mut().expect(Self::OUTSIDE_GLOBAL).locals.push((local, local_idx));
+        self.visible_locals
+            .last_mut()
+            .expect(Self::OUTSIDE_GLOBAL)
+            .insert(local, visible);
+        self.all_locals
+            .last_mut()
+            .expect(Self::OUTSIDE_GLOBAL)
+            .locals
+            .push((local, local_idx));
         local_idx
     }
 
     pub fn maybe_reference_local(&mut self, local: &'s str) -> Option<u32> {
-        let VisibleLocal { func_idx, mut local_idx } = self.visible_locals.iter().rev().find_map(|scope| scope.get(local))?.clone();
+        let VisibleLocal {
+            func_idx,
+            mut local_idx,
+        } = self
+            .visible_locals
+            .iter()
+            .rev()
+            .find_map(|scope| scope.get(local))?
+            .clone();
 
         // Need to propogate this local upwards through upvalues
         let current_func_idx = self.all_locals.len() as u32 - 1;
         for func_scope_idx in func_idx..current_func_idx {
             let next_func_idx = func_scope_idx + 1;
             let upvalue_idx = self.all_locals[next_func_idx as usize].local_count();
-            self.all_locals[func_scope_idx as usize].upvalues.push((local_idx, upvalue_idx));
+            self.all_locals[func_scope_idx as usize]
+                .upvalues
+                .push((local_idx, upvalue_idx));
             local_idx = upvalue_idx;
         }
         // println!("Resolved local reference: {local} -> {local_idx}");
@@ -434,10 +461,11 @@ impl<'s> LocalResolution<'s> {
     }
 
     fn new() -> Self {
-        Self { visible_locals: Vec::new(), all_locals: Vec::new() }
+        Self {
+            visible_locals: Vec::new(),
+            all_locals: Vec::new(),
+        }
     }
-
-
 }
 
 pub struct SpannedLexer<'s> {
@@ -466,7 +494,12 @@ impl<'s> SpannedLexer<'s> {
         result
     }
 
-    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(&mut self, args: impl IntoIterator<Item = &'s str>, is_varargs: bool, f: F) -> Result<(T, FunctionLocals<'s>), E> {
+    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(
+        &mut self,
+        args: impl IntoIterator<Item = &'s str>,
+        is_varargs: bool,
+        f: F,
+    ) -> Result<(T, FunctionLocals<'s>), E> {
         self.locals.enter_fn_scope(args, is_varargs);
         let result = f(self);
         let fn_locals = self.locals.exit_fn_scope();
@@ -567,7 +600,10 @@ impl<'s> SpannedLexer<'s> {
     }
 
     pub fn skip_token(&mut self) {
-        assert!(self.stored_next.is_some(), "Can only call skip_token after a peek() call");
+        assert!(
+            self.stored_next.is_some(),
+            "Can only call skip_token after a peek() call"
+        );
         self.stored_next.take();
     }
 
@@ -602,7 +638,9 @@ impl<'s> Iterator for SpannedLexer<'s> {
         if let Some(next) = self.stored_next.take() {
             Some(Ok(next))
         } else {
-            self.next_internal().map(|_| self.stored_next.take()).transpose()
+            self.next_internal()
+                .map(|_| self.stored_next.take())
+                .transpose()
         }
     }
 }

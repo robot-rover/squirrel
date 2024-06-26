@@ -108,10 +108,14 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
     let mut lhs = match first_token {
         // Needs to be less than the bp of period to not break field access
         Token::Identifier(name) => if min_bp < 25 {
-            tokens.lcl().maybe_reference_local(name).map(|local_idx| Expr::local(local_idx, ctx))
+            tokens
+                .lcl()
+                .maybe_reference_local(name)
+                .map(|local_idx| Expr::local(local_idx, ctx))
         } else {
             None
-        }.unwrap_or_else(|| Expr::ident((name, ctx))),
+        }
+        .unwrap_or_else(|| Expr::ident((name, ctx))),
         Token::Integer(num) => Expr::literal(Literal::Integer(num), ctx),
         Token::Number(num) => Expr::literal(Literal::Number(num), ctx),
         Token::String(string) => Expr::literal(Literal::String(string), ctx),
@@ -136,9 +140,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
             let (members, end_span) = parse_table_or_class(tokens, &Token::Comma, false)?;
             Expr::table_decl(members, ctx, end_span)
         }
-        Token::Function => {
-            parse_function(tokens, ctx)?
-        }
+        Token::Function => parse_function(tokens, ctx)?,
         Token::LeftSquareBracket => {
             tokens.stash((first_token, ctx)); // Put the bracket back
             let (elements, span) =

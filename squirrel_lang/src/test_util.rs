@@ -1,5 +1,7 @@
 use std::{
-    fs, io::Read, path::{Path, PathBuf}
+    fs,
+    io::Read,
+    path::{Path, PathBuf},
 };
 
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
@@ -70,7 +72,14 @@ pub fn exchange_str<'a>(test_type: &str, test_file: &str, actual_str: &str) -> S
 
     let mut expect_strg = String::new();
 
-    exchange_internal(test_type, test_file, actual_str, &actual_path, &mut expect_strg, &expect_path);
+    exchange_internal(
+        test_type,
+        test_file,
+        actual_str,
+        &actual_path,
+        &mut expect_strg,
+        &expect_path,
+    );
     expect_strg
 }
 
@@ -87,7 +96,9 @@ fn exchange_internal<'a>(
     fs::write(&actual_path, actual_str)
         .expect(format!("Failed to write to {}", actual_path.display()).as_str());
 
-    fs::File::open(&expect_path).and_then(|mut file| file.read_to_string(expect_strg)).expect(
+    fs::File::open(&expect_path)
+        .and_then(|mut file| file.read_to_string(expect_strg))
+        .expect(
             format!(
                 "Failed to read expected data from {}",
                 expect_path.display()
