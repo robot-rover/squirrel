@@ -36,16 +36,17 @@ impl From<ExecError> for FlowControl {
     }
 }
 
-pub fn run(
+pub fn run<'a>(
     tree: &ast::Function,
     file_name: &str,
     stdout: Option<&mut dyn io::Write>,
+    args: impl IntoIterator<Item = &'a str>,
 ) -> Result<(), SquirrelError> {
     let root = init_root();
     let root_closure = Closure::root(tree, Value::Object(root.clone()));
-    let arg_vals = env::args()
+    let arg_vals = args
         .into_iter()
-        .map(|arg| Value::string(&arg))
+        .map(|arg| Value::string(arg))
         .collect();
     let infunc = FuncRuntime::new(
         Rc::new(RefCell::new(root_closure)),
@@ -741,6 +742,8 @@ fn run_assign(
 
 #[cfg(test)]
 mod tests {
+    use std::iter;
+
     use indent::indent_all_with;
 
     use super::*;
@@ -757,7 +760,7 @@ mod tests {
         };
 
         let mut output = Vec::new();
-        let result = match run(&actual_ast, file_name, Some(&mut output)) {
+        let result = match run(&actual_ast, file_name, Some(&mut output), iter::empty()) {
             Ok(val) => val,
             Err(err) => panic!("{}", err.with_context(file_contents)),
         };

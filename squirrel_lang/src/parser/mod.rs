@@ -660,7 +660,9 @@ mod tests {
             let expect_ast = exchange_data("parser", file_name, &actual_ast, &mut expect_strg);
 
             // TODO: Have a more useful comparison for these trees
-            assert_eq!(actual_ast, expect_ast);
+            if actual_ast != expect_ast {
+                panic!("ASTs do not match");
+            }
         }
     }
 }

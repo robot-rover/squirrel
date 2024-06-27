@@ -1,4 +1,4 @@
-use std::env::args;
+use std::{env::args, iter};
 
 use squirrel_lang::context::IntoSquirrelErrorContext;
 
@@ -15,7 +15,7 @@ fn main() {
             std::process::exit(1);
         }
     };
-    match squirrel_lang::runtime::walker::run(&ast, &file_name, None) {
+    match squirrel_lang::runtime::walker::run(&ast, &file_name, None, iter::empty()) {
         Ok(()) => {}
         Err(err) => {
             println!("Error: {}", err.with_context(&contents));
