@@ -605,7 +605,7 @@
                           {
                             "data": {
                               "BinaryOp": {
-                                "op": "Eq",
+                                "op": "NotEq",
                                 "op_span": {
                                   "start": 502,
                                   "end": 504

@@ -106,7 +106,7 @@
                                           {
                                             "data": {
                                               "BinaryOp": {
-                                                "op": "Eq",
+                                                "op": "NotEq",
                                                 "op_span": {
                                                   "start": 146,
                                                   "end": 148
@@ -1368,7 +1368,7 @@
                         "cond": {
                           "data": {
                             "BinaryOp": {
-                              "op": "Eq",
+                              "op": "NotEq",
                               "op_span": {
                                 "start": 624,
                                 "end": 626

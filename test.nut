@@ -1,5 +1,19 @@
-local a = "I am a\n"
-::print(a)
-local b = "I am b\n"
-::print(a)
-::print(b)
+::print((0 < 2) + "\n")
+::print((0 < 1) + "\n")
+::print((0 < 0) + "\n")
+::print("\n")
+
+::print((0 <= 2) + "\n")
+::print((0 <= 1) + "\n")
+::print((0 <= 0) + "\n")
+::print("\n")
+
+::print((0 > 2) + "\n")
+::print((0 > 1) + "\n")
+::print((0 > 0) + "\n")
+::print("\n")
+
+::print((0 >= 2) + "\n")
+::print((0 >= 1) + "\n")
+::print((0 >= 0) + "\n")
+::print("\n")

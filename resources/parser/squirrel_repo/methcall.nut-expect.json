@@ -828,46 +828,31 @@
                                   "IfElse": [
                                     {
                                       "data": {
-                                        "UnaryOp": [
-                                          "Not",
-                                          {
+                                        "BinaryOp": {
+                                          "op": "GreaterEq",
+                                          "op_span": {
                                             "start": 549,
                                             "end": 551
                                           },
-                                          {
+                                          "lhs": {
                                             "data": {
-                                              "BinaryOp": {
-                                                "op": "Less",
-                                                "op_span": {
-                                                  "start": 549,
-                                                  "end": 551
-                                                },
-                                                "lhs": {
-                                                  "data": {
-                                                    "Ident": "count"
-                                                  },
-                                                  "span": {
-                                                    "start": 543,
-                                                    "end": 548
-                                                  }
-                                                },
-                                                "rhs": {
-                                                  "data": {
-                                                    "Ident": "count_max"
-                                                  },
-                                                  "span": {
-                                                    "start": 552,
-                                                    "end": 561
-                                                  }
-                                                }
-                                              }
+                                              "Ident": "count"
                                             },
                                             "span": {
                                               "start": 543,
+                                              "end": 548
+                                            }
+                                          },
+                                          "rhs": {
+                                            "data": {
+                                              "Ident": "count_max"
+                                            },
+                                            "span": {
+                                              "start": 552,
                                               "end": 561
                                             }
                                           }
-                                        ]
+                                        }
                                       },
                                       "span": {
                                         "start": 543,
@@ -1109,7 +1094,7 @@
                                               "cond": {
                                                 "data": {
                                                   "BinaryOp": {
-                                                    "op": "Eq",
+                                                    "op": "NotEq",
                                                     "op_span": {
                                                       "start": 676,
                                                       "end": 678

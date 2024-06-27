@@ -137,11 +137,7 @@ impl ExecError {
         }
     }
 
-    fn illegal_unary_op(
-        op: &str,
-        op_span: Span,
-        data: (&Value, Span),
-    ) -> ExecError {
+    fn illegal_unary_op(op: &str, op_span: Span, data: (&Value, Span)) -> ExecError {
         ExecError::IllegalOperation {
             op: op.to_string(),
             op_span,
@@ -219,26 +215,23 @@ impl ExecError {
             } => {
                 let is_binary = rhs.is_some();
                 let mut labels = vec![
-                    (
-                        lhs.1,
-                        format!("Operand of type '{}'", lhs.0),
-                        Color::Red,
-                    ),
+                    (lhs.1, format!("Operand of type '{}'", lhs.0), Color::Red),
                     (op_span, format!("Operator"), Color::Blue),
                 ];
                 if let Some(rhs) = rhs {
-                    labels.push((
-                        rhs.1,
-                        format!("Operand of type '{}'", rhs.0),
-                        Color::Red,
-                    ));
+                    labels.push((rhs.1, format!("Operand of type '{}'", rhs.0), Color::Red));
                 }
                 SquirrelError::new_labels(
-                file_name,
-                format!("Illegal type{} for '{}' operator", if is_binary { "s" } else { "" }, op),
-                labels,
-                bt,
-            )},
+                    file_name,
+                    format!(
+                        "Illegal type{} for '{}' operator",
+                        if is_binary { "s" } else { "" },
+                        op
+                    ),
+                    labels,
+                    bt,
+                )
+            }
             ExecError::WrongArgType {
                 call_info,
                 arg_index,

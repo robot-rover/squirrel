@@ -98,76 +98,61 @@
                                             "IfElse": [
                                               {
                                                 "data": {
-                                                  "UnaryOp": [
-                                                    "Not",
-                                                    {
+                                                  "BinaryOp": {
+                                                    "op": "GreaterEq",
+                                                    "op_span": {
                                                       "start": 235,
                                                       "end": 237
                                                     },
-                                                    {
+                                                    "lhs": {
                                                       "data": {
-                                                        "BinaryOp": {
-                                                          "op": "Less",
-                                                          "op_span": {
-                                                            "start": 235,
-                                                            "end": 237
-                                                          },
-                                                          "lhs": {
-                                                            "data": {
-                                                              "FunctionCall": {
-                                                                "func": {
-                                                                  "FieldAccess": [
+                                                        "FunctionCall": {
+                                                          "func": {
+                                                            "FieldAccess": [
+                                                              {
+                                                                "data": {
+                                                                  "Local": [
+                                                                    0,
                                                                     {
-                                                                      "data": {
-                                                                        "Local": [
-                                                                          0,
-                                                                          {
-                                                                            "start": 223,
-                                                                            "end": 228
-                                                                          }
-                                                                        ]
-                                                                      },
-                                                                      "span": {
-                                                                        "start": 223,
-                                                                        "end": 228
-                                                                      }
-                                                                    },
-                                                                    [
-                                                                      "len",
-                                                                      {
-                                                                        "start": 229,
-                                                                        "end": 232
-                                                                      }
-                                                                    ]
+                                                                      "start": 223,
+                                                                      "end": 228
+                                                                    }
                                                                   ]
                                                                 },
-                                                                "args": []
-                                                              }
-                                                            },
-                                                            "span": {
-                                                              "start": 232,
-                                                              "end": 234
-                                                            }
+                                                                "span": {
+                                                                  "start": 223,
+                                                                  "end": 228
+                                                                }
+                                                              },
+                                                              [
+                                                                "len",
+                                                                {
+                                                                  "start": 229,
+                                                                  "end": 232
+                                                                }
+                                                              ]
+                                                            ]
                                                           },
-                                                          "rhs": {
-                                                            "data": {
-                                                              "Literal": {
-                                                                "Integer": 3
-                                                              }
-                                                            },
-                                                            "span": {
-                                                              "start": 238,
-                                                              "end": 239
-                                                            }
-                                                          }
+                                                          "args": []
                                                         }
                                                       },
                                                       "span": {
                                                         "start": 232,
+                                                        "end": 234
+                                                      }
+                                                    },
+                                                    "rhs": {
+                                                      "data": {
+                                                        "Literal": {
+                                                          "Integer": 3
+                                                        }
+                                                      },
+                                                      "span": {
+                                                        "start": 238,
                                                         "end": 239
                                                       }
                                                     }
-                                                  ]
+                                                  }
                                                 },
                                                 "span": {
                                                   "start": 232,

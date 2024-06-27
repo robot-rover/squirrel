@@ -3,6 +3,7 @@ use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{ptr::NonNull, rc::Rc};
 
 use crate::parser::ast::{self, Expr};
+use crate::runtime::SqBacktrace;
 
 use super::{argparse, builtins, CallInfo, Context, ExecError, ExprResult, FuncRuntime};
 

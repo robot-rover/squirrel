@@ -291,21 +291,13 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
             // Comparison Operators
             // TODO: These give wrong values for NaNs
             Token::LessThan => Expr::binary_op(BinaryOp::Less, op_span, lhs, rhs),
-            Token::LessThanEquals => Expr::unary_op(
-                UnaryOp::Not,
-                Expr::binary_op(BinaryOp::Greater, op_span, lhs, rhs),
-                op_span,
-            ),
+            Token::LessThanEquals => Expr::binary_op(BinaryOp::LessEq, op_span, lhs, rhs),
             Token::GreaterThan => Expr::binary_op(BinaryOp::Greater, op_span, lhs, rhs),
-            Token::GreaterThanEquals => Expr::unary_op(
-                UnaryOp::Not,
-                Expr::binary_op(BinaryOp::Less, op_span, lhs, rhs),
-                op_span,
-            ),
+            Token::GreaterThanEquals => Expr::binary_op(BinaryOp::GreaterEq, op_span, lhs, rhs),
             Token::InstaceOf => Expr::binary_op(BinaryOp::InstanceOf, op_span, lhs, rhs),
             // Equality Operators
             Token::Equals => Expr::binary_op(BinaryOp::Eq, op_span, lhs, rhs),
-            Token::DoesNotEqual => Expr::binary_op(BinaryOp::Eq, op_span, lhs, rhs),
+            Token::DoesNotEqual => Expr::binary_op(BinaryOp::NotEq, op_span, lhs, rhs),
             Token::Compare => Expr::binary_op(BinaryOp::Compare, op_span, lhs, rhs),
             // Bitwise And
             Token::BitAnd => Expr::binary_op(BinaryOp::BitAnd, op_span, lhs, rhs),
@@ -321,7 +313,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
             Token::MinusAssign => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::Sub),
             Token::MultiplyAssign => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::Mult),
             Token::DivideAssign => Expr::assign(lhs.try_into()?, op_span, rhs, AssignKind::Div),
-            other => panic!("Token {:?} should not have a binding power", other),
+            other => unreachable!("Token {:?} should not have a binding power", other),
         };
     }
 

@@ -15,6 +15,142 @@
   "Semicolon",
   "Newline",
   "Newline",
+  "Function",
+  {
+    "Identifier": "print_array"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "name"
+  },
+  "Comma",
+  {
+    "Identifier": "a"
+  },
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "name"
+  },
+  "Plus",
+  {
+    "String": " = ["
+  },
+  "RightParenthesis",
+  "Newline",
+  "For",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "Assign",
+  {
+    "Integer": 0
+  },
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "a"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  {
+    "Identifier": "i"
+  },
+  "PlusAssign",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "Identifier": "a"
+  },
+  "LeftSquareBracket",
+  {
+    "Identifier": "i"
+  },
+  "RightSquareBracket",
+  "Period",
+  {
+    "Identifier": "tostring"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "If",
+  "LeftParenthesis",
+  {
+    "Identifier": "i"
+  },
+  "LessThan",
+  {
+    "Identifier": "a"
+  },
+  "Period",
+  {
+    "Identifier": "len"
+  },
+  "LeftParenthesis",
+  "RightParenthesis",
+  "Minus",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "LeftCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": ", "
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  {
+    "String": "]\n"
+  },
+  "RightParenthesis",
+  "Semicolon",
+  "Newline",
+  "RightCurlyBrace",
+  "Newline",
+  "Newline",
   "If",
   "LeftParenthesis",
   {
@@ -221,6 +357,54 @@
   "RightCurlyBrace",
   "Newline",
   "Newline",
+  {
+    "Identifier": "print_array"
+  },
+  "LeftParenthesis",
+  {
+    "String": "x"
+  },
+  "Comma",
+  {
+    "Identifier": "x"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print_array"
+  },
+  "LeftParenthesis",
+  {
+    "String": "y"
+  },
+  "Comma",
+  {
+    "Identifier": "y"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
+  "DoubleColon",
+  {
+    "Identifier": "print"
+  },
+  "LeftParenthesis",
+  "LeftParenthesis",
+  {
+    "Integer": 0
+  },
+  "LessThanEquals",
+  {
+    "Integer": 1
+  },
+  "RightParenthesis",
+  "Plus",
+  {
+    "String": "\n"
+  },
+  "RightParenthesis",
+  "Newline",
+  "Newline",
   "For",
   "LeftParenthesis",
   {
@@ -312,6 +496,34 @@
   "RightCurlyBrace",
   "Newline",
   "RightCurlyBrace",
+  "Newline",
+  "Newline",
+  {
+    "Identifier": "print_array"
+  },
+  "LeftParenthesis",
+  {
+    "String": "x"
+  },
+  "Comma",
+  {
+    "Identifier": "x"
+  },
+  "RightParenthesis",
+  "Newline",
+  {
+    "Identifier": "print_array"
+  },
+  "LeftParenthesis",
+  {
+    "String": "y"
+  },
+  "Comma",
+  {
+    "Identifier": "y"
+  },
+  "RightParenthesis",
+  "Newline",
   "Newline",
   {
     "Identifier": "print"

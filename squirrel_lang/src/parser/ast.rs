@@ -50,8 +50,11 @@ pub enum BinaryOp {
     Mod,
     // Comparison
     Eq,
+    NotEq,
     Greater,
+    GreaterEq,
     Less,
+    LessEq,
     Compare,
     // TODO: Need GTE, LTE, and NEQ for floating point
     // Logical

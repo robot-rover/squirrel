@@ -141,7 +141,9 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
             let iterable = run_expression(context, iterable)?;
             for idx in 0.. {
                 if let Some(index_idx) = index_idx {
-                    *context.infunc.locals[*index_idx as usize].deref().borrow_mut() = Value::Integer(idx);
+                    *context.infunc.locals[*index_idx as usize]
+                        .deref()
+                        .borrow_mut() = Value::Integer(idx);
                 }
                 let val = match &iterable {
                     Value::Array(arr) => {
@@ -154,11 +156,13 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
                     }
                     _ => todo!(),
                 };
-                *context.infunc.locals[*value_idx as usize].deref().borrow_mut() = val;
+                *context.infunc.locals[*value_idx as usize]
+                    .deref()
+                    .borrow_mut() = val;
 
                 run_statement(context, body)?;
             }
-        },
+        }
         StatementData::Break => return Err(FlowControl::Break(statement.span)),
         StatementData::Continue => return Err(FlowControl::Continue(statement.span)),
         StatementData::Return(val) => {
@@ -523,17 +527,35 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
     )))
 }
 
-fn run_unary_op(context: &mut Context, op: &UnaryOp, op_span: Span, val: Value, val_span: Span) -> ExprResult {
+fn run_unary_op(
+    context: &mut Context,
+    op: &UnaryOp,
+    op_span: Span,
+    val: Value,
+    val_span: Span,
+) -> ExprResult {
     let res = match op {
         UnaryOp::Neg => match val {
             Value::Float(val) => Value::float(-val),
             Value::Integer(val) => Value::Integer(-val),
-            other => return Err(ExecError::illegal_unary_op("-", op_span, (&other, val_span))),
+            other => {
+                return Err(ExecError::illegal_unary_op(
+                    "-",
+                    op_span,
+                    (&other, val_span),
+                ))
+            }
         },
-        UnaryOp::Not => Value::boolean(val.truthy()),
+        UnaryOp::Not => Value::boolean(!val.truthy()),
         UnaryOp::BitNot => match val {
             Value::Integer(val) => Value::Integer(!val),
-            other => return Err(ExecError::illegal_unary_op("~", op_span, (&other, val_span))),
+            other => {
+                return Err(ExecError::illegal_unary_op(
+                    "~",
+                    op_span,
+                    (&other, val_span),
+                ))
+            }
         },
         UnaryOp::TypeOf => Value::string(&val.type_str()),
         UnaryOp::Clone => match val {
@@ -606,8 +628,11 @@ fn run_binary_op(
         BinaryOp::Mod => int_op!(lhs, rhs, %; "%"),
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
         BinaryOp::Eq => promoting_op!(lhs, rhs, ==, boolean; "=="),
+        BinaryOp::NotEq => promoting_op!(lhs, rhs, !=, boolean; "!="),
         BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean; ">"),
+        BinaryOp::GreaterEq => promoting_op!(lhs, rhs, >=, boolean; ">="),
         BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean; "<"),
+        BinaryOp::LessEq => promoting_op!(lhs, rhs, <=, boolean; "<="),
         BinaryOp::Compare => promoting_op!(lhs, rhs, -; "-"),
         BinaryOp::And => Ok(if !lhs.truthy() {
             lhs.clone()
@@ -634,12 +659,7 @@ fn run_binary_op(
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
     };
     res.map_err(|(op, lhs, rhs)| {
-        ExecError::illegal_binary_op(
-            op,
-            op_span,
-            (lhs, lhs_span),
-            (rhs, rhs_span),
-        )
+        ExecError::illegal_binary_op(op, op_span, (lhs, lhs_span), (rhs, rhs_span))
     })
 }
 
@@ -721,6 +741,8 @@ fn run_assign(
 
 #[cfg(test)]
 mod tests {
+    use indent::indent_all_with;
+
     use super::*;
     use crate::{
         context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str,
@@ -745,7 +767,14 @@ mod tests {
         {
             let expect_str = exchange_str("outputs", file_name, &actual_str);
             // TODO: Have a more useful comparison for these trees
-            assert_eq!(actual_str, expect_str);
+            if actual_str != expect_str {
+                panic!(
+                    "Output does not match expected output\nSource File: {}\nExpected:\n{}\nActual:\n{}",
+                    file_name,
+                    indent_all_with("| ", expect_str),
+                    indent_all_with("| ", actual_str),
+                );
+            }
         }
     }
 }

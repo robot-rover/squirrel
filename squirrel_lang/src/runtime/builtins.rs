@@ -376,16 +376,8 @@ pub mod array {
         let size = argparse::convert_arg::<i64>(arg_iter.next().unwrap(), 0, call_info)?;
         let fill = arg_iter.next().unwrap_or(Value::Null);
         let current_size = this.borrow().len();
-        {
-            let mut vec = this.borrow_mut();
-            match (size as usize).cmp(&current_size) {
-                std::cmp::Ordering::Less => vec.truncate(size as usize),
-                std::cmp::Ordering::Equal => {}
-                std::cmp::Ordering::Greater => {
-                    vec.extend(iter::repeat(fill).take(size as usize - current_size));
-                }
-            }
-        }
+        this.borrow_mut()
+            .resize_with(size as usize, || fill.clone());
         Ok(Value::Array(this))
     }
 
