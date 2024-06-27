@@ -91,6 +91,10 @@ fn parse_statement<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> 
         Token::ForEach => parse_foreach(tokens)?,
         Token::Switch => parse_switch(tokens)?,
         Token::While | Token::Do => parse_while(tokens)?,
+        Token::Break => {
+            let break_span = tokens.expect_token(Token::Break, true)?;
+            Statement::break_stmt(break_span)
+        }
         _ => parse_expr_line(tokens)?.into(),
     };
     Ok(stmt)

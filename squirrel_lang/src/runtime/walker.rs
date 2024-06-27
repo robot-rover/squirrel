@@ -44,10 +44,7 @@ pub fn run<'a>(
 ) -> Result<(), SquirrelError> {
     let root = init_root();
     let root_closure = Closure::root(tree, Value::Object(root.clone()));
-    let arg_vals = args
-        .into_iter()
-        .map(|arg| Value::string(arg))
-        .collect();
+    let arg_vals = args.into_iter().map(|arg| Value::string(arg)).collect();
     let infunc = FuncRuntime::new(
         Rc::new(RefCell::new(root_closure)),
         arg_vals,
@@ -73,6 +70,34 @@ pub fn run<'a>(
 
 fn init_root() -> Rc<RefCell<Object>> {
     Rc::new(RefCell::new(builtins::global::make_root_table()))
+}
+
+fn run_foreach<'a, K, I, F>(
+    context: &mut Context,
+    iter: I,
+    index_to_value: F,
+    index_local_idx: Option<&u32>,
+    value_local_idx: &u32,
+    body: &Statement,
+) -> FlowResult
+where
+    I: Iterator<Item = (K, &'a Value)>,
+    F: Fn(K) -> Value,
+{
+    for (key, val) in iter {
+        if let Some(index_idx) = index_local_idx {
+            context.infunc.set_local(*index_idx, index_to_value(key))
+        }
+        context.infunc.set_local(*value_local_idx, val.clone());
+
+        match run_statement(context, body) {
+            Ok(()) | Err(FlowControl::Continue(_)) => {}
+            Err(FlowControl::Break(_span)) => break,
+            Err(other) => return Err(other),
+        }
+    }
+
+    Ok(())
 }
 
 fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
@@ -139,30 +164,39 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
             iterable,
             body,
         } => {
+            let iterable_span = iterable.span;
             let iterable = run_expression(context, iterable)?;
-            for idx in 0.. {
-                if let Some(index_idx) = index_idx {
-                    *context.infunc.locals[*index_idx as usize]
-                        .deref()
-                        .borrow_mut() = Value::Integer(idx);
+            match iterable {
+                Value::String(_) => todo!(),
+                Value::Object(obj) => {
+                    let anchor = obj.borrow();
+                    run_foreach(
+                        context,
+                        anchor.slot_iter(),
+                        |hv| hv.clone().into(),
+                        index_idx.as_ref(),
+                        value_idx,
+                        body,
+                    )?;
                 }
-                let val = match &iterable {
-                    Value::Array(arr) => {
-                        let arr = arr.deref().borrow();
-                        if idx < arr.len() as i64 {
-                            arr[idx as usize].clone()
-                        } else {
-                            break;
-                        }
-                    }
-                    _ => todo!(),
-                };
-                *context.infunc.locals[*value_idx as usize]
-                    .deref()
-                    .borrow_mut() = val;
-
-                run_statement(context, body)?;
-            }
+                Value::Array(arr) => {
+                    let anchor = arr.borrow();
+                    run_foreach(
+                        context,
+                        anchor.iter().enumerate(),
+                        |idx| Value::Integer(idx as i64),
+                        index_idx.as_ref(),
+                        value_idx,
+                        body,
+                    )?;
+                }
+                other => {
+                    return Err(FlowControl::Error(ExecError::uniterable_type(
+                        other.type_str().to_string(),
+                        iterable_span,
+                    )))
+                }
+            };
         }
         StatementData::Break => return Err(FlowControl::Break(statement.span)),
         StatementData::Continue => return Err(FlowControl::Continue(statement.span)),
@@ -469,6 +503,7 @@ fn run_unary_ref_op(
         Value::Integer(1),
         op_span,
     )?;
+    run_assign(context, target, new_val.clone(), false)?;
     Ok(if return_new { new_val } else { val })
 }
 
@@ -562,7 +597,7 @@ fn run_unary_op(
         UnaryOp::Clone => match val {
             Value::Closure(_) => todo!(),
             Value::Array(arr) => Value::array(arr.deref().borrow().clone()),
-            Value::Object(_) => todo!(),
+            Value::Object(obj) => Value::object(obj.deref().borrow().clone()),
             other => other.clone(),
         },
         UnaryOp::Resume => todo!("Resume not implemented"),

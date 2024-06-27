@@ -5,6 +5,15 @@ macro_rules! test_foreach {
         mod verify {
             use super::$func;
 #[rustfmt::skip]
+            mod statements {
+                use super::$func;
+                use crate::test_macro::data::verify::statements::*;
+                #[test]
+                fn test_loops() {
+                    $func(LOOPS_PATH, LOOPS_CONTENTS);
+                }
+            }
+#[rustfmt::skip]
             mod lexical_structure {
                 use super::$func;
                 use crate::test_macro::data::verify::lexical_structure::*;
@@ -158,6 +167,10 @@ macro_rules! test_foreach {
 #[rustfmt::skip]
 pub mod data {
     pub mod verify {
+        pub mod statements {
+            pub const LOOPS_PATH: &str = "verify/statements/loops.nut";
+            pub const LOOPS_CONTENTS: &str = include_str!("../../resources/scripts/verify/statements/loops.nut");
+        }
         pub mod lexical_structure {
             pub const KEYWORDS_PATH: &str = "verify/lexical_structure/keywords.nut";
             pub const KEYWORDS_CONTENTS: &str = include_str!("../../resources/scripts/verify/lexical_structure/keywords.nut");

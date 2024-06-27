@@ -61,6 +61,11 @@ pub enum ExecError {
         span: Span,
         bt: SqBacktrace,
     },
+    UniterableType {
+        kind: String,
+        span: Span,
+        bt: SqBacktrace,
+    },
     IllegalOperation {
         op: String,
         op_span: Span,
@@ -116,6 +121,7 @@ impl ExecError {
     variant_constructor!(IllegalKeyword illegal_keyword(span: Span));
     variant_constructor!(WrongArgCount wrong_arg_count { call_info: CallInfo, expected: Range<usize>, got: usize, definition_span: Option<Span> });
     variant_constructor!(UnhashableType unhashable_type { kind: String, span: Span });
+    variant_constructor!(UniterableType uniterable_type { kind: String, span: Span });
     variant_constructor!(WrongArgType wrong_arg_type { call_info: CallInfo, arg_index: usize, expected: String, got: String });
     variant_constructor!(WrongThisType wrong_this_type { call_info: CallInfo, expected: String, got: String });
     variant_constructor!(AssertionFailed assertion_failed(span: Span, message: Option<String>));
@@ -301,6 +307,12 @@ impl ExecError {
                 ],
                 bt,
             ),
+            ExecError::UniterableType { kind, span, bt } => SquirrelError::new(
+                file_name,
+                span,
+                format!("A value of type '{}' is not iterable", kind),
+                bt,
+            ),
         }
     }
 }
@@ -444,6 +456,14 @@ impl FuncRuntime {
             locals,
             env,
         })
+    }
+
+    fn set_local(&mut self, idx: u32, val: Value) {
+        *self.locals[idx as usize].deref().borrow_mut() = val;
+    }
+
+    fn get_local(&self, idx: u32) -> Value {
+        self.locals[idx as usize].deref().borrow().clone()
     }
 }
 

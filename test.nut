@@ -1,19 +1,21 @@
-::print((0 < 2) + "\n")
-::print((0 < 1) + "\n")
-::print((0 < 0) + "\n")
-::print("\n")
+local arr = [0, 1, 2]
+foreach(v in arr) {
+    print(v)
+    if (v < 3) {
+        arr.push(v + 3)
+    }
+}
+print("\n")
 
-::print((0 <= 2) + "\n")
-::print((0 <= 1) + "\n")
-::print((0 <= 0) + "\n")
-::print("\n")
+local obj = {[3]="3", [4]="4", [5]="5"}
+foreach (k, v in obj) {
+    print(k + " " + v + "\n")
+    if (k >= 3) {
+        obj[k - 3] <- (k - 3).tostring()
+    }
+}
 
-::print((0 > 2) + "\n")
-::print((0 > 1) + "\n")
-::print((0 > 0) + "\n")
-::print("\n")
-
-::print((0 >= 2) + "\n")
-::print((0 >= 1) + "\n")
-::print((0 >= 0) + "\n")
-::print("\n")
+print("\n")
+foreach (k, v in obj) {
+    print(k + " " + v + "\n")
+}

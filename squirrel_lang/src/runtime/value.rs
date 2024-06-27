@@ -238,8 +238,14 @@ impl TypeName for Value {
     }
 }
 
-macro_rules! value_variant_tryfrom {
+macro_rules! value_variant {
     ($base:ident::$variant:ident($data:ty) $name:literal) => {
+        impl From<$data> for $base {
+            fn from(value: $data) -> Self {
+                $base::$variant(value)
+            }
+        }
+
         impl TypeName for $data {
             fn type_name() -> &'static str {
                 $name
@@ -256,13 +262,13 @@ macro_rules! value_variant_tryfrom {
 }
 
 // TODO: Are these names right?
-value_variant_tryfrom!(Value::Integer(i64) "integer");
-value_variant_tryfrom!(Value::Float(f64) "float");
-value_variant_tryfrom!(Value::NativeFn(NativeFn) "function");
-value_variant_tryfrom!(Value::String(Rc<str>) "string");
-value_variant_tryfrom!(Value::Object(Rc<RefCell<Object>>) "table");
-value_variant_tryfrom!(Value::Closure(Rc<RefCell<Closure>>) "function");
-value_variant_tryfrom!(Value::Array(Rc<RefCell<Vec<Value>>>) "array");
+value_variant!(Value::Integer(i64) "integer");
+value_variant!(Value::Float(f64) "float");
+value_variant!(Value::NativeFn(NativeFn) "function");
+value_variant!(Value::String(Rc<str>) "string");
+value_variant!(Value::Object(Rc<RefCell<Object>>) "table");
+value_variant!(Value::Closure(Rc<RefCell<Closure>>) "function");
+value_variant!(Value::Array(Rc<RefCell<Vec<Value>>>) "array");
 
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -350,6 +356,10 @@ impl Object {
 
     pub fn len(&self) -> usize {
         self.slots.len()
+    }
+
+    pub fn slot_iter(&self) -> impl Iterator<Item = (&HashValue, &Value)> {
+        self.slots.iter()
     }
 
     // Squirrel Default Delegate Functions
