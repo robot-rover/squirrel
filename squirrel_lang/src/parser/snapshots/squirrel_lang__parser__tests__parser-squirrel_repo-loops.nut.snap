@@ -1,0 +1,950 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/loops.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - arr
+    - 1
+  - - i
+    - 2
+  - - val
+    - 3
+  - - i
+    - 4
+  - - i
+    - 5
+  - - i
+    - 6
+num_locals: 7
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 6
+                      end: 9
+                value:
+                  data:
+                    ArrayDecl:
+                      - data:
+                          Literal:
+                            String: one
+                        span:
+                          start: 11
+                          end: 16
+                      - data:
+                          Literal:
+                            String: two
+                        span:
+                          start: 17
+                          end: 22
+                      - data:
+                          Literal:
+                            String: three
+                        span:
+                          start: 23
+                          end: 30
+                  span:
+                    start: 10
+                    end: 31
+                kind: Normal
+                op_span:
+                  start: 9
+                  end: 10
+            span:
+              start: 6
+              end: 31
+        span:
+          start: 6
+          end: 31
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 33
+                        end: 35
+                    - - print
+                      - start: 35
+                        end: 40
+                args:
+                  - data:
+                      Literal:
+                        String: "FOREACH\n"
+                    span:
+                      start: 41
+                      end: 52
+            span:
+              start: 40
+              end: 53
+        span:
+          start: 40
+          end: 53
+      - data:
+          Foreach:
+            index_idx: 2
+            value_idx: 3
+            iterable:
+              data:
+                Local:
+                  - 1
+                  - start: 73
+                    end: 76
+              span:
+                start: 73
+                end: 76
+            body:
+              data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 84
+                                    end: 86
+                                - - print
+                                  - start: 86
+                                    end: 91
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 112
+                                      end: 113
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 108
+                                            end: 109
+                                          lhs:
+                                            data:
+                                              BinaryOp:
+                                                op: Add
+                                                op_span:
+                                                  start: 103
+                                                  end: 104
+                                                lhs:
+                                                  data:
+                                                    BinaryOp:
+                                                      op: Add
+                                                      op_span:
+                                                        start: 101
+                                                        end: 102
+                                                      lhs:
+                                                        data:
+                                                          Literal:
+                                                            String: "index ["
+                                                        span:
+                                                          start: 92
+                                                          end: 101
+                                                      rhs:
+                                                        data:
+                                                          Local:
+                                                            - 2
+                                                            - start: 102
+                                                              end: 103
+                                                        span:
+                                                          start: 102
+                                                          end: 103
+                                                  span:
+                                                    start: 92
+                                                    end: 103
+                                                rhs:
+                                                  data:
+                                                    Literal:
+                                                      String: "]="
+                                                  span:
+                                                    start: 104
+                                                    end: 108
+                                            span:
+                                              start: 92
+                                              end: 108
+                                          rhs:
+                                            data:
+                                              Local:
+                                                - 3
+                                                - start: 109
+                                                  end: 112
+                                            span:
+                                              start: 109
+                                              end: 112
+                                      span:
+                                        start: 92
+                                        end: 112
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "\n"
+                                      span:
+                                        start: 113
+                                        end: 117
+                                span:
+                                  start: 92
+                                  end: 117
+                        span:
+                          start: 91
+                          end: 118
+                    span:
+                      start: 91
+                      end: 118
+              span:
+                start: 0
+                end: 121
+        span:
+          start: 0
+          end: 121
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 123
+                        end: 125
+                    - - print
+                      - start: 125
+                        end: 130
+                args:
+                  - data:
+                      Literal:
+                        String: "FOR\n"
+                    span:
+                      start: 131
+                      end: 138
+            span:
+              start: 130
+              end: 139
+        span:
+          start: 130
+          end: 139
+      - data:
+          For:
+            init:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 4
+                          - start: 152
+                            end: 153
+                      value:
+                        data:
+                          Literal:
+                            Integer: 0
+                        span:
+                          start: 154
+                          end: 155
+                      kind: Normal
+                      op_span:
+                        start: 153
+                        end: 154
+                  span:
+                    start: 152
+                    end: 155
+              span:
+                start: 152
+                end: 155
+            cond:
+              data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 157
+                    end: 158
+                  lhs:
+                    data:
+                      Local:
+                        - 4
+                        - start: 156
+                          end: 157
+                    span:
+                      start: 156
+                      end: 157
+                  rhs:
+                    data:
+                      FunctionCall:
+                        func:
+                          FieldAccess:
+                            - data:
+                                Local:
+                                  - 1
+                                  - start: 158
+                                    end: 161
+                              span:
+                                start: 158
+                                end: 161
+                            - - len
+                              - start: 162
+                                end: 165
+                        args: []
+                    span:
+                      start: 165
+                      end: 167
+              span:
+                start: 156
+                end: 167
+            incr:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 4
+                          - start: 168
+                            end: 169
+                      value:
+                        data:
+                          Literal:
+                            Integer: 1
+                        span:
+                          start: 171
+                          end: 172
+                      kind: Add
+                      op_span:
+                        start: 169
+                        end: 171
+                  span:
+                    start: 168
+                    end: 172
+              span:
+                start: 168
+                end: 172
+            body:
+              data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 180
+                                    end: 182
+                                - - print
+                                  - start: 182
+                                    end: 187
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 211
+                                      end: 212
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 204
+                                            end: 205
+                                          lhs:
+                                            data:
+                                              BinaryOp:
+                                                op: Add
+                                                op_span:
+                                                  start: 199
+                                                  end: 200
+                                                lhs:
+                                                  data:
+                                                    BinaryOp:
+                                                      op: Add
+                                                      op_span:
+                                                        start: 197
+                                                        end: 198
+                                                      lhs:
+                                                        data:
+                                                          Literal:
+                                                            String: "index ["
+                                                        span:
+                                                          start: 188
+                                                          end: 197
+                                                      rhs:
+                                                        data:
+                                                          Local:
+                                                            - 4
+                                                            - start: 198
+                                                              end: 199
+                                                        span:
+                                                          start: 198
+                                                          end: 199
+                                                  span:
+                                                    start: 188
+                                                    end: 199
+                                                rhs:
+                                                  data:
+                                                    Literal:
+                                                      String: "]="
+                                                  span:
+                                                    start: 200
+                                                    end: 204
+                                            span:
+                                              start: 188
+                                              end: 204
+                                          rhs:
+                                            data:
+                                              ArrayAccess:
+                                                array:
+                                                  data:
+                                                    Local:
+                                                      - 1
+                                                      - start: 205
+                                                        end: 208
+                                                  span:
+                                                    start: 205
+                                                    end: 208
+                                                index:
+                                                  data:
+                                                    Local:
+                                                      - 4
+                                                      - start: 209
+                                                        end: 210
+                                                  span:
+                                                    start: 209
+                                                    end: 210
+                                            span:
+                                              start: 208
+                                              end: 211
+                                      span:
+                                        start: 188
+                                        end: 211
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "\n"
+                                      span:
+                                        start: 212
+                                        end: 216
+                                span:
+                                  start: 188
+                                  end: 216
+                        span:
+                          start: 187
+                          end: 217
+                    span:
+                      start: 187
+                      end: 217
+              span:
+                start: 0
+                end: 220
+        span:
+          start: 0
+          end: 220
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 222
+                        end: 224
+                    - - print
+                      - start: 224
+                        end: 229
+                args:
+                  - data:
+                      Literal:
+                        String: "WHILE\n"
+                    span:
+                      start: 230
+                      end: 239
+            span:
+              start: 229
+              end: 240
+        span:
+          start: 229
+          end: 240
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 5
+                    - start: 249
+                      end: 250
+                value:
+                  data:
+                    Literal:
+                      Integer: 0
+                  span:
+                    start: 251
+                    end: 252
+                kind: Normal
+                op_span:
+                  start: 250
+                  end: 251
+            span:
+              start: 249
+              end: 252
+        span:
+          start: 249
+          end: 252
+      - data:
+          While:
+            - data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 261
+                    end: 262
+                  lhs:
+                    data:
+                      Local:
+                        - 5
+                        - start: 260
+                          end: 261
+                    span:
+                      start: 260
+                      end: 261
+                  rhs:
+                    data:
+                      FunctionCall:
+                        func:
+                          FieldAccess:
+                            - data:
+                                Local:
+                                  - 1
+                                  - start: 262
+                                    end: 265
+                              span:
+                                start: 262
+                                end: 265
+                            - - len
+                              - start: 266
+                                end: 269
+                        args: []
+                    span:
+                      start: 269
+                      end: 271
+              span:
+                start: 260
+                end: 271
+            - data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 279
+                                    end: 281
+                                - - print
+                                  - start: 281
+                                    end: 286
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 310
+                                      end: 311
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 303
+                                            end: 304
+                                          lhs:
+                                            data:
+                                              BinaryOp:
+                                                op: Add
+                                                op_span:
+                                                  start: 298
+                                                  end: 299
+                                                lhs:
+                                                  data:
+                                                    BinaryOp:
+                                                      op: Add
+                                                      op_span:
+                                                        start: 296
+                                                        end: 297
+                                                      lhs:
+                                                        data:
+                                                          Literal:
+                                                            String: "index ["
+                                                        span:
+                                                          start: 287
+                                                          end: 296
+                                                      rhs:
+                                                        data:
+                                                          Local:
+                                                            - 5
+                                                            - start: 297
+                                                              end: 298
+                                                        span:
+                                                          start: 297
+                                                          end: 298
+                                                  span:
+                                                    start: 287
+                                                    end: 298
+                                                rhs:
+                                                  data:
+                                                    Literal:
+                                                      String: "]="
+                                                  span:
+                                                    start: 299
+                                                    end: 303
+                                            span:
+                                              start: 287
+                                              end: 303
+                                          rhs:
+                                            data:
+                                              ArrayAccess:
+                                                array:
+                                                  data:
+                                                    Local:
+                                                      - 1
+                                                      - start: 304
+                                                        end: 307
+                                                  span:
+                                                    start: 304
+                                                    end: 307
+                                                index:
+                                                  data:
+                                                    Local:
+                                                      - 5
+                                                      - start: 308
+                                                        end: 309
+                                                  span:
+                                                    start: 308
+                                                    end: 309
+                                            span:
+                                              start: 307
+                                              end: 310
+                                      span:
+                                        start: 287
+                                        end: 310
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "\n"
+                                      span:
+                                        start: 311
+                                        end: 315
+                                span:
+                                  start: 287
+                                  end: 315
+                        span:
+                          start: 286
+                          end: 316
+                    span:
+                      start: 286
+                      end: 316
+                  - data:
+                      Expr:
+                        data:
+                          Assign:
+                            target:
+                              Local:
+                                - 5
+                                - start: 322
+                                  end: 323
+                            value:
+                              data:
+                                Literal:
+                                  Integer: 1
+                              span:
+                                start: 325
+                                end: 326
+                            kind: Add
+                            op_span:
+                              start: 323
+                              end: 325
+                        span:
+                          start: 322
+                          end: 326
+                    span:
+                      start: 322
+                      end: 326
+              span:
+                start: 0
+                end: 329
+        span:
+          start: 0
+          end: 329
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 330
+                        end: 332
+                    - - print
+                      - start: 332
+                        end: 337
+                args:
+                  - data:
+                      Literal:
+                        String: "DO WHILE\n"
+                    span:
+                      start: 338
+                      end: 350
+            span:
+              start: 337
+              end: 351
+        span:
+          start: 337
+          end: 351
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 6
+                    - start: 360
+                      end: 361
+                value:
+                  data:
+                    Literal:
+                      Integer: 0
+                  span:
+                    start: 362
+                    end: 363
+                kind: Normal
+                op_span:
+                  start: 361
+                  end: 362
+            span:
+              start: 360
+              end: 363
+        span:
+          start: 360
+          end: 363
+      - data:
+          While:
+            - data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 431
+                    end: 432
+                  lhs:
+                    data:
+                      Local:
+                        - 6
+                        - start: 430
+                          end: 431
+                    span:
+                      start: 430
+                      end: 431
+                  rhs:
+                    data:
+                      FunctionCall:
+                        func:
+                          FieldAccess:
+                            - data:
+                                Local:
+                                  - 1
+                                  - start: 432
+                                    end: 435
+                              span:
+                                start: 432
+                                end: 435
+                            - - len
+                              - start: 436
+                                end: 439
+                        args: []
+                    span:
+                      start: 439
+                      end: 441
+              span:
+                start: 430
+                end: 441
+            - data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 374
+                                    end: 376
+                                - - print
+                                  - start: 376
+                                    end: 381
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 405
+                                      end: 406
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 398
+                                            end: 399
+                                          lhs:
+                                            data:
+                                              BinaryOp:
+                                                op: Add
+                                                op_span:
+                                                  start: 393
+                                                  end: 394
+                                                lhs:
+                                                  data:
+                                                    BinaryOp:
+                                                      op: Add
+                                                      op_span:
+                                                        start: 391
+                                                        end: 392
+                                                      lhs:
+                                                        data:
+                                                          Literal:
+                                                            String: "index ["
+                                                        span:
+                                                          start: 382
+                                                          end: 391
+                                                      rhs:
+                                                        data:
+                                                          Local:
+                                                            - 6
+                                                            - start: 392
+                                                              end: 393
+                                                        span:
+                                                          start: 392
+                                                          end: 393
+                                                  span:
+                                                    start: 382
+                                                    end: 393
+                                                rhs:
+                                                  data:
+                                                    Literal:
+                                                      String: "]="
+                                                  span:
+                                                    start: 394
+                                                    end: 398
+                                            span:
+                                              start: 382
+                                              end: 398
+                                          rhs:
+                                            data:
+                                              ArrayAccess:
+                                                array:
+                                                  data:
+                                                    Local:
+                                                      - 1
+                                                      - start: 399
+                                                        end: 402
+                                                  span:
+                                                    start: 399
+                                                    end: 402
+                                                index:
+                                                  data:
+                                                    Local:
+                                                      - 6
+                                                      - start: 403
+                                                        end: 404
+                                                  span:
+                                                    start: 403
+                                                    end: 404
+                                            span:
+                                              start: 402
+                                              end: 405
+                                      span:
+                                        start: 382
+                                        end: 405
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "\n"
+                                      span:
+                                        start: 406
+                                        end: 410
+                                span:
+                                  start: 382
+                                  end: 410
+                        span:
+                          start: 381
+                          end: 411
+                    span:
+                      start: 381
+                      end: 411
+                  - data:
+                      Expr:
+                        data:
+                          Assign:
+                            target:
+                              Local:
+                                - 6
+                                - start: 417
+                                  end: 418
+                            value:
+                              data:
+                                Literal:
+                                  Integer: 1
+                              span:
+                                start: 420
+                                end: 421
+                            kind: Add
+                            op_span:
+                              start: 418
+                              end: 420
+                        span:
+                          start: 417
+                          end: 421
+                    span:
+                      start: 417
+                      end: 421
+              span:
+                start: 0
+                end: 424
+        span:
+          start: 0
+          end: 424
+      - data: Empty
+        span:
+          start: 0
+          end: 0
+  span:
+    start: 0
+    end: 424

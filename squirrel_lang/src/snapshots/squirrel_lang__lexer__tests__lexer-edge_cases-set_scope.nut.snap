@@ -1,0 +1,349 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/set_scope.nut
+---
+- Function
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: t
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: t
+- Plus
+- String: "["
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: idx
+- Comma
+- Identifier: key
+- In
+- Identifier: t
+- Period
+- Identifier: keys
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: key
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- Identifier: idx
+- LessThan
+- Identifier: t
+- Period
+- Identifier: len
+- LeftParenthesis
+- RightParenthesis
+- Minus
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: ", "
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "]\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: a_del
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: a_del_field
+- Assign
+- String: I am a_del
+- Newline
+- Function
+- Identifier: _tostring
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- String: "<I am table a>"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: a
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: key1
+- Assign
+- Integer: 1
+- Newline
+- Identifier: key2
+- Assign
+- Integer: 2
+- Newline
+- Function
+- Identifier: what_is_this
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "  this: "
+- Plus
+- This
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "  base: "
+- Plus
+- Base
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "  del: "
+- Plus
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "  a_del: "
+- Plus
+- Identifier: a_del
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "  root: "
+- Plus
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Identifier: a
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: a_del
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "a: "
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: a
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "root: "
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- Identifier: assert
+- LeftParenthesis
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- Equals
+- This
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "This Check:\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- Period
+- Identifier: what_is_this
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "End This Check\n"
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: dofile
+- LeftParenthesis
+- String: resources/scripts/edge_cases/parent_scope.nut
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: b
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: set_this
+- Assign
+- String: unset
+- Newline
+- Identifier: set
+- Assign
+- String: unset2
+- Newline
+- Function
+- Identifier: set_stuff
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: set_this
+- Assign
+- String: set this
+- Newline
+- This
+- Period
+- Identifier: ns_this
+- NewSlot
+- String: ns this
+- Newline
+- Identifier: set
+- Assign
+- String: set
+- Newline
+- Identifier: ns
+- NewSlot
+- String: ns
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Finding a in env
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- This
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- This
+- Period
+- Identifier: a
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "Set Stuff Check\n"
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: b
+- RightParenthesis
+- Newline
+- Identifier: b
+- Period
+- Identifier: set_stuff
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Identifier: show_keys
+- LeftParenthesis
+- Identifier: b
+- RightParenthesis

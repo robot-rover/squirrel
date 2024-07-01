@@ -1,0 +1,518 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/tailstate.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - statethread
+    - 1
+  - - i
+    - 2
+num_locals: 3
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - state1
+                    - start: 9
+                      end: 15
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 0
+                        end: 8
+                      arg_span:
+                        start: 15
+                        end: 17
+                      num_args: 0
+                      default_expr: []
+                      local_names: []
+                      num_locals: 0
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 24
+                                              end: 26
+                                          - - suspend
+                                            - start: 26
+                                              end: 33
+                                      args:
+                                        - data:
+                                            Literal:
+                                              String: state1
+                                          span:
+                                            start: 34
+                                            end: 42
+                                  span:
+                                    start: 33
+                                    end: 43
+                              span:
+                                start: 33
+                                end: 43
+                            - data:
+                                Return:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        Expr:
+                                          data:
+                                            Ident: state2
+                                          span:
+                                            start: 56
+                                            end: 62
+                                      args: []
+                                  span:
+                                    start: 62
+                                    end: 64
+                              span:
+                                start: 49
+                                end: 64
+                        span:
+                          start: 0
+                          end: 67
+                  span:
+                    start: 0
+                    end: 67
+                kind: NewSlot
+                op_span:
+                  start: 0
+                  end: 8
+            span:
+              start: 0
+              end: 67
+        span:
+          start: 0
+          end: 67
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - state2
+                    - start: 78
+                      end: 84
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 69
+                        end: 77
+                      arg_span:
+                        start: 84
+                        end: 86
+                      num_args: 0
+                      default_expr: []
+                      local_names: []
+                      num_locals: 0
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 93
+                                              end: 95
+                                          - - suspend
+                                            - start: 95
+                                              end: 102
+                                      args:
+                                        - data:
+                                            Literal:
+                                              String: state2
+                                          span:
+                                            start: 103
+                                            end: 111
+                                  span:
+                                    start: 102
+                                    end: 112
+                              span:
+                                start: 102
+                                end: 112
+                            - data:
+                                Return:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        Expr:
+                                          data:
+                                            Ident: state3
+                                          span:
+                                            start: 125
+                                            end: 131
+                                      args: []
+                                  span:
+                                    start: 131
+                                    end: 133
+                              span:
+                                start: 118
+                                end: 133
+                        span:
+                          start: 0
+                          end: 136
+                  span:
+                    start: 0
+                    end: 136
+                kind: NewSlot
+                op_span:
+                  start: 69
+                  end: 77
+            span:
+              start: 0
+              end: 136
+        span:
+          start: 0
+          end: 136
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - state3
+                    - start: 147
+                      end: 153
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 138
+                        end: 146
+                      arg_span:
+                        start: 153
+                        end: 155
+                      num_args: 0
+                      default_expr: []
+                      local_names: []
+                      num_locals: 0
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 162
+                                              end: 164
+                                          - - suspend
+                                            - start: 164
+                                              end: 171
+                                      args:
+                                        - data:
+                                            Literal:
+                                              String: state3
+                                          span:
+                                            start: 172
+                                            end: 180
+                                  span:
+                                    start: 171
+                                    end: 181
+                              span:
+                                start: 171
+                                end: 181
+                            - data:
+                                Return:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        Expr:
+                                          data:
+                                            Ident: state1
+                                          span:
+                                            start: 194
+                                            end: 200
+                                      args: []
+                                  span:
+                                    start: 200
+                                    end: 202
+                              span:
+                                start: 187
+                                end: 202
+                        span:
+                          start: 0
+                          end: 205
+                  span:
+                    start: 0
+                    end: 205
+                kind: NewSlot
+                op_span:
+                  start: 138
+                  end: 146
+            span:
+              start: 0
+              end: 205
+        span:
+          start: 0
+          end: 205
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 213
+                      end: 224
+                value:
+                  data:
+                    FunctionCall:
+                      func:
+                        FieldAccess:
+                          - data: Globals
+                            span:
+                              start: 227
+                              end: 229
+                          - - newthread
+                            - start: 229
+                              end: 238
+                      args:
+                        - data:
+                            Ident: state1
+                          span:
+                            start: 239
+                            end: 245
+                  span:
+                    start: 238
+                    end: 246
+                kind: Normal
+                op_span:
+                  start: 225
+                  end: 226
+            span:
+              start: 213
+              end: 246
+        span:
+          start: 213
+          end: 246
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 248
+                        end: 250
+                    - - print
+                      - start: 250
+                        end: 255
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 274
+                          end: 275
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                FieldAccess:
+                                  - data:
+                                      Local:
+                                        - 1
+                                        - start: 256
+                                          end: 267
+                                    span:
+                                      start: 256
+                                      end: 267
+                                  - - call
+                                    - start: 268
+                                      end: 272
+                              args: []
+                          span:
+                            start: 272
+                            end: 274
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 275
+                            end: 279
+                    span:
+                      start: 272
+                      end: 279
+            span:
+              start: 255
+              end: 280
+        span:
+          start: 255
+          end: 280
+      - data:
+          For:
+            init:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 2
+                          - start: 293
+                            end: 294
+                      value:
+                        data:
+                          Literal:
+                            Integer: 0
+                        span:
+                          start: 297
+                          end: 298
+                      kind: Normal
+                      op_span:
+                        start: 295
+                        end: 296
+                  span:
+                    start: 293
+                    end: 298
+              span:
+                start: 293
+                end: 298
+            cond:
+              data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 302
+                    end: 303
+                  lhs:
+                    data:
+                      Local:
+                        - 2
+                        - start: 300
+                          end: 301
+                    span:
+                      start: 300
+                      end: 301
+                  rhs:
+                    data:
+                      Literal:
+                        Integer: 10000
+                    span:
+                      start: 304
+                      end: 309
+              span:
+                start: 300
+                end: 309
+            incr:
+              data:
+                Expr:
+                  data:
+                    UnaryRefOp:
+                      - PostIncr
+                      - start: 312
+                        end: 314
+                      - Local:
+                          - 2
+                          - start: 311
+                            end: 312
+                  span:
+                    start: 311
+                    end: 314
+              span:
+                start: 311
+                end: 314
+            body:
+              data:
+                Expr:
+                  data:
+                    FunctionCall:
+                      func:
+                        FieldAccess:
+                          - data: Globals
+                            span:
+                              start: 320
+                              end: 322
+                          - - print
+                            - start: 322
+                              end: 327
+                      args:
+                        - data:
+                            BinaryOp:
+                              op: Add
+                              op_span:
+                                start: 348
+                                end: 349
+                              lhs:
+                                data:
+                                  FunctionCall:
+                                    func:
+                                      FieldAccess:
+                                        - data:
+                                            Local:
+                                              - 1
+                                              - start: 328
+                                                end: 339
+                                          span:
+                                            start: 328
+                                            end: 339
+                                        - - wakeup
+                                          - start: 340
+                                            end: 346
+                                    args: []
+                                span:
+                                  start: 346
+                                  end: 348
+                              rhs:
+                                data:
+                                  Literal:
+                                    String: "\n"
+                                span:
+                                  start: 349
+                                  end: 353
+                          span:
+                            start: 346
+                            end: 353
+                  span:
+                    start: 327
+                    end: 354
+              span:
+                start: 327
+                end: 354
+        span:
+          start: 283
+          end: 354
+  span:
+    start: 0
+    end: 354

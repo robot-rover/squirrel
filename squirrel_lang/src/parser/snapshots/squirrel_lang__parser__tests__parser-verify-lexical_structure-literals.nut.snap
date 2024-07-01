@@ -1,0 +1,654 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for verify/lexical_structure/literals.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - int_b10
+    - 1
+  - - int_hex
+    - 2
+  - - int_oct
+    - 3
+  - - int_char
+    - 4
+  - - float
+    - 5
+  - - float_sci
+    - 6
+  - - float_sci2
+    - 7
+  - - str
+    - 8
+  - - str_verb
+    - 9
+  - - str_verb_multi
+    - 10
+num_locals: 11
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - println
+                    - start: 9
+                      end: 16
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 0
+                        end: 8
+                      arg_span:
+                        start: 16
+                        end: 21
+                      num_args: 1
+                      default_expr: []
+                      local_names:
+                        - - val
+                          - 0
+                      num_locals: 1
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 28
+                                              end: 30
+                                          - - print
+                                            - start: 30
+                                              end: 35
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 40
+                                                end: 41
+                                              lhs:
+                                                data:
+                                                  Local:
+                                                    - 0
+                                                    - start: 36
+                                                      end: 39
+                                                span:
+                                                  start: 36
+                                                  end: 39
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 42
+                                                  end: 46
+                                          span:
+                                            start: 36
+                                            end: 46
+                                  span:
+                                    start: 35
+                                    end: 47
+                              span:
+                                start: 35
+                                end: 47
+                        span:
+                          start: 0
+                          end: 49
+                  span:
+                    start: 0
+                    end: 49
+                kind: NewSlot
+                op_span:
+                  start: 0
+                  end: 8
+            span:
+              start: 0
+              end: 49
+        span:
+          start: 0
+          end: 49
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 57
+                      end: 64
+                value:
+                  data:
+                    Literal:
+                      Integer: 34
+                  span:
+                    start: 67
+                    end: 69
+                kind: Normal
+                op_span:
+                  start: 65
+                  end: 66
+            span:
+              start: 57
+              end: 69
+        span:
+          start: 57
+          end: 69
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 70
+                      end: 77
+                args:
+                  - data:
+                      Local:
+                        - 1
+                        - start: 78
+                          end: 85
+                    span:
+                      start: 78
+                      end: 85
+            span:
+              start: 77
+              end: 86
+        span:
+          start: 77
+          end: 86
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: 93
+                      end: 100
+                value:
+                  data:
+                    Literal:
+                      Integer: 4278231328
+                  span:
+                    start: 103
+                    end: 113
+                kind: Normal
+                op_span:
+                  start: 101
+                  end: 102
+            span:
+              start: 93
+              end: 113
+        span:
+          start: 93
+          end: 113
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 114
+                      end: 121
+                args:
+                  - data:
+                      Local:
+                        - 2
+                        - start: 122
+                          end: 129
+                    span:
+                      start: 122
+                      end: 129
+            span:
+              start: 121
+              end: 130
+        span:
+          start: 121
+          end: 130
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 3
+                    - start: 137
+                      end: 144
+                value:
+                  data:
+                    Literal:
+                      Integer: 491
+                  span:
+                    start: 147
+                    end: 151
+                kind: Normal
+                op_span:
+                  start: 145
+                  end: 146
+            span:
+              start: 137
+              end: 151
+        span:
+          start: 137
+          end: 151
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 152
+                      end: 159
+                args:
+                  - data:
+                      Local:
+                        - 3
+                        - start: 160
+                          end: 167
+                    span:
+                      start: 160
+                      end: 167
+            span:
+              start: 159
+              end: 168
+        span:
+          start: 159
+          end: 168
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 4
+                    - start: 175
+                      end: 183
+                value:
+                  data:
+                    Literal:
+                      Integer: 97
+                  span:
+                    start: 186
+                    end: 189
+                kind: Normal
+                op_span:
+                  start: 184
+                  end: 185
+            span:
+              start: 175
+              end: 189
+        span:
+          start: 175
+          end: 189
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 190
+                      end: 197
+                args:
+                  - data:
+                      Local:
+                        - 4
+                        - start: 198
+                          end: 206
+                    span:
+                      start: 198
+                      end: 206
+            span:
+              start: 197
+              end: 207
+        span:
+          start: 197
+          end: 207
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 5
+                    - start: 215
+                      end: 220
+                value:
+                  data:
+                    Literal:
+                      Number: 1.52
+                  span:
+                    start: 223
+                    end: 227
+                kind: Normal
+                op_span:
+                  start: 221
+                  end: 222
+            span:
+              start: 215
+              end: 227
+        span:
+          start: 215
+          end: 227
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 228
+                      end: 235
+                args:
+                  - data:
+                      Local:
+                        - 5
+                        - start: 236
+                          end: 241
+                    span:
+                      start: 236
+                      end: 241
+            span:
+              start: 235
+              end: 242
+        span:
+          start: 235
+          end: 242
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 6
+                    - start: 249
+                      end: 258
+                value:
+                  data:
+                    Literal:
+                      Number: 0.01
+                  span:
+                    start: 261
+                    end: 266
+                kind: Normal
+                op_span:
+                  start: 259
+                  end: 260
+            span:
+              start: 249
+              end: 266
+        span:
+          start: 249
+          end: 266
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 267
+                      end: 274
+                args:
+                  - data:
+                      Local:
+                        - 6
+                        - start: 275
+                          end: 284
+                    span:
+                      start: 275
+                      end: 284
+            span:
+              start: 274
+              end: 285
+        span:
+          start: 274
+          end: 285
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 7
+                    - start: 292
+                      end: 302
+                value:
+                  data:
+                    Literal:
+                      Number: 120
+                  span:
+                    start: 305
+                    end: 310
+                kind: Normal
+                op_span:
+                  start: 303
+                  end: 304
+            span:
+              start: 292
+              end: 310
+        span:
+          start: 292
+          end: 310
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 311
+                      end: 318
+                args:
+                  - data:
+                      Local:
+                        - 7
+                        - start: 319
+                          end: 329
+                    span:
+                      start: 319
+                      end: 329
+            span:
+              start: 318
+              end: 330
+        span:
+          start: 318
+          end: 330
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 8
+                    - start: 458
+                      end: 461
+                value:
+                  data:
+                    Literal:
+                      String: "I'm a string"
+                  span:
+                    start: 464
+                    end: 478
+                kind: Normal
+                op_span:
+                  start: 462
+                  end: 463
+            span:
+              start: 458
+              end: 478
+        span:
+          start: 458
+          end: 478
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 479
+                      end: 486
+                args:
+                  - data:
+                      Local:
+                        - 8
+                        - start: 487
+                          end: 490
+                    span:
+                      start: 487
+                      end: 490
+            span:
+              start: 486
+              end: 491
+        span:
+          start: 486
+          end: 491
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 9
+                    - start: 498
+                      end: 506
+                value:
+                  data:
+                    Literal:
+                      String: "I'm a verbatim string"
+                  span:
+                    start: 509
+                    end: 533
+                kind: Normal
+                op_span:
+                  start: 507
+                  end: 508
+            span:
+              start: 498
+              end: 533
+        span:
+          start: 498
+          end: 533
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 534
+                      end: 541
+                args:
+                  - data:
+                      Local:
+                        - 9
+                        - start: 542
+                          end: 550
+                    span:
+                      start: 542
+                      end: 550
+            span:
+              start: 541
+              end: 551
+        span:
+          start: 541
+          end: 551
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 10
+                    - start: 558
+                      end: 572
+                value:
+                  data:
+                    Literal:
+                      String: "I'm a verbatim string\nthat spans multiple lines"
+                  span:
+                    start: 575
+                    end: 625
+                kind: Normal
+                op_span:
+                  start: 573
+                  end: 574
+            span:
+              start: 558
+              end: 625
+        span:
+          start: 558
+          end: 625
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: println
+                    span:
+                      start: 626
+                      end: 633
+                args:
+                  - data:
+                      Local:
+                        - 10
+                        - start: 634
+                          end: 648
+                    span:
+                      start: 634
+                      end: 648
+            span:
+              start: 633
+              end: 649
+        span:
+          start: 633
+          end: 649
+  span:
+    start: 0
+    end: 649

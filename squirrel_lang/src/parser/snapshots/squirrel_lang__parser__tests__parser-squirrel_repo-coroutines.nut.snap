@@ -1,0 +1,848 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/coroutines.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - coro
+    - 1
+  - - susparam
+    - 2
+  - - i
+    - 3
+num_locals: 4
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - coroutine_test
+                    - start: 9
+                      end: 23
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 0
+                        end: 8
+                      arg_span:
+                        start: 23
+                        end: 28
+                      num_args: 2
+                      default_expr: []
+                      local_names:
+                        - - a
+                          - 0
+                        - - b
+                          - 1
+                        - - ret
+                          - 2
+                      num_locals: 3
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 35
+                                              end: 37
+                                          - - print
+                                            - start: 37
+                                              end: 42
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 50
+                                                end: 51
+                                              lhs:
+                                                data:
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: 48
+                                                      end: 49
+                                                    lhs:
+                                                      data:
+                                                        BinaryOp:
+                                                          op: Add
+                                                          op_span:
+                                                            start: 44
+                                                            end: 45
+                                                          lhs:
+                                                            data:
+                                                              Local:
+                                                                - 0
+                                                                - start: 43
+                                                                  end: 44
+                                                            span:
+                                                              start: 43
+                                                              end: 44
+                                                          rhs:
+                                                            data:
+                                                              Literal:
+                                                                String: " "
+                                                            span:
+                                                              start: 45
+                                                              end: 48
+                                                      span:
+                                                        start: 43
+                                                        end: 48
+                                                    rhs:
+                                                      data:
+                                                        Local:
+                                                          - 1
+                                                          - start: 49
+                                                            end: 50
+                                                      span:
+                                                        start: 49
+                                                        end: 50
+                                                span:
+                                                  start: 43
+                                                  end: 50
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 51
+                                                  end: 55
+                                          span:
+                                            start: 43
+                                            end: 55
+                                  span:
+                                    start: 42
+                                    end: 56
+                              span:
+                                start: 42
+                                end: 56
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 2
+                                          - start: 68
+                                            end: 71
+                                      value:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data: Globals
+                                                  span:
+                                                    start: 74
+                                                    end: 76
+                                                - - suspend
+                                                  - start: 76
+                                                    end: 83
+                                            args:
+                                              - data:
+                                                  Literal:
+                                                    String: suspend 1
+                                                span:
+                                                  start: 84
+                                                  end: 95
+                                        span:
+                                          start: 83
+                                          end: 96
+                                      kind: Normal
+                                      op_span:
+                                        start: 72
+                                        end: 73
+                                  span:
+                                    start: 68
+                                    end: 96
+                              span:
+                                start: 68
+                                end: 96
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 102
+                                              end: 104
+                                          - - print
+                                            - start: 104
+                                              end: 109
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 135
+                                                end: 136
+                                              lhs:
+                                                data:
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: 131
+                                                      end: 132
+                                                    lhs:
+                                                      data:
+                                                        Literal:
+                                                          String: "the coroutine says "
+                                                      span:
+                                                        start: 110
+                                                        end: 131
+                                                    rhs:
+                                                      data:
+                                                        Local:
+                                                          - 2
+                                                          - start: 132
+                                                            end: 135
+                                                      span:
+                                                        start: 132
+                                                        end: 135
+                                                span:
+                                                  start: 110
+                                                  end: 135
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 136
+                                                  end: 140
+                                          span:
+                                            start: 110
+                                            end: 140
+                                  span:
+                                    start: 109
+                                    end: 141
+                              span:
+                                start: 109
+                                end: 141
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 2
+                                          - start: 147
+                                            end: 150
+                                      value:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data: Globals
+                                                  span:
+                                                    start: 153
+                                                    end: 155
+                                                - - suspend
+                                                  - start: 155
+                                                    end: 162
+                                            args:
+                                              - data:
+                                                  Literal:
+                                                    String: suspend 2
+                                                span:
+                                                  start: 163
+                                                  end: 174
+                                        span:
+                                          start: 162
+                                          end: 175
+                                      kind: Normal
+                                      op_span:
+                                        start: 151
+                                        end: 152
+                                  span:
+                                    start: 147
+                                    end: 175
+                              span:
+                                start: 147
+                                end: 175
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 181
+                                              end: 183
+                                          - - print
+                                            - start: 183
+                                              end: 188
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 214
+                                                end: 215
+                                              lhs:
+                                                data:
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: 210
+                                                      end: 211
+                                                    lhs:
+                                                      data:
+                                                        Literal:
+                                                          String: "the coroutine says "
+                                                      span:
+                                                        start: 189
+                                                        end: 210
+                                                    rhs:
+                                                      data:
+                                                        Local:
+                                                          - 2
+                                                          - start: 211
+                                                            end: 214
+                                                      span:
+                                                        start: 211
+                                                        end: 214
+                                                span:
+                                                  start: 189
+                                                  end: 214
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 215
+                                                  end: 219
+                                          span:
+                                            start: 189
+                                            end: 219
+                                  span:
+                                    start: 188
+                                    end: 220
+                              span:
+                                start: 188
+                                end: 220
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 2
+                                          - start: 226
+                                            end: 229
+                                      value:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data: Globals
+                                                  span:
+                                                    start: 232
+                                                    end: 234
+                                                - - suspend
+                                                  - start: 234
+                                                    end: 241
+                                            args:
+                                              - data:
+                                                  Literal:
+                                                    String: suspend 3
+                                                span:
+                                                  start: 242
+                                                  end: 253
+                                        span:
+                                          start: 241
+                                          end: 254
+                                      kind: Normal
+                                      op_span:
+                                        start: 230
+                                        end: 231
+                                  span:
+                                    start: 226
+                                    end: 254
+                              span:
+                                start: 226
+                                end: 254
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 260
+                                              end: 262
+                                          - - print
+                                            - start: 262
+                                              end: 267
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 293
+                                                end: 294
+                                              lhs:
+                                                data:
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: 289
+                                                      end: 290
+                                                    lhs:
+                                                      data:
+                                                        Literal:
+                                                          String: "the coroutine says "
+                                                      span:
+                                                        start: 268
+                                                        end: 289
+                                                    rhs:
+                                                      data:
+                                                        Local:
+                                                          - 2
+                                                          - start: 290
+                                                            end: 293
+                                                      span:
+                                                        start: 290
+                                                        end: 293
+                                                span:
+                                                  start: 268
+                                                  end: 293
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 294
+                                                  end: 298
+                                          span:
+                                            start: 268
+                                            end: 298
+                                  span:
+                                    start: 267
+                                    end: 299
+                              span:
+                                start: 267
+                                end: 299
+                            - data:
+                                Return:
+                                  data:
+                                    Literal:
+                                      String: "I'm done"
+                                  span:
+                                    start: 312
+                                    end: 322
+                              span:
+                                start: 305
+                                end: 322
+                        span:
+                          start: 0
+                          end: 324
+                  span:
+                    start: 0
+                    end: 324
+                kind: NewSlot
+                op_span:
+                  start: 0
+                  end: 8
+            span:
+              start: 0
+              end: 324
+        span:
+          start: 0
+          end: 324
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 332
+                      end: 336
+                value:
+                  data:
+                    FunctionCall:
+                      func:
+                        FieldAccess:
+                          - data: Globals
+                            span:
+                              start: 339
+                              end: 341
+                          - - newthread
+                            - start: 341
+                              end: 350
+                      args:
+                        - data:
+                            Ident: coroutine_test
+                          span:
+                            start: 351
+                            end: 365
+                  span:
+                    start: 350
+                    end: 366
+                kind: Normal
+                op_span:
+                  start: 337
+                  end: 338
+            span:
+              start: 332
+              end: 366
+        span:
+          start: 332
+          end: 366
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: 375
+                      end: 383
+                value:
+                  data:
+                    FunctionCall:
+                      func:
+                        FieldAccess:
+                          - data:
+                              Local:
+                                - 1
+                                - start: 386
+                                  end: 390
+                            span:
+                              start: 386
+                              end: 390
+                          - - call
+                            - start: 391
+                              end: 395
+                      args:
+                        - data:
+                            Literal:
+                              String: test
+                          span:
+                            start: 396
+                            end: 402
+                        - data:
+                            Literal:
+                              String: coroutine
+                          span:
+                            start: 403
+                            end: 414
+                  span:
+                    start: 395
+                    end: 415
+                kind: Normal
+                op_span:
+                  start: 384
+                  end: 385
+            span:
+              start: 375
+              end: 415
+        span:
+          start: 375
+          end: 415
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 3
+                    - start: 447
+                      end: 448
+                value:
+                  data:
+                    Literal:
+                      Integer: 1
+                  span:
+                    start: 451
+                    end: 452
+                kind: Normal
+                op_span:
+                  start: 449
+                  end: 450
+            span:
+              start: 447
+              end: 452
+        span:
+          start: 447
+          end: 452
+      - data:
+          While:
+            - data:
+                BinaryOp:
+                  op: Eq
+                  op_span:
+                    start: 577
+                    end: 579
+                  lhs:
+                    data:
+                      FunctionCall:
+                        func:
+                          FieldAccess:
+                            - data:
+                                Local:
+                                  - 1
+                                  - start: 561
+                                    end: 565
+                              span:
+                                start: 561
+                                end: 565
+                            - - getstatus
+                              - start: 566
+                                end: 575
+                        args: []
+                    span:
+                      start: 575
+                      end: 577
+                  rhs:
+                    data:
+                      Literal:
+                        String: suspended
+                    span:
+                      start: 579
+                      end: 590
+              span:
+                start: 575
+                end: 590
+            - data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 463
+                                    end: 465
+                                - - print
+                                  - start: 465
+                                    end: 470
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 498
+                                      end: 499
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 489
+                                            end: 490
+                                          lhs:
+                                            data:
+                                              Literal:
+                                                String: "suspend passed ["
+                                            span:
+                                              start: 471
+                                              end: 489
+                                          rhs:
+                                            data:
+                                              Local:
+                                                - 2
+                                                - start: 490
+                                                  end: 498
+                                            span:
+                                              start: 490
+                                              end: 498
+                                      span:
+                                        start: 471
+                                        end: 498
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "]\n"
+                                      span:
+                                        start: 499
+                                        end: 504
+                                span:
+                                  start: 471
+                                  end: 504
+                        span:
+                          start: 470
+                          end: 505
+                    span:
+                      start: 470
+                      end: 505
+                  - data:
+                      Expr:
+                        data:
+                          Assign:
+                            target:
+                              Local:
+                                - 2
+                                - start: 510
+                                  end: 518
+                            value:
+                              data:
+                                FunctionCall:
+                                  func:
+                                    FieldAccess:
+                                      - data:
+                                          Local:
+                                            - 1
+                                            - start: 521
+                                              end: 525
+                                        span:
+                                          start: 521
+                                          end: 525
+                                      - - wakeup
+                                        - start: 526
+                                          end: 532
+                                  args:
+                                    - data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 540
+                                            end: 541
+                                          lhs:
+                                            data:
+                                              Literal:
+                                                String: "ciao "
+                                            span:
+                                              start: 533
+                                              end: 540
+                                          rhs:
+                                            data:
+                                              Local:
+                                                - 3
+                                                - start: 541
+                                                  end: 542
+                                            span:
+                                              start: 541
+                                              end: 542
+                                      span:
+                                        start: 533
+                                        end: 542
+                              span:
+                                start: 532
+                                end: 543
+                            kind: Normal
+                            op_span:
+                              start: 519
+                              end: 520
+                        span:
+                          start: 510
+                          end: 543
+                    span:
+                      start: 510
+                      end: 543
+                  - data:
+                      Expr:
+                        data:
+                          UnaryRefOp:
+                            - PreIncr
+                            - start: 549
+                              end: 551
+                            - Local:
+                                - 3
+                                - start: 551
+                                  end: 552
+                        span:
+                          start: 549
+                          end: 552
+                    span:
+                      start: 549
+                      end: 552
+              span:
+                start: 0
+                end: 555
+        span:
+          start: 0
+          end: 555
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 593
+                        end: 595
+                    - - print
+                      - start: 595
+                        end: 600
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 627
+                          end: 628
+                        lhs:
+                          data:
+                            BinaryOp:
+                              op: Add
+                              op_span:
+                                start: 618
+                                end: 619
+                              lhs:
+                                data:
+                                  Literal:
+                                    String: "return passed ["
+                                span:
+                                  start: 601
+                                  end: 618
+                              rhs:
+                                data:
+                                  Local:
+                                    - 2
+                                    - start: 619
+                                      end: 627
+                                span:
+                                  start: 619
+                                  end: 627
+                          span:
+                            start: 601
+                            end: 627
+                        rhs:
+                          data:
+                            Literal:
+                              String: "]\n"
+                          span:
+                            start: 628
+                            end: 633
+                    span:
+                      start: 601
+                      end: 633
+            span:
+              start: 600
+              end: 634
+        span:
+          start: 600
+          end: 634
+  span:
+    start: 0
+    end: 634

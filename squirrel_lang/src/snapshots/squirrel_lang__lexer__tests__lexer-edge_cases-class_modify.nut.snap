@@ -1,0 +1,35 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/class_modify.nut
+---
+- Class
+- Identifier: Foo
+- LeftCurlyBrace
+- Newline
+- Identifier: a
+- Assign
+- Integer: 0
+- Newline
+- Identifier: b
+- Assign
+- Integer: 0
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: Foo
+- Period
+- Identifier: c
+- NewSlot
+- Integer: 0
+- Newline
+- Newline
+- Local
+- Identifier: fooinst
+- Assign
+- Identifier: Foo
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- Newline

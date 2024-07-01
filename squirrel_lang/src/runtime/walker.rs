@@ -777,8 +777,6 @@ fn run_assign(
 mod tests {
     use std::iter;
 
-    use indent::indent_all_with;
-
     use super::*;
     use crate::{
         context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str,
@@ -787,6 +785,9 @@ mod tests {
     test_foreach!(sample_test);
 
     fn sample_test(file_name: &str, file_contents: &str) {
+        let test_name = format!("walker-{}", file_name.replace("/", "-"));
+        let test_desc = format!("Walker test for {}", file_name);
+
         let actual_ast = match parse(file_contents, file_name.to_string()) {
             Ok(ast) => ast,
             Err(err) => panic!("{}", err),
@@ -801,16 +802,7 @@ mod tests {
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
         #[cfg(not(miri))]
         {
-            let expect_str = exchange_str("outputs", file_name, &actual_str);
-            // TODO: Have a more useful comparison for these trees
-            if actual_str != expect_str {
-                panic!(
-                    "Output does not match expected output\nSource File: {}\nExpected:\n{}\nActual:\n{}",
-                    file_name,
-                    indent_all_with("| ", expect_str),
-                    indent_all_with("| ", actual_str),
-                );
-            }
+            insta::assert_snapshot!(test_name, actual_str, &test_desc);
         }
     }
 }

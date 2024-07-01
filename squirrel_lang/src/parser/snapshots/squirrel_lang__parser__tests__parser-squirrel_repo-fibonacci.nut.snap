@@ -1,0 +1,366 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/fibonacci.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - n
+    - 1
+num_locals: 2
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - fib
+                    - start: 105
+                      end: 108
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 96
+                        end: 104
+                      arg_span:
+                        start: 108
+                        end: 111
+                      num_args: 1
+                      default_expr: []
+                      local_names:
+                        - - n
+                          - 0
+                      num_locals: 1
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                IfElse:
+                                  - data:
+                                      BinaryOp:
+                                        op: Less
+                                        op_span:
+                                          start: 124
+                                          end: 125
+                                        lhs:
+                                          data:
+                                            Local:
+                                              - 0
+                                              - start: 122
+                                                end: 123
+                                          span:
+                                            start: 122
+                                            end: 123
+                                        rhs:
+                                          data:
+                                            Literal:
+                                              Integer: 2
+                                          span:
+                                            start: 126
+                                            end: 127
+                                    span:
+                                      start: 122
+                                      end: 127
+                                  - data:
+                                      Return:
+                                        data:
+                                          Literal:
+                                            Integer: 1
+                                        span:
+                                          start: 136
+                                          end: 137
+                                    span:
+                                      start: 129
+                                      end: 137
+                                  - data: Empty
+                                    span:
+                                      start: 0
+                                      end: 0
+                              span:
+                                start: 0
+                                end: 137
+                            - data:
+                                Return:
+                                  data:
+                                    BinaryOp:
+                                      op: Add
+                                      op_span:
+                                        start: 158
+                                        end: 159
+                                      lhs:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              Expr:
+                                                data:
+                                                  Ident: fib
+                                                span:
+                                                  start: 149
+                                                  end: 152
+                                            args:
+                                              - data:
+                                                  BinaryOp:
+                                                    op: Sub
+                                                    op_span:
+                                                      start: 154
+                                                      end: 155
+                                                    lhs:
+                                                      data:
+                                                        Local:
+                                                          - 0
+                                                          - start: 153
+                                                            end: 154
+                                                      span:
+                                                        start: 153
+                                                        end: 154
+                                                    rhs:
+                                                      data:
+                                                        Literal:
+                                                          Integer: 2
+                                                      span:
+                                                        start: 155
+                                                        end: 156
+                                                span:
+                                                  start: 153
+                                                  end: 156
+                                        span:
+                                          start: 152
+                                          end: 157
+                                      rhs:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              Expr:
+                                                data:
+                                                  Ident: fib
+                                                span:
+                                                  start: 160
+                                                  end: 163
+                                            args:
+                                              - data:
+                                                  BinaryOp:
+                                                    op: Sub
+                                                    op_span:
+                                                      start: 165
+                                                      end: 166
+                                                    lhs:
+                                                      data:
+                                                        Local:
+                                                          - 0
+                                                          - start: 164
+                                                            end: 165
+                                                      span:
+                                                        start: 164
+                                                        end: 165
+                                                    rhs:
+                                                      data:
+                                                        Literal:
+                                                          Integer: 1
+                                                      span:
+                                                        start: 166
+                                                        end: 167
+                                                span:
+                                                  start: 164
+                                                  end: 167
+                                        span:
+                                          start: 163
+                                          end: 168
+                                  span:
+                                    start: 152
+                                    end: 168
+                              span:
+                                start: 142
+                                end: 168
+                        span:
+                          start: 0
+                          end: 170
+                  span:
+                    start: 0
+                    end: 170
+                kind: NewSlot
+                op_span:
+                  start: 96
+                  end: 104
+            span:
+              start: 0
+              end: 170
+        span:
+          start: 0
+          end: 170
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 178
+                      end: 179
+                value:
+                  data:
+                    Ternary:
+                      cond:
+                        data:
+                          BinaryOp:
+                            op: NotEq
+                            op_span:
+                              start: 193
+                              end: 195
+                            lhs:
+                              data:
+                                FunctionCall:
+                                  func:
+                                    FieldAccess:
+                                      - data:
+                                          Local:
+                                            - 0
+                                            - start: 182
+                                              end: 187
+                                        span:
+                                          start: 182
+                                          end: 187
+                                      - - len
+                                        - start: 188
+                                          end: 191
+                                  args: []
+                              span:
+                                start: 191
+                                end: 193
+                            rhs:
+                              data:
+                                Literal:
+                                  Integer: 0
+                              span:
+                                start: 195
+                                end: 196
+                        span:
+                          start: 191
+                          end: 196
+                      true_expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data:
+                                    ArrayAccess:
+                                      array:
+                                        data:
+                                          Local:
+                                            - 0
+                                            - start: 197
+                                              end: 202
+                                        span:
+                                          start: 197
+                                          end: 202
+                                      index:
+                                        data:
+                                          Literal:
+                                            Integer: 0
+                                        span:
+                                          start: 203
+                                          end: 204
+                                  span:
+                                    start: 202
+                                    end: 205
+                                - - tointeger
+                                  - start: 206
+                                    end: 215
+                            args: []
+                        span:
+                          start: 215
+                          end: 217
+                      false_expr:
+                        data:
+                          Literal:
+                            Integer: 1
+                        span:
+                          start: 218
+                          end: 219
+                  span:
+                    start: 191
+                    end: 219
+                kind: Normal
+                op_span:
+                  start: 180
+                  end: 181
+            span:
+              start: 178
+              end: 219
+        span:
+          start: 178
+          end: 219
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: 221
+                      end: 226
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 233
+                          end: 234
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                Expr:
+                                  data:
+                                    Ident: fib
+                                  span:
+                                    start: 227
+                                    end: 230
+                              args:
+                                - data:
+                                    Local:
+                                      - 1
+                                      - start: 231
+                                        end: 232
+                                  span:
+                                    start: 231
+                                    end: 232
+                          span:
+                            start: 230
+                            end: 233
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 234
+                            end: 238
+                    span:
+                      start: 230
+                      end: 238
+            span:
+              start: 226
+              end: 239
+        span:
+          start: 226
+          end: 239
+  span:
+    start: 0
+    end: 239

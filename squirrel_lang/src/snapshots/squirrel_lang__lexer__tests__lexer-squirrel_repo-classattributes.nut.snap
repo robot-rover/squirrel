@@ -1,0 +1,168 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for squirrel_repo/classattributes.nut
+---
+- Class
+- Identifier: Foo
+- LeftCurlyBrace
+- Newline
+- Newline
+- Identifier: constructor
+- LeftParenthesis
+- Identifier: a
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- Identifier: testy
+- Assign
+- LeftSquareBracket
+- String: stuff
+- Comma
+- Integer: 1
+- Comma
+- Integer: 2
+- Comma
+- Integer: 3
+- RightSquareBracket
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Newline
+- Function
+- Identifier: PrintTesty
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: i
+- Comma
+- Identifier: val
+- In
+- Identifier: testy
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "idx = "
+- Plus
+- Identifier: i
+- Plus
+- String: " = "
+- Plus
+- Identifier: val
+- Plus
+- String: " \n"
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Newline
+- Identifier: testy
+- Assign
+- "Null"
+- Semicolon
+- Newline
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: member
+- Comma
+- Identifier: val
+- In
+- Identifier: Foo
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: member
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: attr
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: attr
+- Assign
+- Identifier: Foo
+- Period
+- Identifier: getattributes
+- LeftParenthesis
+- Identifier: member
+- RightParenthesis
+- RightParenthesis
+- DoesNotEqual
+- "Null"
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: i
+- Comma
+- Identifier: v
+- In
+- Identifier: attr
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\t"
+- Plus
+- Identifier: i
+- Plus
+- String: " = "
+- Plus
+- LeftParenthesis
+- Typeof
+- Identifier: v
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Else
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\t<no attributes>\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline

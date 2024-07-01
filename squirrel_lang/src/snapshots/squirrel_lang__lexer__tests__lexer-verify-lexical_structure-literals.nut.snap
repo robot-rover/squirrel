@@ -1,0 +1,132 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/lexical_structure/literals.nut
+---
+- Function
+- Identifier: println
+- LeftParenthesis
+- Identifier: val
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: val
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: int_b10
+- Assign
+- Integer: 34
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: int_b10
+- RightParenthesis
+- Newline
+- Local
+- Identifier: int_hex
+- Assign
+- Integer: 4278231328
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: int_hex
+- RightParenthesis
+- Newline
+- Local
+- Identifier: int_oct
+- Assign
+- Integer: 491
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: int_oct
+- RightParenthesis
+- Newline
+- Local
+- Identifier: int_char
+- Assign
+- Integer: 97
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: int_char
+- RightParenthesis
+- Newline
+- Newline
+- Local
+- Identifier: float
+- Assign
+- Number: 1.52
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: float
+- RightParenthesis
+- Newline
+- Local
+- Identifier: float_sci
+- Assign
+- Number: 0.01
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: float_sci
+- RightParenthesis
+- Newline
+- Local
+- Identifier: float_sci2
+- Assign
+- Number: 120
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: float_sci2
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- Newline
+- Newline
+- Newline
+- Local
+- Identifier: str
+- Assign
+- String: "I'm a string"
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: str
+- RightParenthesis
+- Newline
+- Local
+- Identifier: str_verb
+- Assign
+- String: "I'm a verbatim string"
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: str_verb
+- RightParenthesis
+- Newline
+- Local
+- Identifier: str_verb_multi
+- Assign
+- String: "I'm a verbatim string\nthat spans multiple lines"
+- Newline
+- Identifier: println
+- LeftParenthesis
+- Identifier: str_verb_multi
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- Newline
+- Newline

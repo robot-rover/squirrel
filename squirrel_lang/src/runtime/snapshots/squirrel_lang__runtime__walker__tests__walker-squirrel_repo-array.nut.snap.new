@@ -1,0 +1,12 @@
+---
+source: squirrel_lang/src/runtime/walker.rs
+assertion_line: 805
+expression: Walker test for squirrel_repo/array.nut
+---
+n = 1
+x = [1]
+y = [0]
+1
+x = [1]
+y = [1]
+1 1

@@ -1,0 +1,42 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/lexical_structure/keywords.nut
+---
+- Local
+- Identifier: foo
+- Assign
+- String: foo
+- Newline
+- Local
+- Identifier: Foo
+- Assign
+- String: Foo
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: foo
+- Plus
+- Identifier: Foo
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Integer: 6
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: verify/lexical_structure/keywords.nut
+- Period
+- Identifier: slice
+- LeftParenthesis
+- Minus
+- Integer: 12
+- RightParenthesis
+- RightParenthesis
+- Newline

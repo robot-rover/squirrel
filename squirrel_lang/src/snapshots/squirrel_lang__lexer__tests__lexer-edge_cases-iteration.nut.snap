@@ -1,0 +1,231 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/iteration.nut
+---
+- Identifier: table
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: a
+- Assign
+- Integer: 0
+- Newline
+- Identifier: c
+- Assign
+- Integer: 2
+- Newline
+- Identifier: b
+- Assign
+- Integer: 1
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: arr
+- NewSlot
+- LeftSquareBracket
+- Integer: 0
+- Comma
+- Integer: 1
+- Comma
+- Integer: 2
+- RightSquareBracket
+- Newline
+- Newline
+- Function
+- Identifier: generator
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- For
+- LeftParenthesis
+- Local
+- Identifier: i
+- Assign
+- Integer: 0
+- Semicolon
+- Identifier: i
+- LessThan
+- Integer: 3
+- Semicolon
+- Identifier: i
+- Increment
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Yield
+- Identifier: i
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Class
+- Identifier: Class
+- LeftCurlyBrace
+- Newline
+- Identifier: a
+- Assign
+- Integer: 0
+- Newline
+- Identifier: b
+- Assign
+- Integer: 1
+- Newline
+- Identifier: c
+- Assign
+- Integer: 2
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "table\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: k
+- Comma
+- Identifier: v
+- In
+- Identifier: table
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: k
+- Plus
+- String: " "
+- Plus
+- Identifier: v
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "arr\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: k
+- Comma
+- Identifier: v
+- In
+- Identifier: arr
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: k
+- Plus
+- String: " "
+- Plus
+- Identifier: v
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "generator\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: k
+- Comma
+- Identifier: v
+- In
+- Identifier: generator
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: k
+- Plus
+- String: " "
+- Plus
+- Identifier: v
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "class\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: k
+- Comma
+- Identifier: v
+- In
+- Identifier: Class
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: k
+- Plus
+- String: " "
+- Plus
+- Identifier: v
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\n"
+- RightParenthesis

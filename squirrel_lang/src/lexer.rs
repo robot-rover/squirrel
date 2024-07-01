@@ -834,8 +834,11 @@ mod tests {
         assert_eq!(vec![Ok(Token::Number(4e-2))], result);
     }
 
-    fn sample_test(sample_path: &str, sample_contents: &str) {
-        let mut spanned_lexer = SpannedLexer::new(sample_contents, sample_path.to_string());
+    fn sample_test(file_name: &str, file_contents: &str) {
+        let test_name = format!("lexer-{}", file_name.replace("/", "-"));
+        let test_desc = format!("Lexer test for {}", file_name);
+
+        let mut spanned_lexer = SpannedLexer::new(file_contents, file_name.to_string());
         let tokens = spanned_lexer.by_ref().collect::<Result<Vec<_>, _>>();
         let tokens = match tokens {
             Ok(tokens) => tokens,
@@ -848,15 +851,7 @@ mod tests {
             .collect::<Vec<_>>();
         #[cfg(not(miri))]
         {
-            let mut expect_strg = String::new();
-            let expected_data = exchange_data("lexer", sample_path, &actual_data, &mut expect_strg);
-            for (idx, (expected, actual)) in expected_data
-                .into_iter()
-                .zip(actual_data.into_iter())
-                .enumerate()
-            {
-                assert_eq!(expected, actual, "Token at index {} does not match", idx);
-            }
+            insta::assert_yaml_snapshot!(test_name, actual_data, &test_desc);
         }
     }
 

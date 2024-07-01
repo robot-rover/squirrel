@@ -1,0 +1,121 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/func_env.nut
+---
+- Identifier: table_a
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: ident
+- Assign
+- String: Table A
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: table_b
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: ident
+- Assign
+- String: Table B
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: ident
+- NewSlot
+- String: File Table
+- Newline
+- Newline
+- Function
+- Identifier: get_ident
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- If
+- LeftParenthesis
+- This
+- Equals
+- "Null"
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "No ident\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- This
+- Period
+- Identifier: ident
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: get_ident
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: table_a
+- Period
+- Identifier: get_ident
+- NewSlot
+- Identifier: get_ident
+- Newline
+- Identifier: table_a
+- Period
+- Identifier: get_ident
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: table_b
+- Period
+- Identifier: get_ident
+- NewSlot
+- Identifier: get_ident
+- Newline
+- Identifier: table_b
+- Period
+- Identifier: get_ident
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- RawCall
+- LeftParenthesis
+- Identifier: get_ident
+- Comma
+- "Null"
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: arr
+- NewSlot
+- LeftSquareBracket
+- Identifier: get_ident
+- RightSquareBracket
+- Newline
+- Identifier: arr
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- LeftParenthesis
+- RightParenthesis

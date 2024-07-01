@@ -654,19 +654,16 @@ mod tests {
     test_foreach!(sample_test);
 
     fn sample_test(file_name: &str, file_contents: &str) {
+        let test_name = format!("parser-{}", file_name.replace("/", "-"));
+        let test_desc = format!("Parser test for {}", file_name);
+
         let actual_ast = match parse(file_contents, file_name.to_string()) {
             Ok(ast) => ast,
             Err(err) => panic!("{}", err),
         };
         #[cfg(not(miri))]
         {
-            let mut expect_strg = String::new();
-            let expect_ast = exchange_data("parser", file_name, &actual_ast, &mut expect_strg);
-
-            // TODO: Have a more useful comparison for these trees
-            if actual_ast != expect_ast {
-                panic!("ASTs do not match");
-            }
+            insta::assert_yaml_snapshot!(test_name, actual_ast, &test_desc);
         }
     }
 }

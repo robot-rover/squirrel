@@ -1,0 +1,349 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for squirrel_repo/array.nut
+---
+- Newline
+- Local
+- Identifier: n
+- Comma
+- Identifier: i
+- Comma
+- Identifier: k
+- Semicolon
+- Newline
+- Newline
+- Function
+- Identifier: print_array
+- LeftParenthesis
+- Identifier: name
+- Comma
+- Identifier: a
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: name
+- Plus
+- String: " = ["
+- RightParenthesis
+- Newline
+- For
+- LeftParenthesis
+- Identifier: i
+- Assign
+- Integer: 0
+- Semicolon
+- Identifier: i
+- LessThan
+- Identifier: a
+- Period
+- Identifier: len
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Identifier: i
+- PlusAssign
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Period
+- Identifier: tostring
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: i
+- LessThan
+- Identifier: a
+- Period
+- Identifier: len
+- LeftParenthesis
+- RightParenthesis
+- Minus
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: ", "
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "]\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- If
+- LeftParenthesis
+- Identifier: vargv
+- Period
+- Identifier: len
+- LeftParenthesis
+- RightParenthesis
+- DoesNotEqual
+- Integer: 0
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Identifier: n
+- Assign
+- Identifier: vargv
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Period
+- Identifier: tointeger
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: n
+- LessThan
+- Integer: 1
+- RightParenthesis
+- Identifier: n
+- Assign
+- Integer: 1
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Identifier: n
+- Assign
+- Integer: 1
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "n = "
+- Plus
+- Identifier: n
+- Period
+- Identifier: tostring
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: x
+- Assign
+- LeftSquareBracket
+- RightSquareBracket
+- Semicolon
+- Identifier: x
+- Period
+- Identifier: resize
+- LeftParenthesis
+- Identifier: n
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: y
+- Assign
+- LeftSquareBracket
+- RightSquareBracket
+- Semicolon
+- Identifier: y
+- Period
+- Identifier: resize
+- LeftParenthesis
+- Identifier: n
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- For
+- LeftParenthesis
+- Identifier: i
+- Assign
+- Integer: 0
+- Semicolon
+- Identifier: i
+- LessThan
+- Identifier: n
+- Semicolon
+- Identifier: i
+- PlusAssign
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Identifier: x
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Assign
+- Identifier: i
+- Plus
+- Integer: 1
+- Semicolon
+- Newline
+- Identifier: y
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Assign
+- Integer: 0
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: print_array
+- LeftParenthesis
+- String: x
+- Comma
+- Identifier: x
+- RightParenthesis
+- Newline
+- Identifier: print_array
+- LeftParenthesis
+- String: y
+- Comma
+- Identifier: y
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Integer: 0
+- LessThanEquals
+- Integer: 1
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- For
+- LeftParenthesis
+- Identifier: k
+- Assign
+- Integer: 0
+- Semicolon
+- Identifier: k
+- LessThan
+- Identifier: n
+- Semicolon
+- Identifier: k
+- PlusAssign
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- For
+- LeftParenthesis
+- Identifier: i
+- Assign
+- Identifier: n
+- Minus
+- Integer: 1
+- Semicolon
+- Identifier: i
+- GreaterThanEquals
+- Integer: 0
+- Semicolon
+- Identifier: i
+- MinusAssign
+- Integer: 1
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Identifier: y
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Assign
+- Identifier: y
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Plus
+- Identifier: x
+- LeftSquareBracket
+- Identifier: i
+- RightSquareBracket
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: print_array
+- LeftParenthesis
+- String: x
+- Comma
+- Identifier: x
+- RightParenthesis
+- Newline
+- Identifier: print_array
+- LeftParenthesis
+- String: y
+- Comma
+- Identifier: y
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: y
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Period
+- Identifier: tostring
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: " "
+- Plus
+- Identifier: y
+- LeftSquareBracket
+- Identifier: n
+- Minus
+- Integer: 1
+- RightSquareBracket
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline

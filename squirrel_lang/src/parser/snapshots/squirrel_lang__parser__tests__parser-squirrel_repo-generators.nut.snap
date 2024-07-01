@@ -1,0 +1,1035 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/generators.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - randtor
+    - 1
+  - - i
+    - 2
+  - - val
+    - 3
+num_locals: 4
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - gen_random
+                    - start: 113
+                      end: 123
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 104
+                        end: 112
+                      arg_span:
+                        start: 123
+                        end: 128
+                      num_args: 1
+                      default_expr: []
+                      local_names:
+                        - - max
+                          - 0
+                        - - last
+                          - 1
+                        - - IM
+                          - 2
+                        - - IA
+                          - 3
+                        - - IC
+                          - 4
+                      num_locals: 5
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 1
+                                          - start: 141
+                                            end: 145
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 42
+                                        span:
+                                          start: 146
+                                          end: 148
+                                      kind: Normal
+                                      op_span:
+                                        start: 145
+                                        end: 146
+                                  span:
+                                    start: 141
+                                    end: 148
+                              span:
+                                start: 141
+                                end: 148
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 2
+                                          - start: 159
+                                            end: 161
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 139968
+                                        span:
+                                          start: 164
+                                          end: 170
+                                      kind: Normal
+                                      op_span:
+                                        start: 162
+                                        end: 163
+                                  span:
+                                    start: 159
+                                    end: 170
+                              span:
+                                start: 159
+                                end: 170
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 3
+                                          - start: 182
+                                            end: 184
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 3877
+                                        span:
+                                          start: 187
+                                          end: 191
+                                      kind: Normal
+                                      op_span:
+                                        start: 185
+                                        end: 186
+                                  span:
+                                    start: 182
+                                    end: 191
+                              span:
+                                start: 182
+                                end: 191
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 4
+                                          - start: 203
+                                            end: 205
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 29573
+                                        span:
+                                          start: 208
+                                          end: 213
+                                      kind: Normal
+                                      op_span:
+                                        start: 206
+                                        end: 207
+                                  span:
+                                    start: 203
+                                    end: 213
+                              span:
+                                start: 203
+                                end: 213
+                            - data:
+                                For:
+                                  init:
+                                    data: Empty
+                                    span:
+                                      start: 0
+                                      end: 0
+                                  cond:
+                                    data:
+                                      Literal:
+                                        Integer: 1
+                                    span:
+                                      start: 224
+                                      end: 225
+                                  incr:
+                                    data: Empty
+                                    span:
+                                      start: 0
+                                      end: 0
+                                  body:
+                                    data:
+                                      Block:
+                                        - data:
+                                            Yield:
+                                              data:
+                                                BinaryOp:
+                                                  op: Div
+                                                  op_span:
+                                                    start: 297
+                                                    end: 298
+                                                  lhs:
+                                                    data:
+                                                      BinaryOp:
+                                                        op: Mul
+                                                        op_span:
+                                                          start: 264
+                                                          end: 265
+                                                        lhs:
+                                                          data:
+                                                            Local:
+                                                              - 0
+                                                              - start: 260
+                                                                end: 263
+                                                          span:
+                                                            start: 260
+                                                            end: 263
+                                                        rhs:
+                                                          data:
+                                                            Assign:
+                                                              target:
+                                                                Local:
+                                                                  - 1
+                                                                  - start: 267
+                                                                    end: 271
+                                                              value:
+                                                                data:
+                                                                  BinaryOp:
+                                                                    op: Mod
+                                                                    op_span:
+                                                                      start: 291
+                                                                      end: 292
+                                                                    lhs:
+                                                                      data:
+                                                                        BinaryOp:
+                                                                          op: Add
+                                                                          op_span:
+                                                                            start: 285
+                                                                            end: 286
+                                                                          lhs:
+                                                                            data:
+                                                                              BinaryOp:
+                                                                                op: Mul
+                                                                                op_span:
+                                                                                  start: 280
+                                                                                  end: 281
+                                                                                lhs:
+                                                                                  data:
+                                                                                    Local:
+                                                                                      - 1
+                                                                                      - start: 275
+                                                                                        end: 279
+                                                                                  span:
+                                                                                    start: 275
+                                                                                    end: 279
+                                                                                rhs:
+                                                                                  data:
+                                                                                    Local:
+                                                                                      - 3
+                                                                                      - start: 282
+                                                                                        end: 284
+                                                                                  span:
+                                                                                    start: 282
+                                                                                    end: 284
+                                                                            span:
+                                                                              start: 275
+                                                                              end: 284
+                                                                          rhs:
+                                                                            data:
+                                                                              Local:
+                                                                                - 4
+                                                                                - start: 287
+                                                                                  end: 289
+                                                                            span:
+                                                                              start: 287
+                                                                              end: 289
+                                                                      span:
+                                                                        start: 275
+                                                                        end: 289
+                                                                    rhs:
+                                                                      data:
+                                                                        Local:
+                                                                          - 2
+                                                                          - start: 293
+                                                                            end: 295
+                                                                      span:
+                                                                        start: 293
+                                                                        end: 295
+                                                                span:
+                                                                  start: 275
+                                                                  end: 295
+                                                              kind: Normal
+                                                              op_span:
+                                                                start: 272
+                                                                end: 273
+                                                          span:
+                                                            start: 267
+                                                            end: 295
+                                                    span:
+                                                      start: 260
+                                                      end: 295
+                                                  rhs:
+                                                    data:
+                                                      Local:
+                                                        - 2
+                                                        - start: 299
+                                                          end: 301
+                                                    span:
+                                                      start: 299
+                                                      end: 301
+                                              span:
+                                                start: 260
+                                                end: 301
+                                          span:
+                                            start: 253
+                                            end: 301
+                                    span:
+                                      start: 0
+                                      end: 309
+                              span:
+                                start: 0
+                                end: 309
+                        span:
+                          start: 0
+                          end: 311
+                  span:
+                    start: 0
+                    end: 311
+                kind: NewSlot
+                op_span:
+                  start: 104
+                  end: 112
+            span:
+              start: 0
+              end: 311
+        span:
+          start: 0
+          end: 311
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 319
+                      end: 326
+                value:
+                  data:
+                    FunctionCall:
+                      func:
+                        Expr:
+                          data:
+                            Ident: gen_random
+                          span:
+                            start: 327
+                            end: 337
+                      args:
+                        - data:
+                            Literal:
+                              Integer: 100
+                          span:
+                            start: 338
+                            end: 341
+                  span:
+                    start: 337
+                    end: 342
+                kind: Normal
+                op_span:
+                  start: 326
+                  end: 327
+            span:
+              start: 319
+              end: 342
+        span:
+          start: 319
+          end: 342
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: 345
+                      end: 350
+                args:
+                  - data:
+                      Literal:
+                        String: "RAND NUMBERS \n"
+                    span:
+                      start: 351
+                      end: 368
+            span:
+              start: 350
+              end: 369
+        span:
+          start: 350
+          end: 369
+      - data:
+          For:
+            init:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 2
+                          - start: 381
+                            end: 382
+                      value:
+                        data:
+                          Literal:
+                            Integer: 0
+                        span:
+                          start: 383
+                          end: 384
+                      kind: Normal
+                      op_span:
+                        start: 382
+                        end: 383
+                  span:
+                    start: 381
+                    end: 384
+              span:
+                start: 381
+                end: 384
+            cond:
+              data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 386
+                    end: 387
+                  lhs:
+                    data:
+                      Local:
+                        - 2
+                        - start: 385
+                          end: 386
+                    span:
+                      start: 385
+                      end: 386
+                  rhs:
+                    data:
+                      Literal:
+                        Integer: 10
+                    span:
+                      start: 387
+                      end: 389
+              span:
+                start: 385
+                end: 389
+            incr:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 2
+                          - start: 390
+                            end: 391
+                      value:
+                        data:
+                          Literal:
+                            Integer: 1
+                        span:
+                          start: 393
+                          end: 394
+                      kind: Add
+                      op_span:
+                        start: 391
+                        end: 393
+                  span:
+                    start: 390
+                    end: 394
+              span:
+                start: 390
+                end: 394
+            body:
+              data:
+                Expr:
+                  data:
+                    FunctionCall:
+                      func:
+                        Expr:
+                          data:
+                            Ident: print
+                          span:
+                            start: 400
+                            end: 405
+                      args:
+                        - data:
+                            BinaryOp:
+                              op: Add
+                              op_span:
+                                start: 424
+                                end: 425
+                              lhs:
+                                data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 409
+                                      end: 410
+                                    lhs:
+                                      data:
+                                        Literal:
+                                          String: ">"
+                                      span:
+                                        start: 406
+                                        end: 409
+                                    rhs:
+                                      data:
+                                        UnaryOp:
+                                          - Resume
+                                          - start: 410
+                                            end: 416
+                                          - data:
+                                              Local:
+                                                - 1
+                                                - start: 417
+                                                  end: 424
+                                            span:
+                                              start: 417
+                                              end: 424
+                                      span:
+                                        start: 410
+                                        end: 424
+                                span:
+                                  start: 406
+                                  end: 424
+                              rhs:
+                                data:
+                                  Literal:
+                                    String: "\n"
+                                span:
+                                  start: 425
+                                  end: 429
+                          span:
+                            start: 406
+                            end: 429
+                  span:
+                    start: 405
+                    end: 430
+              span:
+                start: 405
+                end: 430
+        span:
+          start: 371
+          end: 430
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: 433
+                      end: 438
+                args:
+                  - data:
+                      Literal:
+                        String: "FIBONACCI \n"
+                    span:
+                      start: 439
+                      end: 453
+            span:
+              start: 438
+              end: 454
+        span:
+          start: 438
+          end: 454
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - fiboz
+                    - start: 464
+                      end: 469
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 455
+                        end: 463
+                      arg_span:
+                        start: 469
+                        end: 472
+                      num_args: 1
+                      default_expr: []
+                      local_names:
+                        - - n
+                          - 0
+                        - - prev
+                          - 1
+                        - - curr
+                          - 2
+                        - - i
+                          - 3
+                        - - res
+                          - 4
+                      num_locals: 5
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 1
+                                          - start: 485
+                                            end: 489
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 0
+                                        span:
+                                          start: 490
+                                          end: 491
+                                      kind: Normal
+                                      op_span:
+                                        start: 489
+                                        end: 490
+                                  span:
+                                    start: 485
+                                    end: 491
+                              span:
+                                start: 485
+                                end: 491
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 2
+                                          - start: 503
+                                            end: 507
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 1
+                                        span:
+                                          start: 508
+                                          end: 509
+                                      kind: Normal
+                                      op_span:
+                                        start: 507
+                                        end: 508
+                                  span:
+                                    start: 503
+                                    end: 509
+                              span:
+                                start: 503
+                                end: 509
+                            - data:
+                                Yield:
+                                  data:
+                                    Literal:
+                                      Integer: 1
+                                  span:
+                                    start: 521
+                                    end: 522
+                              span:
+                                start: 515
+                                end: 522
+                            - data:
+                                For:
+                                  init:
+                                    data:
+                                      Expr:
+                                        data:
+                                          Assign:
+                                            target:
+                                              Local:
+                                                - 3
+                                                - start: 539
+                                                  end: 540
+                                            value:
+                                              data:
+                                                Literal:
+                                                  Integer: 0
+                                              span:
+                                                start: 541
+                                                end: 542
+                                            kind: Normal
+                                            op_span:
+                                              start: 540
+                                              end: 541
+                                        span:
+                                          start: 539
+                                          end: 542
+                                    span:
+                                      start: 539
+                                      end: 542
+                                  cond:
+                                    data:
+                                      BinaryOp:
+                                        op: Less
+                                        op_span:
+                                          start: 544
+                                          end: 545
+                                        lhs:
+                                          data:
+                                            Local:
+                                              - 3
+                                              - start: 543
+                                                end: 544
+                                          span:
+                                            start: 543
+                                            end: 544
+                                        rhs:
+                                          data:
+                                            BinaryOp:
+                                              op: Sub
+                                              op_span:
+                                                start: 546
+                                                end: 547
+                                              lhs:
+                                                data:
+                                                  Local:
+                                                    - 0
+                                                    - start: 545
+                                                      end: 546
+                                                span:
+                                                  start: 545
+                                                  end: 546
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    Integer: 1
+                                                span:
+                                                  start: 547
+                                                  end: 548
+                                          span:
+                                            start: 545
+                                            end: 548
+                                    span:
+                                      start: 543
+                                      end: 548
+                                  incr:
+                                    data:
+                                      Expr:
+                                        data:
+                                          Assign:
+                                            target:
+                                              Local:
+                                                - 3
+                                                - start: 549
+                                                  end: 550
+                                            value:
+                                              data:
+                                                Literal:
+                                                  Integer: 1
+                                              span:
+                                                start: 552
+                                                end: 553
+                                            kind: Add
+                                            op_span:
+                                              start: 550
+                                              end: 552
+                                        span:
+                                          start: 549
+                                          end: 553
+                                    span:
+                                      start: 549
+                                      end: 553
+                                  body:
+                                    data:
+                                      Block:
+                                        - data:
+                                            Expr:
+                                              data:
+                                                Assign:
+                                                  target:
+                                                    Local:
+                                                      - 4
+                                                      - start: 575
+                                                        end: 578
+                                                  value:
+                                                    data:
+                                                      BinaryOp:
+                                                        op: Add
+                                                        op_span:
+                                                          start: 583
+                                                          end: 584
+                                                        lhs:
+                                                          data:
+                                                            Local:
+                                                              - 1
+                                                              - start: 579
+                                                                end: 583
+                                                          span:
+                                                            start: 579
+                                                            end: 583
+                                                        rhs:
+                                                          data:
+                                                            Local:
+                                                              - 2
+                                                              - start: 584
+                                                                end: 588
+                                                          span:
+                                                            start: 584
+                                                            end: 588
+                                                    span:
+                                                      start: 579
+                                                      end: 588
+                                                  kind: Normal
+                                                  op_span:
+                                                    start: 578
+                                                    end: 579
+                                              span:
+                                                start: 575
+                                                end: 588
+                                          span:
+                                            start: 575
+                                            end: 588
+                                        - data:
+                                            Expr:
+                                              data:
+                                                Assign:
+                                                  target:
+                                                    Local:
+                                                      - 1
+                                                      - start: 598
+                                                        end: 602
+                                                  value:
+                                                    data:
+                                                      Local:
+                                                        - 2
+                                                        - start: 603
+                                                          end: 607
+                                                    span:
+                                                      start: 603
+                                                      end: 607
+                                                  kind: Normal
+                                                  op_span:
+                                                    start: 602
+                                                    end: 603
+                                              span:
+                                                start: 598
+                                                end: 607
+                                          span:
+                                            start: 598
+                                            end: 607
+                                        - data:
+                                            Yield:
+                                              data:
+                                                Assign:
+                                                  target:
+                                                    Local:
+                                                      - 2
+                                                      - start: 623
+                                                        end: 627
+                                                  value:
+                                                    data:
+                                                      Local:
+                                                        - 4
+                                                        - start: 628
+                                                          end: 631
+                                                    span:
+                                                      start: 628
+                                                      end: 631
+                                                  kind: Normal
+                                                  op_span:
+                                                    start: 627
+                                                    end: 628
+                                              span:
+                                                start: 623
+                                                end: 631
+                                          span:
+                                            start: 617
+                                            end: 631
+                                    span:
+                                      start: 0
+                                      end: 638
+                              span:
+                                start: 0
+                                end: 638
+                            - data:
+                                Return:
+                                  data:
+                                    BinaryOp:
+                                      op: Add
+                                      op_span:
+                                        start: 654
+                                        end: 655
+                                      lhs:
+                                        data:
+                                          Local:
+                                            - 1
+                                            - start: 650
+                                              end: 654
+                                        span:
+                                          start: 650
+                                          end: 654
+                                      rhs:
+                                        data:
+                                          Local:
+                                            - 2
+                                            - start: 655
+                                              end: 659
+                                        span:
+                                          start: 655
+                                          end: 659
+                                  span:
+                                    start: 650
+                                    end: 659
+                              span:
+                                start: 643
+                                end: 659
+                        span:
+                          start: 0
+                          end: 662
+                  span:
+                    start: 0
+                    end: 662
+                kind: NewSlot
+                op_span:
+                  start: 455
+                  end: 463
+            span:
+              start: 0
+              end: 662
+        span:
+          start: 0
+          end: 662
+      - data:
+          Foreach:
+            index_idx: ~
+            value_idx: 3
+            iterable:
+              data:
+                FunctionCall:
+                  func:
+                    Expr:
+                      data:
+                        Ident: fiboz
+                      span:
+                        start: 679
+                        end: 684
+                  args:
+                    - data:
+                        Literal:
+                          Integer: 10
+                      span:
+                        start: 685
+                        end: 687
+              span:
+                start: 684
+                end: 688
+            body:
+              data:
+                Block:
+                  - data:
+                      Expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data: Globals
+                                  span:
+                                    start: 696
+                                    end: 698
+                                - - print
+                                  - start: 698
+                                    end: 703
+                            args:
+                              - data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: 711
+                                      end: 712
+                                    lhs:
+                                      data:
+                                        BinaryOp:
+                                          op: Add
+                                          op_span:
+                                            start: 707
+                                            end: 708
+                                          lhs:
+                                            data:
+                                              Literal:
+                                                String: ">"
+                                            span:
+                                              start: 704
+                                              end: 707
+                                          rhs:
+                                            data:
+                                              Local:
+                                                - 3
+                                                - start: 708
+                                                  end: 711
+                                            span:
+                                              start: 708
+                                              end: 711
+                                      span:
+                                        start: 704
+                                        end: 711
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: "\n"
+                                      span:
+                                        start: 712
+                                        end: 716
+                                span:
+                                  start: 704
+                                  end: 716
+                        span:
+                          start: 703
+                          end: 717
+                    span:
+                      start: 703
+                      end: 717
+              span:
+                start: 0
+                end: 720
+        span:
+          start: 0
+          end: 720
+  span:
+    start: 0
+    end: 720

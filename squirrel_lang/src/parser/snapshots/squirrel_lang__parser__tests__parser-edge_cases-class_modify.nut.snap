@@ -1,0 +1,141 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for edge_cases/class_modify.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - fooinst
+    - 1
+num_locals: 2
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - Foo
+                    - start: 6
+                      end: 9
+                value:
+                  data:
+                    ClassDef:
+                      parent: ~
+                      members:
+                        - - data:
+                              Literal:
+                                String: a
+                            span:
+                              start: 16
+                              end: 17
+                          - data:
+                              Literal:
+                                Integer: 0
+                            span:
+                              start: 20
+                              end: 21
+                        - - data:
+                              Literal:
+                                String: b
+                            span:
+                              start: 26
+                              end: 27
+                          - data:
+                              Literal:
+                                Integer: 0
+                            span:
+                              start: 30
+                              end: 31
+                  span:
+                    start: 0
+                    end: 33
+                kind: NewSlot
+                op_span:
+                  start: 0
+                  end: 5
+            span:
+              start: 0
+              end: 33
+        span:
+          start: 0
+          end: 33
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  FieldAccess:
+                    - data:
+                        Ident: Foo
+                      span:
+                        start: 35
+                        end: 38
+                    - - c
+                      - start: 39
+                        end: 40
+                value:
+                  data:
+                    Literal:
+                      Integer: 0
+                  span:
+                    start: 44
+                    end: 45
+                kind: NewSlot
+                op_span:
+                  start: 41
+                  end: 43
+            span:
+              start: 35
+              end: 45
+        span:
+          start: 35
+          end: 45
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 53
+                      end: 60
+                value:
+                  data:
+                    FunctionCall:
+                      func:
+                        Expr:
+                          data:
+                            Ident: Foo
+                          span:
+                            start: 63
+                            end: 66
+                      args: []
+                  span:
+                    start: 66
+                    end: 68
+                kind: Normal
+                op_span:
+                  start: 61
+                  end: 62
+            span:
+              start: 53
+              end: 68
+        span:
+          start: 53
+          end: 68
+  span:
+    start: 0
+    end: 68

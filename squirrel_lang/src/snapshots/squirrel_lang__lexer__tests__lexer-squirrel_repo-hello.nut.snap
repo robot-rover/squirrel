@@ -1,0 +1,9 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for squirrel_repo/hello.nut
+---
+- Identifier: print
+- LeftParenthesis
+- String: Hello World!
+- RightParenthesis
+- Newline

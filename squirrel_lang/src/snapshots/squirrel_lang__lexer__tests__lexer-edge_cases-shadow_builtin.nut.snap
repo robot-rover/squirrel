@@ -1,0 +1,34 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/shadow_builtin.nut
+---
+- Identifier: table
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Function
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: delegate
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Just a test\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: table
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis

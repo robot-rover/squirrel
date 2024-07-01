@@ -1,7 +1,0 @@
-PrintTesty
-	test = string
-testy
-	flippy = integer
-	second = array
-constructor
-	<no attributes>

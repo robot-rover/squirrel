@@ -1,0 +1,618 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for edge_cases/inherit_env.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+num_locals: 1
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - parent
+                    - start: 9
+                      end: 15
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 0
+                        end: 8
+                      arg_span:
+                        start: 15
+                        end: 17
+                      num_args: 0
+                      default_expr: []
+                      local_names:
+                        - - child
+                          - 0
+                      num_locals: 1
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 0
+                                          - start: 30
+                                            end: 35
+                                      value:
+                                        data:
+                                          FunctionDef:
+                                            keyword_span:
+                                              start: 38
+                                              end: 46
+                                            arg_span:
+                                              start: 46
+                                              end: 48
+                                            num_args: 0
+                                            default_expr: []
+                                            local_names: []
+                                            num_locals: 0
+                                            upvalues: []
+                                            is_varargs: false
+                                            body:
+                                              data:
+                                                Block:
+                                                  - data:
+                                                      IfElse:
+                                                        - data:
+                                                            BinaryOp:
+                                                              op: NotEq
+                                                              op_span:
+                                                                start: 68
+                                                                end: 70
+                                                              lhs:
+                                                                data: This
+                                                                span:
+                                                                  start: 63
+                                                                  end: 67
+                                                              rhs:
+                                                                data:
+                                                                  Literal: "Null"
+                                                                span:
+                                                                  start: 71
+                                                                  end: 75
+                                                          span:
+                                                            start: 63
+                                                            end: 75
+                                                        - data:
+                                                            Block:
+                                                              - data:
+                                                                  Expr:
+                                                                    data:
+                                                                      Assign:
+                                                                        target:
+                                                                          Ident:
+                                                                            - a
+                                                                            - start: 91
+                                                                              end: 92
+                                                                        value:
+                                                                          data:
+                                                                            Literal:
+                                                                              String: test
+                                                                          span:
+                                                                            start: 96
+                                                                            end: 102
+                                                                        kind: NewSlot
+                                                                        op_span:
+                                                                          start: 93
+                                                                          end: 95
+                                                                    span:
+                                                                      start: 91
+                                                                      end: 102
+                                                                span:
+                                                                  start: 91
+                                                                  end: 102
+                                                          span:
+                                                            start: 0
+                                                            end: 112
+                                                        - data: Empty
+                                                          span:
+                                                            start: 0
+                                                            end: 0
+                                                    span:
+                                                      start: 0
+                                                      end: 112
+                                                  - data:
+                                                      Return:
+                                                        data: This
+                                                        span:
+                                                          start: 128
+                                                          end: 132
+                                                    span:
+                                                      start: 121
+                                                      end: 132
+                                              span:
+                                                start: 0
+                                                end: 138
+                                        span:
+                                          start: 0
+                                          end: 138
+                                      kind: Normal
+                                      op_span:
+                                        start: 36
+                                        end: 37
+                                  span:
+                                    start: 0
+                                    end: 138
+                              span:
+                                start: 0
+                                end: 138
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data: Globals
+                                            span:
+                                              start: 143
+                                              end: 145
+                                          - - print
+                                            - start: 145
+                                              end: 150
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: 156
+                                                end: 157
+                                              lhs:
+                                                data: This
+                                                span:
+                                                  start: 151
+                                                  end: 155
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: 158
+                                                  end: 162
+                                          span:
+                                            start: 151
+                                            end: 162
+                                  span:
+                                    start: 150
+                                    end: 163
+                              span:
+                                start: 150
+                                end: 163
+                            - data:
+                                Return:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data:
+                                              Local:
+                                                - 0
+                                                - start: 175
+                                                  end: 180
+                                            span:
+                                              start: 175
+                                              end: 180
+                                          - - bindenv
+                                            - start: 181
+                                              end: 188
+                                      args:
+                                        - data:
+                                            TableDecl: []
+                                          span:
+                                            start: 189
+                                            end: 191
+                                  span:
+                                    start: 188
+                                    end: 192
+                              span:
+                                start: 168
+                                end: 192
+                        span:
+                          start: 0
+                          end: 194
+                  span:
+                    start: 0
+                    end: 194
+                kind: NewSlot
+                op_span:
+                  start: 0
+                  end: 8
+            span:
+              start: 0
+              end: 194
+        span:
+          start: 0
+          end: 194
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 196
+                        end: 198
+                    - - print
+                      - start: 198
+                        end: 203
+                args:
+                  - data:
+                      Literal:
+                        String: "First, the root table\n"
+                    span:
+                      start: 204
+                      end: 229
+            span:
+              start: 203
+              end: 230
+        span:
+          start: 203
+          end: 230
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 231
+                        end: 233
+                    - - print
+                      - start: 233
+                        end: 238
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 254
+                          end: 255
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                Expr:
+                                  data:
+                                    Ident: getroottable
+                                  span:
+                                    start: 239
+                                    end: 251
+                              args: []
+                          span:
+                            start: 251
+                            end: 253
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 256
+                            end: 260
+                    span:
+                      start: 251
+                      end: 260
+            span:
+              start: 238
+              end: 261
+        span:
+          start: 238
+          end: 261
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 262
+                        end: 264
+                    - - print
+                      - start: 264
+                        end: 269
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 281
+                          end: 282
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        Expr:
+                                          data:
+                                            Ident: parent
+                                          span:
+                                            start: 270
+                                            end: 276
+                                      args: []
+                                  span:
+                                    start: 276
+                                    end: 278
+                              args: []
+                          span:
+                            start: 278
+                            end: 280
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 283
+                            end: 287
+                    span:
+                      start: 278
+                      end: 287
+            span:
+              start: 269
+              end: 288
+        span:
+          start: 269
+          end: 288
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 289
+                        end: 291
+                    - - print
+                      - start: 291
+                        end: 296
+                args:
+                  - data:
+                      Literal:
+                        String: "\n"
+                    span:
+                      start: 297
+                      end: 301
+            span:
+              start: 296
+              end: 302
+        span:
+          start: 296
+          end: 302
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - table
+                    - start: 304
+                      end: 309
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: parent
+                          span:
+                            start: 319
+                            end: 325
+                        - data:
+                            FunctionCall:
+                              func:
+                                FieldAccess:
+                                  - data:
+                                      Ident: parent
+                                    span:
+                                      start: 328
+                                      end: 334
+                                  - - bindenv
+                                    - start: 335
+                                      end: 342
+                              args:
+                                - data:
+                                    TableDecl: []
+                                  span:
+                                    start: 343
+                                    end: 345
+                          span:
+                            start: 342
+                            end: 346
+                  span:
+                    start: 313
+                    end: 348
+                kind: NewSlot
+                op_span:
+                  start: 310
+                  end: 312
+            span:
+              start: 304
+              end: 348
+        span:
+          start: 304
+          end: 348
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 350
+                        end: 352
+                    - - print
+                      - start: 352
+                        end: 357
+                args:
+                  - data:
+                      Literal:
+                        String: "Now, a table with a parent function\n"
+                    span:
+                      start: 358
+                      end: 397
+            span:
+              start: 357
+              end: 398
+        span:
+          start: 357
+          end: 398
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 399
+                        end: 401
+                    - - print
+                      - start: 401
+                        end: 406
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 413
+                          end: 414
+                        lhs:
+                          data:
+                            Ident: table
+                          span:
+                            start: 407
+                            end: 412
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 415
+                            end: 419
+                    span:
+                      start: 407
+                      end: 419
+            span:
+              start: 406
+              end: 420
+        span:
+          start: 406
+          end: 420
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 421
+                        end: 423
+                    - - print
+                      - start: 423
+                        end: 428
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: 446
+                          end: 447
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data:
+                                              Ident: table
+                                            span:
+                                              start: 429
+                                              end: 434
+                                          - - parent
+                                            - start: 435
+                                              end: 441
+                                      args: []
+                                  span:
+                                    start: 441
+                                    end: 443
+                              args: []
+                          span:
+                            start: 443
+                            end: 445
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: 448
+                            end: 452
+                    span:
+                      start: 443
+                      end: 452
+            span:
+              start: 428
+              end: 453
+        span:
+          start: 428
+          end: 453
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: 454
+                        end: 456
+                    - - print
+                      - start: 456
+                        end: 461
+                args:
+                  - data:
+                      Literal:
+                        String: "\n"
+                    span:
+                      start: 462
+                      end: 466
+            span:
+              start: 461
+              end: 467
+        span:
+          start: 461
+          end: 467
+  span:
+    start: 0
+    end: 467

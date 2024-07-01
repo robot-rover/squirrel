@@ -1,0 +1,1070 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: Parser test for squirrel_repo/list.nut
+---
+keyword_span:
+  start: 0
+  end: 0
+arg_span:
+  start: 0
+  end: 0
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - n
+    - 1
+  - - i
+    - 2
+num_locals: 3
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - compare_arr
+                    - start: 86
+                      end: 97
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 77
+                        end: 85
+                      arg_span:
+                        start: 97
+                        end: 104
+                      num_args: 2
+                      default_expr: []
+                      local_names:
+                        - - a1
+                          - 0
+                        - - a2
+                          - 1
+                        - - i
+                          - 2
+                        - - val
+                          - 3
+                      num_locals: 4
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Foreach:
+                                  index_idx: 2
+                                  value_idx: 3
+                                  iterable:
+                                    data:
+                                      Local:
+                                        - 0
+                                        - start: 128
+                                          end: 130
+                                    span:
+                                      start: 128
+                                      end: 130
+                                  body:
+                                    data:
+                                      IfElse:
+                                        - data:
+                                            BinaryOp:
+                                              op: NotEq
+                                              op_span:
+                                                start: 146
+                                                end: 148
+                                              lhs:
+                                                data:
+                                                  Local:
+                                                    - 3
+                                                    - start: 143
+                                                      end: 146
+                                                span:
+                                                  start: 143
+                                                  end: 146
+                                              rhs:
+                                                data:
+                                                  ArrayAccess:
+                                                    array:
+                                                      data:
+                                                        Local:
+                                                          - 1
+                                                          - start: 148
+                                                            end: 150
+                                                      span:
+                                                        start: 148
+                                                        end: 150
+                                                    index:
+                                                      data:
+                                                        Local:
+                                                          - 2
+                                                          - start: 151
+                                                            end: 152
+                                                      span:
+                                                        start: 151
+                                                        end: 152
+                                                span:
+                                                  start: 150
+                                                  end: 153
+                                          span:
+                                            start: 143
+                                            end: 153
+                                        - data:
+                                            Return:
+                                              data:
+                                                Literal: "Null"
+                                              span:
+                                                start: 161
+                                                end: 165
+                                          span:
+                                            start: 154
+                                            end: 165
+                                        - data: Empty
+                                          span:
+                                            start: 0
+                                            end: 0
+                                    span:
+                                      start: 0
+                                      end: 165
+                              span:
+                                start: 0
+                                end: 165
+                            - data:
+                                Return:
+                                  data:
+                                    Literal:
+                                      Integer: 1
+                                  span:
+                                    start: 178
+                                    end: 179
+                              span:
+                                start: 171
+                                end: 179
+                        span:
+                          start: 0
+                          end: 182
+                  span:
+                    start: 0
+                    end: 182
+                kind: NewSlot
+                op_span:
+                  start: 77
+                  end: 85
+            span:
+              start: 0
+              end: 182
+        span:
+          start: 0
+          end: 182
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - test
+                    - start: 193
+                      end: 197
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: 184
+                        end: 192
+                      arg_span:
+                        start: 197
+                        end: 199
+                      num_args: 0
+                      default_expr: []
+                      local_names:
+                        - - size
+                          - 0
+                        - - l1
+                          - 1
+                        - - i
+                          - 2
+                        - - l2
+                          - 3
+                        - - l3
+                          - 4
+                      num_locals: 5
+                      upvalues: []
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 0
+                                          - start: 270
+                                            end: 274
+                                      value:
+                                        data:
+                                          Literal:
+                                            Integer: 10
+                                        span:
+                                          start: 275
+                                          end: 277
+                                      kind: Normal
+                                      op_span:
+                                        start: 274
+                                        end: 275
+                                  span:
+                                    start: 270
+                                    end: 277
+                              span:
+                                start: 270
+                                end: 277
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 1
+                                          - start: 288
+                                            end: 290
+                                      value:
+                                        data:
+                                          ArrayDecl: []
+                                        span:
+                                          start: 291
+                                          end: 293
+                                      kind: Normal
+                                      op_span:
+                                        start: 290
+                                        end: 291
+                                  span:
+                                    start: 288
+                                    end: 293
+                              span:
+                                start: 288
+                                end: 293
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data:
+                                              Local:
+                                                - 1
+                                                - start: 295
+                                                  end: 297
+                                            span:
+                                              start: 295
+                                              end: 297
+                                          - - resize
+                                            - start: 298
+                                              end: 304
+                                      args:
+                                        - data:
+                                            Local:
+                                              - 0
+                                              - start: 305
+                                                end: 309
+                                          span:
+                                            start: 305
+                                            end: 309
+                                  span:
+                                    start: 304
+                                    end: 310
+                              span:
+                                start: 304
+                                end: 310
+                            - data:
+                                For:
+                                  init:
+                                    data:
+                                      Expr:
+                                        data:
+                                          Assign:
+                                            target:
+                                              Local:
+                                                - 2
+                                                - start: 326
+                                                  end: 327
+                                            value:
+                                              data:
+                                                Literal:
+                                                  Integer: 0
+                                              span:
+                                                start: 328
+                                                end: 329
+                                            kind: Normal
+                                            op_span:
+                                              start: 327
+                                              end: 328
+                                        span:
+                                          start: 326
+                                          end: 329
+                                    span:
+                                      start: 326
+                                      end: 329
+                                  cond:
+                                    data:
+                                      BinaryOp:
+                                        op: Less
+                                        op_span:
+                                          start: 331
+                                          end: 332
+                                        lhs:
+                                          data:
+                                            Local:
+                                              - 2
+                                              - start: 330
+                                                end: 331
+                                          span:
+                                            start: 330
+                                            end: 331
+                                        rhs:
+                                          data:
+                                            Local:
+                                              - 0
+                                              - start: 332
+                                                end: 336
+                                          span:
+                                            start: 332
+                                            end: 336
+                                    span:
+                                      start: 330
+                                      end: 336
+                                  incr:
+                                    data:
+                                      Expr:
+                                        data:
+                                          Assign:
+                                            target:
+                                              Local:
+                                                - 2
+                                                - start: 337
+                                                  end: 338
+                                            value:
+                                              data:
+                                                Literal:
+                                                  Integer: 1
+                                              span:
+                                                start: 340
+                                                end: 341
+                                            kind: Add
+                                            op_span:
+                                              start: 338
+                                              end: 340
+                                        span:
+                                          start: 337
+                                          end: 341
+                                    span:
+                                      start: 337
+                                      end: 341
+                                  body:
+                                    data:
+                                      Expr:
+                                        data:
+                                          Assign:
+                                            target:
+                                              ArrayAccess:
+                                                array:
+                                                  data:
+                                                    Local:
+                                                      - 1
+                                                      - start: 343
+                                                        end: 345
+                                                  span:
+                                                    start: 343
+                                                    end: 345
+                                                index:
+                                                  data:
+                                                    Local:
+                                                      - 2
+                                                      - start: 346
+                                                        end: 347
+                                                  span:
+                                                    start: 346
+                                                    end: 347
+                                                span:
+                                                  start: 345
+                                                  end: 348
+                                            value:
+                                              data:
+                                                Local:
+                                                  - 2
+                                                  - start: 349
+                                                    end: 350
+                                              span:
+                                                start: 349
+                                                end: 350
+                                            kind: Normal
+                                            op_span:
+                                              start: 348
+                                              end: 349
+                                        span:
+                                          start: 345
+                                          end: 350
+                                    span:
+                                      start: 345
+                                      end: 350
+                              span:
+                                start: 316
+                                end: 350
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 3
+                                          - start: 362
+                                            end: 364
+                                      value:
+                                        data:
+                                          UnaryOp:
+                                            - Clone
+                                            - start: 365
+                                              end: 370
+                                            - data:
+                                                Local:
+                                                  - 1
+                                                  - start: 371
+                                                    end: 373
+                                              span:
+                                                start: 371
+                                                end: 373
+                                        span:
+                                          start: 365
+                                          end: 373
+                                      kind: Normal
+                                      op_span:
+                                        start: 364
+                                        end: 365
+                                  span:
+                                    start: 362
+                                    end: 373
+                              span:
+                                start: 362
+                                end: 373
+                            - data:
+                                Expr:
+                                  data:
+                                    Assign:
+                                      target:
+                                        Local:
+                                          - 4
+                                          - start: 385
+                                            end: 387
+                                      value:
+                                        data:
+                                          ArrayDecl: []
+                                        span:
+                                          start: 388
+                                          end: 390
+                                      kind: Normal
+                                      op_span:
+                                        start: 387
+                                        end: 388
+                                  span:
+                                    start: 385
+                                    end: 390
+                              span:
+                                start: 385
+                                end: 390
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data:
+                                              Local:
+                                                - 3
+                                                - start: 396
+                                                  end: 398
+                                            span:
+                                              start: 396
+                                              end: 398
+                                          - - reverse
+                                            - start: 399
+                                              end: 406
+                                      args: []
+                                  span:
+                                    start: 406
+                                    end: 408
+                              span:
+                                start: 406
+                                end: 408
+                            - data:
+                                While:
+                                  - data:
+                                      BinaryOp:
+                                        op: Greater
+                                        op_span:
+                                          start: 428
+                                          end: 429
+                                        lhs:
+                                          data:
+                                            FunctionCall:
+                                              func:
+                                                FieldAccess:
+                                                  - data:
+                                                      Local:
+                                                        - 3
+                                                        - start: 420
+                                                          end: 422
+                                                    span:
+                                                      start: 420
+                                                      end: 422
+                                                  - - len
+                                                    - start: 423
+                                                      end: 426
+                                              args: []
+                                          span:
+                                            start: 426
+                                            end: 428
+                                        rhs:
+                                          data:
+                                            Literal:
+                                              Integer: 0
+                                          span:
+                                            start: 429
+                                            end: 430
+                                    span:
+                                      start: 426
+                                      end: 430
+                                  - data:
+                                      Expr:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data:
+                                                    Local:
+                                                      - 4
+                                                      - start: 440
+                                                        end: 442
+                                                  span:
+                                                    start: 440
+                                                    end: 442
+                                                - - append
+                                                  - start: 443
+                                                    end: 449
+                                            args:
+                                              - data:
+                                                  FunctionCall:
+                                                    func:
+                                                      FieldAccess:
+                                                        - data:
+                                                            Local:
+                                                              - 3
+                                                              - start: 450
+                                                                end: 452
+                                                          span:
+                                                            start: 450
+                                                            end: 452
+                                                        - - pop
+                                                          - start: 453
+                                                            end: 456
+                                                    args: []
+                                                span:
+                                                  start: 456
+                                                  end: 458
+                                        span:
+                                          start: 449
+                                          end: 459
+                                    span:
+                                      start: 449
+                                      end: 459
+                              span:
+                                start: 414
+                                end: 459
+                            - data:
+                                While:
+                                  - data:
+                                      BinaryOp:
+                                        op: Greater
+                                        op_span:
+                                          start: 479
+                                          end: 480
+                                        lhs:
+                                          data:
+                                            FunctionCall:
+                                              func:
+                                                FieldAccess:
+                                                  - data:
+                                                      Local:
+                                                        - 4
+                                                        - start: 471
+                                                          end: 473
+                                                    span:
+                                                      start: 471
+                                                      end: 473
+                                                  - - len
+                                                    - start: 474
+                                                      end: 477
+                                              args: []
+                                          span:
+                                            start: 477
+                                            end: 479
+                                        rhs:
+                                          data:
+                                            Literal:
+                                              Integer: 0
+                                          span:
+                                            start: 480
+                                            end: 481
+                                    span:
+                                      start: 477
+                                      end: 481
+                                  - data:
+                                      Expr:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data:
+                                                    Local:
+                                                      - 3
+                                                      - start: 491
+                                                        end: 493
+                                                  span:
+                                                    start: 491
+                                                    end: 493
+                                                - - append
+                                                  - start: 494
+                                                    end: 500
+                                            args:
+                                              - data:
+                                                  FunctionCall:
+                                                    func:
+                                                      FieldAccess:
+                                                        - data:
+                                                            Local:
+                                                              - 4
+                                                              - start: 501
+                                                                end: 503
+                                                          span:
+                                                            start: 501
+                                                            end: 503
+                                                        - - pop
+                                                          - start: 504
+                                                            end: 507
+                                                    args: []
+                                                span:
+                                                  start: 507
+                                                  end: 509
+                                        span:
+                                          start: 500
+                                          end: 510
+                                    span:
+                                      start: 500
+                                      end: 510
+                              span:
+                                start: 465
+                                end: 510
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        FieldAccess:
+                                          - data:
+                                              Local:
+                                                - 1
+                                                - start: 516
+                                                  end: 518
+                                            span:
+                                              start: 516
+                                              end: 518
+                                          - - reverse
+                                            - start: 519
+                                              end: 526
+                                      args: []
+                                  span:
+                                    start: 526
+                                    end: 528
+                              span:
+                                start: 526
+                                end: 528
+                            - data:
+                                IfElse:
+                                  - data:
+                                      FunctionCall:
+                                        func:
+                                          Expr:
+                                            data:
+                                              Ident: compare_arr
+                                            span:
+                                              start: 538
+                                              end: 549
+                                        args:
+                                          - data:
+                                              Local:
+                                                - 1
+                                                - start: 550
+                                                  end: 552
+                                            span:
+                                              start: 550
+                                              end: 552
+                                          - data:
+                                              Local:
+                                                - 3
+                                                - start: 553
+                                                  end: 555
+                                            span:
+                                              start: 553
+                                              end: 555
+                                    span:
+                                      start: 549
+                                      end: 556
+                                  - data:
+                                      Return:
+                                        data:
+                                          FunctionCall:
+                                            func:
+                                              FieldAccess:
+                                                - data:
+                                                    Local:
+                                                      - 1
+                                                      - start: 573
+                                                        end: 575
+                                                  span:
+                                                    start: 573
+                                                    end: 575
+                                                - - len
+                                                  - start: 576
+                                                    end: 579
+                                            args: []
+                                        span:
+                                          start: 579
+                                          end: 581
+                                    span:
+                                      start: 566
+                                      end: 581
+                                  - data: Empty
+                                    span:
+                                      start: 0
+                                      end: 0
+                              span:
+                                start: 0
+                                end: 581
+                            - data:
+                                Return:
+                                  data:
+                                    Literal: "Null"
+                                  span:
+                                    start: 594
+                                    end: 598
+                              span:
+                                start: 587
+                                end: 598
+                        span:
+                          start: 0
+                          end: 601
+                  span:
+                    start: 0
+                    end: 601
+                kind: NewSlot
+                op_span:
+                  start: 184
+                  end: 192
+            span:
+              start: 0
+              end: 601
+        span:
+          start: 0
+          end: 601
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: 609
+                      end: 610
+                value:
+                  data:
+                    Ternary:
+                      cond:
+                        data:
+                          BinaryOp:
+                            op: NotEq
+                            op_span:
+                              start: 624
+                              end: 626
+                            lhs:
+                              data:
+                                FunctionCall:
+                                  func:
+                                    FieldAccess:
+                                      - data:
+                                          Local:
+                                            - 0
+                                            - start: 613
+                                              end: 618
+                                        span:
+                                          start: 613
+                                          end: 618
+                                      - - len
+                                        - start: 619
+                                          end: 622
+                                  args: []
+                              span:
+                                start: 622
+                                end: 624
+                            rhs:
+                              data:
+                                Literal:
+                                  Integer: 0
+                              span:
+                                start: 626
+                                end: 627
+                        span:
+                          start: 622
+                          end: 627
+                      true_expr:
+                        data:
+                          FunctionCall:
+                            func:
+                              FieldAccess:
+                                - data:
+                                    ArrayAccess:
+                                      array:
+                                        data:
+                                          Local:
+                                            - 0
+                                            - start: 628
+                                              end: 633
+                                        span:
+                                          start: 628
+                                          end: 633
+                                      index:
+                                        data:
+                                          Literal:
+                                            Integer: 0
+                                        span:
+                                          start: 634
+                                          end: 635
+                                  span:
+                                    start: 633
+                                    end: 636
+                                - - tointeger
+                                  - start: 637
+                                    end: 646
+                            args: []
+                        span:
+                          start: 646
+                          end: 648
+                      false_expr:
+                        data:
+                          Literal:
+                            Integer: 1
+                        span:
+                          start: 649
+                          end: 650
+                  span:
+                    start: 622
+                    end: 650
+                kind: Normal
+                op_span:
+                  start: 611
+                  end: 612
+            span:
+              start: 609
+              end: 650
+        span:
+          start: 609
+          end: 650
+      - data:
+          For:
+            init:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 2
+                          - start: 661
+                            end: 662
+                      value:
+                        data:
+                          Literal:
+                            Integer: 0
+                        span:
+                          start: 663
+                          end: 664
+                      kind: Normal
+                      op_span:
+                        start: 662
+                        end: 663
+                  span:
+                    start: 661
+                    end: 664
+              span:
+                start: 661
+                end: 664
+            cond:
+              data:
+                BinaryOp:
+                  op: Less
+                  op_span:
+                    start: 666
+                    end: 667
+                  lhs:
+                    data:
+                      Local:
+                        - 2
+                        - start: 665
+                          end: 666
+                    span:
+                      start: 665
+                      end: 666
+                  rhs:
+                    data:
+                      Local:
+                        - 1
+                        - start: 667
+                          end: 668
+                    span:
+                      start: 667
+                      end: 668
+              span:
+                start: 665
+                end: 668
+            incr:
+              data:
+                Expr:
+                  data:
+                    Assign:
+                      target:
+                        Local:
+                          - 2
+                          - start: 669
+                            end: 670
+                      value:
+                        data:
+                          Literal:
+                            Integer: 1
+                        span:
+                          start: 672
+                          end: 673
+                      kind: Add
+                      op_span:
+                        start: 670
+                        end: 672
+                  span:
+                    start: 669
+                    end: 673
+              span:
+                start: 669
+                end: 673
+            body:
+              data:
+                IfElse:
+                  - data:
+                      UnaryOp:
+                        - Not
+                        - start: 682
+                          end: 683
+                        - data:
+                            FunctionCall:
+                              func:
+                                Expr:
+                                  data:
+                                    Ident: test
+                                  span:
+                                    start: 683
+                                    end: 687
+                              args: []
+                          span:
+                            start: 687
+                            end: 689
+                    span:
+                      start: 682
+                      end: 689
+                  - data:
+                      Block:
+                        - data:
+                            Expr:
+                              data:
+                                FunctionCall:
+                                  func:
+                                    Expr:
+                                      data:
+                                        Ident: print
+                                      span:
+                                        start: 705
+                                        end: 710
+                                  args:
+                                    - data:
+                                        Literal:
+                                          String: "failed\n"
+                                      span:
+                                        start: 711
+                                        end: 721
+                              span:
+                                start: 710
+                                end: 722
+                          span:
+                            start: 710
+                            end: 722
+                        - data:
+                            Return:
+                              data:
+                                Literal: "Null"
+                              span:
+                                start: 0
+                                end: 0
+                          span:
+                            start: 0
+                            end: 738
+                    span:
+                      start: 0
+                      end: 745
+                  - data: Empty
+                    span:
+                      start: 0
+                      end: 0
+              span:
+                start: 0
+                end: 745
+        span:
+          start: 0
+          end: 745
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: 747
+                      end: 752
+                args:
+                  - data:
+                      Literal:
+                        String: "oki doki\n"
+                    span:
+                      start: 753
+                      end: 765
+            span:
+              start: 752
+              end: 766
+        span:
+          start: 752
+          end: 766
+  span:
+    start: 0
+    end: 766

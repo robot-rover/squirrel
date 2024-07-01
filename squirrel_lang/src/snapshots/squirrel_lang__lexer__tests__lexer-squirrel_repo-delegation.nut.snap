@@ -1,0 +1,293 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for squirrel_repo/delegation.nut
+---
+- Newline
+- Identifier: PEntity
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: name
+- Assign
+- String: noname
+- Newline
+- Identifier: pos
+- Assign
+- LeftCurlyBrace
+- Identifier: x
+- Assign
+- Integer: 0
+- Comma
+- Identifier: y
+- Assign
+- Integer: 0
+- Comma
+- Identifier: z
+- Assign
+- Integer: 0
+- RightCurlyBrace
+- Newline
+- Identifier: type
+- Assign
+- String: entity
+- Newline
+- Newline
+- Identifier: _typeof
+- Assign
+- Function
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- Return
+- Identifier: type
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: PEntity
+- DoubleColon
+- Identifier: PrintPos
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: x=
+- Plus
+- Identifier: pos
+- Period
+- Identifier: x
+- Plus
+- String: " y="
+- Plus
+- Identifier: pos
+- Period
+- Identifier: y
+- Plus
+- String: " z="
+- Plus
+- Identifier: pos
+- Period
+- Identifier: z
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: PEntity
+- DoubleColon
+- Identifier: new
+- LeftParenthesis
+- Identifier: name
+- Comma
+- Identifier: pos
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- Local
+- Identifier: newentity
+- Assign
+- Clone
+- DoubleColon
+- Identifier: PEntity
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: name
+- RightParenthesis
+- Newline
+- Identifier: newentity
+- Period
+- Identifier: name
+- Assign
+- Identifier: name
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: pos
+- RightParenthesis
+- Newline
+- Identifier: newentity
+- Period
+- Identifier: pos
+- Assign
+- Identifier: pos
+- Semicolon
+- Newline
+- Return
+- Identifier: newentity
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: PPlayer
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: model
+- Assign
+- String: warrior.mdl
+- Newline
+- Identifier: weapon
+- Assign
+- String: fist
+- Newline
+- Identifier: health
+- Assign
+- Integer: 100
+- Newline
+- Identifier: armor
+- Assign
+- Integer: 0
+- Newline
+- Newline
+- Identifier: type
+- Assign
+- String: player
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: PPlayer
+- DoubleColon
+- Identifier: new
+- LeftParenthesis
+- Identifier: name
+- Comma
+- Identifier: pos
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- Local
+- Identifier: p
+- Assign
+- Clone
+- DoubleColon
+- Identifier: PPlayer
+- Semicolon
+- Newline
+- Local
+- Identifier: newplayer
+- Assign
+- DoubleColon
+- Identifier: PEntity
+- Period
+- Identifier: new
+- LeftParenthesis
+- Identifier: name
+- Comma
+- Identifier: pos
+- RightParenthesis
+- Semicolon
+- Newline
+- Identifier: newplayer
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: p
+- RightParenthesis
+- Semicolon
+- Newline
+- Return
+- Identifier: newplayer
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: player
+- Assign
+- Identifier: PPlayer
+- Period
+- Identifier: new
+- LeftParenthesis
+- String: godzilla
+- Comma
+- LeftCurlyBrace
+- Identifier: x
+- Assign
+- Integer: 10
+- Comma
+- Identifier: y
+- Assign
+- Integer: 20
+- Comma
+- Identifier: z
+- Assign
+- Integer: 30
+- RightCurlyBrace
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: PLAYER NAME
+- Plus
+- Identifier: player
+- Period
+- Identifier: name
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: ENTITY TYPE
+- Plus
+- Typeof
+- Identifier: player
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- Identifier: player
+- Period
+- Identifier: PrintPos
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- Identifier: player
+- Period
+- Identifier: pos
+- Period
+- Identifier: x
+- Assign
+- Integer: 123
+- Semicolon
+- Newline
+- Newline
+- Identifier: player
+- Period
+- Identifier: PrintPos
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline

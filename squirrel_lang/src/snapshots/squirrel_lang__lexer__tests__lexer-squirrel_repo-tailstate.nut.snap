@@ -1,0 +1,125 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for squirrel_repo/tailstate.nut
+---
+- Function
+- Identifier: state1
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: suspend
+- LeftParenthesis
+- String: state1
+- RightParenthesis
+- Semicolon
+- Newline
+- Return
+- Identifier: state2
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: state2
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: suspend
+- LeftParenthesis
+- String: state2
+- RightParenthesis
+- Semicolon
+- Newline
+- Return
+- Identifier: state3
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: state3
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: suspend
+- LeftParenthesis
+- String: state3
+- RightParenthesis
+- Semicolon
+- Newline
+- Return
+- Identifier: state1
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: statethread
+- Assign
+- DoubleColon
+- Identifier: newthread
+- LeftParenthesis
+- Identifier: state1
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: statethread
+- Period
+- Identifier: call
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- For
+- LeftParenthesis
+- Local
+- Identifier: i
+- Assign
+- Integer: 0
+- Semicolon
+- Identifier: i
+- LessThan
+- Integer: 10000
+- Semicolon
+- Identifier: i
+- Increment
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: statethread
+- Period
+- Identifier: wakeup
+- LeftParenthesis
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Semicolon
+- Newline
