@@ -5,3 +5,6 @@ debug *TESTS:
 check:
     -cargo check --color always 2> target/tmp/build.log
     less -R < target/tmp/build.log
+
+test regex="":
+    cargo nextest run --no-fail-fast -E "test(/{{ regex }}/)"

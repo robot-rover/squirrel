@@ -13,7 +13,7 @@ use crate::{
     parser::ast::{
         self, AssignKind, AssignTarget, BinaryOp, CallTarget, Expr, ExprData, Ident, Statement,
         StatementData, UnaryOp, UnaryRefOp,
-    },
+    }, util::IntoOwned,
 };
 
 use super::{
@@ -72,21 +72,21 @@ fn init_root() -> Rc<RefCell<Object>> {
     Rc::new(RefCell::new(builtins::global::make_root_table()))
 }
 
-fn run_foreach<'a, K, I, F>(
+fn run_foreach<'a, K, O, I>(
     context: &mut Context,
     iter: I,
-    index_to_value: F,
     index_local_idx: Option<&u32>,
     value_local_idx: &u32,
     body: &Statement,
 ) -> FlowResult
 where
     I: Iterator<Item = (K, &'a Value)>,
-    F: Fn(K) -> Value,
+    K: IntoOwned<O>,
+    O: Into<Value>,
 {
     for (key, val) in iter {
         if let Some(index_idx) = index_local_idx {
-            context.infunc.set_local(*index_idx, index_to_value(key))
+            context.infunc.set_local(*index_idx, key.into_owned().into())
         }
         context.infunc.set_local(*value_local_idx, val.clone());
 
@@ -170,10 +170,9 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
                 Value::String(_) => todo!(),
                 Value::Object(obj) => {
                     let anchor = obj.borrow();
-                    run_foreach(
+                    run_foreach::<&HashValue, HashValue, _>(
                         context,
                         anchor.slot_iter(),
-                        |hv| hv.clone().into(),
                         index_idx.as_ref(),
                         value_idx,
                         body,
@@ -181,10 +180,9 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
                 }
                 Value::Array(arr) => {
                     let anchor = arr.borrow();
-                    run_foreach(
+                    run_foreach::<i64, i64, _>(
                         context,
-                        anchor.iter().enumerate(),
-                        |idx| Value::Integer(idx as i64),
+                        anchor.iter().enumerate().map(|(i, v)| (i as i64, v)),
                         index_idx.as_ref(),
                         value_idx,
                         body,
