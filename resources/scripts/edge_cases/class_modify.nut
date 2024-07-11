@@ -5,6 +5,10 @@ class Foo {
 
 Foo.c <- 0
 
+Foo.constructor <- function(){
+    ::print("Constructing Foo\n")
+}
+
 local fooinst = Foo()
 
 // This is an error

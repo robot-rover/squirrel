@@ -24,6 +24,24 @@ expression: Lexer test for edge_cases/class_modify.nut
 - Integer: 0
 - Newline
 - Newline
+- Identifier: Foo
+- Period
+- Identifier: constructor
+- NewSlot
+- Function
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Constructing Foo\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
 - Local
 - Identifier: fooinst
 - Assign

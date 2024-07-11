@@ -2,7 +2,7 @@ use hashbrown::{Equivalent, HashMap};
 use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{ptr::NonNull, rc::Rc};
 
-use crate::parser::ast::{self, Expr};
+use crate::{context::Span, parser::ast::{self, Expr}};
 use crate::runtime::SqBacktrace;
 
 use super::{argparse, builtins, CallInfo, Context, ExecError, ExprResult, FuncRuntime};
@@ -19,6 +19,8 @@ pub enum Value {
     Object(Rc<RefCell<Object>>),
     Array(Rc<RefCell<Vec<Value>>>),
     Closure(Rc<RefCell<Closure>>),
+    Class(Rc<RefCell<Class>>),
+    Instance(Rc<RefCell<Instance>>),
 }
 
 macro_rules! value_common_impl {
@@ -41,6 +43,10 @@ macro_rules! value_common_impl {
 
         pub fn object(object: Object) -> Self {
             Self::Object(Rc::new(RefCell::new(object)))
+        }
+
+        pub fn class(class: Class) -> Self {
+            Self::Class(Rc::new(RefCell::new(class)))
         }
     };
 }
@@ -93,6 +99,8 @@ impl Value {
             Value::Object(obj) => obj.borrow().get_field_str(key),
             Value::Array(_) => builtins::array::delegate(key),
             Value::Closure(_) => todo!(),
+            Value::Class(_) => todo!(),
+            Value::Instance(_) => todo!(),
         }
     }
 
@@ -106,6 +114,8 @@ impl Value {
             Value::Array(_) => <Rc<RefCell<Vec<Value>>> as TypeName>::type_name(),
             Value::Closure(_) => <Rc<RefCell<Closure>> as TypeName>::type_name(),
             Value::Object(_) => <Rc<RefCell<Object>> as TypeName>::type_name(),
+            Value::Class(_) => todo!(),
+            Value::Instance(_) => todo!(),
         }
     }
 }
@@ -121,6 +131,7 @@ impl PartialEq for Value {
             (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Null, Self::Null) => true,
+            // TODO: Add instance and class identity
             _ => false,
         }
     }
@@ -135,6 +146,7 @@ pub enum HashValue {
     Object(Rc<RefCell<Object>>),
     Array(Rc<RefCell<Vec<Value>>>),
     Closure(Rc<RefCell<Closure>>),
+    Class(Rc<RefCell<Class>>),
 }
 
 impl PartialEq for HashValue {
@@ -164,6 +176,7 @@ impl Hash for HashValue {
             HashValue::Object(o) => o.as_ptr().hash(state),
             HashValue::Array(a) => a.as_ptr().hash(state),
             HashValue::Closure(c) => c.as_ptr().hash(state),
+            HashValue::Class(c) => c.as_ptr().hash(state),
         }
     }
 }
@@ -190,6 +203,7 @@ impl From<HashValue> for Value {
             HashValue::Object(o) => Value::Object(o),
             HashValue::Array(a) => Value::Array(a),
             HashValue::Closure(c) => Value::Closure(c),
+            HashValue::Class(c) => Value::Class(c)
         }
     }
 }
@@ -286,24 +300,17 @@ impl fmt::Display for Value {
 pub struct Object {
     delegate: Option<Rc<RefCell<Object>>>,
     slots: HashMap<HashValue, Value>,
-    is_class_inst: bool,
 }
 
 impl Object {
     pub fn new(
         delegate: Option<Rc<RefCell<Object>>>,
         slots: HashMap<HashValue, Value>,
-        is_class_inst: bool,
     ) -> Object {
         Object {
             delegate,
             slots,
-            is_class_inst,
         }
-    }
-
-    pub fn get_is_class_inst(&self) -> bool {
-        self.is_class_inst
     }
 
     pub fn get_delegate(&self) -> Option<&Rc<RefCell<Object>>> {
@@ -315,7 +322,8 @@ impl Object {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-    ) -> Result<(), HashValue> {
+        span: Span,
+    ) -> Result<(), ExecError> {
         if is_newslot || self.slots.contains_key(&key) {
             self.slots.insert(key, value);
             Ok(())
@@ -323,9 +331,9 @@ impl Object {
             match self.delegate.as_ref() {
                 Some(delegate) => {
                     let mut parent = delegate.borrow_mut();
-                    parent.set_field(key, value, is_newslot)
+                    parent.set_field(key, value, is_newslot, span)
                 }
-                None => Err(key),
+                None => Err(ExecError::undefined_field(span, key.into())),
             }
         }
     }
@@ -491,7 +499,7 @@ impl Object {
                 ))
             }
         };
-        let mut new_obj = Object::new(None, HashMap::new(), false);
+        let mut new_obj = Object::new(None, HashMap::new());
         // for (key, val) in this.borrow().slots.iter() {
         //     let res = context.call_closure(&filter_fn, vec![val.clone(), key.clone().into()], call_info)?;
         //     if res.truthy() {
@@ -541,7 +549,6 @@ impl fmt::Debug for Object {
                     .as_ref()
                     .map(|del| del.deref().borrow().deref() as *const Object),
             )
-            .field("is_class_inst", &self.is_class_inst)
             .finish_non_exhaustive()
     }
 }
@@ -586,5 +593,170 @@ impl Closure {
             env: None,
             upvalues: Vec::new(),
         }
+    }
+}
+
+#[derive(Debug)]
+enum ClassFields {
+    NoOffsets(HashMap<HashValue, Value>),
+    Offsets(HashMap<HashValue, (u32, Value)>),
+}
+
+impl Default for ClassFields {
+    fn default() -> Self {
+        ClassFields::NoOffsets(HashMap::new())
+    }
+}
+
+pub struct Class {
+    parent: Option<Rc<RefCell<Class>>>,
+    fields: ClassFields,
+}
+
+impl Class {
+    pub fn new(parent: Option<Rc<RefCell<Class>>>, fields: HashMap<HashValue, Value>) -> Self {
+        Class {
+            parent,
+            fields: ClassFields::NoOffsets(fields),
+        }
+    }
+
+    fn get_next_valid_offset(&self) -> u32 {
+        self.parent.as_ref().map(|p| p.borrow().get_next_valid_offset()).unwrap_or(0) + self.get_offsets().len() as u32
+    }
+
+    fn get_offsets(&self) -> &HashMap<HashValue, (u32, Value)> {
+        match &self.fields {
+            ClassFields::NoOffsets(_) => panic!("Cannot get offsets before they are initialized"),
+            ClassFields::Offsets(offsets) => offsets,
+        }
+    }
+
+    fn get_or_make_offsets(&mut self) -> &HashMap<HashValue, (u32, Value)> {
+        match &mut self.fields {
+            ClassFields::Offsets(offsets) => {},
+            ClassFields::NoOffsets(fields) => {
+                let fields = mem::take(fields);
+                let first_offset = self.parent.as_ref().map(|p| p.borrow().get_next_valid_offset() as u32).unwrap_or(0);
+                let mut offsets = HashMap::new();
+                for (field_idx, (key, value)) in fields.into_iter().enumerate() {
+                    offsets.insert(key.clone(), (first_offset + field_idx as u32, value));
+                }
+
+                self.fields = ClassFields::Offsets(offsets);
+            }
+        };
+        let ClassFields::Offsets(offsets) = &self.fields else { unreachable!() };
+        offsets
+    }
+
+    pub fn set_field(
+        &mut self,
+        key: HashValue,
+        value: Value,
+        is_newslot: bool,
+        span: Span,
+    ) -> Result<(), ExecError> {
+        match &mut self.fields {
+            ClassFields::NoOffsets(fields) =>
+            if is_newslot || fields.contains_key(&key) {
+                fields.insert(key, value);
+                Ok(())
+            } else {
+                Err(ExecError::undefined_field(span, key.into()))
+            },
+            ClassFields::Offsets(_) => Err(ExecError::mutating_instantiated_class(span)),
+        }
+    }
+
+    // TODO: Do this with other get_field(_str)? functions
+    fn get_field_generic<K: Equivalent<HashValue> + Hash + ?Sized>(&self, key: &K) -> Option<Value> {
+        match &self.fields {
+            ClassFields::NoOffsets(fields) => fields.get(key).map(|v| v.clone()),
+            ClassFields::Offsets(fields) => fields.get(key).map(|v| v.1.clone()),
+        }
+    }
+
+    pub fn get_field(&self, key: &HashValue) -> Option<Value> {
+        self.get_field_generic(key)
+    }
+
+    pub fn get_field_str(&self, key: &str) -> Option<Value> {
+        self.get_field_generic(key)
+    }
+
+    fn initialize(&mut self, instance: &mut Instance) -> Result<(), ExecError> {
+        if let Some(parent) = self.parent.as_ref() {
+            parent.borrow_mut().initialize(instance)?;
+        }
+
+        let offsets = self.get_or_make_offsets();
+        for (key, (offset, value)) in offsets.iter() {
+            instance.fields[*offset as usize] = value.clone();
+        }
+        Ok(())
+    }
+}
+
+impl fmt::Debug for Class {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Class")
+            .field("ptr", &(self as *const Class))
+            .field(
+                "parent",
+                &self
+                    .parent
+                    .as_ref()
+                    .map(|del| del.deref().borrow().deref() as *const Class),
+            )
+            .finish_non_exhaustive()
+    }
+}
+
+#[derive(Debug)]
+pub struct Instance {
+    class: Rc<RefCell<Class>>,
+    fields: Vec<Value>,
+}
+
+impl Instance {
+    pub fn get_field_idx<T>(&self, class: &Class, key: &T) -> Option<u32>
+    where T: Equivalent<HashValue> + Hash + ?Sized {
+        if let Some((field_idx, field_default_val)) = class.get_offsets().get(key) {
+            Some(*field_idx)
+        } else {
+            class.parent.as_ref().and_then(|p| self.get_field_idx(&p.borrow(), key))
+        }
+    }
+
+    pub fn set_field(
+        &mut self,
+        key: HashValue,
+        value: Value,
+        is_newslot: bool,
+        span: Span,
+    ) -> Result<(), ExecError> {
+        if is_newslot {
+            return Err(ExecError::mutating_instantiated_class(span));
+        }
+        if let Some(offset) = self.get_field_idx(&self.class.borrow(), &key) {
+            self.fields[offset as usize] = value;
+            Ok(())
+        } else {
+            Err(ExecError::undefined_field(span, key.into()))
+        }
+    }
+
+    pub fn get_field(&self, key: &HashValue) -> Option<Value> {
+        self.get_field_idx(&self.class.borrow(), key).map(|offset| self.fields[offset as usize].clone())
+    }
+
+    pub fn get_field_str(&self, key: &str) -> Option<Value> {
+        self.get_field_idx(&self.class.borrow(), key).map(|offset| self.fields[offset as usize].clone())
+    }
+
+    pub fn construct(class: Rc<RefCell<Class>>) -> Self {
+        let fields = vec![Value::Null; class.borrow().get_next_valid_offset() as usize];
+        Instance { class, fields }
     }
 }

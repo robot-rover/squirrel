@@ -94,6 +94,8 @@ pub enum ExecError {
         span: Span,
         bt: SqBacktrace,
     },
+    MutatingInstantiatedClass(Span, SqBacktrace),
+    ExtendingNonClass(Span, SqBacktrace),
 }
 
 macro_rules! variant_constructor {
@@ -127,6 +129,8 @@ impl ExecError {
     variant_constructor!(AssertionFailed assertion_failed(span: Span, message: Option<String>));
     variant_constructor!(NumberParseError number_parse_error(span: Span, message: String));
     variant_constructor!(IndexOutOfBounds index_out_of_bounds { index: i64, len: usize, span: Span });
+    variant_constructor!(MutatingInstantiatedClass mutating_instantiated_class(span: Span));
+    variant_constructor!(ExtendingNonClass extending_non_class(span: Span));
 
     fn illegal_binary_op(
         op: &str,
@@ -312,6 +316,12 @@ impl ExecError {
                 span,
                 format!("A value of type '{}' is not iterable", kind),
                 bt,
+            ),
+            ExecError::MutatingInstantiatedClass(span, bt) => SquirrelError::new(
+                file_name, span, "Cannot mutate an instantiated class".to_string(), bt
+            ),
+            ExecError::ExtendingNonClass(span, bt) => SquirrelError::new(
+                file_name, span, "Cannot extend a non-class".to_string(), bt
             ),
         }
     }

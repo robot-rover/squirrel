@@ -18,7 +18,7 @@ use crate::{
 
 use super::{
     builtins,
-    value::{Closure, HashValue, Object, TypeName, Value},
+    value::{Class, Closure, HashValue, Object, TypeName, Value},
     CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState,
 };
 enum FlowControl {
@@ -368,16 +368,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
         ExprData::Globals => Ok(context.infunc.closure.borrow().root.clone()),
         ExprData::Ident(name) => run_load_ident(context, name, expr.span),
         ExprData::Base => {
-            let val = &context.infunc.env;
-            // Double check this is null and not an error
-            if let Value::Object(obj) = val {
-                let obj = obj.borrow();
-                if obj.get_is_class_inst() {
-                    if let Some(delegate) = obj.get_delegate() {
-                        return Ok(Value::Object(delegate.clone()));
-                    }
-                }
-            }
+            todo!();
             return Ok(Value::Null);
         }
         ExprData::Local(idx, span) => {
@@ -514,15 +505,8 @@ fn run_class(
     let parent = if let Some((parent, parent_span)) = parent {
         let parent = run_load_ident(context, parent, *parent_span)?;
         match parent {
-            Value::Object(obj) => {
-                let obj_ref = obj.borrow();
-                if obj_ref.get_is_class_inst() {
-                    Some(obj.clone())
-                } else {
-                    panic!("Not a class")
-                }
-            }
-            _ => panic!("Not a class"),
+            Value::Class(obj) => Some(obj.clone()),
+            _ => return Err(ExecError::extending_non_class(*parent_span)),
         }
     } else {
         None
@@ -539,7 +523,7 @@ fn run_class(
             Ok((k, v))
         })
         .collect::<Result<HashMap<HashValue, Value>, ExecError>>()?;
-    Ok(Value::object(Object::new(parent, slots, true)))
+    Ok(Value::class(Class::new(parent, slots)))
 }
 
 fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
@@ -557,7 +541,6 @@ fn run_table(context: &mut Context, table_decl: &[(Expr, Expr)]) -> ExprResult {
                 Ok((key, val))
             })
             .collect::<Result<HashMap<_, _>, _>>()?,
-        false,
     )))
 }
 
@@ -759,8 +742,7 @@ fn run_assign(
     match (target_obj, index) {
         (Value::Object(obj), any) => {
             let mut obj = obj.deref().borrow_mut();
-            obj.set_field(any, val, is_newslot)
-                .map_err(|hash_index| ExecError::undefined_field(span, hash_index.into()))
+            obj.set_field(any, val, is_newslot, span)
         }
         (Value::Array(arr), HashValue::Integer(index)) => {
             // TODO: Handle index out of bounds

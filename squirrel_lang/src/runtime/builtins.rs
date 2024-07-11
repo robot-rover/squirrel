@@ -720,6 +720,6 @@ pub mod global {
         .map(|(k, v)| (HashValue::string(k), v))
         .collect::<HashMap<_, _>>();
 
-        Object::new(None, slots, false)
+        Object::new(None, slots)
     }
 }
