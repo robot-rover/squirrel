@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for edge_cases/class_modify.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -28,8 +28,8 @@ body:
                 target:
                   Ident:
                     - Foo
-                    - start: 6
-                      end: 9
+                    - start: Start
+                      end: End
                 value:
                   data:
                     ClassDef:
@@ -39,39 +39,39 @@ body:
                               Literal:
                                 String: a
                             span:
-                              start: 16
-                              end: 17
+                              start: Start
+                              end: End
                           - data:
                               Literal:
                                 Integer: 0
                             span:
-                              start: 20
-                              end: 21
+                              start: Start
+                              end: End
                         - - data:
                               Literal:
                                 String: b
                             span:
-                              start: 26
-                              end: 27
+                              start: Start
+                              end: End
                           - data:
                               Literal:
                                 Integer: 0
                             span:
-                              start: 30
-                              end: 31
+                              start: Start
+                              end: End
                   span:
-                    start: 0
-                    end: 33
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 0
-                  end: 5
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 33
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 33
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -81,28 +81,28 @@ body:
                     - data:
                         Ident: Foo
                       span:
-                        start: 35
-                        end: 38
+                        start: Start
+                        end: End
                     - - c
-                      - start: 39
-                        end: 40
+                      - start: Start
+                        end: End
                 value:
                   data:
                     Literal:
                       Integer: 0
                   span:
-                    start: 44
-                    end: 45
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 41
-                  end: 43
+                  start: Start
+                  end: End
             span:
-              start: 35
-              end: 45
+              start: Start
+              end: End
         span:
-          start: 35
-          end: 45
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -112,20 +112,20 @@ body:
                     - data:
                         Ident: Foo
                       span:
-                        start: 47
-                        end: 50
+                        start: Start
+                        end: End
                     - - constructor
-                      - start: 51
-                        end: 62
+                      - start: Start
+                        end: End
                 value:
                   data:
                     FunctionDef:
                       keyword_span:
-                        start: 66
-                        end: 74
+                        start: Start
+                        end: End
                       arg_span:
-                        start: 74
-                        end: 76
+                        start: Start
+                        end: End
                       num_args: 0
                       default_expr: []
                       local_names: []
@@ -143,40 +143,40 @@ body:
                                         FieldAccess:
                                           - data: Globals
                                             span:
-                                              start: 82
-                                              end: 84
+                                              start: Start
+                                              end: End
                                           - - print
-                                            - start: 84
-                                              end: 89
+                                            - start: Start
+                                              end: End
                                       args:
                                         - data:
                                             Literal:
                                               String: "Constructing Foo\n"
                                           span:
-                                            start: 90
-                                            end: 110
+                                            start: Start
+                                            end: End
                                   span:
-                                    start: 89
-                                    end: 111
+                                    start: Start
+                                    end: End
                               span:
-                                start: 89
-                                end: 111
+                                start: Start
+                                end: End
                         span:
-                          start: 0
-                          end: 113
+                          start: Start
+                          end: End
                   span:
-                    start: 0
-                    end: 113
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 63
-                  end: 65
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 113
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 113
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -184,8 +184,8 @@ body:
                 target:
                   Local:
                     - 1
-                    - start: 121
-                      end: 128
+                    - start: Start
+                      end: End
                 value:
                   data:
                     FunctionCall:
@@ -194,22 +194,22 @@ body:
                           data:
                             Ident: Foo
                           span:
-                            start: 131
-                            end: 134
+                            start: Start
+                            end: End
                       args: []
                   span:
-                    start: 134
-                    end: 136
+                    start: Start
+                    end: End
                 kind: Normal
                 op_span:
-                  start: 129
-                  end: 130
+                  start: Start
+                  end: End
             span:
-              start: 121
-              end: 136
+              start: Start
+              end: End
         span:
-          start: 121
-          end: 136
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 136
+    start: Start
+    end: End

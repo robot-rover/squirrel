@@ -1,0 +1,24 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+num_locals: 1
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block: []
+  span:
+    start: Start
+    end: End

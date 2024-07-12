@@ -1,0 +1,381 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - a
+    - 1
+  - - b
+    - 2
+num_locals: 3
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    ArrayDecl:
+                      - data:
+                          Literal:
+                            String: "I'm"
+                        span:
+                          start: Start
+                          end: End
+                      - data:
+                          Literal:
+                            String: an
+                        span:
+                          start: Start
+                          end: End
+                      - data:
+                          Literal:
+                            String: array
+                        span:
+                          start: Start
+                          end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            BinaryOp:
+                              op: Add
+                              op_span:
+                                start: Start
+                                end: End
+                              lhs:
+                                data:
+                                  BinaryOp:
+                                    op: Add
+                                    op_span:
+                                      start: Start
+                                      end: End
+                                    lhs:
+                                      data:
+                                        ArrayAccess:
+                                          array:
+                                            data:
+                                              Local:
+                                                - 1
+                                                - start: Start
+                                                  end: End
+                                            span:
+                                              start: Start
+                                              end: End
+                                          index:
+                                            data:
+                                              Literal:
+                                                Integer: 0
+                                            span:
+                                              start: Start
+                                              end: End
+                                      span:
+                                        start: Start
+                                        end: End
+                                    rhs:
+                                      data:
+                                        Literal:
+                                          String: " "
+                                      span:
+                                        start: Start
+                                        end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              rhs:
+                                data:
+                                  ArrayAccess:
+                                    array:
+                                      data:
+                                        Local:
+                                          - 1
+                                          - start: Start
+                                            end: End
+                                      span:
+                                        start: Start
+                                        end: End
+                                    index:
+                                      data:
+                                        Literal:
+                                          Integer: 2
+                                      span:
+                                        start: Start
+                                        end: End
+                                span:
+                                  start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    ArrayDecl:
+                      - data:
+                          Literal: "Null"
+                        span:
+                          start: Start
+                          end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 2
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  ArrayAccess:
+                    array:
+                      data:
+                        Local:
+                          - 2
+                          - start: Start
+                            end: End
+                      span:
+                        start: Start
+                        end: End
+                    index:
+                      data:
+                        Literal:
+                          Integer: 0
+                      span:
+                        start: Start
+                        end: End
+                    span:
+                      start: Start
+                      end: End
+                value:
+                  data:
+                    ArrayAccess:
+                      array:
+                        data:
+                          Local:
+                            - 1
+                            - start: Start
+                              end: End
+                        span:
+                          start: Start
+                          end: End
+                      index:
+                        data:
+                          Literal:
+                            Integer: 2
+                        span:
+                          start: Start
+                          end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 2
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

@@ -1,0 +1,434 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - t
+    - 1
+  - - test
+    - 2
+num_locals: 3
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl: []
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: a
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Literal:
+                              Integer: 10
+                          span:
+                            start: Start
+                            end: End
+                      - - data:
+                            Literal:
+                              String: b
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            FunctionDef:
+                              keyword_span:
+                                start: Start
+                                end: End
+                              arg_span:
+                                start: Start
+                                end: End
+                              num_args: 1
+                              default_expr: []
+                              local_names:
+                                - - a
+                                  - 0
+                              num_locals: 1
+                              upvalues: []
+                              is_varargs: false
+                              body:
+                                data:
+                                  Block:
+                                    - data:
+                                        Return:
+                                          data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: Start
+                                                end: End
+                                              lhs:
+                                                data:
+                                                  Local:
+                                                    - 0
+                                                    - start: Start
+                                                      end: End
+                                                span:
+                                                  start: Start
+                                                  end: End
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    Integer: 1
+                                                span:
+                                                  start: Start
+                                                  end: End
+                                          span:
+                                            start: Start
+                                            end: End
+                                      span:
+                                        start: Start
+                                        end: End
+                                span:
+                                  start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                FieldAccess:
+                                  - data:
+                                      FunctionCall:
+                                        func:
+                                          FieldAccess:
+                                            - data:
+                                                Local:
+                                                  - 1
+                                                  - start: Start
+                                                    end: End
+                                              span:
+                                                start: Start
+                                                end: End
+                                            - - tostring
+                                              - start: Start
+                                                end: End
+                                        args: []
+                                    span:
+                                      start: Start
+                                      end: End
+                                  - - slice
+                                    - start: Start
+                                      end: End
+                              args:
+                                - data:
+                                    Literal:
+                                      Integer: 0
+                                  span:
+                                    start: Start
+                                    end: End
+                                - data:
+                                    Literal:
+                                      Integer: 11
+                                  span:
+                                    start: Start
+                                    end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                FieldAccess:
+                                  - data:
+                                      FunctionCall:
+                                        func:
+                                          FieldAccess:
+                                            - data:
+                                                Local:
+                                                  - 2
+                                                  - start: Start
+                                                    end: End
+                                              span:
+                                                start: Start
+                                                end: End
+                                            - - tostring
+                                              - start: Start
+                                                end: End
+                                        args: []
+                                    span:
+                                      start: Start
+                                      end: End
+                                  - - slice
+                                    - start: Start
+                                      end: End
+                              args:
+                                - data:
+                                    Literal:
+                                      Integer: 0
+                                  span:
+                                    start: Start
+                                    end: End
+                                - data:
+                                    Literal:
+                                      Integer: 11
+                                  span:
+                                    start: Start
+                                    end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            FieldAccess:
+                              - data:
+                                  Local:
+                                    - 2
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              - - a
+                                - start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            FunctionCall:
+                              func:
+                                FieldAccess:
+                                  - data:
+                                      Local:
+                                        - 2
+                                        - start: Start
+                                          end: End
+                                    span:
+                                      start: Start
+                                      end: End
+                                  - - b
+                                    - start: Start
+                                      end: End
+                              args:
+                                - data:
+                                    FieldAccess:
+                                      - data:
+                                          Local:
+                                            - 2
+                                            - start: Start
+                                              end: End
+                                        span:
+                                          start: Start
+                                          end: End
+                                      - - a
+                                        - start: Start
+                                          end: End
+                                  span:
+                                    start: Start
+                                    end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

@@ -1,0 +1,252 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/metamethods/cmp.nut
+---
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "With Tables:\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: comparable
+- Assign
+- LeftCurlyBrace
+- Newline
+- Identifier: _cmp
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _cmp called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- Identifier: name
+- LessThan
+- Identifier: other
+- Period
+- Identifier: name
+- RightParenthesis
+- Return
+- Minus
+- Integer: 1
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: name
+- GreaterThan
+- Identifier: other
+- Period
+- Identifier: name
+- RightParenthesis
+- Return
+- Integer: 1
+- Semicolon
+- Newline
+- Return
+- Integer: 0
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: a
+- Assign
+- LeftCurlyBrace
+- Identifier: name
+- Assign
+- String: Alberto
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: comparable
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: b
+- Assign
+- LeftCurlyBrace
+- Identifier: name
+- Assign
+- String: Wouter
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: comparable
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- If
+- LeftParenthesis
+- Identifier: a
+- GreaterThan
+- Identifier: b
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "a>b\n"
+- RightParenthesis
+- Newline
+- Else
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "b<=a\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- If
+- LeftParenthesis
+- Identifier: comparable
+- Equals
+- Identifier: comparable
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "comparable==comparable\n"
+- RightParenthesis
+- Newline
+- Else
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "comparable!=comparable\n"
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\nWith Classes:\n"
+- RightParenthesis
+- Newline
+- Class
+- Identifier: Comparable
+- LeftCurlyBrace
+- Newline
+- Identifier: constructor
+- LeftParenthesis
+- Identifier: n
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- Identifier: name
+- Assign
+- Identifier: n
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Function
+- Identifier: _cmp
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _cmp called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- Identifier: name
+- LessThan
+- Identifier: other
+- Period
+- Identifier: name
+- RightParenthesis
+- Return
+- Minus
+- Integer: 1
+- Semicolon
+- Newline
+- If
+- LeftParenthesis
+- Identifier: name
+- GreaterThan
+- Identifier: other
+- Period
+- Identifier: name
+- RightParenthesis
+- Return
+- Integer: 1
+- Semicolon
+- Newline
+- Return
+- Integer: 0
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Identifier: name
+- Assign
+- "Null"
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: a
+- Assign
+- Identifier: Comparable
+- LeftParenthesis
+- String: Alberto
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: b
+- Assign
+- Identifier: Comparable
+- LeftParenthesis
+- String: Wouter
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- If
+- LeftParenthesis
+- Identifier: a
+- GreaterThan
+- Identifier: b
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "a>b\n"
+- RightParenthesis
+- Newline
+- Else
+- Newline
+- Identifier: print
+- LeftParenthesis
+- String: "b<=a\n"
+- RightParenthesis
+- Semicolon

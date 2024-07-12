@@ -1,0 +1,672 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/metamethods/arith.nut
+---
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "With Tables:\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: arithT
+- Assign
+- LeftCurlyBrace
+- Newline
+- Identifier: _add
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _add called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Plus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _sub
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _sub called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Minus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: _mul
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _mul called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Multiply
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _div
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _div called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Divide
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _modulo
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _modulo called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Modulus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _unm
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _unm called\n"
+- RightParenthesis
+- Newline
+- Return
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- Minus
+- This
+- Period
+- Identifier: n
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- This
+- Period
+- Identifier: getdelegate
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _tostring
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- String: "{n="
+- Plus
+- This
+- Period
+- Identifier: n
+- Plus
+- String: "}"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: one
+- Assign
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- Integer: 1
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: arithT
+- RightParenthesis
+- Semicolon
+- Newline
+- Local
+- Identifier: two
+- Assign
+- LeftCurlyBrace
+- Identifier: n
+- Assign
+- Integer: 2
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: arithT
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Plus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Minus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Multiply
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Divide
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Plus
+- Identifier: two
+- RightParenthesis
+- Modulus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\nWith Classes:\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: ArithC
+- Newline
+- Identifier: ArithC
+- Assign
+- Class
+- LeftCurlyBrace
+- Newline
+- Identifier: n
+- Assign
+- Integer: 0
+- Newline
+- Identifier: constructor
+- LeftParenthesis
+- Identifier: n
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: n
+- Assign
+- Identifier: n
+- Newline
+- RightCurlyBrace
+- Newline
+- Identifier: _add
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _add called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Plus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _sub
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _sub called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Minus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: _mul
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _mul called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Multiply
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _div
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _div called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Divide
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _modulo
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _modulo called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- This
+- Period
+- Identifier: n
+- Modulus
+- Identifier: other
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _unm
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _unm called\n"
+- RightParenthesis
+- Newline
+- Return
+- Identifier: ArithC
+- LeftParenthesis
+- Identifier: n
+- Assign
+- Minus
+- This
+- Period
+- Identifier: n
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _tostring
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- String: ArithC(n=
+- Plus
+- This
+- Period
+- Identifier: n
+- Plus
+- String: )
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: one
+- Assign
+- Identifier: ArithC
+- LeftParenthesis
+- Integer: 1
+- RightParenthesis
+- Newline
+- Local
+- Identifier: two
+- Assign
+- Identifier: ArithC
+- LeftParenthesis
+- Integer: 2
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Plus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Minus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Multiply
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Divide
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: one
+- Plus
+- Identifier: two
+- RightParenthesis
+- Modulus
+- Identifier: two
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline

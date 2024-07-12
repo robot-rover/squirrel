@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for squirrel_repo/classattributes.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -36,8 +36,8 @@ body:
                 target:
                   Ident:
                     - Foo
-                    - start: 6
-                      end: 9
+                    - start: Start
+                      end: End
                 value:
                   data:
                     ClassDef:
@@ -47,16 +47,16 @@ body:
                               Literal:
                                 String: constructor
                             span:
-                              start: 34
-                              end: 45
+                              start: Start
+                              end: End
                           - data:
                               FunctionDef:
                                 keyword_span:
-                                  start: 34
-                                  end: 45
+                                  start: Start
+                                  end: End
                                 arg_span:
-                                  start: 45
-                                  end: 48
+                                  start: Start
+                                  end: End
                                 num_args: 1
                                 default_expr: []
                                 local_names:
@@ -75,8 +75,8 @@ body:
                                                 target:
                                                   Ident:
                                                     - testy
-                                                    - start: 63
-                                                      end: 68
+                                                    - start: Start
+                                                      end: End
                                                 value:
                                                   data:
                                                     ArrayDecl:
@@ -84,59 +84,59 @@ body:
                                                           Literal:
                                                             String: stuff
                                                         span:
-                                                          start: 72
-                                                          end: 79
+                                                          start: Start
+                                                          end: End
                                                       - data:
                                                           Literal:
                                                             Integer: 1
                                                         span:
-                                                          start: 80
-                                                          end: 81
+                                                          start: Start
+                                                          end: End
                                                       - data:
                                                           Literal:
                                                             Integer: 2
                                                         span:
-                                                          start: 82
-                                                          end: 83
+                                                          start: Start
+                                                          end: End
                                                       - data:
                                                           Literal:
                                                             Integer: 3
                                                         span:
-                                                          start: 84
-                                                          end: 85
+                                                          start: Start
+                                                          end: End
                                                   span:
-                                                    start: 71
-                                                    end: 86
+                                                    start: Start
+                                                    end: End
                                                 kind: Normal
                                                 op_span:
-                                                  start: 69
-                                                  end: 70
+                                                  start: Start
+                                                  end: End
                                             span:
-                                              start: 63
-                                              end: 86
+                                              start: Start
+                                              end: End
                                         span:
-                                          start: 63
-                                          end: 86
+                                          start: Start
+                                          end: End
                                   span:
-                                    start: 0
-                                    end: 93
+                                    start: Start
+                                    end: End
                             span:
-                              start: 0
-                              end: 93
+                              start: Start
+                              end: End
                         - - data:
                               Literal:
                                 String: PrintTesty
                             span:
-                              start: 174
-                              end: 184
+                              start: Start
+                              end: End
                           - data:
                               FunctionDef:
                                 keyword_span:
-                                  start: 165
-                                  end: 173
+                                  start: Start
+                                  end: End
                                 arg_span:
-                                  start: 184
-                                  end: 186
+                                  start: Start
+                                  end: End
                                 num_args: 0
                                 default_expr: []
                                 local_names:
@@ -158,8 +158,8 @@ body:
                                               data:
                                                 Ident: testy
                                               span:
-                                                start: 218
-                                                end: 223
+                                                start: Start
+                                                end: End
                                             body:
                                               data:
                                                 Block:
@@ -171,132 +171,132 @@ body:
                                                               FieldAccess:
                                                                 - data: Globals
                                                                   span:
-                                                                    start: 247
-                                                                    end: 249
+                                                                    start: Start
+                                                                    end: End
                                                                 - - print
-                                                                  - start: 249
-                                                                    end: 254
+                                                                  - start: Start
+                                                                    end: End
                                                             args:
                                                               - data:
                                                                   BinaryOp:
                                                                     op: Add
                                                                     op_span:
-                                                                      start: 275
-                                                                      end: 276
+                                                                      start: Start
+                                                                      end: End
                                                                     lhs:
                                                                       data:
                                                                         BinaryOp:
                                                                           op: Add
                                                                           op_span:
-                                                                            start: 271
-                                                                            end: 272
+                                                                            start: Start
+                                                                            end: End
                                                                           lhs:
                                                                             data:
                                                                               BinaryOp:
                                                                                 op: Add
                                                                                 op_span:
-                                                                                  start: 265
-                                                                                  end: 266
+                                                                                  start: Start
+                                                                                  end: End
                                                                                 lhs:
                                                                                   data:
                                                                                     BinaryOp:
                                                                                       op: Add
                                                                                       op_span:
-                                                                                        start: 263
-                                                                                        end: 264
+                                                                                        start: Start
+                                                                                        end: End
                                                                                       lhs:
                                                                                         data:
                                                                                           Literal:
                                                                                             String: "idx = "
                                                                                         span:
-                                                                                          start: 255
-                                                                                          end: 263
+                                                                                          start: Start
+                                                                                          end: End
                                                                                       rhs:
                                                                                         data:
                                                                                           Local:
                                                                                             - 0
-                                                                                            - start: 264
-                                                                                              end: 265
+                                                                                            - start: Start
+                                                                                              end: End
                                                                                         span:
-                                                                                          start: 264
-                                                                                          end: 265
+                                                                                          start: Start
+                                                                                          end: End
                                                                                   span:
-                                                                                    start: 255
-                                                                                    end: 265
+                                                                                    start: Start
+                                                                                    end: End
                                                                                 rhs:
                                                                                   data:
                                                                                     Literal:
                                                                                       String: " = "
                                                                                   span:
-                                                                                    start: 266
-                                                                                    end: 271
+                                                                                    start: Start
+                                                                                    end: End
                                                                             span:
-                                                                              start: 255
-                                                                              end: 271
+                                                                              start: Start
+                                                                              end: End
                                                                           rhs:
                                                                             data:
                                                                               Local:
                                                                                 - 1
-                                                                                - start: 272
-                                                                                  end: 275
+                                                                                - start: Start
+                                                                                  end: End
                                                                             span:
-                                                                              start: 272
-                                                                              end: 275
+                                                                              start: Start
+                                                                              end: End
                                                                       span:
-                                                                        start: 255
-                                                                        end: 275
+                                                                        start: Start
+                                                                        end: End
                                                                     rhs:
                                                                       data:
                                                                         Literal:
                                                                           String: " \n"
                                                                       span:
-                                                                        start: 276
-                                                                        end: 281
+                                                                        start: Start
+                                                                        end: End
                                                                 span:
-                                                                  start: 255
-                                                                  end: 281
+                                                                  start: Start
+                                                                  end: End
                                                         span:
-                                                          start: 254
-                                                          end: 282
+                                                          start: Start
+                                                          end: End
                                                     span:
-                                                      start: 254
-                                                      end: 282
+                                                      start: Start
+                                                      end: End
                                               span:
-                                                start: 0
-                                                end: 293
+                                                start: Start
+                                                end: End
                                         span:
-                                          start: 0
-                                          end: 293
+                                          start: Start
+                                          end: End
                                   span:
-                                    start: 0
-                                    end: 299
+                                    start: Start
+                                    end: End
                             span:
-                              start: 0
-                              end: 299
+                              start: Start
+                              end: End
                         - - data:
                               Literal:
                                 String: testy
                             span:
-                              start: 371
-                              end: 376
+                              start: Start
+                              end: End
                           - data:
                               Literal: "Null"
                             span:
-                              start: 379
-                              end: 383
+                              start: Start
+                              end: End
                   span:
-                    start: 0
-                    end: 387
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 0
-                  end: 5
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 387
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 387
+          start: Start
+          end: End
       - data:
           Foreach:
             index_idx: 1
@@ -305,8 +305,8 @@ body:
               data:
                 Ident: Foo
               span:
-                start: 411
-                end: 414
+                start: Start
+                end: End
             body:
               data:
                 Block:
@@ -318,64 +318,64 @@ body:
                               FieldAccess:
                                 - data: Globals
                                   span:
-                                    start: 422
-                                    end: 424
+                                    start: Start
+                                    end: End
                                 - - print
-                                  - start: 424
-                                    end: 429
+                                  - start: Start
+                                    end: End
                             args:
                               - data:
                                   BinaryOp:
                                     op: Add
                                     op_span:
-                                      start: 436
-                                      end: 437
+                                      start: Start
+                                      end: End
                                     lhs:
                                       data:
                                         Local:
                                           - 1
-                                          - start: 430
-                                            end: 436
+                                          - start: Start
+                                            end: End
                                       span:
-                                        start: 430
-                                        end: 436
+                                        start: Start
+                                        end: End
                                     rhs:
                                       data:
                                         Literal:
                                           String: "\n"
                                       span:
-                                        start: 437
-                                        end: 441
+                                        start: Start
+                                        end: End
                                 span:
-                                  start: 430
-                                  end: 441
+                                  start: Start
+                                  end: End
                         span:
-                          start: 429
-                          end: 442
+                          start: Start
+                          end: End
                     span:
-                      start: 429
-                      end: 442
+                      start: Start
+                      end: End
                   - data:
                       Block: []
                     span:
-                      start: 0
-                      end: 453
+                      start: Start
+                      end: End
                   - data:
                       IfElse:
                         - data:
                             BinaryOp:
                               op: NotEq
                               op_span:
-                                start: 502
-                                end: 504
+                                start: Start
+                                end: End
                               lhs:
                                 data:
                                   Assign:
                                     target:
                                       Local:
                                         - 3
-                                        - start: 468
-                                          end: 472
+                                        - start: Start
+                                          end: End
                                     value:
                                       data:
                                         FunctionCall:
@@ -384,39 +384,39 @@ body:
                                               - data:
                                                   Ident: Foo
                                                 span:
-                                                  start: 475
-                                                  end: 478
+                                                  start: Start
+                                                  end: End
                                               - - getattributes
-                                                - start: 479
-                                                  end: 492
+                                                - start: Start
+                                                  end: End
                                           args:
                                             - data:
                                                 Local:
                                                   - 1
-                                                  - start: 493
-                                                    end: 499
+                                                  - start: Start
+                                                    end: End
                                               span:
-                                                start: 493
-                                                end: 499
+                                                start: Start
+                                                end: End
                                       span:
-                                        start: 492
-                                        end: 500
+                                        start: Start
+                                        end: End
                                     kind: Normal
                                     op_span:
-                                      start: 473
-                                      end: 474
+                                      start: Start
+                                      end: End
                                 span:
-                                  start: 468
-                                  end: 500
+                                  start: Start
+                                  end: End
                               rhs:
                                 data:
                                   Literal: "Null"
                                 span:
-                                  start: 505
-                                  end: 509
+                                  start: Start
+                                  end: End
                           span:
-                            start: 468
-                            end: 509
+                            start: Start
+                            end: End
                         - data:
                             Block:
                               - data:
@@ -427,11 +427,11 @@ body:
                                       data:
                                         Local:
                                           - 3
-                                          - start: 536
-                                            end: 540
+                                          - start: Start
+                                            end: End
                                       span:
-                                        start: 536
-                                        end: 540
+                                        start: Start
+                                        end: End
                                     body:
                                       data:
                                         Block:
@@ -443,113 +443,113 @@ body:
                                                       FieldAccess:
                                                         - data: Globals
                                                           span:
-                                                            start: 564
-                                                            end: 566
+                                                            start: Start
+                                                            end: End
                                                         - - print
-                                                          - start: 566
-                                                            end: 571
+                                                          - start: Start
+                                                            end: End
                                                     args:
                                                       - data:
                                                           BinaryOp:
                                                             op: Add
                                                             op_span:
-                                                              start: 595
-                                                              end: 596
+                                                              start: Start
+                                                              end: End
                                                             lhs:
                                                               data:
                                                                 BinaryOp:
                                                                   op: Add
                                                                   op_span:
-                                                                    start: 584
-                                                                    end: 585
+                                                                    start: Start
+                                                                    end: End
                                                                   lhs:
                                                                     data:
                                                                       BinaryOp:
                                                                         op: Add
                                                                         op_span:
-                                                                          start: 578
-                                                                          end: 579
+                                                                          start: Start
+                                                                          end: End
                                                                         lhs:
                                                                           data:
                                                                             BinaryOp:
                                                                               op: Add
                                                                               op_span:
-                                                                                start: 576
-                                                                                end: 577
+                                                                                start: Start
+                                                                                end: End
                                                                               lhs:
                                                                                 data:
                                                                                   Literal:
                                                                                     String: "\t"
                                                                                 span:
-                                                                                  start: 572
-                                                                                  end: 576
+                                                                                  start: Start
+                                                                                  end: End
                                                                               rhs:
                                                                                 data:
                                                                                   Local:
                                                                                     - 4
-                                                                                    - start: 577
-                                                                                      end: 578
+                                                                                    - start: Start
+                                                                                      end: End
                                                                                 span:
-                                                                                  start: 577
-                                                                                  end: 578
+                                                                                  start: Start
+                                                                                  end: End
                                                                           span:
-                                                                            start: 572
-                                                                            end: 578
+                                                                            start: Start
+                                                                            end: End
                                                                         rhs:
                                                                           data:
                                                                             Literal:
                                                                               String: " = "
                                                                           span:
-                                                                            start: 579
-                                                                            end: 584
+                                                                            start: Start
+                                                                            end: End
                                                                     span:
-                                                                      start: 572
-                                                                      end: 584
+                                                                      start: Start
+                                                                      end: End
                                                                   rhs:
                                                                     data:
                                                                       UnaryOp:
                                                                         - TypeOf
-                                                                        - start: 586
-                                                                          end: 592
+                                                                        - start: Start
+                                                                          end: End
                                                                         - data:
                                                                             Local:
                                                                               - 5
-                                                                              - start: 593
-                                                                                end: 594
+                                                                              - start: Start
+                                                                                end: End
                                                                           span:
-                                                                            start: 593
-                                                                            end: 594
+                                                                            start: Start
+                                                                            end: End
                                                                     span:
-                                                                      start: 586
-                                                                      end: 594
+                                                                      start: Start
+                                                                      end: End
                                                               span:
-                                                                start: 572
-                                                                end: 594
+                                                                start: Start
+                                                                end: End
                                                             rhs:
                                                               data:
                                                                 Literal:
                                                                   String: "\n"
                                                               span:
-                                                                start: 596
-                                                                end: 600
+                                                                start: Start
+                                                                end: End
                                                         span:
-                                                          start: 572
-                                                          end: 600
+                                                          start: Start
+                                                          end: End
                                                 span:
-                                                  start: 571
-                                                  end: 601
+                                                  start: Start
+                                                  end: End
                                             span:
-                                              start: 571
-                                              end: 601
+                                              start: Start
+                                              end: End
                                       span:
-                                        start: 0
-                                        end: 612
+                                        start: Start
+                                        end: End
                                 span:
-                                  start: 0
-                                  end: 612
+                                  start: Start
+                                  end: End
                           span:
-                            start: 0
-                            end: 618
+                            start: Start
+                            end: End
                         - data:
                             Block:
                               - data:
@@ -560,36 +560,36 @@ body:
                                           FieldAccess:
                                             - data: Globals
                                               span:
-                                                start: 638
-                                                end: 640
+                                                start: Start
+                                                end: End
                                             - - print
-                                              - start: 640
-                                                end: 645
+                                              - start: Start
+                                                end: End
                                         args:
                                           - data:
                                               Literal:
                                                 String: "\t<no attributes>\n"
                                             span:
-                                              start: 646
-                                              end: 667
+                                              start: Start
+                                              end: End
                                     span:
-                                      start: 645
-                                      end: 668
+                                      start: Start
+                                      end: End
                                 span:
-                                  start: 645
-                                  end: 668
+                                  start: Start
+                                  end: End
                           span:
-                            start: 0
-                            end: 674
+                            start: Start
+                            end: End
                     span:
-                      start: 0
-                      end: 674
+                      start: Start
+                      end: End
               span:
-                start: 0
-                end: 676
+                start: Start
+                end: End
         span:
-          start: 0
-          end: 676
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 676
+    start: Start
+    end: End

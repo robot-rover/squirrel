@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for verify/lexical_structure/keywords.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -30,25 +30,25 @@ body:
                 target:
                   Local:
                     - 1
-                    - start: 6
-                      end: 9
+                    - start: Start
+                      end: End
                 value:
                   data:
                     Literal:
                       String: foo
                   span:
-                    start: 12
-                    end: 17
+                    start: Start
+                    end: End
                 kind: Normal
                 op_span:
-                  start: 10
-                  end: 11
+                  start: Start
+                  end: End
             span:
-              start: 6
-              end: 17
+              start: Start
+              end: End
         span:
-          start: 6
-          end: 17
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -56,25 +56,25 @@ body:
                 target:
                   Local:
                     - 2
-                    - start: 24
-                      end: 27
+                    - start: Start
+                      end: End
                 value:
                   data:
                     Literal:
                       String: Foo
                   span:
-                    start: 30
-                    end: 35
+                    start: Start
+                    end: End
                 kind: Normal
                 op_span:
-                  start: 28
-                  end: 29
+                  start: Start
+                  end: End
             span:
-              start: 24
-              end: 35
+              start: Start
+              end: End
         span:
-          start: 24
-          end: 35
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -83,45 +83,45 @@ body:
                   FieldAccess:
                     - data: Globals
                       span:
-                        start: 37
-                        end: 39
+                        start: Start
+                        end: End
                     - - print
-                      - start: 39
-                        end: 44
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       BinaryOp:
                         op: Add
                         op_span:
-                          start: 49
-                          end: 50
+                          start: Start
+                          end: End
                         lhs:
                           data:
                             Local:
                               - 1
-                              - start: 45
-                                end: 48
+                              - start: Start
+                                end: End
                           span:
-                            start: 45
-                            end: 48
+                            start: Start
+                            end: End
                         rhs:
                           data:
                             Local:
                               - 2
-                              - start: 51
-                                end: 54
+                              - start: Start
+                                end: End
                           span:
-                            start: 51
-                            end: 54
+                            start: Start
+                            end: End
                     span:
-                      start: 45
-                      end: 54
+                      start: Start
+                      end: End
             span:
-              start: 44
-              end: 55
+              start: Start
+              end: End
         span:
-          start: 44
-          end: 55
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -130,24 +130,24 @@ body:
                   FieldAccess:
                     - data: Globals
                       span:
-                        start: 57
-                        end: 59
+                        start: Start
+                        end: End
                     - - print
-                      - start: 59
-                        end: 64
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       Literal:
                         Integer: 6
                     span:
-                      start: 65
-                      end: 73
+                      start: Start
+                      end: End
             span:
-              start: 64
-              end: 74
+              start: Start
+              end: End
         span:
-          start: 64
-          end: 74
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -156,11 +156,11 @@ body:
                   FieldAccess:
                     - data: Globals
                       span:
-                        start: 75
-                        end: 77
+                        start: Start
+                        end: End
                     - - print
-                      - start: 77
-                        end: 82
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       FunctionCall:
@@ -170,35 +170,35 @@ body:
                                 Literal:
                                   String: verify/lexical_structure/keywords.nut
                               span:
-                                start: 83
-                                end: 91
+                                start: Start
+                                end: End
                             - - slice
-                              - start: 92
-                                end: 97
+                              - start: Start
+                                end: End
                         args:
                           - data:
                               UnaryOp:
                                 - Neg
-                                - start: 98
-                                  end: 99
+                                - start: Start
+                                  end: End
                                 - data:
                                     Literal:
                                       Integer: 12
                                   span:
-                                    start: 99
-                                    end: 101
+                                    start: Start
+                                    end: End
                             span:
-                              start: 98
-                              end: 101
+                              start: Start
+                              end: End
                     span:
-                      start: 97
-                      end: 102
+                      start: Start
+                      end: End
             span:
-              start: 82
-              end: 103
+              start: Start
+              end: End
         span:
-          start: 82
-          end: 103
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 103
+    start: Start
+    end: End

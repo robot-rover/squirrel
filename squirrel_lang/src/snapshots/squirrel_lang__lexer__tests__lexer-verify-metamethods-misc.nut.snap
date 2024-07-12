@@ -1,0 +1,439 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/metamethods/misc.nut
+---
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "With Tables:\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: customTable
+- Assign
+- LeftCurlyBrace
+- Newline
+- Identifier: _typeof
+- Assign
+- Function
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _typeof called\n"
+- RightParenthesis
+- Newline
+- Return
+- String: customTable
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _call
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Table _call called (
+- Plus
+- LeftParenthesis
+- Identifier: other
+- Equals
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _cloned
+- LeftParenthesis
+- Identifier: original
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Table _cloned called (
+- Plus
+- Identifier: original
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _tostring
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- String: customTableStringed
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Newline
+- Function
+- Identifier: _nexti
+- LeftParenthesis
+- Identifier: prev_idx
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Table _nexti called (
+- Plus
+- Identifier: prev_idx
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- Identifier: prev_idx
+- LessThan
+- Integer: 10
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- Identifier: prev_idx
+- Plus
+- Integer: 1
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Throw
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: a
+- Assign
+- LeftCurlyBrace
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: customTable
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "a: "
+- Plus
+- Identifier: a
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Local
+- Identifier: ac
+- Assign
+- Clone
+- Identifier: a
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Typeof
+- Identifier: ac
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Loop:\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: i
+- In
+- Identifier: a
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: i
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\nWith Classes:\n"
+- RightParenthesis
+- Newline
+- Class
+- Identifier: CustomClass
+- LeftCurlyBrace
+- Newline
+- Identifier: data
+- Assign
+- "Null"
+- Newline
+- Identifier: _typeof
+- Assign
+- Function
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Class _typeof called\n"
+- RightParenthesis
+- Newline
+- Return
+- String: customClass
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _call
+- LeftParenthesis
+- Identifier: other
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Class _call called (
+- Plus
+- LeftParenthesis
+- Identifier: other
+- Equals
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _cloned
+- LeftParenthesis
+- Identifier: original
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Class _cloned called (
+- Plus
+- Identifier: original
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _tostring
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- String: customClassStringed
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _nexti
+- LeftParenthesis
+- Identifier: prev_idx
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Table _nexti called (
+- Plus
+- Identifier: prev_idx
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: data
+- Equals
+- "Null"
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: data
+- Assign
+- Integer: 0
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: data
+- PlusAssign
+- Integer: 1
+- Newline
+- RightCurlyBrace
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: data
+- Equals
+- Integer: 5
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: data
+- Assign
+- "Null"
+- Newline
+- Return
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- Return
+- String: data
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: b
+- Assign
+- Identifier: CustomClass
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "b: "
+- Plus
+- Identifier: b
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: b
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Local
+- Identifier: bc
+- Assign
+- Clone
+- Identifier: b
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Typeof
+- Identifier: bc
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Loop:\n"
+- RightParenthesis
+- Newline
+- ForEach
+- LeftParenthesis
+- Identifier: i
+- In
+- Identifier: b
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: i
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace

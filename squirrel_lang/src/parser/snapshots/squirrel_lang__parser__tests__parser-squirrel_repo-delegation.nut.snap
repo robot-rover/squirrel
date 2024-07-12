@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for squirrel_repo/delegation.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -28,8 +28,8 @@ body:
                 target:
                   Ident:
                     - PEntity
-                    - start: 1
-                      end: 8
+                    - start: Start
+                      end: End
                 value:
                   data:
                     TableDecl:
@@ -37,87 +37,87 @@ body:
                             Literal:
                               String: name
                           span:
-                            start: 18
-                            end: 22
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               String: noname
                           span:
-                            start: 23
-                            end: 31
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: pos
                           span:
-                            start: 36
-                            end: 39
+                            start: Start
+                            end: End
                         - data:
                             TableDecl:
                               - - data:
                                     Literal:
                                       String: x
                                   span:
-                                    start: 41
-                                    end: 42
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 0
                                   span:
-                                    start: 43
-                                    end: 44
+                                    start: Start
+                                    end: End
                               - - data:
                                     Literal:
                                       String: y
                                   span:
-                                    start: 45
-                                    end: 46
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 0
                                   span:
-                                    start: 47
-                                    end: 48
+                                    start: Start
+                                    end: End
                               - - data:
                                     Literal:
                                       String: z
                                   span:
-                                    start: 49
-                                    end: 50
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 0
                                   span:
-                                    start: 51
-                                    end: 52
+                                    start: Start
+                                    end: End
                           span:
-                            start: 40
-                            end: 53
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: type
                           span:
-                            start: 58
-                            end: 62
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               String: entity
                           span:
-                            start: 63
-                            end: 71
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: _typeof
                           span:
-                            start: 94
-                            end: 101
+                            start: Start
+                            end: End
                         - data:
                             FunctionDef:
                               keyword_span:
-                                start: 102
-                                end: 110
+                                start: Start
+                                end: End
                               arg_span:
-                                start: 110
-                                end: 112
+                                start: Start
+                                end: End
                               num_args: 0
                               default_expr: []
                               local_names: []
@@ -132,30 +132,30 @@ body:
                                           data:
                                             Ident: type
                                           span:
-                                            start: 134
-                                            end: 138
+                                            start: Start
+                                            end: End
                                       span:
-                                        start: 127
-                                        end: 138
+                                        start: Start
+                                        end: End
                                 span:
-                                  start: 0
-                                  end: 145
+                                  start: Start
+                                  end: End
                           span:
-                            start: 0
-                            end: 145
+                            start: Start
+                            end: End
                   span:
-                    start: 12
-                    end: 147
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 9
-                  end: 11
+                  start: Start
+                  end: End
             span:
-              start: 1
-              end: 147
+              start: Start
+              end: End
         span:
-          start: 1
-          end: 147
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -165,20 +165,20 @@ body:
                     - data:
                         Ident: PEntity
                       span:
-                        start: 158
-                        end: 165
+                        start: Start
+                        end: End
                     - - PrintPos
-                      - start: 167
-                        end: 175
+                      - start: Start
+                        end: End
                 value:
                   data:
                     FunctionDef:
                       keyword_span:
-                        start: 149
-                        end: 157
+                        start: Start
+                        end: End
                       arg_span:
-                        start: 175
-                        end: 177
+                        start: Start
+                        end: End
                       num_args: 0
                       default_expr: []
                       local_names: []
@@ -196,163 +196,163 @@ body:
                                         FieldAccess:
                                           - data: Globals
                                             span:
-                                              start: 184
-                                              end: 186
+                                              start: Start
+                                              end: End
                                           - - print
-                                            - start: 186
-                                              end: 191
+                                            - start: Start
+                                              end: End
                                       args:
                                         - data:
                                             BinaryOp:
                                               op: Add
                                               op_span:
-                                                start: 226
-                                                end: 227
+                                                start: Start
+                                                end: End
                                               lhs:
                                                 data:
                                                   BinaryOp:
                                                     op: Add
                                                     op_span:
-                                                      start: 220
-                                                      end: 221
+                                                      start: Start
+                                                      end: End
                                                     lhs:
                                                       data:
                                                         BinaryOp:
                                                           op: Add
                                                           op_span:
-                                                            start: 214
-                                                            end: 215
+                                                            start: Start
+                                                            end: End
                                                           lhs:
                                                             data:
                                                               BinaryOp:
                                                                 op: Add
                                                                 op_span:
-                                                                  start: 208
-                                                                  end: 209
+                                                                  start: Start
+                                                                  end: End
                                                                 lhs:
                                                                   data:
                                                                     BinaryOp:
                                                                       op: Add
                                                                       op_span:
-                                                                        start: 202
-                                                                        end: 203
+                                                                        start: Start
+                                                                        end: End
                                                                       lhs:
                                                                         data:
                                                                           BinaryOp:
                                                                             op: Add
                                                                             op_span:
-                                                                              start: 196
-                                                                              end: 197
+                                                                              start: Start
+                                                                              end: End
                                                                             lhs:
                                                                               data:
                                                                                 Literal:
                                                                                   String: x=
                                                                               span:
-                                                                                start: 192
-                                                                                end: 196
+                                                                                start: Start
+                                                                                end: End
                                                                             rhs:
                                                                               data:
                                                                                 FieldAccess:
                                                                                   - data:
                                                                                       Ident: pos
                                                                                     span:
-                                                                                      start: 197
-                                                                                      end: 200
+                                                                                      start: Start
+                                                                                      end: End
                                                                                   - - x
-                                                                                    - start: 201
-                                                                                      end: 202
+                                                                                    - start: Start
+                                                                                      end: End
                                                                               span:
-                                                                                start: 197
-                                                                                end: 202
+                                                                                start: Start
+                                                                                end: End
                                                                         span:
-                                                                          start: 192
-                                                                          end: 202
+                                                                          start: Start
+                                                                          end: End
                                                                       rhs:
                                                                         data:
                                                                           Literal:
                                                                             String: " y="
                                                                         span:
-                                                                          start: 203
-                                                                          end: 208
+                                                                          start: Start
+                                                                          end: End
                                                                   span:
-                                                                    start: 192
-                                                                    end: 208
+                                                                    start: Start
+                                                                    end: End
                                                                 rhs:
                                                                   data:
                                                                     FieldAccess:
                                                                       - data:
                                                                           Ident: pos
                                                                         span:
-                                                                          start: 209
-                                                                          end: 212
+                                                                          start: Start
+                                                                          end: End
                                                                       - - y
-                                                                        - start: 213
-                                                                          end: 214
+                                                                        - start: Start
+                                                                          end: End
                                                                   span:
-                                                                    start: 209
-                                                                    end: 214
+                                                                    start: Start
+                                                                    end: End
                                                             span:
-                                                              start: 192
-                                                              end: 214
+                                                              start: Start
+                                                              end: End
                                                           rhs:
                                                             data:
                                                               Literal:
                                                                 String: " z="
                                                             span:
-                                                              start: 215
-                                                              end: 220
+                                                              start: Start
+                                                              end: End
                                                       span:
-                                                        start: 192
-                                                        end: 220
+                                                        start: Start
+                                                        end: End
                                                     rhs:
                                                       data:
                                                         FieldAccess:
                                                           - data:
                                                               Ident: pos
                                                             span:
-                                                              start: 221
-                                                              end: 224
+                                                              start: Start
+                                                              end: End
                                                           - - z
-                                                            - start: 225
-                                                              end: 226
+                                                            - start: Start
+                                                              end: End
                                                       span:
-                                                        start: 221
-                                                        end: 226
+                                                        start: Start
+                                                        end: End
                                                 span:
-                                                  start: 192
-                                                  end: 226
+                                                  start: Start
+                                                  end: End
                                               rhs:
                                                 data:
                                                   Literal:
                                                     String: "\n"
                                                 span:
-                                                  start: 227
-                                                  end: 231
+                                                  start: Start
+                                                  end: End
                                           span:
-                                            start: 192
-                                            end: 231
+                                            start: Start
+                                            end: End
                                   span:
-                                    start: 191
-                                    end: 232
+                                    start: Start
+                                    end: End
                               span:
-                                start: 191
-                                end: 232
+                                start: Start
+                                end: End
                         span:
-                          start: 0
-                          end: 235
+                          start: Start
+                          end: End
                   span:
-                    start: 0
-                    end: 235
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 149
-                  end: 157
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 235
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 235
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -362,20 +362,20 @@ body:
                     - data:
                         Ident: PEntity
                       span:
-                        start: 246
-                        end: 253
+                        start: Start
+                        end: End
                     - - new
-                      - start: 255
-                        end: 258
+                      - start: Start
+                        end: End
                 value:
                   data:
                     FunctionDef:
                       keyword_span:
-                        start: 237
-                        end: 245
+                        start: Start
+                        end: End
                       arg_span:
-                        start: 258
-                        end: 268
+                        start: Start
+                        end: End
                       num_args: 2
                       default_expr: []
                       local_names:
@@ -398,49 +398,49 @@ body:
                                       target:
                                         Local:
                                           - 2
-                                          - start: 281
-                                            end: 290
+                                          - start: Start
+                                            end: End
                                       value:
                                         data:
                                           UnaryOp:
                                             - Clone
-                                            - start: 291
-                                              end: 296
+                                            - start: Start
+                                              end: End
                                             - data:
                                                 FieldAccess:
                                                   - data: Globals
                                                     span:
-                                                      start: 297
-                                                      end: 299
+                                                      start: Start
+                                                      end: End
                                                   - - PEntity
-                                                    - start: 299
-                                                      end: 306
+                                                    - start: Start
+                                                      end: End
                                               span:
-                                                start: 297
-                                                end: 306
+                                                start: Start
+                                                end: End
                                         span:
-                                          start: 291
-                                          end: 306
+                                          start: Start
+                                          end: End
                                       kind: Normal
                                       op_span:
-                                        start: 290
-                                        end: 291
+                                        start: Start
+                                        end: End
                                   span:
-                                    start: 281
-                                    end: 306
+                                    start: Start
+                                    end: End
                               span:
-                                start: 281
-                                end: 306
+                                start: Start
+                                end: End
                             - data:
                                 IfElse:
                                   - data:
                                       Local:
                                         - 0
-                                        - start: 315
-                                          end: 319
+                                        - start: Start
+                                          end: End
                                     span:
-                                      start: 315
-                                      end: 319
+                                      start: Start
+                                      end: End
                                   - data:
                                       Expr:
                                         data:
@@ -450,50 +450,50 @@ body:
                                                 - data:
                                                     Local:
                                                       - 2
-                                                      - start: 329
-                                                        end: 338
+                                                      - start: Start
+                                                        end: End
                                                   span:
-                                                    start: 329
-                                                    end: 338
+                                                    start: Start
+                                                    end: End
                                                 - - name
-                                                  - start: 339
-                                                    end: 343
+                                                  - start: Start
+                                                    end: End
                                             value:
                                               data:
                                                 Local:
                                                   - 0
-                                                  - start: 344
-                                                    end: 348
+                                                  - start: Start
+                                                    end: End
                                               span:
-                                                start: 344
-                                                end: 348
+                                                start: Start
+                                                end: End
                                             kind: Normal
                                             op_span:
-                                              start: 343
-                                              end: 344
+                                              start: Start
+                                              end: End
                                         span:
-                                          start: 329
-                                          end: 348
+                                          start: Start
+                                          end: End
                                     span:
-                                      start: 329
-                                      end: 348
+                                      start: Start
+                                      end: End
                                   - data: Empty
                                     span:
-                                      start: 0
-                                      end: 0
+                                      start: Start
+                                      end: End
                               span:
-                                start: 0
-                                end: 348
+                                start: Start
+                                end: End
                             - data:
                                 IfElse:
                                   - data:
                                       Local:
                                         - 1
-                                        - start: 357
-                                          end: 360
+                                        - start: Start
+                                          end: End
                                     span:
-                                      start: 357
-                                      end: 360
+                                      start: Start
+                                      end: End
                                   - data:
                                       Expr:
                                         data:
@@ -503,69 +503,69 @@ body:
                                                 - data:
                                                     Local:
                                                       - 2
-                                                      - start: 370
-                                                        end: 379
+                                                      - start: Start
+                                                        end: End
                                                   span:
-                                                    start: 370
-                                                    end: 379
+                                                    start: Start
+                                                    end: End
                                                 - - pos
-                                                  - start: 380
-                                                    end: 383
+                                                  - start: Start
+                                                    end: End
                                             value:
                                               data:
                                                 Local:
                                                   - 1
-                                                  - start: 384
-                                                    end: 387
+                                                  - start: Start
+                                                    end: End
                                               span:
-                                                start: 384
-                                                end: 387
+                                                start: Start
+                                                end: End
                                             kind: Normal
                                             op_span:
-                                              start: 383
-                                              end: 384
+                                              start: Start
+                                              end: End
                                         span:
-                                          start: 370
-                                          end: 387
+                                          start: Start
+                                          end: End
                                     span:
-                                      start: 370
-                                      end: 387
+                                      start: Start
+                                      end: End
                                   - data: Empty
                                     span:
-                                      start: 0
-                                      end: 0
+                                      start: Start
+                                      end: End
                               span:
-                                start: 0
-                                end: 387
+                                start: Start
+                                end: End
                             - data:
                                 Return:
                                   data:
                                     Local:
                                       - 2
-                                      - start: 400
-                                        end: 409
+                                      - start: Start
+                                        end: End
                                   span:
-                                    start: 400
-                                    end: 409
+                                    start: Start
+                                    end: End
                               span:
-                                start: 393
-                                end: 409
+                                start: Start
+                                end: End
                         span:
-                          start: 0
-                          end: 412
+                          start: Start
+                          end: End
                   span:
-                    start: 0
-                    end: 412
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 237
-                  end: 245
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 412
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 412
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -573,8 +573,8 @@ body:
                 target:
                   Ident:
                     - PPlayer
-                    - start: 414
-                      end: 421
+                    - start: Start
+                      end: End
                 value:
                   data:
                     TableDecl:
@@ -582,75 +582,75 @@ body:
                             Literal:
                               String: model
                           span:
-                            start: 431
-                            end: 436
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               String: warrior.mdl
                           span:
-                            start: 437
-                            end: 450
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: weapon
                           span:
-                            start: 455
-                            end: 461
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               String: fist
                           span:
-                            start: 462
-                            end: 468
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: health
                           span:
-                            start: 473
-                            end: 479
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               Integer: 100
                           span:
-                            start: 480
-                            end: 483
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: armor
                           span:
-                            start: 488
-                            end: 493
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               Integer: 0
                           span:
-                            start: 494
-                            end: 495
+                            start: Start
+                            end: End
                       - - data:
                             Literal:
                               String: type
                           span:
-                            start: 532
-                            end: 536
+                            start: Start
+                            end: End
                         - data:
                             Literal:
                               String: player
                           span:
-                            start: 537
-                            end: 545
+                            start: Start
+                            end: End
                   span:
-                    start: 425
-                    end: 547
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 422
-                  end: 424
+                  start: Start
+                  end: End
             span:
-              start: 414
-              end: 547
+              start: Start
+              end: End
         span:
-          start: 414
-          end: 547
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -660,20 +660,20 @@ body:
                     - data:
                         Ident: PPlayer
                       span:
-                        start: 558
-                        end: 565
+                        start: Start
+                        end: End
                     - - new
-                      - start: 567
-                        end: 570
+                      - start: Start
+                        end: End
                 value:
                   data:
                     FunctionDef:
                       keyword_span:
-                        start: 549
-                        end: 557
+                        start: Start
+                        end: End
                       arg_span:
-                        start: 570
-                        end: 580
+                        start: Start
+                        end: End
                       num_args: 2
                       default_expr: []
                       local_names:
@@ -698,39 +698,39 @@ body:
                                       target:
                                         Local:
                                           - 2
-                                          - start: 593
-                                            end: 594
+                                          - start: Start
+                                            end: End
                                       value:
                                         data:
                                           UnaryOp:
                                             - Clone
-                                            - start: 597
-                                              end: 602
+                                            - start: Start
+                                              end: End
                                             - data:
                                                 FieldAccess:
                                                   - data: Globals
                                                     span:
-                                                      start: 603
-                                                      end: 605
+                                                      start: Start
+                                                      end: End
                                                   - - PPlayer
-                                                    - start: 605
-                                                      end: 612
+                                                    - start: Start
+                                                      end: End
                                               span:
-                                                start: 603
-                                                end: 612
+                                                start: Start
+                                                end: End
                                         span:
-                                          start: 597
-                                          end: 612
+                                          start: Start
+                                          end: End
                                       kind: Normal
                                       op_span:
-                                        start: 595
-                                        end: 596
+                                        start: Start
+                                        end: End
                                   span:
-                                    start: 593
-                                    end: 612
+                                    start: Start
+                                    end: End
                               span:
-                                start: 593
-                                end: 612
+                                start: Start
+                                end: End
                             - data:
                                 Expr:
                                   data:
@@ -738,8 +738,8 @@ body:
                                       target:
                                         Local:
                                           - 3
-                                          - start: 624
-                                            end: 633
+                                          - start: Start
+                                            end: End
                                       value:
                                         data:
                                           FunctionCall:
@@ -749,47 +749,47 @@ body:
                                                     FieldAccess:
                                                       - data: Globals
                                                         span:
-                                                          start: 636
-                                                          end: 638
+                                                          start: Start
+                                                          end: End
                                                       - - PEntity
-                                                        - start: 638
-                                                          end: 645
+                                                        - start: Start
+                                                          end: End
                                                   span:
-                                                    start: 636
-                                                    end: 645
+                                                    start: Start
+                                                    end: End
                                                 - - new
-                                                  - start: 646
-                                                    end: 649
+                                                  - start: Start
+                                                    end: End
                                             args:
                                               - data:
                                                   Local:
                                                     - 0
-                                                    - start: 650
-                                                      end: 654
+                                                    - start: Start
+                                                      end: End
                                                 span:
-                                                  start: 650
-                                                  end: 654
+                                                  start: Start
+                                                  end: End
                                               - data:
                                                   Local:
                                                     - 1
-                                                    - start: 655
-                                                      end: 658
+                                                    - start: Start
+                                                      end: End
                                                 span:
-                                                  start: 655
-                                                  end: 658
+                                                  start: Start
+                                                  end: End
                                         span:
-                                          start: 649
-                                          end: 659
+                                          start: Start
+                                          end: End
                                       kind: Normal
                                       op_span:
-                                        start: 634
-                                        end: 635
+                                        start: Start
+                                        end: End
                                   span:
-                                    start: 624
-                                    end: 659
+                                    start: Start
+                                    end: End
                               span:
-                                start: 624
-                                end: 659
+                                start: Start
+                                end: End
                             - data:
                                 Expr:
                                   data:
@@ -799,58 +799,58 @@ body:
                                           - data:
                                               Local:
                                                 - 3
-                                                - start: 665
-                                                  end: 674
+                                                - start: Start
+                                                  end: End
                                             span:
-                                              start: 665
-                                              end: 674
+                                              start: Start
+                                              end: End
                                           - - setdelegate
-                                            - start: 675
-                                              end: 686
+                                            - start: Start
+                                              end: End
                                       args:
                                         - data:
                                             Local:
                                               - 2
-                                              - start: 687
-                                                end: 688
+                                              - start: Start
+                                                end: End
                                           span:
-                                            start: 687
-                                            end: 688
+                                            start: Start
+                                            end: End
                                   span:
-                                    start: 686
-                                    end: 689
+                                    start: Start
+                                    end: End
                               span:
-                                start: 686
-                                end: 689
+                                start: Start
+                                end: End
                             - data:
                                 Return:
                                   data:
                                     Local:
                                       - 3
-                                      - start: 702
-                                        end: 711
+                                      - start: Start
+                                        end: End
                                   span:
-                                    start: 702
-                                    end: 711
+                                    start: Start
+                                    end: End
                               span:
-                                start: 695
-                                end: 711
+                                start: Start
+                                end: End
                         span:
-                          start: 0
-                          end: 714
+                          start: Start
+                          end: End
                   span:
-                    start: 0
-                    end: 714
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 549
-                  end: 557
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 714
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 714
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -858,8 +858,8 @@ body:
                 target:
                   Local:
                     - 1
-                    - start: 722
-                      end: 728
+                    - start: Start
+                      end: End
                 value:
                   data:
                     FunctionCall:
@@ -868,72 +868,72 @@ body:
                           - data:
                               Ident: PPlayer
                             span:
-                              start: 729
-                              end: 736
+                              start: Start
+                              end: End
                           - - new
-                            - start: 737
-                              end: 740
+                            - start: Start
+                              end: End
                       args:
                         - data:
                             Literal:
                               String: godzilla
                           span:
-                            start: 741
-                            end: 751
+                            start: Start
+                            end: End
                         - data:
                             TableDecl:
                               - - data:
                                     Literal:
                                       String: x
                                   span:
-                                    start: 753
-                                    end: 754
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 10
                                   span:
-                                    start: 755
-                                    end: 757
+                                    start: Start
+                                    end: End
                               - - data:
                                     Literal:
                                       String: y
                                   span:
-                                    start: 758
-                                    end: 759
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 20
                                   span:
-                                    start: 760
-                                    end: 762
+                                    start: Start
+                                    end: End
                               - - data:
                                     Literal:
                                       String: z
                                   span:
-                                    start: 763
-                                    end: 764
+                                    start: Start
+                                    end: End
                                 - data:
                                     Literal:
                                       Integer: 30
                                   span:
-                                    start: 765
-                                    end: 767
+                                    start: Start
+                                    end: End
                           span:
-                            start: 752
-                            end: 768
+                            start: Start
+                            end: End
                   span:
-                    start: 740
-                    end: 769
+                    start: Start
+                    end: End
                 kind: Normal
                 op_span:
-                  start: 728
-                  end: 729
+                  start: Start
+                  end: End
             span:
-              start: 722
-              end: 769
+              start: Start
+              end: End
         span:
-          start: 722
-          end: 769
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -942,68 +942,68 @@ body:
                   FieldAccess:
                     - data: Globals
                       span:
-                        start: 772
-                        end: 774
+                        start: Start
+                        end: End
                     - - print
-                      - start: 774
-                        end: 779
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       BinaryOp:
                         op: Add
                         op_span:
-                          start: 805
-                          end: 806
+                          start: Start
+                          end: End
                         lhs:
                           data:
                             BinaryOp:
                               op: Add
                               op_span:
-                                start: 793
-                                end: 794
+                                start: Start
+                                end: End
                               lhs:
                                 data:
                                   Literal:
                                     String: PLAYER NAME
                                 span:
-                                  start: 780
-                                  end: 793
+                                  start: Start
+                                  end: End
                               rhs:
                                 data:
                                   FieldAccess:
                                     - data:
                                         Local:
                                           - 1
-                                          - start: 794
-                                            end: 800
+                                          - start: Start
+                                            end: End
                                       span:
-                                        start: 794
-                                        end: 800
+                                        start: Start
+                                        end: End
                                     - - name
-                                      - start: 801
-                                        end: 805
+                                      - start: Start
+                                        end: End
                                 span:
-                                  start: 794
-                                  end: 805
+                                  start: Start
+                                  end: End
                           span:
-                            start: 780
-                            end: 805
+                            start: Start
+                            end: End
                         rhs:
                           data:
                             Literal:
                               String: "\n"
                           span:
-                            start: 806
-                            end: 810
+                            start: Start
+                            end: End
                     span:
-                      start: 780
-                      end: 810
+                      start: Start
+                      end: End
             span:
-              start: 779
-              end: 811
+              start: Start
+              end: End
         span:
-          start: 779
-          end: 811
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -1012,68 +1012,68 @@ body:
                   FieldAccess:
                     - data: Globals
                       span:
-                        start: 813
-                        end: 815
+                        start: Start
+                        end: End
                     - - print
-                      - start: 815
-                        end: 820
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       BinaryOp:
                         op: Add
                         op_span:
-                          start: 848
-                          end: 849
+                          start: Start
+                          end: End
                         lhs:
                           data:
                             BinaryOp:
                               op: Add
                               op_span:
-                                start: 834
-                                end: 835
+                                start: Start
+                                end: End
                               lhs:
                                 data:
                                   Literal:
                                     String: ENTITY TYPE
                                 span:
-                                  start: 821
-                                  end: 834
+                                  start: Start
+                                  end: End
                               rhs:
                                 data:
                                   UnaryOp:
                                     - TypeOf
-                                    - start: 835
-                                      end: 841
+                                    - start: Start
+                                      end: End
                                     - data:
                                         Local:
                                           - 1
-                                          - start: 842
-                                            end: 848
+                                          - start: Start
+                                            end: End
                                       span:
-                                        start: 842
-                                        end: 848
+                                        start: Start
+                                        end: End
                                 span:
-                                  start: 835
-                                  end: 848
+                                  start: Start
+                                  end: End
                           span:
-                            start: 821
-                            end: 848
+                            start: Start
+                            end: End
                         rhs:
                           data:
                             Literal:
                               String: "\n"
                           span:
-                            start: 849
-                            end: 853
+                            start: Start
+                            end: End
                     span:
-                      start: 821
-                      end: 853
+                      start: Start
+                      end: End
             span:
-              start: 820
-              end: 854
+              start: Start
+              end: End
         span:
-          start: 820
-          end: 854
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -1083,21 +1083,21 @@ body:
                     - data:
                         Local:
                           - 1
-                          - start: 857
-                            end: 863
+                          - start: Start
+                            end: End
                       span:
-                        start: 857
-                        end: 863
+                        start: Start
+                        end: End
                     - - PrintPos
-                      - start: 864
-                        end: 872
+                      - start: Start
+                        end: End
                 args: []
             span:
-              start: 872
-              end: 874
+              start: Start
+              end: End
         span:
-          start: 872
-          end: 874
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -1109,37 +1109,37 @@ body:
                           - data:
                               Local:
                                 - 1
-                                - start: 877
-                                  end: 883
+                                - start: Start
+                                  end: End
                             span:
-                              start: 877
-                              end: 883
+                              start: Start
+                              end: End
                           - - pos
-                            - start: 884
-                              end: 887
+                            - start: Start
+                              end: End
                       span:
-                        start: 877
-                        end: 887
+                        start: Start
+                        end: End
                     - - x
-                      - start: 888
-                        end: 889
+                      - start: Start
+                        end: End
                 value:
                   data:
                     Literal:
                       Integer: 123
                   span:
-                    start: 890
-                    end: 893
+                    start: Start
+                    end: End
                 kind: Normal
                 op_span:
-                  start: 889
-                  end: 890
+                  start: Start
+                  end: End
             span:
-              start: 877
-              end: 893
+              start: Start
+              end: End
         span:
-          start: 877
-          end: 893
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -1149,21 +1149,21 @@ body:
                     - data:
                         Local:
                           - 1
-                          - start: 896
-                            end: 902
+                          - start: Start
+                            end: End
                       span:
-                        start: 896
-                        end: 902
+                        start: Start
+                        end: End
                     - - PrintPos
-                      - start: 903
-                        end: 911
+                      - start: Start
+                        end: End
                 args: []
             span:
-              start: 911
-              end: 913
+              start: Start
+              end: End
         span:
-          start: 911
-          end: 913
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 913
+    start: Start
+    end: End

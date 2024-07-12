@@ -1,0 +1,57 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/float.nut
+---
+- Local
+- Identifier: a
+- Assign
+- Number: 1
+- Newline
+- Local
+- Identifier: b
+- Assign
+- Number: 0.234
+- Newline
+- Local
+- Identifier: c
+- Assign
+- Number: 0.001
+- Newline
+- Local
+- Identifier: d
+- Assign
+- Minus
+- Number: 0.03
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: c
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: d
+- Plus
+- String: "\n"
+- RightParenthesis

@@ -1,0 +1,72 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/array.nut
+---
+- Local
+- Identifier: a
+- Assign
+- LeftSquareBracket
+- String: "I'm"
+- Comma
+- String: an
+- Comma
+- String: array
+- RightSquareBracket
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Plus
+- String: " "
+- Plus
+- Identifier: a
+- LeftSquareBracket
+- Integer: 2
+- RightSquareBracket
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: b
+- Assign
+- LeftSquareBracket
+- "Null"
+- RightSquareBracket
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: b
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Assign
+- Identifier: a
+- LeftSquareBracket
+- Integer: 2
+- RightSquareBracket
+- Semicolon
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
+- Plus
+- String: "\n"
+- RightParenthesis

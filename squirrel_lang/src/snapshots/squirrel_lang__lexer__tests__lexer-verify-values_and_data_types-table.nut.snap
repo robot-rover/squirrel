@@ -1,0 +1,99 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/table.nut
+---
+- Local
+- Identifier: t
+- Assign
+- LeftCurlyBrace
+- RightCurlyBrace
+- Newline
+- Local
+- Identifier: test
+- Assign
+- Newline
+- LeftCurlyBrace
+- Newline
+- Identifier: a
+- Assign
+- Integer: 10
+- Newline
+- Identifier: b
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: a
+- RightParenthesis
+- LeftCurlyBrace
+- Return
+- Identifier: a
+- Plus
+- Integer: 1
+- Semicolon
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: t
+- Period
+- Identifier: tostring
+- LeftParenthesis
+- RightParenthesis
+- Period
+- Identifier: slice
+- LeftParenthesis
+- Integer: 0
+- Comma
+- Integer: 11
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: test
+- Period
+- Identifier: tostring
+- LeftParenthesis
+- RightParenthesis
+- Period
+- Identifier: slice
+- LeftParenthesis
+- Integer: 0
+- Comma
+- Integer: 11
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: test
+- Period
+- Identifier: a
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: test
+- Period
+- Identifier: b
+- LeftParenthesis
+- Identifier: test
+- Period
+- Identifier: a
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis

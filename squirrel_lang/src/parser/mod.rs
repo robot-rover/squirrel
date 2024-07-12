@@ -663,7 +663,10 @@ mod tests {
         };
         #[cfg(not(miri))]
         {
-            insta::assert_yaml_snapshot!(test_name, actual_ast, &test_desc);
+            insta::assert_yaml_snapshot!(test_name, actual_ast, {
+                ".**.start" => "Start",
+                ".**.end" => "End",
+            });
         }
     }
 }

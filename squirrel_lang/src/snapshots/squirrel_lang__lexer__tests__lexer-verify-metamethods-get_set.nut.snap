@@ -1,0 +1,526 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/metamethods/get_set.nut
+---
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "With Tables:\n"
+- RightParenthesis
+- Newline
+- Local
+- Identifier: myslots
+- Assign
+- LeftCurlyBrace
+- Newline
+- Identifier: _set
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: idx
+- Comma
+- Identifier: val
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _set called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: rawin
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: rawset
+- LeftParenthesis
+- Identifier: idx
+- Comma
+- Identifier: val
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Throw
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _get
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _get called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: rawin
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- This
+- Period
+- Identifier: rawget
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Throw
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _newslot
+- LeftParenthesis
+- Identifier: key
+- Comma
+- Identifier: value
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _newslot called\n"
+- RightParenthesis
+- Newline
+- This
+- Period
+- Identifier: rawset
+- LeftParenthesis
+- Identifier: key
+- Comma
+- Identifier: value
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _delslot
+- LeftParenthesis
+- Identifier: key
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _delslot called\n"
+- RightParenthesis
+- Newline
+- This
+- Period
+- Identifier: rawdelete
+- LeftParenthesis
+- Identifier: key
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: a
+- Assign
+- LeftCurlyBrace
+- Identifier: desc
+- Assign
+- String: Hello
+- RightCurlyBrace
+- Period
+- Identifier: setdelegate
+- LeftParenthesis
+- Identifier: myslots
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: a
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- Period
+- Identifier: ns
+- NewSlot
+- String: New Slot
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: a
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- Period
+- Identifier: ns
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- Period
+- Identifier: ns
+- Assign
+- String: New Value
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- Period
+- Identifier: ns
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Delete
+- Identifier: a
+- Period
+- Identifier: ns
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: a
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "\nWith Classes:\n"
+- RightParenthesis
+- Newline
+- Class
+- Identifier: MySlots
+- LeftCurlyBrace
+- Newline
+- Identifier: data
+- Assign
+- "Null"
+- Newline
+- Identifier: constructor
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: data
+- Assign
+- LeftCurlyBrace
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Identifier: _set
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: idx
+- Comma
+- Identifier: val
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _set called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawin
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawset
+- LeftParenthesis
+- Identifier: idx
+- Comma
+- Identifier: val
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Throw
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _get
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- Newline
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _get called\n"
+- RightParenthesis
+- Newline
+- If
+- LeftParenthesis
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawin
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Return
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawget
+- LeftParenthesis
+- Identifier: idx
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Else
+- LeftCurlyBrace
+- Newline
+- Throw
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _newslot
+- LeftParenthesis
+- Identifier: key
+- Comma
+- Identifier: value
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _newslot called\n"
+- RightParenthesis
+- Newline
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawset
+- LeftParenthesis
+- Identifier: key
+- Comma
+- Identifier: value
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: _delslot
+- LeftParenthesis
+- Identifier: key
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table _delslot called\n"
+- RightParenthesis
+- Newline
+- This
+- Period
+- Identifier: data
+- Period
+- Identifier: rawdelete
+- LeftParenthesis
+- Identifier: key
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: b
+- Assign
+- Identifier: MySlots
+- LeftParenthesis
+- RightParenthesis
+- Semicolon
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: b
+- Period
+- Identifier: data
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: b
+- Period
+- Identifier: ns
+- NewSlot
+- String: New Slot
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: b
+- Period
+- Identifier: data
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- Period
+- Identifier: ns
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: b
+- Period
+- Identifier: ns
+- Assign
+- String: New Value
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- Period
+- Identifier: ns
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Delete
+- Identifier: b
+- Period
+- Identifier: ns
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: ns
+- In
+- Identifier: b
+- Period
+- Identifier: data
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline

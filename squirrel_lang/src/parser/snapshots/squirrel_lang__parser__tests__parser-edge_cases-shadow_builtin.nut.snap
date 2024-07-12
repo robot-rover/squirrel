@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for edge_cases/shadow_builtin.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -26,8 +26,8 @@ body:
                 target:
                   Ident:
                     - table
-                    - start: 0
-                      end: 5
+                    - start: Start
+                      end: End
                 value:
                   data:
                     TableDecl:
@@ -35,16 +35,16 @@ body:
                             Literal:
                               String: setdelegate
                           span:
-                            start: 24
-                            end: 35
+                            start: Start
+                            end: End
                         - data:
                             FunctionDef:
                               keyword_span:
-                                start: 15
-                                end: 23
+                                start: Start
+                                end: End
                               arg_span:
-                                start: 35
-                                end: 45
+                                start: Start
+                                end: End
                               num_args: 1
                               default_expr: []
                               local_names:
@@ -64,43 +64,43 @@ body:
                                                 FieldAccess:
                                                   - data: Globals
                                                     span:
-                                                      start: 56
-                                                      end: 58
+                                                      start: Start
+                                                      end: End
                                                   - - print
-                                                    - start: 58
-                                                      end: 63
+                                                    - start: Start
+                                                      end: End
                                               args:
                                                 - data:
                                                     Literal:
                                                       String: "Just a test\n"
                                                   span:
-                                                    start: 64
-                                                    end: 79
+                                                    start: Start
+                                                    end: End
                                           span:
-                                            start: 63
-                                            end: 80
+                                            start: Start
+                                            end: End
                                       span:
-                                        start: 63
-                                        end: 80
+                                        start: Start
+                                        end: End
                                 span:
-                                  start: 0
-                                  end: 86
+                                  start: Start
+                                  end: End
                           span:
-                            start: 0
-                            end: 86
+                            start: Start
+                            end: End
                   span:
-                    start: 9
-                    end: 88
+                    start: Start
+                    end: End
                 kind: NewSlot
                 op_span:
-                  start: 6
-                  end: 8
+                  start: Start
+                  end: End
             span:
-              start: 0
-              end: 88
+              start: Start
+              end: End
         span:
-          start: 0
-          end: 88
+          start: Start
+          end: End
       - data:
           Expr:
             data:
@@ -110,11 +110,11 @@ body:
                     - data:
                         Ident: table
                       span:
-                        start: 90
-                        end: 95
+                        start: Start
+                        end: End
                     - - setdelegate
-                      - start: 96
-                        end: 107
+                      - start: Start
+                        end: End
                 args:
                   - data:
                       FunctionCall:
@@ -123,18 +123,18 @@ body:
                             data:
                               Ident: getroottable
                             span:
-                              start: 108
-                              end: 120
+                              start: Start
+                              end: End
                         args: []
                     span:
-                      start: 120
-                      end: 122
+                      start: Start
+                      end: End
             span:
-              start: 107
-              end: 123
+              start: Start
+              end: End
         span:
-          start: 107
-          end: 123
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 123
+    start: Start
+    end: End

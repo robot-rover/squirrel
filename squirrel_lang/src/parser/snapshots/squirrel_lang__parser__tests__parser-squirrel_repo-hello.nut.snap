@@ -1,13 +1,13 @@
 ---
 source: squirrel_lang/src/parser/mod.rs
-expression: Parser test for squirrel_repo/hello.nut
+expression: actual_ast
 ---
 keyword_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 arg_span:
-  start: 0
-  end: 0
+  start: Start
+  end: End
 num_args: 0
 default_expr: []
 local_names:
@@ -28,21 +28,21 @@ body:
                     data:
                       Ident: print
                     span:
-                      start: 0
-                      end: 5
+                      start: Start
+                      end: End
                 args:
                   - data:
                       Literal:
                         String: Hello World!
                     span:
-                      start: 6
-                      end: 20
+                      start: Start
+                      end: End
             span:
-              start: 5
-              end: 21
+              start: Start
+              end: End
         span:
-          start: 5
-          end: 21
+          start: Start
+          end: End
   span:
-    start: 0
-    end: 21
+    start: Start
+    end: End

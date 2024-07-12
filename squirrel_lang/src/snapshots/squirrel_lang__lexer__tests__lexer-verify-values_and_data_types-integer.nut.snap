@@ -1,0 +1,98 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/integer.nut
+---
+- Local
+- Identifier: a
+- Assign
+- Integer: 123
+- Newline
+- Local
+- Identifier: b
+- Assign
+- Integer: 18
+- Newline
+- Local
+- Identifier: c
+- Assign
+- Integer: 61
+- Newline
+- Local
+- Identifier: d
+- Assign
+- Integer: 119
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: c
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: d
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- Local
+- Identifier: t
+- Assign
+- Boolean: true
+- Newline
+- Local
+- Identifier: f
+- Assign
+- Boolean: false
+- Newline
+- Local
+- Identifier: n
+- Assign
+- "Null"
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: t
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: f
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: n
+- Plus
+- String: "\n"
+- RightParenthesis
