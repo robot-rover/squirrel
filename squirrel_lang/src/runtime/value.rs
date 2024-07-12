@@ -48,6 +48,10 @@ macro_rules! value_common_impl {
         pub fn class(class: Class) -> Self {
             Self::Class(Rc::new(RefCell::new(class)))
         }
+
+        pub fn instance(instance: Instance) -> Self {
+            Self::Instance(Rc::new(RefCell::new(instance)))
+        }
     };
 }
 
@@ -114,8 +118,8 @@ impl Value {
             Value::Array(_) => <Rc<RefCell<Vec<Value>>> as TypeName>::type_name(),
             Value::Closure(_) => <Rc<RefCell<Closure>> as TypeName>::type_name(),
             Value::Object(_) => <Rc<RefCell<Object>> as TypeName>::type_name(),
-            Value::Class(_) => todo!(),
-            Value::Instance(_) => todo!(),
+            Value::Class(_) => <Rc<RefCell<Class>> as TypeName>::type_name(),
+            Value::Instance(_) => <Rc<RefCell<Instance>> as TypeName>::type_name(),
         }
     }
 }
@@ -147,6 +151,7 @@ pub enum HashValue {
     Array(Rc<RefCell<Vec<Value>>>),
     Closure(Rc<RefCell<Closure>>),
     Class(Rc<RefCell<Class>>),
+    Instance(Rc<RefCell<Instance>>),
 }
 
 impl PartialEq for HashValue {
@@ -177,6 +182,7 @@ impl Hash for HashValue {
             HashValue::Array(a) => a.as_ptr().hash(state),
             HashValue::Closure(c) => c.as_ptr().hash(state),
             HashValue::Class(c) => c.as_ptr().hash(state),
+            HashValue::Instance(i) => i.as_ptr().hash(state),
         }
     }
 }
@@ -203,7 +209,8 @@ impl From<HashValue> for Value {
             HashValue::Object(o) => Value::Object(o),
             HashValue::Array(a) => Value::Array(a),
             HashValue::Closure(c) => Value::Closure(c),
-            HashValue::Class(c) => Value::Class(c)
+            HashValue::Class(c) => Value::Class(c),
+            HashValue::Instance(i) => Value::Instance(i),
         }
     }
 }
@@ -283,6 +290,13 @@ value_variant!(Value::String(Rc<str>) "string");
 value_variant!(Value::Object(Rc<RefCell<Object>>) "table");
 value_variant!(Value::Closure(Rc<RefCell<Closure>>) "function");
 value_variant!(Value::Array(Rc<RefCell<Vec<Value>>>) "array");
+value_variant!(Value::Class(Rc<RefCell<Class>>) "class");
+value_variant!(Value::Instance(Rc<RefCell<Instance>>) "instance");
+
+fn print_addr<T>(f: &mut fmt::Formatter<'_>, ptr: &Rc<T>) -> fmt::Result
+where Rc<T>: TypeName {
+    write!(f, "({} : 0x{:012x})", <Rc<T> as TypeName>::type_name(), Rc::as_ptr(ptr) as usize)
+}
 
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -291,7 +305,12 @@ impl fmt::Display for Value {
             Value::Integer(i) => write!(f, "{}", i),
             Value::Null => write!(f, "null"),
             Value::String(s) => write!(f, "{}", s),
-            _ => todo!(),
+            Value::NativeFn(n) => write!(f, "({} : 0x{:012x})", <NativeFn as TypeName>::type_name(), *n as usize),
+            Value::Object(o) => print_addr(f, o),
+            Value::Array(a) => print_addr(f, a),
+            Value::Closure(c) => print_addr(f, c),
+            Value::Class(c) => print_addr(f, c),
+            Value::Instance(i) => print_addr(f, i),
         }
     }
 }
@@ -621,8 +640,8 @@ impl Class {
         }
     }
 
-    fn get_next_valid_offset(&self) -> u32 {
-        self.parent.as_ref().map(|p| p.borrow().get_next_valid_offset()).unwrap_or(0) + self.get_offsets().len() as u32
+    fn get_next_valid_offset(&mut self) -> u32 {
+        self.parent.as_ref().map(|p| p.borrow_mut().get_next_valid_offset()).unwrap_or(0) + self.get_or_make_offsets().len() as u32
     }
 
     fn get_offsets(&self) -> &HashMap<HashValue, (u32, Value)> {
@@ -637,7 +656,7 @@ impl Class {
             ClassFields::Offsets(offsets) => {},
             ClassFields::NoOffsets(fields) => {
                 let fields = mem::take(fields);
-                let first_offset = self.parent.as_ref().map(|p| p.borrow().get_next_valid_offset() as u32).unwrap_or(0);
+                let first_offset = self.parent.as_ref().map(|p| p.borrow_mut().get_next_valid_offset() as u32).unwrap_or(0);
                 let mut offsets = HashMap::new();
                 for (field_idx, (key, value)) in fields.into_iter().enumerate() {
                     offsets.insert(key.clone(), (first_offset + field_idx as u32, value));
@@ -756,7 +775,7 @@ impl Instance {
     }
 
     pub fn construct(class: Rc<RefCell<Class>>) -> Self {
-        let fields = vec![Value::Null; class.borrow().get_next_valid_offset() as usize];
+        let fields = vec![Value::Null; class.borrow_mut().get_next_valid_offset() as usize];
         Instance { class, fields }
     }
 }

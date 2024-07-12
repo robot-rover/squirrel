@@ -18,7 +18,7 @@ use crate::{
 
 use super::{
     builtins,
-    value::{Class, Closure, HashValue, Object, TypeName, Value},
+    value::{Class, Closure, HashValue, Instance, Object, TypeName, Value},
     CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState,
 };
 enum FlowControl {
@@ -435,6 +435,10 @@ fn run_rawcall(
                 call_span,
             };
             func(context as *mut _, env, args, &call_info)
+        }
+        Value::Class(class) => {
+            let instance = Instance::construct(class.clone());
+            Ok(Value::instance(instance))
         }
         other => panic!("Can't call non-function {other:?}"),
     }
