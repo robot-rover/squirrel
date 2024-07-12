@@ -804,7 +804,11 @@ mod tests {
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
         #[cfg(not(miri))]
         {
-            insta::assert_snapshot!(test_name, actual_str, &test_desc);
+            insta::with_settings!({filters => vec![
+                (r"\((?<kind>[a-z]+) : 0x(?:0x)?[0-9a-f]+\)", "($kind : 0x<memory>)")
+            ]}, {
+                insta::assert_snapshot!(test_name, actual_str, &test_desc);
+            });
         }
     }
 }

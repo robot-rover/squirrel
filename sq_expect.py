@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 import subprocess
 import sys
 from textwrap import dedent
@@ -75,10 +76,13 @@ def register_script(script):
             ---
             """))
         handle.flush()
-        res = subprocess.run([SQUIRREL_BIN, str(script)], stdout=handle, stderr=subprocess.PIPE)
+        res = subprocess.run([SQUIRREL_BIN, str(script)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         if len(res.stderr) > 0:
             print("Error:")
             print(res.stderr.decode())
+        output = res.stdout.decode()
+        output = re.sub(r"\(([a-z]+) : 0x(?:0x)?[0-9a-f]+\)", r"(\1 : 0x<memory>)", output)
+        handle.write(output)
 
 for dirpath, dirnames, filenames in SCRIPTS.walk(follow_symlinks=True):
     for file in filenames:

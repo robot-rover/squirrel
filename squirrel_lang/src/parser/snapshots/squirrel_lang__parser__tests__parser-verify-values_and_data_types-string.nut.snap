@@ -482,10 +482,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 2
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 2
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -525,10 +538,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 3
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 3
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -654,10 +680,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 6
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 6
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -697,10 +736,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 7
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 7
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -740,10 +792,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 8
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 8
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -869,10 +934,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 11
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 11
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -912,10 +990,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 12
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 12
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -955,10 +1046,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 13
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 13
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End
@@ -998,10 +1102,23 @@ body:
                           end: End
                         lhs:
                           data:
-                            Local:
-                              - 14
-                              - start: Start
-                                end: End
+                            ArrayAccess:
+                              array:
+                                data:
+                                  Local:
+                                    - 14
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                              index:
+                                data:
+                                  Literal:
+                                    Integer: 0
+                                span:
+                                  start: Start
+                                  end: End
                           span:
                             start: Start
                             end: End

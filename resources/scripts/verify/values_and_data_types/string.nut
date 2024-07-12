@@ -16,19 +16,19 @@ local unicodes = "\u0067"
 local unicodel = "\U00000067"
 
 ::print(tab + "\n")
-print(a + "\n")
-print(b + "\n")
+print(a[0] + "\n")
+print(b[0] + "\n")
 print(newline + "\n")
 print(carriage + "\n")
-print(v + "\n")
-print(f + "\n")
-print(back + "\n")
+print(v[0] + "\n")
+print(f[0] + "\n")
+print(back[0] + "\n")
 print(quote + "\n")
 print(single + "\n")
-print(zero + "\n")
-print(hexcode + "\n")
-print(unicodes + "\n")
-print(unicodel + "\n")
+print(zero[0] + "\n")
+print(hexcode[0] + "\n")
+print(unicodes[0] + "\n")
+print(unicodel[0] + "\n")
 
 local normal = "I'm a wonderful string\n"
 // has a newline at the end of the string

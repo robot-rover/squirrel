@@ -86,6 +86,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: a
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -93,6 +96,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: b
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -114,6 +120,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: v
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -121,6 +130,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: f
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -128,6 +140,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: back
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -149,6 +164,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: zero
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -156,6 +174,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: hexcode
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -163,6 +184,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: unicodes
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
@@ -170,6 +194,9 @@ expression: Lexer test for verify/values_and_data_types/string.nut
 - Identifier: print
 - LeftParenthesis
 - Identifier: unicodel
+- LeftSquareBracket
+- Integer: 0
+- RightSquareBracket
 - Plus
 - String: "\n"
 - RightParenthesis
