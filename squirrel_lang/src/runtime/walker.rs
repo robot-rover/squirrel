@@ -470,6 +470,21 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     Err(ExecError::undefined_variable((ident.to_string(), span)))
 }
 
+fn run_delete(
+    context: &mut Context,
+    op_span: Span,
+    target: &AssignTarget,
+) -> ExprResult {
+    match target {
+        AssignTarget::Ident(ident) => todo!(),
+        AssignTarget::ArrayAccess { array, index, span } => todo!(),
+        AssignTarget::FieldAccess(parent, ident) => todo!(),
+        AssignTarget::Local(local_idx, span) => todo!(),
+    }
+
+
+}
+
 fn run_unary_ref_op(
     context: &mut Context,
     op: &UnaryRefOp,
@@ -482,6 +497,7 @@ fn run_unary_ref_op(
         UnaryRefOp::PreDecr => (false, true),
         UnaryRefOp::PostIncr => (true, false),
         UnaryRefOp::PostDecr => (false, false),
+        UnaryRefOp::Delete => return run_delete(context, op_span, target),
     };
     let new_val = run_binary_op(
         context,

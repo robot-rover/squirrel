@@ -4,6 +4,11 @@ macro_rules! test_foreach {
 #[rustfmt::skip]
         mod verify {
             use super::$func;
+            use crate::test_macro::data::verify::*;
+            #[test]
+            fn test_tables() {
+                $func(TABLES_PATH, TABLES_CONTENTS);
+            }
 #[rustfmt::skip]
             mod statements {
                 use super::$func;
@@ -202,6 +207,10 @@ macro_rules! test_foreach {
             fn test_parent_scope() {
                 $func(PARENT_SCOPE_PATH, PARENT_SCOPE_CONTENTS);
             }
+            #[test]
+            fn test_delete_to_root() {
+                $func(DELETE_TO_ROOT_PATH, DELETE_TO_ROOT_CONTENTS);
+            }
         }
 #[rustfmt::skip]
         mod parse_test {
@@ -217,6 +226,8 @@ macro_rules! test_foreach {
 #[rustfmt::skip]
 pub mod data {
     pub mod verify {
+        pub const TABLES_PATH: &str = "verify/tables.nut";
+        pub const TABLES_CONTENTS: &str = include_str!("../../resources/scripts/verify/tables.nut");
         pub mod statements {
             pub const LOOPS_PATH: &str = "verify/statements/loops.nut";
             pub const LOOPS_CONTENTS: &str = include_str!("../../resources/scripts/verify/statements/loops.nut");
@@ -313,6 +324,8 @@ pub mod data {
         pub const LOST_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/lost_env.nut");
         pub const PARENT_SCOPE_PATH: &str = "edge_cases/parent_scope.nut";
         pub const PARENT_SCOPE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/parent_scope.nut");
+        pub const DELETE_TO_ROOT_PATH: &str = "edge_cases/delete_to_root.nut";
+        pub const DELETE_TO_ROOT_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/delete_to_root.nut");
     }
     pub mod parse_test {
         pub const NEWLINES_PATH: &str = "parse_test/newlines.nut";

@@ -88,6 +88,7 @@ pub enum UnaryRefOp {
     PreDecr,
     PostIncr,
     PostDecr,
+    Delete,
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]

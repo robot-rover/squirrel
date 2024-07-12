@@ -1,0 +1,1239 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - tab
+    - 1
+  - - a
+    - 2
+  - - b
+    - 3
+  - - newline
+    - 4
+  - - carriage
+    - 5
+  - - v
+    - 6
+  - - f
+    - 7
+  - - back
+    - 8
+  - - quote
+    - 9
+  - - single
+    - 10
+  - - zero
+    - 11
+  - - hexcode
+    - 12
+  - - unicodes
+    - 13
+  - - unicodel
+    - 14
+  - - normal
+    - 15
+  - - verb
+    - 16
+  - - multiline
+    - 17
+num_locals: 18
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\t"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: 
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 3
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: 
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 4
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\n"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 5
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\r"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 6
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: 
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 7
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: 
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 8
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\\"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 9
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\""
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 10
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "'"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 11
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\u0000"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 12
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: f
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 13
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: g
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 14
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: g
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 1
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 2
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 3
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 4
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 5
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 6
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 7
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 8
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 9
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 10
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 11
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 12
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 13
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: print
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 14
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 15
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "I'm a wonderful string\n"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 16
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "I'm a verbatim string\\n"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 17
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "\n    this is a multiline string\n    it will \"embed\" all the new line\n    characters\n"
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 15
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 16
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Add
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 17
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              String: "\n"
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

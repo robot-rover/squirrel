@@ -172,17 +172,18 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
             )?;
             Expr::unary_op(op, rhs, ctx)
         }
-        Token::Increment | Token::Decrement => {
+        Token::Increment | Token::Decrement | Token::Delete => {
             let rhs = parse_expr_bp(
                 tokens,
                 get_prefix_bp(&first_token),
                 is_term,
                 ignore_newlines,
             )?;
-            let op = if matches!(first_token, Token::Increment) {
-                UnaryRefOp::PreIncr
-            } else {
-                UnaryRefOp::PreDecr
+            let op = match first_token {
+                Token::Increment => UnaryRefOp::PreIncr,
+                Token::Decrement => UnaryRefOp::PreDecr,
+                Token::Delete => UnaryRefOp::Delete,
+                _ => unreachable!(),
             };
             Expr::unary_ref_op(op, rhs.try_into()?, ctx)
         }

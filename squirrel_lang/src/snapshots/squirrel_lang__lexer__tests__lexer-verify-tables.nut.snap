@@ -1,0 +1,57 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/tables.nut
+---
+- Local
+- Identifier: a
+- Assign
+- LeftCurlyBrace
+- RightCurlyBrace
+- Newline
+- Newline
+- Newline
+- Newline
+- Newline
+- Identifier: a
+- Period
+- Identifier: newslot
+- NewSlot
+- Integer: 1234
+- Newline
+- Newline
+- Identifier: a
+- LeftSquareBracket
+- Integer: 1
+- RightSquareBracket
+- NewSlot
+- String: "I'm the value of the new slot"
+- Semicolon
+- Newline
+- Newline
+- Local
+- Identifier: num
+- Assign
+- Delete
+- Identifier: a
+- Period
+- Identifier: newslot
+- Semicolon
+- Newline
+- Newline
+- Identifier: assert
+- LeftParenthesis
+- Identifier: num
+- Equals
+- Integer: 1234
+- RightParenthesis
+- Newline
+- Identifier: assert
+- LeftParenthesis
+- Not
+- LeftParenthesis
+- String: newslot
+- In
+- Identifier: a
+- RightParenthesis
+- RightParenthesis
+- Newline

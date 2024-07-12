@@ -1,0 +1,217 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/string.nut
+---
+- Newline
+- Newline
+- Local
+- Identifier: tab
+- Assign
+- String: "\t"
+- Newline
+- Local
+- Identifier: a
+- Assign
+- String: 
+- Newline
+- Local
+- Identifier: b
+- Assign
+- String: 
+- Newline
+- Local
+- Identifier: newline
+- Assign
+- String: "\n"
+- Newline
+- Local
+- Identifier: carriage
+- Assign
+- String: "\r"
+- Newline
+- Local
+- Identifier: v
+- Assign
+- String: 
+- Newline
+- Local
+- Identifier: f
+- Assign
+- String: 
+- Newline
+- Local
+- Identifier: back
+- Assign
+- String: "\\"
+- Newline
+- Local
+- Identifier: quote
+- Assign
+- String: "\""
+- Newline
+- Local
+- Identifier: single
+- Assign
+- String: "'"
+- Newline
+- Local
+- Identifier: zero
+- Assign
+- String: "\u0000"
+- Newline
+- Local
+- Identifier: hexcode
+- Assign
+- String: f
+- Newline
+- Local
+- Identifier: unicodes
+- Assign
+- String: g
+- Newline
+- Local
+- Identifier: unicodel
+- Assign
+- String: g
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: tab
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: a
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: b
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: newline
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: carriage
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: v
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: f
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: back
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: quote
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: single
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: zero
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: hexcode
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: unicodes
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: print
+- LeftParenthesis
+- Identifier: unicodel
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- Local
+- Identifier: normal
+- Assign
+- String: "I'm a wonderful string\n"
+- Newline
+- Newline
+- Local
+- Identifier: verb
+- Assign
+- String: "I'm a verbatim string\\n"
+- Newline
+- Newline
+- Local
+- Identifier: multiline
+- Assign
+- String: "\n    this is a multiline string\n    it will \"embed\" all the new line\n    characters\n"
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: normal
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: verb
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: multiline
+- Plus
+- String: "\n"
+- RightParenthesis

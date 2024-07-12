@@ -1,0 +1,120 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/delete_to_root.nut
+---
+- Local
+- Identifier: table
+- Assign
+- LeftCurlyBrace
+- Newline
+- Function
+- Identifier: delete_a
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Newline
+- Delete
+- Identifier: a
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Function
+- Identifier: delete_root_a
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Delete
+- DoubleColon
+- Identifier: a
+- Semicolon
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: a
+- Assign
+- String: Hello
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: a
+- NewSlot
+- String: Root A
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: a
+- In
+- This
+- RightParenthesis
+- Plus
+- String: ", "
+- Plus
+- LeftParenthesis
+- String: a
+- In
+- Identifier: table
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: table
+- Period
+- Identifier: delete_a
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: a
+- In
+- This
+- RightParenthesis
+- Plus
+- String: ", "
+- Plus
+- LeftParenthesis
+- String: a
+- In
+- Identifier: table
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: table
+- Period
+- Identifier: delete_root_a
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- String: a
+- In
+- This
+- RightParenthesis
+- Plus
+- String: ", "
+- Plus
+- LeftParenthesis
+- String: a
+- In
+- Identifier: table
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis

@@ -10,7 +10,7 @@ local f = "\f"
 local back = "\\"
 local quote = "\""
 local single = "\'"
-local null = "\0"
+local zero = "\0"
 local hexcode = "\x66"
 local unicodes = "\u0067"
 local unicodel = "\U00000067"
@@ -25,7 +25,7 @@ print(f + "\n")
 print(back + "\n")
 print(quote + "\n")
 print(single + "\n")
-print(null + "\n")
+print(zero + "\n")
 print(hexcode + "\n")
 print(unicodes + "\n")
 print(unicodel + "\n")

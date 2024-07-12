@@ -1,6 +1,5 @@
 use std::{
-    convert::{self, identity},
-    str::FromStr,
+    borrow::Cow, convert::{self, identity}, str::FromStr
 };
 
 use ariadne::{Label, Report, ReportKind};
@@ -230,8 +229,14 @@ fn trim_str(s: &str, trim_start: usize, trim_end: usize) -> &str {
 
 #[derive(Debug, PartialEq, Logos)]
 pub enum EscapedString<'s> {
-    #[regex(r#"[^\\"\n]+"#)]
+    #[regex(r"\\x[0-9a-fA-F]{2}", parse_char_hex)]
+    #[regex(r"\\u[0-9a-fA-F]{4}", parse_char_hex)]
+    #[regex(r"\\U[0-9a-fA-F]{8}", parse_char_hex)]
+    // todo: Inefficient, need to have custom function to concatenate
+    // todo: an iterator of str and char below, then we can have this hold a char instead
+    Owned(String),
     #[regex(r"\\.", |lex| escape_lookup(lex.slice()))]
+    #[regex(r#"[^\\"\n]+"#)]
     Fragment(&'s str),
     #[token("\"")]
     End,
@@ -262,14 +267,30 @@ impl<'s> From<VerbString<'s>> for EscapedString<'s> {
 fn escape_lookup(s: &str) -> Option<&'static str> {
     // TODO: Check squirrel source code for other escapes
     match s {
+        r"\a" => Some("\x07"),
+        r"\b" => Some("\x08"),
+        r"\f" => Some("\x0C"),
         r"\n" => Some("\n"),
         r"\r" => Some("\r"),
         r"\t" => Some("\t"),
+        r"\v" => Some("\x0B"),
         r"\\" => Some("\\"),
+        r"\'" => Some("\'"),
+        r"\0" => Some("\0"),
         r#"\""# => Some("\""),
         _ => None,
     }
 }
+
+fn parse_char_hex<'s>(lexer: &mut Lexer<'s, EscapedString<'s>>) -> Result<String, ()> {
+    let hex_str = &lexer.slice()[2..];
+    let codepoint = u32::from_str_radix(hex_str, 16).unwrap();
+    match char::from_u32(codepoint) {
+        Some(c) => Ok(c.to_string()),
+        None => Err(()),
+    }
+}
+
 
 fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token<'s>>, allow_newlines: bool) -> LexResult<String>
 where
@@ -278,18 +299,19 @@ where
 {
     let remainder = &lexer.source()[lexer.span().end..];
     let mut escape_lexer = T::lexer(remainder);
-    let mut fragments: Vec<&str> = Vec::new();
+    let mut fragments: Vec<Cow<str>> = Vec::new();
     while let Some(fragment) = escape_lexer.next() {
         match fragment.map(Into::into) {
-            Ok(EscapedString::Fragment(fragment)) => fragments.push(fragment),
+            Ok(EscapedString::Fragment(fragment)) => fragments.push(fragment.into()),
             Ok(EscapedString::End) => {
                 lexer.bump(escape_lexer.span().end);
                 return Ok(fragments.join(""));
             }
+            Ok(EscapedString::Owned(c)) => fragments.push(c.into()),
             Ok(EscapedString::Newline) => {
                 if allow_newlines {
                     lexer.extras.log_newlines(1);
-                    fragments.push("\n")
+                    fragments.push("\n".into())
                 } else {
                     return Err(LexError::General(
                         "Newline in non-verbatim string".to_string(),
