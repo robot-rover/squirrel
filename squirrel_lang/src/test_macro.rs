@@ -26,6 +26,56 @@ macro_rules! test_foreach {
                     $func(LITERALS_PATH, LITERALS_CONTENTS);
                 }
             }
+#[rustfmt::skip]
+            mod values_and_data_types {
+                use super::$func;
+                use crate::test_macro::data::verify::values_and_data_types::*;
+                #[test]
+                fn test_integer() {
+                    $func(INTEGER_PATH, INTEGER_CONTENTS);
+                }
+                #[test]
+                fn test_array() {
+                    $func(ARRAY_PATH, ARRAY_CONTENTS);
+                }
+                #[test]
+                fn test_string() {
+                    $func(STRING_PATH, STRING_CONTENTS);
+                }
+                #[test]
+                fn test_float() {
+                    $func(FLOAT_PATH, FLOAT_CONTENTS);
+                }
+                #[test]
+                fn test_table() {
+                    $func(TABLE_PATH, TABLE_CONTENTS);
+                }
+            }
+#[rustfmt::skip]
+            mod metamethods {
+                use super::$func;
+                use crate::test_macro::data::verify::metamethods::*;
+                #[test]
+                fn test_misc() {
+                    $func(MISC_PATH, MISC_CONTENTS);
+                }
+                #[test]
+                fn test_get_set() {
+                    $func(GET_SET_PATH, GET_SET_CONTENTS);
+                }
+                #[test]
+                fn test_arith() {
+                    $func(ARITH_PATH, ARITH_CONTENTS);
+                }
+                #[test]
+                fn test_cmp() {
+                    $func(CMP_PATH, CMP_CONTENTS);
+                }
+                #[test]
+                fn test_classes() {
+                    $func(CLASSES_PATH, CLASSES_CONTENTS);
+                }
+            }
         }
 #[rustfmt::skip]
         mod squirrel_repo {
@@ -176,6 +226,30 @@ pub mod data {
             pub const KEYWORDS_CONTENTS: &str = include_str!("../../resources/scripts/verify/lexical_structure/keywords.nut");
             pub const LITERALS_PATH: &str = "verify/lexical_structure/literals.nut";
             pub const LITERALS_CONTENTS: &str = include_str!("../../resources/scripts/verify/lexical_structure/literals.nut");
+        }
+        pub mod values_and_data_types {
+            pub const INTEGER_PATH: &str = "verify/values_and_data_types/integer.nut";
+            pub const INTEGER_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/integer.nut");
+            pub const ARRAY_PATH: &str = "verify/values_and_data_types/array.nut";
+            pub const ARRAY_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/array.nut");
+            pub const STRING_PATH: &str = "verify/values_and_data_types/string.nut";
+            pub const STRING_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/string.nut");
+            pub const FLOAT_PATH: &str = "verify/values_and_data_types/float.nut";
+            pub const FLOAT_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/float.nut");
+            pub const TABLE_PATH: &str = "verify/values_and_data_types/table.nut";
+            pub const TABLE_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/table.nut");
+        }
+        pub mod metamethods {
+            pub const MISC_PATH: &str = "verify/metamethods/misc.nut";
+            pub const MISC_CONTENTS: &str = include_str!("../../resources/scripts/verify/metamethods/misc.nut");
+            pub const GET_SET_PATH: &str = "verify/metamethods/get_set.nut";
+            pub const GET_SET_CONTENTS: &str = include_str!("../../resources/scripts/verify/metamethods/get_set.nut");
+            pub const ARITH_PATH: &str = "verify/metamethods/arith.nut";
+            pub const ARITH_CONTENTS: &str = include_str!("../../resources/scripts/verify/metamethods/arith.nut");
+            pub const CMP_PATH: &str = "verify/metamethods/cmp.nut";
+            pub const CMP_CONTENTS: &str = include_str!("../../resources/scripts/verify/metamethods/cmp.nut");
+            pub const CLASSES_PATH: &str = "verify/metamethods/classes.nut";
+            pub const CLASSES_CONTENTS: &str = include_str!("../../resources/scripts/verify/metamethods/classes.nut");
         }
     }
     pub mod squirrel_repo {
