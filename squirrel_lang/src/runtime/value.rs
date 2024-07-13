@@ -88,6 +88,9 @@ impl Value {
                 (Value::Array(arr), HashValue::Integer(i)) => {
                     arr.borrow().get(*i as usize).cloned()
                 }
+                (Value::String(s), HashValue::Integer(idx)) => {
+                    s.chars().nth(*idx as usize).map(|c| Value::Integer(c as i64))
+                }
                 _ => None,
             }
         }
