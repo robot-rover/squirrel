@@ -184,6 +184,10 @@ macro_rules! test_foreach {
                 $func(OVERWRITING_SCOPE_PATH, OVERWRITING_SCOPE_CONTENTS);
             }
             #[test]
+            fn test_meta_order() {
+                $func(META_ORDER_PATH, META_ORDER_CONTENTS);
+            }
+            #[test]
             fn test_inherit_env() {
                 $func(INHERIT_ENV_PATH, INHERIT_ENV_CONTENTS);
             }
@@ -312,6 +316,8 @@ pub mod data {
         pub const SET_SCOPE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/set_scope.nut");
         pub const OVERWRITING_SCOPE_PATH: &str = "edge_cases/overwriting_scope.nut";
         pub const OVERWRITING_SCOPE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/overwriting_scope.nut");
+        pub const META_ORDER_PATH: &str = "edge_cases/meta_order.nut";
+        pub const META_ORDER_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/meta_order.nut");
         pub const INHERIT_ENV_PATH: &str = "edge_cases/inherit_env.nut";
         pub const INHERIT_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/inherit_env.nut");
         pub const CLASS_MODIFY_PATH: &str = "edge_cases/class_modify.nut";

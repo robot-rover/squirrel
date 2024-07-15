@@ -96,3 +96,53 @@ expression: Lexer test for verify/values_and_data_types/integer.nut
 - Plus
 - String: "\n"
 - RightParenthesis
+- Newline
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: a
+- Plus
+- Identifier: b
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: a
+- Minus
+- Identifier: b
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: a
+- Multiply
+- Identifier: b
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Identifier: a
+- Divide
+- Identifier: b
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis

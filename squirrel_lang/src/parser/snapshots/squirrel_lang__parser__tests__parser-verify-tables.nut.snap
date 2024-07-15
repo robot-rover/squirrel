@@ -1,0 +1,263 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+local_names:
+  - - vargv
+    - 0
+  - - a
+    - 1
+  - - num
+    - 2
+num_locals: 3
+upvalues: []
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl: []
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  FieldAccess:
+                    - data:
+                        Local:
+                          - 1
+                          - start: Start
+                            end: End
+                      span:
+                        start: Start
+                        end: End
+                    - - newslot
+                      - start: Start
+                        end: End
+                value:
+                  data:
+                    Literal:
+                      Integer: 1234
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  ArrayAccess:
+                    array:
+                      data:
+                        Local:
+                          - 1
+                          - start: Start
+                            end: End
+                      span:
+                        start: Start
+                        end: End
+                    index:
+                      data:
+                        Literal:
+                          Integer: 1
+                      span:
+                        start: Start
+                        end: End
+                    span:
+                      start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: "I'm the value of the new slot"
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    UnaryRefOp:
+                      - Delete
+                      - start: Start
+                        end: End
+                      - FieldAccess:
+                          - data:
+                              Local:
+                                - 1
+                                - start: Start
+                                  end: End
+                            span:
+                              start: Start
+                              end: End
+                          - - newslot
+                            - start: Start
+                              end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: assert
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      BinaryOp:
+                        op: Eq
+                        op_span:
+                          start: Start
+                          end: End
+                        lhs:
+                          data:
+                            Local:
+                              - 2
+                              - start: Start
+                                end: End
+                          span:
+                            start: Start
+                            end: End
+                        rhs:
+                          data:
+                            Literal:
+                              Integer: 1234
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: assert
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      UnaryOp:
+                        - Not
+                        - start: Start
+                          end: End
+                        - data:
+                            BinaryOp:
+                              op: In
+                              op_span:
+                                start: Start
+                                end: End
+                              lhs:
+                                data:
+                                  Literal:
+                                    String: newslot
+                                span:
+                                  start: Start
+                                  end: End
+                              rhs:
+                                data:
+                                  Local:
+                                    - 1
+                                    - start: Start
+                                      end: End
+                                span:
+                                  start: Start
+                                  end: End
+                          span:
+                            start: Start
+                            end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

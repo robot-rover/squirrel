@@ -96,6 +96,12 @@ pub enum ExecError {
     },
     MutatingInstantiatedClass(Span, SqBacktrace),
     ExtendingNonClass(Span, SqBacktrace),
+    MissingMetamethod {
+        span: Span,
+        name: String,
+        op: String,
+        bt: SqBacktrace,
+    },
 }
 
 macro_rules! variant_constructor {
@@ -131,6 +137,7 @@ impl ExecError {
     variant_constructor!(IndexOutOfBounds index_out_of_bounds { index: i64, len: usize, span: Span });
     variant_constructor!(MutatingInstantiatedClass mutating_instantiated_class(span: Span));
     variant_constructor!(ExtendingNonClass extending_non_class(span: Span));
+    variant_constructor!(MissingMetamethod missing_metamethod { span: Span, name: String, op: String });
 
     fn illegal_binary_op(
         op: &str,
@@ -322,6 +329,12 @@ impl ExecError {
             ),
             ExecError::ExtendingNonClass(span, bt) => SquirrelError::new(
                 file_name, span, "Cannot extend a non-class".to_string(), bt
+            ),
+            ExecError::MissingMetamethod { span, name, op, bt } => SquirrelError::new(
+                file_name,
+                span,
+                format!("Missing metamethod '{}' on lhs operand, needed to perform operation '{}'", name, op),
+                bt,
             ),
         }
     }

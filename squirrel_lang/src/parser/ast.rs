@@ -443,7 +443,7 @@ pub enum ExprData {
     RawCall {
         func: ExprRef,
         this: ExprRef,
-        parameters: Vec<Expr>,
+        args: Vec<Expr>,
     },
     Local(u32, Span),
 }
@@ -569,7 +569,7 @@ impl Expr {
         ExprData::RawCall {
             func: Box::new(func),
             this: Box::new(this),
-            parameters,
+            args: parameters,
         }
         .spanning(rawcall_span | end_span)
     }

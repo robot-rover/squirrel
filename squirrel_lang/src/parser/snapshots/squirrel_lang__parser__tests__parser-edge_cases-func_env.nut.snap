@@ -408,7 +408,7 @@ body:
                   span:
                     start: Start
                     end: End
-                parameters: []
+                args: []
             span:
               start: Start
               end: End

@@ -329,14 +329,7 @@ fn parse_if<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     Ok(Statement::if_else(cond, body, else_body, if_span))
 }
 
-fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
-    let class_span = tokens.expect_token(Token::Class, true)?;
-
-    let target = if let (Token::Identifier(_), _) = tokens.peek_token(true)? {
-        Some(parse_hier_path(tokens, Token::Period)?)
-    } else {
-        None
-    };
+fn parse_class_extends_body<'s>(tokens: &mut SpannedLexer<'s>, class_span: Span) -> ParseResult<Expr> {
     let parent = if let (Token::Extends, _) = tokens.peek_token(true)? {
         tokens.skip_token();
         let (parent_ident, ctx) = tokens.next_token(true)?;
@@ -350,7 +343,19 @@ fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
     };
     tokens.expect_token(Token::LeftCurlyBrace, true)?;
     let (members, end_span) = parse_table_or_class(tokens, &Token::Semicolon, true)?;
-    let body = Expr::class_def(parent, members, class_span, end_span);
+    Ok(Expr::class_def(parent, members, class_span, end_span))
+}
+
+fn parse_class<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Expr> {
+    let class_span = tokens.expect_token(Token::Class, true)?;
+
+    let target = if let (Token::Identifier(_), _) = tokens.peek_token(true)? {
+        Some(parse_hier_path(tokens, Token::Period)?)
+    } else {
+        None
+    };
+
+    let body = parse_class_extends_body(tokens, class_span)?;
 
     Ok(if let Some(target) = target {
         Expr::assign(target, class_span, body, AssignKind::NewSlot)

@@ -16,3 +16,9 @@ local n = null
 ::print(t + "\n")
 ::print(f + "\n")
 ::print(n + "\n")
+
+// Some basic arithmetic
+::print((a + b) + "\n")
+::print((a - b) + "\n")
+::print((a * b) + "\n")
+::print((a / b) + "\n")

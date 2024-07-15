@@ -4,9 +4,7 @@ use crate::context::Span;
 use crate::lexer::{SpannedLexer, Token};
 
 use super::{
-    ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp},
-    error::{ParseError, ParseResult},
-    parse_function, parse_list, parse_table_or_class,
+    ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp}, error::{ParseError, ParseResult}, parse_class_extends_body, parse_function, parse_list, parse_table_or_class
 };
 
 pub fn parse_expr<'s, F: Fn(&Token) -> bool>(
@@ -51,6 +49,7 @@ fn get_prefix_bp(op: &Token) -> u16 {
         Token::Resume => 21,
         Token::Increment => 23,
         Token::Decrement => 23,
+        Token::Delete => 23,
         _ => panic!("Token {:?} is not a prefix operator", op),
     }
 }
@@ -125,6 +124,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
         Token::LeftParenthesis => parse_expr_token(tokens, Token::RightParenthesis)?.0,
         Token::This => ExprData::This.spanning(ctx),
         Token::Base => ExprData::Base.spanning(ctx),
+        Token::Class => parse_class_extends_body(tokens, ctx)?,
         // Prefix Unary Operators
         // DoubleColon should be attached to an identifier, so it has infinite binding power
         Token::DoubleColon => {
