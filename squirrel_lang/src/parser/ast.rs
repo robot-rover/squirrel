@@ -16,6 +16,7 @@ pub enum Literal {
     Integer(i64),
     Number(f64),
     String(String),
+    Boolean(bool),
     Null,
 }
 

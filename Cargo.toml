@@ -5,3 +5,8 @@ members = [
 ]
 
 resolver = "2"
+
+# Compile insta in release mode for tests
+[profile.dev.package]
+insta.opt-level = 3
+similar.opt-level = 3

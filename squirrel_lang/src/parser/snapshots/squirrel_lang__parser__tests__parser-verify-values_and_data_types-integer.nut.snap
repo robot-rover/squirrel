@@ -329,7 +329,7 @@ body:
                 value:
                   data:
                     Literal:
-                      Integer: 1
+                      Boolean: true
                   span:
                     start: Start
                     end: End
@@ -355,7 +355,7 @@ body:
                 value:
                   data:
                     Literal:
-                      Integer: 0
+                      Boolean: false
                   span:
                     start: Start
                     end: End

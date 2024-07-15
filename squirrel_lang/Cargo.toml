@@ -21,8 +21,3 @@ hashbrown = "0.14.5"
 # simple_logger = { version = "1.6", features = ["colored"] }
 serde_json = "1.0"
 insta = { version = "1.39.0", features = ["yaml", "redactions", "filters"] }
-
-# Compile insta in release mode for tests
-[profile.dev.package]
-insta.opt-level = 3
-similar.opt-level = 3

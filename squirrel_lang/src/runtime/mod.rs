@@ -484,6 +484,7 @@ impl From<&Literal> for Value {
             Literal::Number(float) => Value::Float((*float).into()),
             Literal::String(string) => Value::string(string),
             Literal::Null => Value::Null,
+            Literal::Boolean(boolean) => Value::Boolean(*boolean),
         }
     }
 }

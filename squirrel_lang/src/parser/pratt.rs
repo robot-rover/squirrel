@@ -119,7 +119,7 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
         Token::Integer(num) => Expr::literal(Literal::Integer(num), ctx),
         Token::Number(num) => Expr::literal(Literal::Number(num), ctx),
         Token::String(string) => Expr::literal(Literal::String(string), ctx),
-        Token::Boolean(val) => Expr::literal(Literal::Integer(if val { 1 } else { 0 }), ctx),
+        Token::Boolean(val) => Expr::literal(Literal::Boolean(val), ctx),
         Token::Null => Expr::literal(Literal::Null, ctx),
         // Need the cast to fn to prevent infinite recursion during type resolution
         Token::LeftParenthesis => parse_expr_token(tokens, Token::RightParenthesis)?.0,

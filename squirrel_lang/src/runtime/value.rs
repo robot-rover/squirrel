@@ -11,6 +11,7 @@ pub type NativeFn = fn(*mut Context, Value, Vec<Value>, &CallInfo) -> Result<Val
 
 #[derive(Debug, Clone)]
 pub enum Value {
+    Boolean(bool),
     Float(f64),
     Integer(i64),
     Null,
@@ -26,7 +27,7 @@ pub enum Value {
 macro_rules! value_common_impl {
     () => {
         pub fn boolean(val: bool) -> Self {
-            Self::Integer(if val { 1 } else { 0 })
+            Self::Boolean(val)
         }
 
         pub fn string(val: &str) -> Self {
@@ -55,14 +56,6 @@ macro_rules! value_common_impl {
     };
 }
 
-macro_rules! value_ref_redirect {
-    ($name:ident($($arg:ident : $argty:ty),*) -> $ret:ty) => {
-        pub fn $name(&self, $($arg : $argty),*) -> $ret {
-            self.borrow().$name($($arg),*)
-        }
-    }
-}
-
 impl Value {
     value_common_impl!();
 
@@ -75,6 +68,7 @@ impl Value {
             Self::Integer(val) if *val == 0 => false,
             Self::Float(b) if *b == 0.0 => false,
             Self::Null => false,
+            Self::Boolean(b) => *b,
             _ => true,
         }
     }
@@ -98,6 +92,7 @@ impl Value {
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
         match self {
+            Value::Boolean(_) => todo!(),
             Value::Float(_) => todo!(),
             Value::Integer(_) => builtins::integer::delegate(key),
             Value::Null => todo!(),
@@ -114,6 +109,7 @@ impl Value {
     pub fn type_str(&self) -> &'static str {
         match self {
             Value::Null => "null",
+            Value::Boolean(_) => <bool as TypeName>::type_name(),
             Value::Integer(_) => <i64 as TypeName>::type_name(),
             Value::Float(_) => <f64 as TypeName>::type_name(),
             Value::NativeFn(_) => <NativeFn as TypeName>::type_name(),
@@ -146,6 +142,7 @@ impl PartialEq for Value {
 
 #[derive(Debug, Clone)]
 pub enum HashValue {
+    Boolean(bool),
     Integer(i64),
     Null,
     NativeFn(NativeFn),
@@ -160,13 +157,16 @@ pub enum HashValue {
 impl PartialEq for HashValue {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
+            (Self::Boolean(l0), Self::Boolean(r0)) => *l0 == *r0,
             (Self::Integer(l0), Self::Integer(r0)) => *l0 == *r0,
+            (Self::Null, Self::Null) => true,
             (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
             (Self::String(l0), Self::String(r0)) => l0.deref() == r0.deref(),
             (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
-            (Self::Null, Self::Null) => true,
+            (Self::Class(l0), Self::Class(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Instance(l0), Self::Instance(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             _ => false,
         }
     }
@@ -177,6 +177,7 @@ impl Hash for HashValue {
         // Todo: This breaks impl Equivalent<HashValue> for str
         // core::mem::discriminant(self).hash(state);
         match self {
+            HashValue::Boolean(b) => b.hash(state),
             HashValue::Integer(i) => i.hash(state),
             HashValue::Null => {}
             HashValue::NativeFn(nf) => nf.hash(state),
@@ -197,6 +198,7 @@ impl HashValue {
         match self {
             Self::Integer(val) if *val == 0 => false,
             Self::Null => false,
+            Self::Boolean(b) => *b,
             _ => true,
         }
     }
@@ -205,6 +207,7 @@ impl HashValue {
 impl From<HashValue> for Value {
     fn from(value: HashValue) -> Self {
         match value {
+            HashValue::Boolean(val) => Value::Boolean(val),
             HashValue::Integer(val) => Value::Integer(val),
             HashValue::Null => Value::Null,
             HashValue::NativeFn(val) => Value::NativeFn(val),
@@ -286,6 +289,7 @@ macro_rules! value_variant {
 }
 
 // TODO: Are these names right?
+value_variant!(Value::Boolean(bool) "bool");
 value_variant!(Value::Integer(i64) "integer");
 value_variant!(Value::Float(f64) "float");
 value_variant!(Value::NativeFn(NativeFn) "function");
@@ -304,6 +308,7 @@ where Rc<T>: TypeName {
 impl fmt::Display for Value {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
+            Value::Boolean(b) => write!(f, "{}", if *b { "true" } else { "false" }),
             Value::Float(n) => write!(f, "{}", n),
             Value::Integer(i) => write!(f, "{}", i),
             Value::Null => write!(f, "null"),
