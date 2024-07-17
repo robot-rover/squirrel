@@ -36,6 +36,10 @@ macro_rules! test_foreach {
                 use super::$func;
                 use crate::test_macro::data::verify::values_and_data_types::*;
                 #[test]
+                fn test_class() {
+                    $func(CLASS_PATH, CLASS_CONTENTS);
+                }
+                #[test]
                 fn test_integer() {
                     $func(INTEGER_PATH, INTEGER_CONTENTS);
                 }
@@ -243,6 +247,8 @@ pub mod data {
             pub const LITERALS_CONTENTS: &str = include_str!("../../resources/scripts/verify/lexical_structure/literals.nut");
         }
         pub mod values_and_data_types {
+            pub const CLASS_PATH: &str = "verify/values_and_data_types/class.nut";
+            pub const CLASS_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/class.nut");
             pub const INTEGER_PATH: &str = "verify/values_and_data_types/integer.nut";
             pub const INTEGER_CONTENTS: &str = include_str!("../../resources/scripts/verify/values_and_data_types/integer.nut");
             pub const ARRAY_PATH: &str = "verify/values_and_data_types/array.nut";

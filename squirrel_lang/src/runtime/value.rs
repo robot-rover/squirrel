@@ -59,10 +59,6 @@ macro_rules! value_common_impl {
 impl Value {
     value_common_impl!();
 
-    pub fn float(val: f64) -> Self {
-        Self::Float(val)
-    }
-
     pub fn truthy(&self) -> bool {
         match self {
             Self::Integer(val) if *val == 0 => false,
@@ -102,7 +98,7 @@ impl Value {
             Value::Array(_) => builtins::array::delegate(key),
             Value::Closure(_) => todo!(),
             Value::Class(_) => todo!(),
-            Value::Instance(_) => todo!(),
+            Value::Instance(inst) => inst.borrow().get_field_str(key),
         }
     }
 
@@ -174,8 +170,10 @@ impl PartialEq for HashValue {
 impl Eq for HashValue {}
 impl Hash for HashValue {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        // Todo: This breaks impl Equivalent<HashValue> for str
-        // core::mem::discriminant(self).hash(state);
+        // This breaks impl Equivalent<HashValue> for str
+        if !matches!(self, &HashValue::String(_)) {
+            core::mem::discriminant(self).hash(state);
+        }
         match self {
             HashValue::Boolean(b) => b.hash(state),
             HashValue::Integer(i) => i.hash(state),
@@ -253,6 +251,8 @@ pub trait TypeName: Sized {
     fn type_name() -> &'static str;
 
     fn typed_from(value: Value) -> Result<Self, Value>;
+    fn typed_from_ref(value: &Value) -> Result<&Self, &Value>;
+    fn typed_from_mut(value: &mut Value) -> Result<&mut Self, &mut Value>;
 }
 
 impl TypeName for Value {
@@ -261,6 +261,14 @@ impl TypeName for Value {
     }
 
     fn typed_from(value: Value) -> Result<Self, Value> {
+        Ok(value)
+    }
+
+    fn typed_from_ref(value: &Value) -> Result<&Self, &Value> {
+        Ok(value)
+    }
+
+    fn typed_from_mut(value: &mut Value) -> Result<&mut Self, &mut Value> {
         Ok(value)
     }
 }
@@ -279,6 +287,20 @@ macro_rules! value_variant {
             }
 
             fn typed_from(value: $base) -> Result<Self, $base> {
+                match value {
+                    $base::$variant(val) => Ok(val),
+                    other => Err(other),
+                }
+            }
+
+            fn typed_from_ref(value: &$base) -> Result<&Self, &$base> {
+                match value {
+                    $base::$variant(val) => Ok(val),
+                    other => Err(other),
+                }
+            }
+
+            fn typed_from_mut(value: &mut $base) -> Result<&mut Self, &mut $base> {
                 match value {
                     $base::$variant(val) => Ok(val),
                     other => Err(other),
@@ -782,8 +804,10 @@ impl Instance {
         self.get_field_idx(&self.class.borrow(), key).map(|offset| self.fields[offset as usize].clone())
     }
 
-    pub fn construct(class: Rc<RefCell<Class>>) -> Self {
+    pub fn construct(class: Rc<RefCell<Class>>) -> Result<Self, ExecError> {
         let fields = vec![Value::Null; class.borrow_mut().get_next_valid_offset() as usize];
-        Instance { class, fields }
+        let mut instance = Instance { class: class.clone(), fields };
+        class.borrow_mut().initialize(&mut instance)?;
+        Ok(instance)
     }
 }

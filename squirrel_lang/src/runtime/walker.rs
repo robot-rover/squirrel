@@ -442,10 +442,15 @@ fn run_rawcall(
             func(context as *mut _, env, args, &call_info)
         }
         Value::Class(class) => {
-            let instance = Instance::construct(class.clone());
-            Ok(Value::instance(instance))
+            let instance = Instance::construct(class.clone())?;
+            let constructor = instance.get_field_str("constructor");
+            let instance_val = Value::instance(instance);
+            if let Some(constructor) = constructor {
+                run_rawcall(context, constructor, instance_val.clone(), args, func_span, call_span)?;
+            }
+            Ok(instance_val)
         }
-        other => panic!("Can't call non-function {other:?}"),
+        other => Err(ExecError::general(func_span, format!("Can't call non-function {other:?}"))),
     }
 }
 
@@ -578,7 +583,7 @@ fn run_unary_op(
 ) -> ExprResult {
     let res = match op {
         UnaryOp::Neg => match val {
-            Value::Float(val) => Value::float(-val),
+            Value::Float(val) => Value::Float(-val),
             Value::Integer(val) => Value::Integer(-val),
             Value::Instance(inst) => todo!("_unm"),
             Value::Object(inst) => todo!("_unm"),
@@ -615,55 +620,46 @@ fn run_unary_op(
 
 // lhs.get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod())
 
-macro_rules! promoting_op {
-    ($lhs:ident, $rhs:ident, $op:tt, $op_lit:literal $(, meta $meta:literal)?) => {
-        match ($lhs, $rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) => Ok(Value::Integer(lhs $op rhs)),
-            (Value::Float(lhs), Value::Float(rhs)) => Ok(Value::float(lhs $op rhs)),
-            (Value::Integer(lhs), Value::Float(rhs)) => Ok(Value::float((lhs as f64) $op rhs)),
-            (Value::Float(lhs), Value::Integer(rhs)) => Ok(Value::float(lhs $op (rhs as f64))),
-            $(
-                (Value::Instance(lhs), rhs) => todo!($meta),
-                (Value::Object(lhs), rhs) => todo!($meta),
-            )?
-            (lhs, rhs) => Err(($op_lit, lhs, rhs)),
-        }
+macro_rules! stringify_or_value {
+    ($val:tt) => {
+        stringify!($val)
     };
-    ($lhs:ident, $rhs:ident, $op:tt, $result:tt, $op_lit:literal $(, meta $meta:literal)?) => {
-        match ($lhs, $rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) => Ok(Value::$result(lhs $op rhs)),
-            (Value::Float(lhs), Value::Float(rhs)) => Ok(Value::$result(lhs $op rhs)),
-            (Value::Integer(lhs), Value::Float(rhs)) => Ok(Value::$result((lhs as f64) $op rhs)),
-            (Value::Float(lhs), Value::Integer(rhs)) => Ok(Value::$result(lhs $op (rhs as f64))),
-            $(
-                (Value::Instance(lhs), rhs) => todo!($meta),
-                (Value::Object(lhs), rhs) => todo!($meta),
-            )?
-            (lhs, rhs) => Err((stringify!($op), lhs, rhs)),
-        }
+    ($val:tt, $lit:literal) => {
+        $lit
     };
-    ($lhs:ident, $rhs:ident, $op:tt, $result:tt, $op_lit:literal, compare) => {
-        match ($lhs, $rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) => Ok(Value::$result(lhs $op rhs)),
-            (Value::Float(lhs), Value::Float(rhs)) => Ok(Value::$result(lhs $op rhs)),
-            (Value::Integer(lhs), Value::Float(rhs)) => Ok(Value::$result((lhs as f64) $op rhs)),
-            (Value::Float(lhs), Value::Integer(rhs)) => Ok(Value::$result(lhs $op (rhs as f64))),
-            (Value::Instance(lhs), rhs) => todo!("_cmp"),
-            (Value::Object(lhs), rhs) => todo!("_cmp"),
-            (lhs, rhs) => Err((stringify!($op), lhs, rhs)),
-        }
-    }
 }
 
-macro_rules! int_op {
-    ($lhs:ident, $rhs:ident, $op:tt, $op_lit:literal $(, meta $meta:literal)?) => {
-        match ($lhs, $rhs) {
-            (Value::Integer($lhs), Value::Integer($rhs)) => Ok(Value::Integer($lhs $op $rhs)),
-            $(
-                (Value::Instance(lhs), rhs) => todo!($meta),
-                (Value::Object(lhs), rhs) => todo!($meta),
-            )?
-            (lhs, rhs) => Err(($op_lit, lhs, rhs)),
+macro_rules! define_op {
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
+        define_op!($lhs $op $rhs; $op_span, $context, int Integer, float Float $(, lit $op_lit)? $(, meta $meta)?)
+    };
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident, both $result:ident $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
+        define_op!($lhs $op $rhs; $op_span, $context, int $result, float $result $(, lit $op_lit)? $(, meta $meta)?)
+    };
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, int $int_result:ident)? $(, float $float_result:ident)? $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
+        {
+            let op_lit = stringify_or_value!($op $(, $op_lit)?);
+            match ($lhs, $rhs) {
+                $(((Value::Integer(lhs), _), (Value::Integer(rhs), _)) => Ok(Value::$int_result(lhs $op rhs)),)?
+                $(
+                    ((Value::Float(lhs), _), (Value::Float(rhs), _)) => Ok(Value::$float_result(lhs $op rhs)),
+                    ((Value::Integer(lhs), _), (Value::Float(rhs), _)) => Ok(Value::$float_result((lhs as f64) $op rhs)),
+                    ((Value::Float(lhs), _), (Value::Integer(rhs), _)) => Ok(Value::$float_result(lhs $op (rhs as f64))),
+                )?
+                $(
+                    ((Value::Instance(lhs), lhs_span), (rhs, rhs_span)) => {
+                        let meta = lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod(lhs_span, $op_span, $meta.to_string(), op_lit.to_string()))?;
+                        println!("Instance metamethod '{}': {}", $meta, meta);
+                        run_rawcall($context, meta, Value::Instance(lhs), vec![rhs], lhs_span | $op_span, lhs_span | rhs_span)
+                    },
+                    ((Value::Object(lhs), lhs_span), (rhs, rhs_span)) => {
+                        let meta = lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod(lhs_span, $op_span, $meta.to_string(), op_lit.to_string()))?;
+                        println!("Table metamethod '{}': {}", $meta, meta);
+                        run_rawcall($context, meta, Value::Object(lhs), vec![rhs], lhs_span | $op_span, lhs_span | rhs_span)
+                    },
+                )?
+                (lhs, rhs) => Err(ExecError::illegal_binary_op(op_lit, $op_span, lhs, rhs)),
+            }
         }
     };
 }
@@ -677,56 +673,55 @@ fn run_binary_op(
     rhs: Value,
     rhs_span: Span,
 ) -> ExprResult {
-    let res = match op {
+    let lhs = (lhs, lhs_span);
+    let rhs = (rhs, rhs_span);
+    match op {
         BinaryOp::Add => {
-            let lhs_str: Result<Rc<str>, Value> = <Rc<str>>::typed_from(lhs);
-            let rhs_str: Result<Rc<str>, Value> = <Rc<str>>::typed_from(rhs);
+            let lhs_str: Result<&Rc<str>, &Value> = <Rc<str>>::typed_from_ref(&lhs.0);
+            let rhs_str: Result<&Rc<str>, &Value> = <Rc<str>>::typed_from_ref(&rhs.0);
             match (lhs_str, rhs_str) {
                 (Ok(ls), Ok(rs)) => Ok(Value::string(&format!("{}{}", ls, rs))),
                 (Ok(ls), Err(r)) => Ok(Value::string(&format!("{}{}", ls, r))),
                 (Err(l), Ok(rs)) => Ok(Value::string(&format!("{}{}", l, rs))),
-                (Err(l), Err(r)) => promoting_op!(l, r, +, "+", meta "_add"),
+                (Err(l), Err(r)) => define_op!(lhs + rhs; op_span, context, meta "_add"),
             }
         }
-        BinaryOp::Sub => promoting_op!(lhs, rhs, -, "-", meta "_sub"),
-        BinaryOp::Mul => promoting_op!(lhs, rhs, *, "*", meta "_mul"),
-        BinaryOp::Div => promoting_op!(lhs, rhs, /, "/", meta "_div"),
-        BinaryOp::Mod => int_op!(lhs, rhs, %, "%", meta "_modulo"),
+        BinaryOp::Sub => define_op!(lhs - rhs; op_span, context, meta "_sub"),
+        BinaryOp::Mul => define_op!(lhs * rhs; op_span, context, meta "_mul"),
+        BinaryOp::Div => define_op!(lhs / rhs; op_span, context, meta "_div"),
+        BinaryOp::Mod => define_op!(lhs % rhs; op_span, context, int Integer, meta "_modulo"),
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
-        BinaryOp::Eq => promoting_op!(lhs, rhs, ==, boolean, "=="),
-        BinaryOp::NotEq => promoting_op!(lhs, rhs, !=, boolean, "!="),
-        BinaryOp::Greater => promoting_op!(lhs, rhs, >, boolean, ">", compare),
-        BinaryOp::GreaterEq => promoting_op!(lhs, rhs, >=, boolean, ">=", compare),
-        BinaryOp::Less => promoting_op!(lhs, rhs, <, boolean, "<", compare),
-        BinaryOp::LessEq => promoting_op!(lhs, rhs, <=, boolean, "<=", compare),
+        BinaryOp::Eq => define_op!(lhs == rhs; op_span, context, both boolean),
+        BinaryOp::NotEq => define_op!(lhs != rhs; op_span, context, both boolean),
+        BinaryOp::Greater => define_op!(lhs > rhs; op_span, context, both boolean), // compare),
+        BinaryOp::GreaterEq => define_op!(lhs >= rhs; op_span, context, both boolean), // compare),
+        BinaryOp::Less => define_op!(lhs < rhs; op_span, context, both boolean), // compare),
+        BinaryOp::LessEq => define_op!(lhs <= rhs; op_span, context, both boolean), // compare),
         BinaryOp::Compare => todo!("Implement compare and metamethod"),
-        BinaryOp::And => Ok(if !lhs.truthy() {
-            lhs.clone()
+        BinaryOp::And => Ok(if !lhs.0.truthy() {
+            lhs.0
         } else {
-            rhs.clone()
+            rhs.0
         }),
-        BinaryOp::Or => Ok(if lhs.truthy() {
-            lhs.clone()
+        BinaryOp::Or => Ok(if lhs.0.truthy() {
+            lhs.0
         } else {
-            rhs.clone()
+            rhs.0
         }),
-        BinaryOp::BitAnd => int_op!(lhs, rhs, &, "&"),
-        BinaryOp::BitOr => int_op!(lhs, rhs, |, "|"),
-        BinaryOp::BitXor => int_op!(lhs, rhs, ^, "^"),
-        BinaryOp::Shl => int_op!(lhs, rhs, <<, "<<"),
+        BinaryOp::BitAnd => define_op!(lhs & rhs; op_span, context, int Integer),
+        BinaryOp::BitOr => define_op!(lhs | rhs; op_span, context, int Integer),
+        BinaryOp::BitXor => define_op!(lhs ^ rhs; op_span, context, int Integer),
+        BinaryOp::Shl => define_op!(lhs << rhs; op_span, context, int Integer),
         BinaryOp::Shr => match (lhs, rhs) {
-            (Value::Integer(lhs), Value::Integer(rhs)) => {
-                Ok(Value::Integer(((lhs as u64) >> rhs) as i64))
+            ((Value::Integer(l), _), (Value::Integer(r), _)) => {
+                Ok(Value::Integer(((l as u64) >> r) as i64))
             }
-            (lhs, rhs) => Err((">>", lhs, rhs)),
+            (lhs, rhs) => Err(ExecError::illegal_binary_op(">>", op_span, lhs, rhs)),
         },
-        BinaryOp::AShr => int_op!(lhs, rhs, >>, ">>>"),
+        BinaryOp::AShr => define_op!(lhs >> rhs; op_span, context, int Integer, lit ">>>"),
         BinaryOp::In => todo!("In is not implemented"),
         BinaryOp::InstanceOf => todo!("Instanceof is not implemented"),
-    };
-    res.map_err(|(op, lhs, rhs)| {
-        ExecError::illegal_binary_op(op, op_span, (lhs, lhs_span), (rhs, rhs_span))
-    })
+    }
 }
 
 fn get_assign_target(context: &mut Context, target: &AssignTarget) -> ExprResult {
@@ -794,12 +789,18 @@ fn run_assign(
             obj.set_field(any, val, is_newslot, span)
         }
         (Value::Array(arr), HashValue::Integer(index)) => {
+            // TODO: What happens with newslot operator?
             // TODO: Handle index out of bounds
             let mut arr = arr.deref().borrow_mut();
             arr[index as usize] = val;
             Ok(())
         }
         (Value::Array(_), other) => panic!("Cannot set non-integer index of array"),
+        (Value::Instance(inst), key) => {
+            let mut inst = inst.deref().borrow_mut();
+            inst.set_field(key, val, is_newslot, span)?;
+            Ok(())
+        },
         _ => panic!("Can't assign to non-object"),
     }
 }

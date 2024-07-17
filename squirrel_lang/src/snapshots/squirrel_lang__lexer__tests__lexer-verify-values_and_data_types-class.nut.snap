@@ -1,0 +1,145 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for verify/values_and_data_types/class.nut
+---
+- Class
+- Identifier: MyClass
+- LeftCurlyBrace
+- Newline
+- Function
+- Identifier: constructor
+- LeftParenthesis
+- Identifier: n
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- This
+- Period
+- Identifier: n
+- Assign
+- Identifier: n
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: n
+- Assign
+- Integer: 0
+- Newline
+- Identifier: test
+- Assign
+- "Null"
+- Newline
+- RightCurlyBrace
+- Newline
+- Identifier: MyClass
+- Period
+- Identifier: test2
+- NewSlot
+- String: test2
+- Newline
+- Identifier: MyClass
+- LeftSquareBracket
+- Integer: 10
+- RightSquareBracket
+- NewSlot
+- Integer: 10
+- Newline
+- Newline
+- Local
+- Identifier: one
+- Assign
+- Identifier: MyClass
+- LeftParenthesis
+- Integer: 1
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: one
+- Period
+- Identifier: n
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: one
+- Period
+- Identifier: test
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Identifier: one
+- Period
+- Identifier: test
+- NewSlot
+- String: Hello
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: one
+- Period
+- Identifier: test
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: one
+- Period
+- Identifier: test2
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: one
+- LeftSquareBracket
+- Integer: 10
+- RightSquareBracket
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: MyClass
+- Period
+- Identifier: n
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: MyClass
+- Period
+- Identifier: test2
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- Identifier: MyClass
+- LeftSquareBracket
+- Integer: 10
+- RightSquareBracket
+- Plus
+- String: "\n"
+- RightParenthesis

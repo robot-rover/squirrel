@@ -46,6 +46,7 @@ type ExprResult = Result<Value, ExecError>;
 
 #[derive(Debug)]
 pub enum ExecError {
+    General(Span, String, SqBacktrace),
     UndefinedVariable(Ident, SqBacktrace),
     UndefinedField(Span, Value, SqBacktrace),
     IllegalKeyword(Span, SqBacktrace),
@@ -97,9 +98,10 @@ pub enum ExecError {
     MutatingInstantiatedClass(Span, SqBacktrace),
     ExtendingNonClass(Span, SqBacktrace),
     MissingMetamethod {
-        span: Span,
-        name: String,
+        obj_span: Span,
+        op_span: Span,
         op: String,
+        name: String,
         bt: SqBacktrace,
     },
 }
@@ -124,6 +126,7 @@ pub struct CallInfo {
 }
 
 impl ExecError {
+    variant_constructor!(General general(span: Span, message: String));
     variant_constructor!(UndefinedVariable undefined_variable(ident: Ident));
     variant_constructor!(UndefinedField undefined_field(span: Span, value: Value));
     variant_constructor!(IllegalKeyword illegal_keyword(span: Span));
@@ -137,7 +140,7 @@ impl ExecError {
     variant_constructor!(IndexOutOfBounds index_out_of_bounds { index: i64, len: usize, span: Span });
     variant_constructor!(MutatingInstantiatedClass mutating_instantiated_class(span: Span));
     variant_constructor!(ExtendingNonClass extending_non_class(span: Span));
-    variant_constructor!(MissingMetamethod missing_metamethod { span: Span, name: String, op: String });
+    variant_constructor!(MissingMetamethod missing_metamethod { obj_span: Span, op_span: Span, name: String, op: String });
 
     fn illegal_binary_op(
         op: &str,
@@ -330,11 +333,20 @@ impl ExecError {
             ExecError::ExtendingNonClass(span, bt) => SquirrelError::new(
                 file_name, span, "Cannot extend a non-class".to_string(), bt
             ),
-            ExecError::MissingMetamethod { span, name, op, bt } => SquirrelError::new(
+            ExecError::MissingMetamethod { obj_span, op_span, name, op, bt } => SquirrelError::new_labels(
+                file_name,
+                format!("Could not find metamethod '{}', which is needed to perform operation '{}'", name, op),
+                vec![
+                    (obj_span, format!("Object (missing '{}')", name), Color::Red),
+                    (op_span, "Operator".to_string(), Color::Blue),
+                ],
+                bt,
+            ),
+            ExecError::General(span, message, bt) => SquirrelError::new(
                 file_name,
                 span,
-                format!("Missing metamethod '{}' on lhs operand, needed to perform operation '{}'", name, op),
-                bt,
+                message,
+                bt
             ),
         }
     }
