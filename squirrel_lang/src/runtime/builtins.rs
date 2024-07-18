@@ -8,6 +8,8 @@ use hashbrown::HashMap;
 use std::cell::RefCell;
 use std::{io::Write, rc::Rc};
 
+use super::walker::run_rawcall;
+
 // pub type NativeFn = fn(*mut Context, Vec<Value>) -> Result<Value, ExecError>;
 
 macro_rules! make_delegate {
@@ -120,7 +122,20 @@ fn tostring(
     call_info: &CallInfo,
 ) -> ExprResult {
     argparse::parse0(args, call_info)?;
-    Ok(Value::String(Rc::from(this.to_string())))
+    let meta = match &this {
+        Value::Object(o) => o.borrow().get_field_str("_tostring"),
+        Value::Instance(inst) => inst.borrow().get_field_str("_tostring"),
+        _ => None,
+    };
+    if let Some(meta) = meta {
+        let result = run_rawcall(unsafe { &mut *context }, meta, this, Vec::new(), call_info.func_span, call_info.call_span)?;
+        match result {
+            Value::String(s) => Ok(Value::String(s)),
+            other => Err(ExecError::wrong_metamethod_return_type(call_info.func_span, call_info.call_span, "_tostring".to_string(), "String".to_string(), other.type_str().to_string())),
+        }
+    } else {
+        Ok(Value::String(Rc::from(this.to_string())))
+    }
 }
 
 fn weakref(

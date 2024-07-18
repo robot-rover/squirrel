@@ -413,7 +413,7 @@ fn run_function_call(
     run_rawcall(context, func_val, env, args, func.span(), args_span)
 }
 
-fn run_rawcall(
+pub fn run_rawcall(
     context: &mut Context,
     func_val: Value,
     env: Value,
@@ -629,16 +629,39 @@ macro_rules! stringify_or_value {
     };
 }
 
+macro_rules! compare_impl {
+    ($result:ident, $op:tt, $lhs_span:ident, $op_span:ident) => {
+        Ok($result)
+    };
+    ($result:ident, $op:tt, $lhs_span:ident, $op_span:ident, $compare:ident) => {
+        match $result {
+            Value::Integer(val) => Ok(Value::Boolean(val $op 0)),
+            Value::Float(val) => Ok(Value::Boolean(val $op 0.0)),
+            other => Err(ExecError::wrong_metamethod_return_type($lhs_span, $op_span, "_cmp".to_string(), "integer|float".to_string(), other.type_str().to_string())),
+        }
+    };
+}
+
+macro_rules! metamethod_impl {
+    (($val_variant:ident $lhs:ident, $lhs_span:ident) $op:tt ($rhs:ident, $rhs_span:ident); $op_span:ident, $context:ident, lit $op_lit:ident, meta $meta:literal $($compare:ident)?) => {{
+        let meta = $lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod($lhs_span, $op_span, $meta.to_string(), $op_lit.to_string()))?;
+        println!("Table metamethod '{}': {}", $meta, meta);
+        let result = run_rawcall($context, meta, Value::$val_variant($lhs), vec![$rhs], $lhs_span | $op_span, $lhs_span | $rhs_span)?;
+        compare_impl!(result, $op, $lhs_span, $op_span $(, $compare)?)
+    }};
+}
+
 macro_rules! define_op {
-    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
-        define_op!($lhs $op $rhs; $op_span, $context, int Integer, float Float $(, lit $op_lit)? $(, meta $meta)?)
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, lit $op_lit:literal)? $(, meta $meta:literal $($compare:ident)?)?) => {
+        define_op!($lhs $op $rhs; $op_span, $context, int Integer, float Float $(, lit $op_lit)? $(, meta $meta $($compare)?)?)
     };
-    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident, both $result:ident $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
-        define_op!($lhs $op $rhs; $op_span, $context, int $result, float $result $(, lit $op_lit)? $(, meta $meta)?)
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident, both $result:ident $(, lit $op_lit:literal)? $(, meta $meta:literal $($compare:ident)?)?) => {
+        define_op!($lhs $op $rhs; $op_span, $context, int $result, float $result $(, lit $op_lit)? $(, meta $meta $($compare)?)?)
     };
-    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, int $int_result:ident)? $(, float $float_result:ident)? $(, lit $op_lit:literal)? $(, meta $meta:literal)?) => {
+    ($lhs:ident $op:tt $rhs:ident; $op_span:ident, $context:ident $(, int $int_result:ident)? $(, float $float_result:ident)? $(, lit $op_lit:literal)? $(, meta $meta:literal $($compare:ident)?)?) => {
         {
             let op_lit = stringify_or_value!($op $(, $op_lit)?);
+            let result = |v: Value| Result::<Value, ExecError>::Ok(v);
             match ($lhs, $rhs) {
                 $(((Value::Integer(lhs), _), (Value::Integer(rhs), _)) => Ok(Value::$int_result(lhs $op rhs)),)?
                 $(
@@ -647,21 +670,22 @@ macro_rules! define_op {
                     ((Value::Float(lhs), _), (Value::Integer(rhs), _)) => Ok(Value::$float_result(lhs $op (rhs as f64))),
                 )?
                 $(
-                    ((Value::Instance(lhs), lhs_span), (rhs, rhs_span)) => {
-                        let meta = lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod(lhs_span, $op_span, $meta.to_string(), op_lit.to_string()))?;
-                        println!("Instance metamethod '{}': {}", $meta, meta);
-                        run_rawcall($context, meta, Value::Instance(lhs), vec![rhs], lhs_span | $op_span, lhs_span | rhs_span)
-                    },
-                    ((Value::Object(lhs), lhs_span), (rhs, rhs_span)) => {
-                        let meta = lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod(lhs_span, $op_span, $meta.to_string(), op_lit.to_string()))?;
-                        println!("Table metamethod '{}': {}", $meta, meta);
-                        run_rawcall($context, meta, Value::Object(lhs), vec![rhs], lhs_span | $op_span, lhs_span | rhs_span)
-                    },
+                    ((Value::Instance(lhs), lhs_span), (rhs, rhs_span)) => metamethod_impl!((Instance lhs, lhs_span) $op (rhs, rhs_span); $op_span, $context, lit op_lit, meta $meta $($compare)?),
+                    ((Value::Object(lhs), lhs_span), (rhs, rhs_span)) => metamethod_impl!((Object lhs, lhs_span) $op (rhs, rhs_span); $op_span, $context, lit op_lit, meta $meta $($compare)?),
                 )?
                 (lhs, rhs) => Err(ExecError::illegal_binary_op(op_lit, $op_span, lhs, rhs)),
             }
         }
     };
+}
+
+fn resolve_cmp(
+    context: &mut Context,
+    cmp_result: Value,
+    cmp_eq: bool,
+    cmp_greater: bool
+) -> ExprResult {
+    todo!()
 }
 
 fn run_binary_op(
@@ -693,10 +717,10 @@ fn run_binary_op(
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
         BinaryOp::Eq => define_op!(lhs == rhs; op_span, context, both boolean),
         BinaryOp::NotEq => define_op!(lhs != rhs; op_span, context, both boolean),
-        BinaryOp::Greater => define_op!(lhs > rhs; op_span, context, both boolean), // compare),
-        BinaryOp::GreaterEq => define_op!(lhs >= rhs; op_span, context, both boolean), // compare),
-        BinaryOp::Less => define_op!(lhs < rhs; op_span, context, both boolean), // compare),
-        BinaryOp::LessEq => define_op!(lhs <= rhs; op_span, context, both boolean), // compare),
+        BinaryOp::Greater => define_op!(lhs > rhs; op_span, context, both boolean, meta "_cmp" compare),
+        BinaryOp::GreaterEq => define_op!(lhs >= rhs; op_span, context, both boolean, meta "_cmp" compare),
+        BinaryOp::Less => define_op!(lhs < rhs; op_span, context, both boolean, meta "_cmp" compare),
+        BinaryOp::LessEq => define_op!(lhs <= rhs; op_span, context, both boolean, meta "_cmp" compare),
         BinaryOp::Compare => todo!("Implement compare and metamethod"),
         BinaryOp::And => Ok(if !lhs.0.truthy() {
             lhs.0

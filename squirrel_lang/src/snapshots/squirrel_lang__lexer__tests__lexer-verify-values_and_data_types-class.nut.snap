@@ -75,11 +75,7 @@ expression: Lexer test for verify/values_and_data_types/class.nut
 - String: "\n"
 - RightParenthesis
 - Newline
-- Identifier: one
-- Period
-- Identifier: test
-- NewSlot
-- String: Hello
+- Newline
 - Newline
 - DoubleColon
 - Identifier: print

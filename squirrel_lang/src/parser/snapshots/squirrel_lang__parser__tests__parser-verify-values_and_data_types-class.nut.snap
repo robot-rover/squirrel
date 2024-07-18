@@ -352,40 +352,6 @@ body:
       - data:
           Expr:
             data:
-              Assign:
-                target:
-                  FieldAccess:
-                    - data:
-                        Local:
-                          - 1
-                          - start: Start
-                            end: End
-                      span:
-                        start: Start
-                        end: End
-                    - - test
-                      - start: Start
-                        end: End
-                value:
-                  data:
-                    Literal:
-                      String: Hello
-                  span:
-                    start: Start
-                    end: End
-                kind: NewSlot
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
               FunctionCall:
                 func:
                   FieldAccess:

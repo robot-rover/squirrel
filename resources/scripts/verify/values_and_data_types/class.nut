@@ -13,7 +13,8 @@ local one = MyClass(1)
 
 ::print(one.n + "\n")
 ::print(one.test + "\n")
-one.test <- "Hello"
+// Classes don't support newslots
+// one.test <- "Hello"
 ::print(one.test + "\n")
 ::print(one.test2 + "\n")
 ::print(one[10] + "\n")

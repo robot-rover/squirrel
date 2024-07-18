@@ -104,6 +104,8 @@ pub enum ExecError {
         name: String,
         bt: SqBacktrace,
     },
+    WrongMetamethodReturnType { obj_span: Span, op_span: Span, mm_name: String, expected: String, got: String, bt: SqBacktrace
+    },
 }
 
 macro_rules! variant_constructor {
@@ -141,6 +143,7 @@ impl ExecError {
     variant_constructor!(MutatingInstantiatedClass mutating_instantiated_class(span: Span));
     variant_constructor!(ExtendingNonClass extending_non_class(span: Span));
     variant_constructor!(MissingMetamethod missing_metamethod { obj_span: Span, op_span: Span, name: String, op: String });
+    variant_constructor!(WrongMetamethodReturnType wrong_metamethod_return_type { obj_span: Span, op_span: Span, mm_name: String, expected: String, got: String});
 
     fn illegal_binary_op(
         op: &str,
@@ -346,6 +349,15 @@ impl ExecError {
                 file_name,
                 span,
                 message,
+                bt
+            ),
+            ExecError::WrongMetamethodReturnType { obj_span, op_span, mm_name, expected, got, bt } => SquirrelError::new_labels(
+                file_name,
+                format!("Metamethod '{}' must return '{}', got '{}'", mm_name, expected, got),
+                vec![
+                    (obj_span, format!("Object"), Color::Red),
+                    (op_span, format!("Operator"), Color::Blue),
+                ],
                 bt
             ),
         }
