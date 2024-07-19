@@ -43,6 +43,16 @@ expression: Lexer test for verify/metamethods/misc.nut
 - DoubleColon
 - Identifier: print
 - LeftParenthesis
+- String: "Other: "
+- Plus
+- Identifier: other
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
 - String: Table _call called (
 - Plus
 - LeftParenthesis
@@ -205,6 +215,59 @@ expression: Lexer test for verify/metamethods/misc.nut
 - RightParenthesis
 - Newline
 - RightCurlyBrace
+- Newline
+- Newline
+- Identifier: customTable
+- Period
+- Identifier: _call
+- Assign
+- Function
+- LeftParenthesis
+- Identifier: other
+- Comma
+- Identifier: a
+- Comma
+- Identifier: b
+- Comma
+- Identifier: c
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Table _call called with args (
+- Plus
+- Identifier: a
+- Plus
+- String: ", "
+- Plus
+- Identifier: b
+- Plus
+- String: ", "
+- Plus
+- Identifier: c
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Calling _call with args:\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- LeftParenthesis
+- Integer: 1
+- Comma
+- Integer: 2
+- Comma
+- Integer: 3
+- RightParenthesis
 - Newline
 - Newline
 - DoubleColon
@@ -437,3 +500,67 @@ expression: Lexer test for verify/metamethods/misc.nut
 - RightParenthesis
 - Newline
 - RightCurlyBrace
+- Newline
+- Newline
+- Class
+- Identifier: CallArgs
+- LeftCurlyBrace
+- Newline
+- Function
+- Identifier: _call
+- LeftParenthesis
+- Identifier: other
+- Comma
+- Identifier: a
+- Comma
+- Identifier: b
+- Comma
+- Identifier: c
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: Class _call called with args (
+- Plus
+- Identifier: a
+- Plus
+- String: ", "
+- Plus
+- Identifier: b
+- Plus
+- String: ", "
+- Plus
+- Identifier: c
+- Plus
+- String: ")\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: c
+- Assign
+- Identifier: CallArgs
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Calling _call with args:\n"
+- RightParenthesis
+- Newline
+- Identifier: c
+- LeftParenthesis
+- Integer: 1
+- Comma
+- Integer: 2
+- Comma
+- Integer: 3
+- RightParenthesis

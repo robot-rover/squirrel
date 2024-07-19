@@ -7,6 +7,7 @@ local customTable ={
     }
 
     function _call(other) {
+        ::print("Other: " + other + "\n")
         ::print("Table _call called (" + (other == getroottable()) + ")\n")
     }
 
@@ -41,6 +42,13 @@ local ac = clone a
 foreach (i in a) {
     ::print(i + "\n")
 }
+
+customTable._call = function(other, a, b, c) {
+    ::print("Table _call called with args (" + a + ", " + b + ", " + c + ")\n")
+}
+
+::print("Calling _call with args:\n")
+a(1, 2, 3)
 
 ::print("\nWith Classes:\n")
 class CustomClass {
@@ -89,3 +97,14 @@ local bc = clone b
 foreach (i in b) {
     ::print(i + "\n")
 }
+
+class CallArgs {
+    function _call(other, a, b, c) {
+        ::print("Class _call called with args (" + a + ", " + b + ", " + c + ")\n")
+    }
+}
+
+local c = CallArgs()
+
+::print("Calling _call with args:\n")
+c(1, 2, 3)

@@ -413,6 +413,12 @@ fn run_function_call(
     run_rawcall(context, func_val, env, args, func.span(), args_span)
 }
 
+macro_rules! run_metamethod {
+    () => {
+
+    };
+}
+
 pub fn run_rawcall(
     context: &mut Context,
     func_val: Value,
@@ -449,6 +455,26 @@ pub fn run_rawcall(
                 run_rawcall(context, constructor, instance_val.clone(), args, func_span, call_span)?;
             }
             Ok(instance_val)
+        }
+        Value::Object(obj) => {
+            let call = obj.deref().borrow().get_field_str("_call");
+            if let Some(call) = call {
+                let mut call_args = vec![context.infunc.env.clone()];
+                call_args.extend(args);
+                run_rawcall(context, call, Value::Object(obj), call_args, func_span, call_span)
+            } else {
+                Err(ExecError::missing_metamethod(func_span, call_span, "call".to_string(), "()".to_string()))
+            }
+        }
+        Value::Instance(inst) => {
+            let call = inst.deref().borrow().get_field_str("_call");
+            if let Some(call) = call {
+                let mut call_args = vec![context.infunc.env.clone()];
+                call_args.extend(args);
+                run_rawcall(context, call, Value::Instance(inst), call_args, func_span, call_span)
+            } else {
+                Err(ExecError::missing_metamethod(func_span, call_span, "call".to_string(), "()".to_string()))
+            }
         }
         other => Err(ExecError::general(func_span, format!("Can't call non-function {other:?}"))),
     }
@@ -678,15 +704,6 @@ macro_rules! define_op {
     };
 }
 
-fn resolve_cmp(
-    context: &mut Context,
-    cmp_result: Value,
-    cmp_eq: bool,
-    cmp_greater: bool
-) -> ExprResult {
-    todo!()
-}
-
 fn run_binary_op(
     context: &mut Context,
     op: &BinaryOp,
@@ -713,8 +730,8 @@ fn run_binary_op(
         BinaryOp::Div => define_op!(lhs / rhs; op_span, context, meta "_div"),
         BinaryOp::Mod => define_op!(lhs % rhs; op_span, context, int Integer, meta "_modulo"),
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
-        BinaryOp::Eq => define_op!(lhs == rhs; op_span, context, both boolean),
-        BinaryOp::NotEq => define_op!(lhs != rhs; op_span, context, both boolean),
+        BinaryOp::Eq => Ok(Value::Boolean(lhs.0 == rhs.0)),
+        BinaryOp::NotEq => Ok(Value::Boolean(lhs.0 != rhs.0)),
         BinaryOp::Greater => define_op!(lhs > rhs; op_span, context, both boolean, meta "_cmp" compare),
         BinaryOp::GreaterEq => define_op!(lhs >= rhs; op_span, context, both boolean, meta "_cmp" compare),
         BinaryOp::Less => define_op!(lhs < rhs; op_span, context, both boolean, meta "_cmp" compare),

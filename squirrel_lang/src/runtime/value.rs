@@ -122,15 +122,22 @@ impl Value {
 impl PartialEq for Value {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
+            // Numerics
             (Self::Float(l0), Self::Float(r0)) => *l0 == *r0,
+            (Self::Float(l0), Self::Integer(r0)) => *l0 == *r0 as f64,
+            (Self::Integer(l0), Self::Float(r0)) => *l0 as f64 == *r0,
             (Self::Integer(l0), Self::Integer(r0)) => *l0 == *r0,
+            // Unique Values
+            (Self::Boolean(l0), Self::Boolean(r0)) => *l0 == *r0,
+            (Self::Null, Self::Null) => true,
+            // Pointer Identity
             (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
             (Self::String(l0), Self::String(r0)) => l0 == r0,
             (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
-            (Self::Null, Self::Null) => true,
-            // TODO: Add instance and class identity
+            (Self::Class(l0), Self::Class(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Instance(l0), Self::Instance(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             _ => false,
         }
     }
