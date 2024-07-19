@@ -697,6 +697,12 @@ macro_rules! define_op {
                 $(
                     ((Value::Instance(lhs), lhs_span), (rhs, rhs_span)) => metamethod_impl!((Instance lhs, lhs_span) $op (rhs, rhs_span); $op_span, $context, lit op_lit, meta $meta $($compare)?),
                     ((Value::Object(lhs), lhs_span), (rhs, rhs_span)) => metamethod_impl!((Object lhs, lhs_span) $op (rhs, rhs_span); $op_span, $context, lit op_lit, meta $meta $($compare)?),
+                    $(
+                        ((Value::String(s), _), (Value::String(t), _)) => {
+                            let $compare = ();
+                            result(Value::Boolean(s $op t))
+                        },
+                    )?
                 )?
                 (lhs, rhs) => Err(ExecError::illegal_binary_op(op_lit, $op_span, lhs, rhs)),
             }
@@ -728,7 +734,7 @@ fn run_binary_op(
         BinaryOp::Sub => define_op!(lhs - rhs; op_span, context, meta "_sub"),
         BinaryOp::Mul => define_op!(lhs * rhs; op_span, context, meta "_mul"),
         BinaryOp::Div => define_op!(lhs / rhs; op_span, context, meta "_div"),
-        BinaryOp::Mod => define_op!(lhs % rhs; op_span, context, int Integer, meta "_modulo"),
+        BinaryOp::Mod => define_op!(lhs % rhs; op_span, context, meta "_modulo"),
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
         BinaryOp::Eq => Ok(Value::Boolean(lhs.0 == rhs.0)),
         BinaryOp::NotEq => Ok(Value::Boolean(lhs.0 != rhs.0)),

@@ -55,3 +55,109 @@ expression: Lexer test for verify/values_and_data_types/float.nut
 - Plus
 - String: "\n"
 - RightParenthesis
+- Newline
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Number: 5.5
+- Modulus
+- Number: 1.5
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Number: 5.5
+- Modulus
+- Integer: 3
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Minus
+- Number: 5.5
+- Modulus
+- Number: 1.5
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Minus
+- Number: 5.5
+- Modulus
+- Integer: 3
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Minus
+- Number: 5.5
+- Modulus
+- Minus
+- Number: 1.5
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Minus
+- Number: 5.5
+- Modulus
+- Minus
+- Integer: 3
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Number: 5.5
+- Modulus
+- Minus
+- Number: 1.5
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- LeftParenthesis
+- Number: 5.5
+- Modulus
+- Minus
+- Integer: 3
+- RightParenthesis
+- Plus
+- String: "\n"
+- RightParenthesis

@@ -22,3 +22,13 @@ local n = null
 ::print((a - b) + "\n")
 ::print((a * b) + "\n")
 ::print((a / b) + "\n")
+
+// Test modulus w/ positive and negative numbers
+::print((5 % 2) + "\n")
+::print((5 % 3) + "\n")
+::print((-5 % 2) + "\n")
+::print((-5 % 3) + "\n")
+::print((-5 % -2) + "\n")
+::print((-5 % -3) + "\n")
+::print((5 % -2) + "\n")
+::print((5 % -3) + "\n")
