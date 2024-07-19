@@ -17,7 +17,7 @@ use crate::{
 };
 
 use super::{
-    builtins,
+    builtins::{self, tostring},
     value::{Class, Closure, HashValue, Instance, Object, TypeName, Value},
     CallInfo, Context, ExecError, ExprResult, FuncRuntime, VMState,
 };
@@ -645,7 +645,6 @@ macro_rules! compare_impl {
 macro_rules! metamethod_impl {
     (($val_variant:ident $lhs:ident, $lhs_span:ident) $op:tt ($rhs:ident, $rhs_span:ident); $op_span:ident, $context:ident, lit $op_lit:ident, meta $meta:literal $($compare:ident)?) => {{
         let meta = $lhs.borrow().get_field_str($meta).ok_or_else(|| ExecError::missing_metamethod($lhs_span, $op_span, $meta.to_string(), $op_lit.to_string()))?;
-        println!("Table metamethod '{}': {}", $meta, meta);
         let result = run_rawcall($context, meta, Value::$val_variant($lhs), vec![$rhs], $lhs_span | $op_span, $lhs_span | $rhs_span)?;
         compare_impl!(result, $op, $lhs_span, $op_span $(, $compare)?)
     }};
@@ -701,13 +700,12 @@ fn run_binary_op(
     let rhs = (rhs, rhs_span);
     match op {
         BinaryOp::Add => {
-            let lhs_str: Result<&Rc<str>, &Value> = <Rc<str>>::typed_from_ref(&lhs.0);
-            let rhs_str: Result<&Rc<str>, &Value> = <Rc<str>>::typed_from_ref(&rhs.0);
-            match (lhs_str, rhs_str) {
-                (Ok(ls), Ok(rs)) => Ok(Value::string(&format!("{}{}", ls, rs))),
-                (Ok(ls), Err(r)) => Ok(Value::string(&format!("{}{}", ls, r))),
-                (Err(l), Ok(rs)) => Ok(Value::string(&format!("{}{}", l, rs))),
-                (Err(l), Err(r)) => define_op!(lhs + rhs; op_span, context, meta "_add"),
+            if matches!(lhs.0, Value::String(_)) || matches!(rhs.0, Value::String(_)) {
+                let lhs = tostring(&mut *context, lhs.0, vec![], &CallInfo { func_span: op_span, call_span: lhs_span })?;
+                let rhs = tostring(&mut *context, rhs.0, vec![], &CallInfo { func_span: op_span, call_span: rhs_span })?;
+                Ok(Value::string(&format!("{}{}", lhs, rhs)))
+            } else {
+                define_op!(lhs + rhs; op_span, context, meta "_add")
             }
         }
         BinaryOp::Sub => define_op!(lhs - rhs; op_span, context, meta "_sub"),

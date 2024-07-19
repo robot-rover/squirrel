@@ -115,7 +115,7 @@ fn tointeger(
     .map(Value::Integer)
 }
 
-fn tostring(
+pub fn tostring(
     context: *mut Context,
     this: Value,
     args: Vec<Value>,
