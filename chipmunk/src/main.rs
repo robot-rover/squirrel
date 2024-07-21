@@ -15,7 +15,7 @@ fn main() {
             std::process::exit(1);
         }
     };
-    match squirrel_lang::runtime::walker::run(&ast, &file_name, None, iter::empty()) {
+    match squirrel_lang::walker::runtime::run(&ast, &file_name, None, iter::empty()) {
         Ok(()) => {}
         Err(err) => {
             println!("Error: {}", err.with_context(&contents));
