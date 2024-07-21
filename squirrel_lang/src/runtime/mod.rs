@@ -19,7 +19,6 @@ pub mod argparse;
 pub mod builtins;
 pub mod value;
 pub mod walker;
-pub mod bytecode;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {

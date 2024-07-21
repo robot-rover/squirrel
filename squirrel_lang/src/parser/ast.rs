@@ -11,7 +11,7 @@ use super::error::ParseError;
 
 pub type Ident = (String, Span);
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum Literal {
     Integer(i64),
     Number(f64),

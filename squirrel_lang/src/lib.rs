@@ -8,6 +8,7 @@ pub mod lexer;
 pub mod parser;
 pub mod runtime;
 pub mod util;
+pub mod vm;
 
 #[cfg(test)]
 pub mod test_macro;
