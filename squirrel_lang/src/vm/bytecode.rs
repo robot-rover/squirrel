@@ -1,5 +1,8 @@
-use super::compiler::{Block, Reg, Const, FunIdx};
+use serde::{Deserialize, Serialize};
 
+use super::compiler::{Block, Const, FunIdx, Reg};
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[repr(u8)]
 pub enum Tag {
     // Comparison Instructions
@@ -11,7 +14,7 @@ pub enum Tag {
     ISGE, // greater or equal
     ISEQ, // equal
     ISNE, // not equal
-    CMP, // compare
+    CMP,  // compare
 
     // Move Instructions
     LOADR, // acc = reg[data]
@@ -20,7 +23,6 @@ pub enum Tag {
     LOADL, // acc = locals[data]
     STORL, // locals[data] = acc
     // SWAPL, // acc <=> locals[data]
-
     LOADC, // acc = const[data]
     LOADF, // acc = functions[data]
     LOADP, // acc = match data { 0 => false, 1 => true, 2 => null }
@@ -28,13 +30,13 @@ pub enum Tag {
     LOADS, // acc = data (as an sign extended integer)
 
     // Arithmetic Instructions
-    NEG, // acc = -acc
-    ADD, // acc = reg[data] + acc
-    SUB, // acc = reg[data] - acc
-    MUL, // acc = reg[data] * acc
-    DIV, // acc = reg[data] / acc
+    NEG,  // acc = -acc
+    ADD,  // acc = reg[data] + acc
+    SUB,  // acc = reg[data] - acc
+    MUL,  // acc = reg[data] * acc
+    DIV,  // acc = reg[data] / acc
     MODU, // acc = reg[data] % acc
-    POW, // acc = reg[data] ^ acc
+    POW,  // acc = reg[data] ^ acc
 
     // Logical Instructions
     LNOT, // acc = !acc
@@ -43,17 +45,17 @@ pub enum Tag {
 
     // Bitwise Instructions
     BNOT, // acc = ~acc
-    BAND, // acc = acc & reg[data]
-    BOR, // acc = acc | reg[data]
-    BXOR, // acc = acc ^ reg[data]
-    BRSH, // acc = acc >> reg[data]
-    BASH, // acc = acc >>> reg[data]
+    BAND, // acc = reg[data] & acc
+    BOR,  // acc = reg[data] | acc
+    BXOR, // acc = reg[data] ^ acc
+    BRSH, // acc = reg[data] >> acc
+    BASH, // acc = reg[data] >>> acc
 
     // Control Flow
-    JMP, // goes to blocks[data]
-    JT, // goes to blocks[data] if acc
-    JF, // goes to blocks[data] if !acc
-    RET, // returns from function (returns acc)
+    JMP,  // goes to blocks[data]
+    JT,   // goes to blocks[data] if acc
+    JF,   // goes to blocks[data] if !acc
+    RET,  // returns from function (returns acc)
     RETN, // returns from function (returns null)
 
     // Function Calls
@@ -75,16 +77,16 @@ pub enum Tag {
     CALLN,
 
     // Field Instructions
-    GETF, // acc = reg[data][acc]
+    GETF,  // acc = reg[data][acc]
     GETFC, // acc = acc[const[data]]
-    SETF, // reg[data][reg[data+1]] = acc
+    SETF,  // reg[data][reg[data+1]] = acc
     SETFS, // reg[data][reg[data+1]] = acc (newslot)
 
-    GET, // acc = env[acc]
-    GETC, // acc = env[const[data]]
-    SET, // env[reg[data]] = acc
-    SETC, // env[const[data]] = acc
-    SETS, // env[reg[data]] = acc (newslot)
+    GET,   // acc = env[acc]
+    GETC,  // acc = env[const[data]]
+    SET,   // env[reg[data]] = acc
+    SETC,  // env[const[data]] = acc
+    SETS,  // env[reg[data]] = acc (newslot)
     SETCS, // env[const[data]] = acc (newslot)
 
     ISIN, // acc = reg[data] in acc
@@ -94,10 +96,13 @@ pub enum Tag {
     ROOT, // acc = root
 }
 
+pub type Data = u8;
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[repr(C)]
 pub struct Inst {
     pub tag: Tag,
-    pub data: u8,
+    pub data: Data,
 }
 
 macro_rules! inst_constructor {
@@ -139,7 +144,10 @@ impl Inst {
         } else {
             panic!("Invalid primitive type: {}", prim_ty);
         };
-        Inst { tag: Tag::LOADP, data }
+        Inst {
+            tag: Tag::LOADP,
+            data,
+        }
     }
     pub fn loadi(imm: u32) -> Inst {
         let data = if imm <= u8::MAX as u32 {
@@ -147,7 +155,10 @@ impl Inst {
         } else {
             panic!("Immediate value too large: {}", imm);
         };
-        Inst { tag: Tag::LOADI, data }
+        Inst {
+            tag: Tag::LOADI,
+            data,
+        }
     }
     pub fn loads(imm: i32) -> Inst {
         let data = if imm <= i8::MAX as i32 && imm >= i8::MIN as i32 {
@@ -155,7 +166,10 @@ impl Inst {
         } else {
             panic!("Immediate value too large: {}", imm);
         };
-        Inst { tag: Tag::LOADS, data }
+        Inst {
+            tag: Tag::LOADS,
+            data,
+        }
     }
 
     inst_constructor!(neg, NEG, !);
@@ -185,16 +199,65 @@ impl Inst {
         let data1 = u8::try_from(u32::from(reg_idx)).unwrap();
         let data2 = u8::try_from(n_args).unwrap();
         match n_args {
-            0 => (Inst { tag: Tag::CALL0, data: data1 }, None),
-            1 => (Inst { tag: Tag::CALL1, data: data1 }, None),
-            2 => (Inst { tag: Tag::CALL2, data: data1 }, None),
-            3 => (Inst { tag: Tag::CALL3, data: data1 }, None),
-            4 => (Inst { tag: Tag::CALL4, data: data1 }, None),
-            5 => (Inst { tag: Tag::CALL5, data: data1 }, None),
-            6 => (Inst { tag: Tag::CALL6, data: data1 }, None),
+            0 => (
+                Inst {
+                    tag: Tag::CALL0,
+                    data: data1,
+                },
+                None,
+            ),
+            1 => (
+                Inst {
+                    tag: Tag::CALL1,
+                    data: data1,
+                },
+                None,
+            ),
+            2 => (
+                Inst {
+                    tag: Tag::CALL2,
+                    data: data1,
+                },
+                None,
+            ),
+            3 => (
+                Inst {
+                    tag: Tag::CALL3,
+                    data: data1,
+                },
+                None,
+            ),
+            4 => (
+                Inst {
+                    tag: Tag::CALL4,
+                    data: data1,
+                },
+                None,
+            ),
+            5 => (
+                Inst {
+                    tag: Tag::CALL5,
+                    data: data1,
+                },
+                None,
+            ),
+            6 => (
+                Inst {
+                    tag: Tag::CALL6,
+                    data: data1,
+                },
+                None,
+            ),
             other => (
-                Inst { tag: Tag::CALLN, data: data2 },
-                Some(Inst { tag: Tag::CALLN, data: data1 })),
+                Inst {
+                    tag: Tag::CALLN,
+                    data: data2,
+                },
+                Some(Inst {
+                    tag: Tag::CALLN,
+                    data: data1,
+                }),
+            ),
         }
     }
 
@@ -202,18 +265,27 @@ impl Inst {
     inst_constructor!(getfc, GETFC, const_idx: Const);
     pub fn setf(reg_idx: Reg, is_ns: bool) -> Inst {
         let data = u8::try_from(u32::from(reg_idx)).unwrap();
-        Inst { tag: if is_ns { Tag::SETFS } else { Tag::SETF }, data }
+        Inst {
+            tag: if is_ns { Tag::SETFS } else { Tag::SETF },
+            data,
+        }
     }
 
     inst_constructor!(get, GET, !);
     inst_constructor!(getc, GETC, const_idx: Const);
     pub fn set(reg_idx: Reg, is_ns: bool) -> Inst {
         let data = u8::try_from(u32::from(reg_idx)).unwrap();
-        Inst { tag: if is_ns { Tag::SETS } else { Tag::SET }, data }
+        Inst {
+            tag: if is_ns { Tag::SETS } else { Tag::SET },
+            data,
+        }
     }
     pub fn setc(const_idx: Const, is_ns: bool) -> Inst {
         let data = u8::try_from(u32::from(const_idx)).unwrap();
-        Inst { tag: if is_ns { Tag::SETCS } else { Tag::SETC }, data }
+        Inst {
+            tag: if is_ns { Tag::SETCS } else { Tag::SETC },
+            data,
+        }
     }
     inst_constructor!(isin, ISIN);
 
@@ -221,3 +293,172 @@ impl Inst {
     inst_constructor!(root, ROOT, !);
 }
 
+#[derive(Clone, Copy, Debug)]
+pub enum DcCompare {
+    ISLT,
+    ISLE,
+    ISGT,
+    ISGE,
+    ISEQ,
+    ISNE,
+    CMP,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcLoad {
+    LOADR,
+    LOADL,
+    LOADC,
+    LOADF,
+    LOADP,
+    LOADI,
+    LOADS,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcStore {
+    STORR,
+    STORL,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcUnary {
+    NEG,
+    LNOT,
+    BNOT,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcArith {
+    ADD,
+    SUB,
+    MUL,
+    DIV,
+    MODU,
+    POW,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcBitwise {
+    BAND,
+    BOR,
+    BXOR,
+    BRSH,
+    BASH,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcJump {
+    JMP,
+    JT,
+    JF,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct DcReturn {
+    pub ret_null: bool,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub struct DcCall {
+    pub arg_count: Option<u8>,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcField {
+    GETF,
+    GETFC,
+    SETF,
+    SETFS,
+
+    GET,
+    GETC,
+    SET,
+    SETC,
+    SETS,
+    SETCS,
+
+    ISIN,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcRuntime {
+    THIS,
+    ROOT,
+}
+
+#[derive(Clone, Copy, Debug)]
+pub enum DcTag {
+    Compare(DcCompare),
+    Load(DcLoad),
+    Store(DcStore),
+    Unary(DcUnary),
+    Arith(DcArith),
+    Bitwise(DcBitwise),
+    Jump(DcJump),
+    Return(DcReturn),
+    Call(DcCall),
+    Field(DcField),
+    Runtime(DcRuntime),
+}
+
+pub fn decode(tag: Tag) -> DcTag {
+    match tag {
+        Tag::ISLT => DcTag::Compare(DcCompare::ISLT),
+        Tag::ISLE => DcTag::Compare(DcCompare::ISLE),
+        Tag::ISGT => DcTag::Compare(DcCompare::ISGT),
+        Tag::ISGE => DcTag::Compare(DcCompare::ISGE),
+        Tag::ISEQ => DcTag::Compare(DcCompare::ISEQ),
+        Tag::ISNE => DcTag::Compare(DcCompare::ISNE),
+        Tag::CMP => DcTag::Compare(DcCompare::CMP),
+        Tag::LOADR => DcTag::Load(DcLoad::LOADR),
+        Tag::STORR => DcTag::Store(DcStore::STORR),
+        Tag::LOADL => DcTag::Load(DcLoad::LOADL),
+        Tag::STORL => DcTag::Store(DcStore::STORL),
+        Tag::LOADC => DcTag::Load(DcLoad::LOADC),
+        Tag::LOADF => DcTag::Load(DcLoad::LOADF),
+        Tag::LOADP => DcTag::Load(DcLoad::LOADP),
+        Tag::LOADI => DcTag::Load(DcLoad::LOADI),
+        Tag::LOADS => DcTag::Load(DcLoad::LOADS),
+        Tag::NEG => DcTag::Unary(DcUnary::NEG),
+        Tag::ADD => DcTag::Arith(DcArith::ADD),
+        Tag::SUB => DcTag::Arith(DcArith::SUB),
+        Tag::MUL => DcTag::Arith(DcArith::MUL),
+        Tag::DIV => DcTag::Arith(DcArith::DIV),
+        Tag::MODU => DcTag::Arith(DcArith::MODU),
+        Tag::POW => DcTag::Arith(DcArith::POW),
+        Tag::LNOT => DcTag::Unary(DcUnary::LNOT),
+        Tag::BNOT => DcTag::Unary(DcUnary::BNOT),
+        Tag::BAND => DcTag::Bitwise(DcBitwise::BAND),
+        Tag::BOR => DcTag::Bitwise(DcBitwise::BOR),
+        Tag::BXOR => DcTag::Bitwise(DcBitwise::BXOR),
+        Tag::BRSH => DcTag::Bitwise(DcBitwise::BRSH),
+        Tag::BASH => DcTag::Bitwise(DcBitwise::BASH),
+        Tag::JMP => DcTag::Jump(DcJump::JMP),
+        Tag::JT => DcTag::Jump(DcJump::JT),
+        Tag::JF => DcTag::Jump(DcJump::JF),
+        Tag::RET => DcTag::Return(DcReturn { ret_null: false }),
+        Tag::RETN => DcTag::Return(DcReturn { ret_null: true }),
+        Tag::CALL0 => DcTag::Call(DcCall { arg_count: Some(0) }),
+        Tag::CALL1 => DcTag::Call(DcCall { arg_count: Some(1) }),
+        Tag::CALL2 => DcTag::Call(DcCall { arg_count: Some(2) }),
+        Tag::CALL3 => DcTag::Call(DcCall { arg_count: Some(3) }),
+        Tag::CALL4 => DcTag::Call(DcCall { arg_count: Some(4) }),
+        Tag::CALL5 => DcTag::Call(DcCall { arg_count: Some(5) }),
+        Tag::CALL6 => DcTag::Call(DcCall { arg_count: Some(6) }),
+        Tag::CALLN => DcTag::Call(DcCall { arg_count: None }),
+        Tag::GETF => DcTag::Field(DcField::GETF),
+        Tag::GETFC => DcTag::Field(DcField::GETFC),
+        Tag::SETF => DcTag::Field(DcField::SETF),
+        Tag::SETFS => DcTag::Field(DcField::SETFS),
+        Tag::GET => DcTag::Field(DcField::GET),
+        Tag::GETC => DcTag::Field(DcField::GETC),
+        Tag::SET => DcTag::Field(DcField::SET),
+        Tag::SETC => DcTag::Field(DcField::SETC),
+        Tag::SETS => DcTag::Field(DcField::SETS),
+        Tag::SETCS => DcTag::Field(DcField::SETCS),
+        Tag::ISIN => DcTag::Field(DcField::ISIN),
+        Tag::THIS => DcTag::Runtime(DcRuntime::THIS),
+        Tag::ROOT => DcTag::Runtime(DcRuntime::ROOT),
+    }
+}

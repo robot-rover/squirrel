@@ -1,17 +1,112 @@
+use std::fmt;
+
+use serde::{Deserialize, Serialize};
+
 use crate::parser::ast::{self, BinaryOp, Expr, ExprData, Statement, StatementData, UnaryOp};
 
-use super::bytecode::Inst;
+use super::bytecode::{Inst, Tag};
 
-struct Function {
-    code: Vec<Inst>,
-    constants: Vec<ast::Literal>,
-    varargs: bool,
-    num_params: u32,
-    locals: Vec<(String, u32)>,
-    sub_functions: Vec<Function>,
+#[derive(Serialize, Deserialize)]
+pub struct Function {
+    pub code: Vec<Inst>,
+    pub block_offsets: Vec<u32>,
+    pub constants: Vec<ast::Literal>,
+    pub is_varargs: bool,
+    pub num_regs: u32,
+    pub num_params: u32,
+    pub locals: Vec<(String, u32)>,
+    pub num_locals: u32,
+    pub sub_functions: Vec<Function>,
 }
 
-#[derive(Default)]
+impl Function {
+    fn fmt_inst(&self, f: &mut fmt::Formatter<'_>, inst: &Inst) -> fmt::Result {
+        write!(f, "{:5}", format!("{:?}", inst.tag))?;
+        match inst.tag {
+            Tag::LOADL | Tag::STORL => write!(f, " locals[{}]({})", inst.data, self.locals[inst.data as usize].0)?,
+            Tag::ISIN | Tag::SETS | Tag::SET | Tag::GETF | Tag::ISLT | Tag::ISLE | Tag::ISGT | Tag::ISGE | Tag::ISEQ | Tag::ISNE | Tag::CMP | Tag::LOADR | Tag::STORR | Tag::ADD | Tag::SUB | Tag::MUL | Tag::DIV | Tag::MODU | Tag::POW | Tag::BAND | Tag::BOR | Tag::BXOR | Tag::BRSH | Tag::BASH => write!(f, " r[{}]", inst.data)?,
+            Tag::GETC | Tag::SETC | Tag::SETCS | Tag::GETFC | Tag::LOADC => write!(f, " consts[{}]({})", inst.data, self.constants[inst.data as usize])?,
+            Tag::LOADF => write!(f, " functions[{}]", inst.data)?,
+            Tag::LOADP => write!(f, " {}({})", inst.data, ["false", "true", "null"][inst.data as usize])?,
+            Tag::LOADI => write!(f, " {}", inst.data as u64)?,
+            Tag::LOADS => write!(f, " {}", inst.data as i8 as i64)?,
+            Tag::THIS | Tag::ROOT | Tag::GET | Tag::NEG | Tag::LNOT | Tag::BNOT | Tag::RET | Tag::RETN => {},
+            Tag::JMP | Tag::JT | Tag::JF => write!(f, " block[{}]", inst.data)?,
+            Tag::CALL0 | Tag::CALL1 | Tag::CALL2 | Tag::CALL3 | Tag::CALL4 | Tag::CALL5 | Tag::CALL6 => write!(f, " r[{}]", inst.data)?,
+            Tag::CALLN => write!(f, " {0} or r[{0}]", inst.data)?,
+            Tag::SETF | Tag::SETFS => write!(f, " r[{}] r[{}]", inst.data, inst.data + 1)?,
+        }
+        Ok(())
+    }
+}
+
+impl fmt::Debug for Function {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "Function(", )?;
+        let mut arg_iter = self.locals[..self.num_params as usize].iter().map(|(name, _)| name.as_str()).peekable();
+        while let Some(arg_name) = arg_iter.next() {
+            write!(f, "{}", arg_name)?;
+            if arg_iter.peek().is_some() {
+                write!(f, ", ")?;
+            }
+        }
+
+        if self.is_varargs {
+            if self.num_params > 0 {
+                write!(f, ", ...")?;
+            } else {
+                write!(f, "...")?;
+            }
+        }
+
+        write!(f, ")")?;
+
+        if f.alternate() {
+            write!(f, "\nConstants:")?;
+            for (idx, constant) in self.constants.iter().enumerate() {
+                write!(f, "\n  {}: {:?}", idx, constant)?;
+            }
+
+            let mut locals_sorted = self.locals[self.num_params as usize..].iter().cloned().collect::<Vec<_>>();
+            locals_sorted.sort_by_key(|(_, idx)| *idx);
+            write!(f, "\nLocals:")?;
+            for (local, local_idx) in locals_sorted {
+                write!(f, "\n  {}: {}", local_idx, local)?;
+            }
+
+            let block_idx_width = self.block_offsets.iter().max().unwrap().to_string().len();
+            let mut blocks = self.block_offsets.iter().map(|offset| *offset as usize).enumerate().collect::<Vec<_>>();
+            blocks.sort_by_key(|(_, offset)| *offset);
+            let mut block_iter = blocks.into_iter().peekable();
+            write!(f, "\nCode:")?;
+            for (offset, inst) in self.code.iter().enumerate() {
+                let block_idx = if let Some(&(block_idx, block_offset)) = block_iter.peek() {
+                    assert!(block_offset >= offset, "Block offset {} is less than current offset {}", block_offset, offset);
+                    if block_offset == offset {
+                        block_iter.next();
+                        Some(block_idx)
+                    } else {
+                        None
+                    }
+                } else {
+                    None
+                };
+
+                if let Some(block_idx) = block_idx {
+                    write!(f, "\n  {:width$}: ", block_idx, width = block_idx_width)?;
+                } else {
+                    write!(f, "\n  {:width$}  ", "", width = block_idx_width)?;
+                }
+                self.fmt_inst(f, inst)?;
+            }
+
+
+        }
+
+        Ok(())
+    }
+}
+
 struct FunctionBuilder {
     blocks: Vec<Vec<Inst>>,
     constants: Vec<ast::Literal>,
@@ -20,6 +115,15 @@ struct FunctionBuilder {
 }
 
 impl FunctionBuilder {
+    fn new() -> Self {
+        Self {
+            blocks: Vec::new(),
+            constants: Vec::new(),
+            functions: Vec::new(),
+            next_register: 0,
+        }
+    }
+
     fn block(&mut self) -> Block {
         let block_idx = self.blocks.len().try_into().unwrap();
         self.blocks.push(vec![]);
@@ -56,8 +160,58 @@ impl FunctionBuilder {
         (reg..reg + count).map(Reg)
     }
 
-    fn build(self) -> Function {
-        todo!()
+    fn build(self, num_params: u32, locals: Vec<(String, u32)>, is_varargs: bool, num_locals: u32) -> Function {
+        let mut blocks_to_take = self.blocks.into_iter().map(|block| Some(block)).collect::<Vec<_>>();
+        let mut code = Vec::new();
+        let mut block_offsets = vec![0; blocks_to_take.len()];
+
+        for block_idx in 0..blocks_to_take.len() {
+            let mut next_block = match blocks_to_take[block_idx].take() {
+                Some(block) => block,
+                None => continue,
+            };
+            let mut next_block_idx = block_idx;
+
+            loop {
+                assert!(next_block.len() > 0, "Block {} is empty", next_block_idx);
+                block_offsets[next_block_idx] = u32::try_from(code.len()).unwrap();
+                code.append(&mut next_block);
+
+                match code.last().unwrap() {
+                    Inst { tag: Tag::JMP, data } => {
+                        let target_block = *data as usize;
+                        if target_block <= next_block_idx {
+                            continue
+                        }
+                        match blocks_to_take.get_mut(target_block as usize) {
+                            Some(block) => {
+                                code.pop(); // Get rid of jump
+                                next_block = block.take().unwrap();
+                                next_block_idx = target_block;
+                            }
+                            None => break,
+                        }
+                    },
+                    Inst { tag: Tag::RET, .. } | Inst { tag: Tag::RETN, .. } => break,
+                    other => panic!("Block ended with non-jump {:?}", other),
+                }
+            }
+        }
+
+        assert_eq!(block_offsets[0], 0);
+        assert!(block_offsets[1..].iter().all(|offset| *offset != 0));
+
+        Function {
+            code,
+            block_offsets,
+            constants: self.constants,
+            is_varargs,
+            num_params,
+            num_regs: self.next_register,
+            locals,
+            num_locals,
+            sub_functions: self.functions,
+        }
     }
 }
 
@@ -98,13 +252,16 @@ impl Block {
     }
 }
 
-fn compile_function(
+pub fn compile_function(
     function: &ast::Function,
 ) -> Function {
-    let mut builder = FunctionBuilder::default();
+    let mut builder = FunctionBuilder::new();
     let block = builder.block();
-    compile_statement(&mut builder, block, &function.body);
-    todo!()
+    let block = compile_statement(&mut builder, block, &function.body);
+    if !matches!(builder.blocks[block.0 as usize].last().unwrap().tag, Tag::RETN | Tag::RET) {
+        block.inst(&mut builder, Inst::retn());
+    }
+    builder.build(function.num_args, function.local_names.clone(), function.is_varargs, function.num_locals)
 }
 
 // --------------
@@ -407,4 +564,32 @@ fn compile_literal(fun: &mut FunctionBuilder, block: Block, lit: &ast::Literal) 
     let lit_idx = fun.literal(lit);
     block.inst(fun, Inst::loadc(lit_idx));
     block
+}
+
+#[cfg(test)]
+
+mod tests {
+    use crate::{parser::parse, test_foreach};
+    use crate::test_util::exchange_data;
+
+    use super::*;
+
+    test_foreach!(sample_test);
+
+    fn sample_test(file_name: &str, file_contents: &str) {
+        let test_name = format!("compiler-{}", file_name.replace("/", "-"));
+        let test_desc = format!("Compiler test for {}", file_name);
+
+        let ast = parse(file_contents, file_name.to_string()).unwrap();
+
+        let actual_code = compile_function(&ast);
+
+        #[cfg(not(miri))]
+        {
+            insta::assert_yaml_snapshot!(test_name, actual_code, {
+                // ".**.start" => "Start",
+                // ".**.end" => "End",
+            });
+        }
+    }
 }

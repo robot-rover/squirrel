@@ -13,7 +13,7 @@ use crate::{
     parser::ast::{
         self, AssignKind, AssignTarget, BinaryOp, CallTarget, Expr, ExprData, Ident, Statement,
         StatementData, UnaryOp, UnaryRefOp,
-    }, util::IntoOwned,
+    }, util::{IntoOwned, WriteOption},
 };
 
 use super::{
@@ -56,7 +56,7 @@ pub fn run<'a>(
     let mut vm_state = VMState {
         root_table: root,
         stdout: stdout.into(),
-        stderr: super::WriteOption::Stderr(io::stderr()),
+        stderr: WriteOption::Stderr(io::stderr()),
     };
     let mut context = Context {
         infunc,

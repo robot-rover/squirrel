@@ -2,6 +2,8 @@ use std::{env::args, iter};
 
 use squirrel_lang::context::IntoSquirrelErrorContext;
 
+const ENABLE_WALKER: bool = false;
+
 fn main() {
     let file_name = args()
         .nth(1)
@@ -15,10 +17,16 @@ fn main() {
             std::process::exit(1);
         }
     };
-    match squirrel_lang::walker::runtime::run(&ast, &file_name, None, iter::empty()) {
-        Ok(()) => {}
-        Err(err) => {
-            println!("Error: {}", err.with_context(&contents));
+    if ENABLE_WALKER {
+        match squirrel_lang::walker::runtime::run(&ast, &file_name, None, iter::empty()) {
+            Ok(()) => {}
+            Err(err) => {
+                println!("Error: {}", err.with_context(&contents));
+            }
         }
+    } else {
+        let code = squirrel_lang::vm::compiler::compile_function(&ast);
+
+        println!("{:#?}", code);
     }
 }

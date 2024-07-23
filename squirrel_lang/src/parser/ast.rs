@@ -1,4 +1,4 @@
-use std::convert::TryFrom;
+use std::{convert::TryFrom, fmt::{self, write}};
 
 use serde::{Deserialize, Serialize};
 
@@ -18,6 +18,18 @@ pub enum Literal {
     String(String),
     Boolean(bool),
     Null,
+}
+
+impl fmt::Display for Literal {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Literal::Integer(i) => write!(f, "{}", i),
+            Literal::Number(n) => write!(f, "{:.4}", n),
+            Literal::String(s) => write!(f, "{:?}", s),
+            Literal::Boolean(b) => write!(f, "{}", b),
+            Literal::Null => write!(f, "null"),
+        }
+    }
 }
 
 impl Literal {
