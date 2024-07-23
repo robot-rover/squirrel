@@ -2,11 +2,12 @@ mod compare;
 
 use std::{cell::RefCell, io::{self, stdout}, rc::Rc};
 
+use compare::run_compare;
 use hashbrown::HashMap;
 
 use crate::{context::SquirrelError, parser::ast, util::WriteOption};
 
-use super::{bytecode::{decode, DcCompare, DcTag, Inst, Tag}, compiler::Function, inst_impl::run_compare, value::{Object, Value}};
+use super::{bytecode::{decode, DcCompare, DcTag, Inst, Tag}, compiler::Function, value::{Table, Value}};
 
 pub struct RtFunction {
     pub code: Vec<Inst>,
@@ -38,7 +39,7 @@ impl From<Function> for RtFunction {
 }
 
 struct VMState<'a, 'f> {
-    root_table: Rc<RefCell<Object>>,
+    root_table: Rc<RefCell<Table>>,
     stdout: WriteOption<'a>,
     call_stack: Vec<StackFrame<'f>>,
     acc: Value,
@@ -64,8 +65,8 @@ struct StackFrame<'f> {
 
 }
 
-fn init_root_table() -> Rc<RefCell<Object>> {
-    let root_table = Object::new(None, HashMap::new());
+fn init_root_table() -> Rc<RefCell<Table>> {
+    let root_table = Table::new(None, HashMap::new());
     let root_table = Rc::new(RefCell::new(root_table));
     root_table
 }
@@ -88,7 +89,7 @@ pub fn run<'a, 'f>(
     let call_stack = vec![StackFrame {
         ip: 0,
         func: root_fn,
-        env: Value::Object(root_table.clone()),
+        env: Value::Table(root_table.clone()),
         registers: Vec::new(),
         locals,
     }];
@@ -113,7 +114,7 @@ fn run_vm(state: &mut VMState) {
         };
 
         match decode(inst.tag) {
-            DcTag::Compare(c) => run_compare(state, c),
+            DcTag::Compare(c) => run_compare(state, c, inst.data).unwrap(),
             other => todo!("{:?}", other),
         }
     }

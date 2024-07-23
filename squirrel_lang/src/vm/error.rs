@@ -4,6 +4,7 @@ use crate::context::{Span, SquirrelError};
 
 use super::value::Value;
 
+#[derive(Debug)]
 pub struct CallInfo {
     func_span: Span,
     call_span: Span,
@@ -12,6 +13,7 @@ pub struct CallInfo {
 
 pub type ExecResult = Result<(), ExecError>;
 
+#[derive(Debug)]
 pub enum ExecError {
     General(Span, String),
     UndefinedVariable(Span, String),

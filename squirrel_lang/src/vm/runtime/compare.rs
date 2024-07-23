@@ -13,7 +13,7 @@ pub fn run_compare(state: &mut VMState, c: DcCompare, data: Data) -> ExecResult 
         (Value::Integer(lhs), Value::Float(rhs)) => compare_zero(c, lhs as f64 - rhs),
         (Value::Float(lhs), Value::Float(rhs)) => compare_zero(c, lhs - rhs),
         (Value::Instance(inst), other) => todo!("Metamethods"),
-        (Value::Object(inst), other) => todo!("Metamethods"),
+        (Value::Table(inst), other) => todo!("Metamethods"),
         other => todo!("Error handling"),
     };
 

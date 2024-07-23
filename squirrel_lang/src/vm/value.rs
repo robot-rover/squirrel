@@ -14,7 +14,7 @@ pub enum Value {
     Null,
     NativeFn(NativeFn),
     String(Rc<str>),
-    Object(Rc<RefCell<Object>>),
+    Table(Rc<RefCell<Table>>),
     Array(Rc<RefCell<Vec<Value>>>),
     Closure(Rc<RefCell<Closure>>),
     Class(Rc<RefCell<Class>>),
@@ -39,8 +39,8 @@ macro_rules! value_common_impl {
             Self::Closure(Rc::new(RefCell::new(closure)))
         }
 
-        pub fn object(object: Object) -> Self {
-            Self::Object(Rc::new(RefCell::new(object)))
+        pub fn table(table: Table) -> Self {
+            Self::Table(Rc::new(RefCell::new(table)))
         }
 
         pub fn class(class: Class) -> Self {
@@ -68,7 +68,7 @@ impl Value {
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
         match (self, key) {
-            (Value::Object(obj), any) => obj.borrow().get_field(any),
+            (Value::Table(obj), any) => obj.borrow().get_field(any),
             (Value::Array(arr), HashValue::Integer(i)) => {
                 arr.borrow().get(*i as usize).cloned()
             }
@@ -89,7 +89,7 @@ impl Value {
             Value::String(_) => <Rc<str> as TypeName>::type_name(),
             Value::Array(_) => <Rc<RefCell<Vec<Value>>> as TypeName>::type_name(),
             Value::Closure(_) => <Rc<RefCell<Closure>> as TypeName>::type_name(),
-            Value::Object(_) => <Rc<RefCell<Object>> as TypeName>::type_name(),
+            Value::Table(_) => <Rc<RefCell<Table>> as TypeName>::type_name(),
             Value::Class(_) => <Rc<RefCell<Class>> as TypeName>::type_name(),
             Value::Instance(_) => <Rc<RefCell<Instance>> as TypeName>::type_name(),
         }
@@ -122,7 +122,7 @@ impl PartialEq for Value {
             // Pointer Identity
             (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
             (Self::String(l0), Self::String(r0)) => l0 == r0,
-            (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Table(l0), Self::Table(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Class(l0), Self::Class(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
@@ -139,7 +139,7 @@ pub enum HashValue {
     Null,
     NativeFn(NativeFn),
     String(Rc<str>),
-    Object(Rc<RefCell<Object>>),
+    Table(Rc<RefCell<Table>>),
     Array(Rc<RefCell<Vec<Value>>>),
     Closure(Rc<RefCell<Closure>>),
     Class(Rc<RefCell<Class>>),
@@ -154,7 +154,7 @@ impl PartialEq for HashValue {
             (Self::Null, Self::Null) => true,
             (Self::NativeFn(l0), Self::NativeFn(r0)) => l0 == r0,
             (Self::String(l0), Self::String(r0)) => l0.deref() == r0.deref(),
-            (Self::Object(l0), Self::Object(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
+            (Self::Table(l0), Self::Table(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Array(l0), Self::Array(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Closure(l0), Self::Closure(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
             (Self::Class(l0), Self::Class(r0)) => ptr::addr_eq(l0.as_ptr(), r0.as_ptr()),
@@ -176,7 +176,7 @@ impl Hash for HashValue {
             HashValue::Null => {}
             HashValue::NativeFn(nf) => nf.hash(state),
             HashValue::String(s) => s.deref().hash(state),
-            HashValue::Object(o) => o.as_ptr().hash(state),
+            HashValue::Table(o) => o.as_ptr().hash(state),
             HashValue::Array(a) => a.as_ptr().hash(state),
             HashValue::Closure(c) => c.as_ptr().hash(state),
             HashValue::Class(c) => c.as_ptr().hash(state),
@@ -206,7 +206,7 @@ impl From<HashValue> for Value {
             HashValue::Null => Value::Null,
             HashValue::NativeFn(val) => Value::NativeFn(val),
             HashValue::String(s) => Value::String(s),
-            HashValue::Object(o) => Value::Object(o),
+            HashValue::Table(o) => Value::Table(o),
             HashValue::Array(a) => Value::Array(a),
             HashValue::Closure(c) => Value::Closure(c),
             HashValue::Class(c) => Value::Class(c),
@@ -224,7 +224,7 @@ impl TryFrom<Value> for HashValue {
             Value::Null => HashValue::Null,
             Value::NativeFn(val) => HashValue::NativeFn(val),
             Value::String(s) => HashValue::String(s),
-            Value::Object(o) => HashValue::Object(o),
+            Value::Table(o) => HashValue::Table(o),
             Value::Array(a) => HashValue::Array(a),
             Value::Closure(c) => HashValue::Closure(c),
             other => return Err(other),
@@ -312,7 +312,7 @@ value_variant!(Value::Integer(i64) "integer");
 value_variant!(Value::Float(f64) "float");
 value_variant!(Value::NativeFn(NativeFn) "function");
 value_variant!(Value::String(Rc<str>) "string");
-value_variant!(Value::Object(Rc<RefCell<Object>>) "table");
+value_variant!(Value::Table(Rc<RefCell<Table>>) "table");
 value_variant!(Value::Closure(Rc<RefCell<Closure>>) "function");
 value_variant!(Value::Array(Rc<RefCell<Vec<Value>>>) "array");
 value_variant!(Value::Class(Rc<RefCell<Class>>) "class");
@@ -332,7 +332,7 @@ impl fmt::Display for Value {
             Value::Null => write!(f, "null"),
             Value::String(s) => write!(f, "{}", s),
             Value::NativeFn(n) => write!(f, "({} : 0x{:012x})", <NativeFn as TypeName>::type_name(), *n as usize),
-            Value::Object(o) => print_addr(f, o),
+            Value::Table(o) => print_addr(f, o),
             Value::Array(a) => print_addr(f, a),
             Value::Closure(c) => print_addr(f, c),
             Value::Class(c) => print_addr(f, c),
@@ -342,23 +342,23 @@ impl fmt::Display for Value {
 }
 
 #[derive(Clone)]
-pub struct Object {
-    delegate: Option<Rc<RefCell<Object>>>,
+pub struct Table {
+    delegate: Option<Rc<RefCell<Table>>>,
     slots: HashMap<HashValue, Value>,
 }
 
-impl Object {
+impl Table {
     pub fn new(
-        delegate: Option<Rc<RefCell<Object>>>,
+        delegate: Option<Rc<RefCell<Table>>>,
         slots: HashMap<HashValue, Value>,
-    ) -> Object {
-        Object {
+    ) -> Table {
+        Table {
             delegate,
             slots,
         }
     }
 
-    pub fn get_delegate(&self) -> Option<&Rc<RefCell<Object>>> {
+    pub fn get_delegate(&self) -> Option<&Rc<RefCell<Table>>> {
         self.delegate.as_ref()
     }
 
@@ -408,16 +408,16 @@ impl Object {
 
 }
 
-impl fmt::Debug for Object {
+impl fmt::Debug for Table {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Object")
-            .field("ptr", &(self as *const Object))
+        f.debug_struct("Table")
+            .field("ptr", &(self as *const Table))
             .field(
                 "delegate",
                 &self
                     .delegate
                     .as_ref()
-                    .map(|del| del.deref().borrow().deref() as *const Object),
+                    .map(|del| del.deref().borrow().deref() as *const Table),
             )
             .finish_non_exhaustive()
     }
