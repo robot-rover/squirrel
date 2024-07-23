@@ -4,7 +4,9 @@ use crate::context::Span;
 use crate::lexer::{SpannedLexer, Token};
 
 use super::{
-    ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp}, error::{ParseError, ParseResult}, parse_class_extends_body, parse_function, parse_list, parse_table_or_class
+    ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp},
+    error::{ParseError, ParseResult},
+    parse_class_extends_body, parse_function, parse_list, parse_table_or_class,
 };
 
 pub fn parse_expr<'s, F: Fn(&Token) -> bool>(

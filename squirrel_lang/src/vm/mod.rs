@@ -1,5 +1,5 @@
-pub mod compiler;
 mod bytecode;
-mod value;
-mod runtime;
+pub mod compiler;
 mod error;
+mod runtime;
+mod value;

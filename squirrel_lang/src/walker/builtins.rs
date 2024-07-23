@@ -128,10 +128,23 @@ pub fn tostring(
         _ => None,
     };
     if let Some(meta) = meta {
-        let result = run_rawcall(unsafe { &mut *context }, meta, this, Vec::new(), call_info.func_span, call_info.call_span)?;
+        let result = run_rawcall(
+            unsafe { &mut *context },
+            meta,
+            this,
+            Vec::new(),
+            call_info.func_span,
+            call_info.call_span,
+        )?;
         match result {
             Value::String(s) => Ok(Value::String(s)),
-            other => Err(ExecError::wrong_metamethod_return_type(call_info.func_span, call_info.call_span, "_tostring".to_string(), "String".to_string(), other.type_str().to_string())),
+            other => Err(ExecError::wrong_metamethod_return_type(
+                call_info.func_span,
+                call_info.call_span,
+                "_tostring".to_string(),
+                "String".to_string(),
+                other.type_str().to_string(),
+            )),
         }
     } else {
         Ok(Value::String(Rc::from(this.to_string())))

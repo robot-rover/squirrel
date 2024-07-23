@@ -12,13 +12,14 @@ use value::{Closure, Object, Value};
 
 use crate::{
     context::{Span, SqBacktrace, SquirrelError},
-    parser::ast::{Ident, Literal}, util::WriteOption,
+    parser::ast::{Ident, Literal},
+    util::WriteOption,
 };
 
 pub mod argparse;
 pub mod builtins;
-pub mod value;
 pub mod runtime;
+pub mod value;
 
 macro_rules! rc_hash_eq {
     ($t:ty, $value:tt, $ptr:tt) => {
@@ -104,7 +105,13 @@ pub enum ExecError {
         name: String,
         bt: SqBacktrace,
     },
-    WrongMetamethodReturnType { obj_span: Span, op_span: Span, mm_name: String, expected: String, got: String, bt: SqBacktrace
+    WrongMetamethodReturnType {
+        obj_span: Span,
+        op_span: Span,
+        mm_name: String,
+        expected: String,
+        got: String,
+        bt: SqBacktrace,
     },
 }
 
@@ -331,34 +338,53 @@ impl ExecError {
                 bt,
             ),
             ExecError::MutatingInstantiatedClass(span, bt) => SquirrelError::new(
-                file_name, span, "Cannot mutate an instantiated class".to_string(), bt
-            ),
-            ExecError::ExtendingNonClass(span, bt) => SquirrelError::new(
-                file_name, span, "Cannot extend a non-class".to_string(), bt
-            ),
-            ExecError::MissingMetamethod { obj_span, op_span, name, op, bt } => SquirrelError::new_labels(
                 file_name,
-                format!("Could not find metamethod '{}', which is needed to perform operation '{}'", name, op),
+                span,
+                "Cannot mutate an instantiated class".to_string(),
+                bt,
+            ),
+            ExecError::ExtendingNonClass(span, bt) => {
+                SquirrelError::new(file_name, span, "Cannot extend a non-class".to_string(), bt)
+            }
+            ExecError::MissingMetamethod {
+                obj_span,
+                op_span,
+                name,
+                op,
+                bt,
+            } => SquirrelError::new_labels(
+                file_name,
+                format!(
+                    "Could not find metamethod '{}', which is needed to perform operation '{}'",
+                    name, op
+                ),
                 vec![
                     (obj_span, format!("Object (missing '{}')", name), Color::Red),
                     (op_span, "Operator".to_string(), Color::Blue),
                 ],
                 bt,
             ),
-            ExecError::General(span, message, bt) => SquirrelError::new(
+            ExecError::General(span, message, bt) => {
+                SquirrelError::new(file_name, span, message, bt)
+            }
+            ExecError::WrongMetamethodReturnType {
+                obj_span,
+                op_span,
+                mm_name,
+                expected,
+                got,
+                bt,
+            } => SquirrelError::new_labels(
                 file_name,
-                span,
-                message,
-                bt
-            ),
-            ExecError::WrongMetamethodReturnType { obj_span, op_span, mm_name, expected, got, bt } => SquirrelError::new_labels(
-                file_name,
-                format!("Metamethod '{}' must return '{}', got '{}'", mm_name, expected, got),
+                format!(
+                    "Metamethod '{}' must return '{}', got '{}'",
+                    mm_name, expected, got
+                ),
                 vec![
                     (obj_span, format!("Object"), Color::Red),
                     (op_span, format!("Operator"), Color::Blue),
                 ],
-                bt
+                bt,
             ),
         }
     }

@@ -72,7 +72,13 @@ pub enum ExecError {
         op: String,
         mm_name: String,
     },
-    WrongMetamethodReturnType { obj_span: Span, op_span: Span, mm_name: String, expected: String, got: String },
+    WrongMetamethodReturnType {
+        obj_span: Span,
+        op_span: Span,
+        mm_name: String,
+        expected: String,
+        got: String,
+    },
 }
 
 impl ExecError {

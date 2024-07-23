@@ -1,5 +1,7 @@
 use std::{
-    borrow::Cow, convert::{self, identity}, str::FromStr
+    borrow::Cow,
+    convert::{self, identity},
+    str::FromStr,
 };
 
 use ariadne::{Label, Report, ReportKind};
@@ -290,7 +292,6 @@ fn parse_char_hex<'s>(lexer: &mut Lexer<'s, EscapedString<'s>>) -> Result<String
         None => Err(()),
     }
 }
-
 
 fn escape_str<'s, T>(lexer: &mut Lexer<'s, Token<'s>>, allow_newlines: bool) -> LexResult<String>
 where

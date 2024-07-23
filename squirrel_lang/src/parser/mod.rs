@@ -329,7 +329,10 @@ fn parse_if<'s>(tokens: &mut SpannedLexer<'s>) -> ParseResult<Statement> {
     Ok(Statement::if_else(cond, body, else_body, if_span))
 }
 
-fn parse_class_extends_body<'s>(tokens: &mut SpannedLexer<'s>, class_span: Span) -> ParseResult<Expr> {
+fn parse_class_extends_body<'s>(
+    tokens: &mut SpannedLexer<'s>,
+    class_span: Span,
+) -> ParseResult<Expr> {
     let parent = if let (Token::Extends, _) = tokens.peek_token(true)? {
         tokens.skip_token();
         let (parent_ident, ctx) = tokens.next_token(true)?;

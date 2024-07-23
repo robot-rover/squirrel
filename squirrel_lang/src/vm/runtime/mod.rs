@@ -1,13 +1,21 @@
 mod compare;
 
-use std::{cell::RefCell, io::{self, stdout}, rc::Rc};
+use std::{
+    cell::RefCell,
+    io::{self, stdout},
+    rc::Rc,
+};
 
 use compare::run_compare;
 use hashbrown::HashMap;
 
 use crate::{context::SquirrelError, parser::ast, util::WriteOption};
 
-use super::{bytecode::{decode, DcCompare, DcTag, Inst, Tag}, compiler::Function, value::{Table, Value}};
+use super::{
+    bytecode::{decode, DcCompare, DcTag, Inst, Tag},
+    compiler::Function,
+    value::{Table, Value},
+};
 
 pub struct RtFunction {
     pub code: Vec<Inst>,
@@ -62,7 +70,6 @@ struct StackFrame<'f> {
     // TODO: The locals that are not upvalues can be stored w/o extra indirection
     locals: Vec<Rc<RefCell<Value>>>,
     registers: Vec<Value>,
-
 }
 
 fn init_root_table() -> Rc<RefCell<Table>> {
@@ -77,11 +84,16 @@ pub fn run<'a, 'f>(
     stdout: Option<&mut dyn io::Write>,
     args: impl IntoIterator<Item = &'a str>,
 ) {
-    assert_eq!(root_fn.num_params, 0, "root function must have 0 parameters");
+    assert_eq!(
+        root_fn.num_params, 0,
+        "root function must have 0 parameters"
+    );
     assert!(root_fn.is_varargs, "root function must be varargs");
     assert_eq!(root_fn.locals.get(0), Some(&(String::from("vargv"), 0)));
 
-    let stdout = stdout.map(|stream| WriteOption::Dyn(stream)).unwrap_or_else(|| WriteOption::Stdout(io::stdout()));
+    let stdout = stdout
+        .map(|stream| WriteOption::Dyn(stream))
+        .unwrap_or_else(|| WriteOption::Stdout(io::stdout()));
     let root_table = init_root_table();
     let mut locals = vec![Rc::new(RefCell::new(Value::Null)); root_fn.locals.len()];
     *locals[0].borrow_mut() = Value::array(args.into_iter().map(Value::string).collect::<Vec<_>>());

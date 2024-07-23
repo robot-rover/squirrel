@@ -13,7 +13,8 @@ use crate::{
     parser::ast::{
         self, AssignKind, AssignTarget, BinaryOp, CallTarget, Expr, ExprData, Ident, Statement,
         StatementData, UnaryOp, UnaryRefOp,
-    }, util::{IntoOwned, WriteOption},
+    },
+    util::{IntoOwned, WriteOption},
 };
 
 use super::{
@@ -86,7 +87,9 @@ where
 {
     for (key, val) in iter {
         if let Some(index_idx) = index_local_idx {
-            context.infunc.set_local(*index_idx, key.into_owned().into())
+            context
+                .infunc
+                .set_local(*index_idx, key.into_owned().into())
         }
         context.infunc.set_local(*value_local_idx, val.clone());
 
@@ -332,11 +335,7 @@ fn run_expression(context: &mut Context, expr: &Expr) -> ExprResult {
                 .map(|expr| expr.span)
                 .fold(func.span(), |acc, span| acc | span),
         ),
-        ExprData::RawCall {
-            func,
-            this,
-            args,
-        } => {
+        ExprData::RawCall { func, this, args } => {
             let func_span = func.span;
             let func = run_expression(context, func)?;
             let param_span = args
@@ -414,9 +413,7 @@ fn run_function_call(
 }
 
 macro_rules! run_metamethod {
-    () => {
-
-    };
+    () => {};
 }
 
 pub fn run_rawcall(
@@ -452,7 +449,14 @@ pub fn run_rawcall(
             let constructor = instance.get_field_str("constructor");
             let instance_val = Value::instance(instance);
             if let Some(constructor) = constructor {
-                run_rawcall(context, constructor, instance_val.clone(), args, func_span, call_span)?;
+                run_rawcall(
+                    context,
+                    constructor,
+                    instance_val.clone(),
+                    args,
+                    func_span,
+                    call_span,
+                )?;
             }
             Ok(instance_val)
         }
@@ -461,9 +465,21 @@ pub fn run_rawcall(
             if let Some(call) = call {
                 let mut call_args = vec![context.infunc.env.clone()];
                 call_args.extend(args);
-                run_rawcall(context, call, Value::Object(obj), call_args, func_span, call_span)
+                run_rawcall(
+                    context,
+                    call,
+                    Value::Object(obj),
+                    call_args,
+                    func_span,
+                    call_span,
+                )
             } else {
-                Err(ExecError::missing_metamethod(func_span, call_span, "call".to_string(), "()".to_string()))
+                Err(ExecError::missing_metamethod(
+                    func_span,
+                    call_span,
+                    "call".to_string(),
+                    "()".to_string(),
+                ))
             }
         }
         Value::Instance(inst) => {
@@ -471,12 +487,27 @@ pub fn run_rawcall(
             if let Some(call) = call {
                 let mut call_args = vec![context.infunc.env.clone()];
                 call_args.extend(args);
-                run_rawcall(context, call, Value::Instance(inst), call_args, func_span, call_span)
+                run_rawcall(
+                    context,
+                    call,
+                    Value::Instance(inst),
+                    call_args,
+                    func_span,
+                    call_span,
+                )
             } else {
-                Err(ExecError::missing_metamethod(func_span, call_span, "call".to_string(), "()".to_string()))
+                Err(ExecError::missing_metamethod(
+                    func_span,
+                    call_span,
+                    "call".to_string(),
+                    "()".to_string(),
+                ))
             }
         }
-        other => Err(ExecError::general(func_span, format!("Can't call non-function {other:?}"))),
+        other => Err(ExecError::general(
+            func_span,
+            format!("Can't call non-function {other:?}"),
+        )),
     }
 }
 
@@ -506,19 +537,13 @@ fn run_load_ident(context: &mut Context, ident: &str, span: Span) -> ExprResult 
     Err(ExecError::undefined_variable((ident.to_string(), span)))
 }
 
-fn run_delete(
-    context: &mut Context,
-    op_span: Span,
-    target: &AssignTarget,
-) -> ExprResult {
+fn run_delete(context: &mut Context, op_span: Span, target: &AssignTarget) -> ExprResult {
     match target {
         AssignTarget::Ident(ident) => todo!(),
         AssignTarget::ArrayAccess { array, index, span } => todo!(),
         AssignTarget::FieldAccess(parent, ident) => todo!(),
         AssignTarget::Local(local_idx, span) => todo!(),
     }
-
-
 }
 
 fn run_unary_ref_op(
@@ -724,8 +749,24 @@ fn run_binary_op(
     match op {
         BinaryOp::Add => {
             if matches!(lhs.0, Value::String(_)) || matches!(rhs.0, Value::String(_)) {
-                let lhs = tostring(&mut *context, lhs.0, vec![], &CallInfo { func_span: op_span, call_span: lhs_span })?;
-                let rhs = tostring(&mut *context, rhs.0, vec![], &CallInfo { func_span: op_span, call_span: rhs_span })?;
+                let lhs = tostring(
+                    &mut *context,
+                    lhs.0,
+                    vec![],
+                    &CallInfo {
+                        func_span: op_span,
+                        call_span: lhs_span,
+                    },
+                )?;
+                let rhs = tostring(
+                    &mut *context,
+                    rhs.0,
+                    vec![],
+                    &CallInfo {
+                        func_span: op_span,
+                        call_span: rhs_span,
+                    },
+                )?;
                 Ok(Value::string(&format!("{}{}", lhs, rhs)))
             } else {
                 define_op!(lhs + rhs; op_span, context, meta "_add")
@@ -738,21 +779,21 @@ fn run_binary_op(
         // TODO: Comparing non-numbers for equality (classes, arrays, functions, etc)
         BinaryOp::Eq => Ok(Value::Boolean(lhs.0 == rhs.0)),
         BinaryOp::NotEq => Ok(Value::Boolean(lhs.0 != rhs.0)),
-        BinaryOp::Greater => define_op!(lhs > rhs; op_span, context, both boolean, meta "_cmp" compare),
-        BinaryOp::GreaterEq => define_op!(lhs >= rhs; op_span, context, both boolean, meta "_cmp" compare),
-        BinaryOp::Less => define_op!(lhs < rhs; op_span, context, both boolean, meta "_cmp" compare),
-        BinaryOp::LessEq => define_op!(lhs <= rhs; op_span, context, both boolean, meta "_cmp" compare),
+        BinaryOp::Greater => {
+            define_op!(lhs > rhs; op_span, context, both boolean, meta "_cmp" compare)
+        }
+        BinaryOp::GreaterEq => {
+            define_op!(lhs >= rhs; op_span, context, both boolean, meta "_cmp" compare)
+        }
+        BinaryOp::Less => {
+            define_op!(lhs < rhs; op_span, context, both boolean, meta "_cmp" compare)
+        }
+        BinaryOp::LessEq => {
+            define_op!(lhs <= rhs; op_span, context, both boolean, meta "_cmp" compare)
+        }
         BinaryOp::Compare => todo!("Implement compare and metamethod"),
-        BinaryOp::And => Ok(if !lhs.0.truthy() {
-            lhs.0
-        } else {
-            rhs.0
-        }),
-        BinaryOp::Or => Ok(if lhs.0.truthy() {
-            lhs.0
-        } else {
-            rhs.0
-        }),
+        BinaryOp::And => Ok(if !lhs.0.truthy() { lhs.0 } else { rhs.0 }),
+        BinaryOp::Or => Ok(if lhs.0.truthy() { lhs.0 } else { rhs.0 }),
         BinaryOp::BitAnd => define_op!(lhs & rhs; op_span, context, int Integer),
         BinaryOp::BitOr => define_op!(lhs | rhs; op_span, context, int Integer),
         BinaryOp::BitXor => define_op!(lhs ^ rhs; op_span, context, int Integer),
@@ -845,7 +886,7 @@ fn run_assign(
             let mut inst = inst.deref().borrow_mut();
             inst.set_field(key, val, is_newslot, span)?;
             Ok(())
-        },
+        }
         _ => panic!("Can't assign to non-object"),
     }
 }

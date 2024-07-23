@@ -1,4 +1,7 @@
-use std::{convert::TryFrom, fmt::{self, write}};
+use std::{
+    convert::TryFrom,
+    fmt::{self, write},
+};
 
 use serde::{Deserialize, Serialize};
 

@@ -1,7 +1,11 @@
 use num_traits::ConstZero;
 
-use crate::vm::{bytecode::{Data, DcCompare}, error::ExecResult, value::Value};
 use crate::vm::runtime::VMState;
+use crate::vm::{
+    bytecode::{Data, DcCompare},
+    error::ExecResult,
+    value::Value,
+};
 
 pub fn run_compare(state: &mut VMState, c: DcCompare, data: Data) -> ExecResult {
     let frame = state.frame();

@@ -2,7 +2,11 @@ use hashbrown::{Equivalent, HashMap};
 use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{ptr::NonNull, rc::Rc};
 
-use crate::{context::Span, parser::ast::{self, Expr}, vm::error::ExecError};
+use crate::{
+    context::Span,
+    parser::ast::{self, Expr},
+    vm::error::ExecError,
+};
 
 pub type NativeFn = fn(/* *mut Context, */ Value, Vec<Value>) -> Result<Value, ExecError>;
 
@@ -69,12 +73,11 @@ impl Value {
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
         match (self, key) {
             (Value::Table(obj), any) => obj.borrow().get_field(any),
-            (Value::Array(arr), HashValue::Integer(i)) => {
-                arr.borrow().get(*i as usize).cloned()
-            }
-            (Value::String(s), HashValue::Integer(idx)) => {
-                s.chars().nth(*idx as usize).map(|c| Value::Integer(c as i64))
-            }
+            (Value::Array(arr), HashValue::Integer(i)) => arr.borrow().get(*i as usize).cloned(),
+            (Value::String(s), HashValue::Integer(idx)) => s
+                .chars()
+                .nth(*idx as usize)
+                .map(|c| Value::Integer(c as i64)),
             _ => None,
         }
     }
@@ -319,8 +322,15 @@ value_variant!(Value::Class(Rc<RefCell<Class>>) "class");
 value_variant!(Value::Instance(Rc<RefCell<Instance>>) "instance");
 
 fn print_addr<T>(f: &mut fmt::Formatter<'_>, ptr: &Rc<T>) -> fmt::Result
-where Rc<T>: TypeName {
-    write!(f, "({} : 0x{:012x})", <Rc<T> as TypeName>::type_name(), Rc::as_ptr(ptr) as usize)
+where
+    Rc<T>: TypeName,
+{
+    write!(
+        f,
+        "({} : 0x{:012x})",
+        <Rc<T> as TypeName>::type_name(),
+        Rc::as_ptr(ptr) as usize
+    )
 }
 
 impl fmt::Display for Value {
@@ -331,7 +341,12 @@ impl fmt::Display for Value {
             Value::Integer(i) => write!(f, "{}", i),
             Value::Null => write!(f, "null"),
             Value::String(s) => write!(f, "{}", s),
-            Value::NativeFn(n) => write!(f, "({} : 0x{:012x})", <NativeFn as TypeName>::type_name(), *n as usize),
+            Value::NativeFn(n) => write!(
+                f,
+                "({} : 0x{:012x})",
+                <NativeFn as TypeName>::type_name(),
+                *n as usize
+            ),
             Value::Table(o) => print_addr(f, o),
             Value::Array(a) => print_addr(f, a),
             Value::Closure(c) => print_addr(f, c),
@@ -348,14 +363,8 @@ pub struct Table {
 }
 
 impl Table {
-    pub fn new(
-        delegate: Option<Rc<RefCell<Table>>>,
-        slots: HashMap<HashValue, Value>,
-    ) -> Table {
-        Table {
-            delegate,
-            slots,
-        }
+    pub fn new(delegate: Option<Rc<RefCell<Table>>>, slots: HashMap<HashValue, Value>) -> Table {
+        Table { delegate, slots }
     }
 
     pub fn get_delegate(&self) -> Option<&Rc<RefCell<Table>>> {
@@ -405,7 +414,6 @@ impl Table {
     pub fn slot_iter(&self) -> impl Iterator<Item = (&HashValue, &Value)> {
         self.slots.iter()
     }
-
 }
 
 impl fmt::Debug for Table {
@@ -493,7 +501,11 @@ impl Class {
     }
 
     fn get_next_valid_offset(&mut self) -> u32 {
-        self.parent.as_ref().map(|p| p.borrow_mut().get_next_valid_offset()).unwrap_or(0) + self.get_or_make_offsets().len() as u32
+        self.parent
+            .as_ref()
+            .map(|p| p.borrow_mut().get_next_valid_offset())
+            .unwrap_or(0)
+            + self.get_or_make_offsets().len() as u32
     }
 
     fn get_offsets(&self) -> &HashMap<HashValue, (u32, Value)> {
@@ -505,10 +517,14 @@ impl Class {
 
     fn get_or_make_offsets(&mut self) -> &HashMap<HashValue, (u32, Value)> {
         match &mut self.fields {
-            ClassFields::Offsets(offsets) => {},
+            ClassFields::Offsets(offsets) => {}
             ClassFields::NoOffsets(fields) => {
                 let fields = mem::take(fields);
-                let first_offset = self.parent.as_ref().map(|p| p.borrow_mut().get_next_valid_offset() as u32).unwrap_or(0);
+                let first_offset = self
+                    .parent
+                    .as_ref()
+                    .map(|p| p.borrow_mut().get_next_valid_offset() as u32)
+                    .unwrap_or(0);
                 let mut offsets = HashMap::new();
                 for (field_idx, (key, value)) in fields.into_iter().enumerate() {
                     offsets.insert(key.clone(), (first_offset + field_idx as u32, value));
@@ -517,7 +533,9 @@ impl Class {
                 self.fields = ClassFields::Offsets(offsets);
             }
         };
-        let ClassFields::Offsets(offsets) = &self.fields else { unreachable!() };
+        let ClassFields::Offsets(offsets) = &self.fields else {
+            unreachable!()
+        };
         offsets
     }
 
@@ -529,19 +547,23 @@ impl Class {
         span: Span,
     ) -> Result<(), ExecError> {
         match &mut self.fields {
-            ClassFields::NoOffsets(fields) =>
-            if is_newslot || fields.contains_key(&key) {
-                fields.insert(key, value);
-                Ok(())
-            } else {
-                todo!("Undefined field")
-            },
+            ClassFields::NoOffsets(fields) => {
+                if is_newslot || fields.contains_key(&key) {
+                    fields.insert(key, value);
+                    Ok(())
+                } else {
+                    todo!("Undefined field")
+                }
+            }
             ClassFields::Offsets(_) => todo!("Mutating instantiated class"),
         }
     }
 
     // TODO: Do this with other get_field(_str)? functions
-    fn get_field_generic<K: Equivalent<HashValue> + Hash + ?Sized>(&self, key: &K) -> Option<Value> {
+    fn get_field_generic<K: Equivalent<HashValue> + Hash + ?Sized>(
+        &self,
+        key: &K,
+    ) -> Option<Value> {
         match &self.fields {
             ClassFields::NoOffsets(fields) => fields.get(key).map(|v| v.clone()),
             ClassFields::Offsets(fields) => fields.get(key).map(|v| v.1.clone()),
@@ -592,11 +614,16 @@ pub struct Instance {
 
 impl Instance {
     pub fn get_field_idx<T>(&self, class: &Class, key: &T) -> Option<u32>
-    where T: Equivalent<HashValue> + Hash + ?Sized {
+    where
+        T: Equivalent<HashValue> + Hash + ?Sized,
+    {
         if let Some((field_idx, field_default_val)) = class.get_offsets().get(key) {
             Some(*field_idx)
         } else {
-            class.parent.as_ref().and_then(|p| self.get_field_idx(&p.borrow(), key))
+            class
+                .parent
+                .as_ref()
+                .and_then(|p| self.get_field_idx(&p.borrow(), key))
         }
     }
 
@@ -619,16 +646,21 @@ impl Instance {
     }
 
     pub fn get_field(&self, key: &HashValue) -> Option<Value> {
-        self.get_field_idx(&self.class.borrow(), key).map(|offset| self.fields[offset as usize].clone())
+        self.get_field_idx(&self.class.borrow(), key)
+            .map(|offset| self.fields[offset as usize].clone())
     }
 
     pub fn get_field_str(&self, key: &str) -> Option<Value> {
-        self.get_field_idx(&self.class.borrow(), key).map(|offset| self.fields[offset as usize].clone())
+        self.get_field_idx(&self.class.borrow(), key)
+            .map(|offset| self.fields[offset as usize].clone())
     }
 
     pub fn construct(class: Rc<RefCell<Class>>) -> Result<Self, ExecError> {
         let fields = vec![Value::Null; class.borrow_mut().get_next_valid_offset() as usize];
-        let mut instance = Instance { class: class.clone(), fields };
+        let mut instance = Instance {
+            class: class.clone(),
+            fields,
+        };
         class.borrow_mut().initialize(&mut instance)?;
         Ok(instance)
     }
