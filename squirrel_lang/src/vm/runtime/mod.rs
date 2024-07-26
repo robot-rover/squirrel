@@ -1,18 +1,15 @@
-mod compare;
-
 use std::{
     cell::RefCell,
     io::{self, stdout},
     rc::Rc,
 };
 
-use compare::run_compare;
 use hashbrown::HashMap;
 
 use crate::{context::SquirrelError, parser::ast, util::WriteOption};
 
 use super::{
-    bytecode::{decode, DcCompare, DcTag, Inst, Tag},
+    bytecode::{decode, run_compare, Data, DcCompare, DcTag, Inst, Reg, Tag},
     compiler::Function,
     value::{Table, Value},
 };
@@ -46,7 +43,7 @@ impl From<Function> for RtFunction {
     }
 }
 
-struct VMState<'a, 'f> {
+pub struct VMState<'a, 'f> {
     root_table: Rc<RefCell<Table>>,
     stdout: WriteOption<'a>,
     call_stack: Vec<StackFrame<'f>>,
@@ -54,22 +51,36 @@ struct VMState<'a, 'f> {
 }
 
 impl<'a, 'f> VMState<'a, 'f> {
-    fn frame(&self) -> &StackFrame {
+    pub fn frame(&self) -> &StackFrame {
         self.call_stack.last().unwrap()
     }
 
-    fn take_acc(&mut self) -> Value {
+    pub fn take_acc(&mut self) -> Value {
         std::mem::replace(&mut self.acc, Value::Null)
+    }
+
+    pub fn set_acc(&mut self, value: Value) {
+        self.acc = value;
     }
 }
 
-struct StackFrame<'f> {
+pub struct StackFrame<'f> {
     ip: usize,
     func: &'f RtFunction,
     env: Value,
     // TODO: The locals that are not upvalues can be stored w/o extra indirection
     locals: Vec<Rc<RefCell<Value>>>,
     registers: Vec<Value>,
+}
+
+impl StackFrame<'_> {
+    pub fn get_reg(&self, reg: Reg) -> &Value {
+        &self.registers[reg.as_idx()]
+    }
+
+    pub fn get_reg_mut(&mut self, reg: Reg) -> &mut Value {
+        &mut self.registers[reg.as_idx()]
+    }
 }
 
 fn init_root_table() -> Rc<RefCell<Table>> {
@@ -122,11 +133,11 @@ fn run_vm(state: &mut VMState) {
             let frame = state.call_stack.last_mut().unwrap();
             let ip = frame.ip;
             frame.ip += 1;
-            frame.func.code[ip]
+            &frame.func.code[ip]
         };
 
-        match decode(inst.tag) {
-            DcTag::Compare(c) => run_compare(state, c, inst.data).unwrap(),
+        match inst {
+            Inst::Compare(c) => run_compare(state, c).unwrap(),
             other => todo!("{:?}", other),
         }
     }

@@ -2,9 +2,9 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::parser::ast::{self, BinaryOp, Expr, ExprData, Statement, StatementData, UnaryOp};
+use crate::{context::Span, parser::ast::{self, BinaryOp, Expr, ExprData, Statement, StatementData, UnaryOp}, vm::bytecode::{InstJump, JumpKind}};
 
-use super::bytecode::{Inst, Tag};
+use super::bytecode::{context::{BinaryOpContext, FnCallContext, GetFieldContext, GetIdentContext, SetFieldContext, SetIdentContext, UnaryOpContext}, Block, Const, FunIdx, Inst, Local, Reg, Tag};
 
 #[derive(Serialize, Deserialize)]
 pub struct Function {
@@ -21,70 +21,7 @@ pub struct Function {
 
 impl Function {
     fn fmt_inst(&self, f: &mut fmt::Formatter<'_>, inst: &Inst) -> fmt::Result {
-        write!(f, "{:5}", format!("{:?}", inst.tag))?;
-        match inst.tag {
-            Tag::LOADL | Tag::STORL => write!(
-                f,
-                " locals[{}]({})",
-                inst.data, self.locals[inst.data as usize].0
-            )?,
-            Tag::ISIN
-            | Tag::SETS
-            | Tag::SET
-            | Tag::GETF
-            | Tag::ISLT
-            | Tag::ISLE
-            | Tag::ISGT
-            | Tag::ISGE
-            | Tag::ISEQ
-            | Tag::ISNE
-            | Tag::CMP
-            | Tag::LOADR
-            | Tag::STORR
-            | Tag::ADD
-            | Tag::SUB
-            | Tag::MUL
-            | Tag::DIV
-            | Tag::MODU
-            | Tag::POW
-            | Tag::BAND
-            | Tag::BOR
-            | Tag::BXOR
-            | Tag::BRSH
-            | Tag::BASH => write!(f, " r[{}]", inst.data)?,
-            Tag::GETC | Tag::SETC | Tag::SETCS | Tag::GETFC | Tag::LOADC => write!(
-                f,
-                " consts[{}]({})",
-                inst.data, self.constants[inst.data as usize]
-            )?,
-            Tag::LOADF => write!(f, " functions[{}]", inst.data)?,
-            Tag::LOADP => write!(
-                f,
-                " {}({})",
-                inst.data,
-                ["false", "true", "null"][inst.data as usize]
-            )?,
-            Tag::LOADI => write!(f, " {}", inst.data as u64)?,
-            Tag::LOADS => write!(f, " {}", inst.data as i8 as i64)?,
-            Tag::THIS
-            | Tag::ROOT
-            | Tag::GET
-            | Tag::NEG
-            | Tag::LNOT
-            | Tag::BNOT
-            | Tag::RET
-            | Tag::RETN => {}
-            Tag::JMP | Tag::JT | Tag::JF => write!(f, " block[{}]", inst.data)?,
-            Tag::CALL0
-            | Tag::CALL1
-            | Tag::CALL2
-            | Tag::CALL3
-            | Tag::CALL4
-            | Tag::CALL5
-            | Tag::CALL6 => write!(f, " r[{}]", inst.data)?,
-            Tag::CALLN => write!(f, " {0} or r[{0}]", inst.data)?,
-            Tag::SETF | Tag::SETFS => write!(f, " r[{}] r[{}]", inst.data, inst.data + 1)?,
-        }
+        write!(f, "{:5}", format!("{:?}", inst))?;
         Ok(())
     }
 }
@@ -177,6 +114,27 @@ struct FunctionBuilder {
     next_register: u32,
 }
 
+struct BlockBuilder {
+    block: Block,
+}
+
+impl BlockBuilder {
+    fn inst(&self, fun: &mut FunctionBuilder, inst: Inst) {
+        fun.blocks[self.block.as_idx()].push(inst);
+    }
+
+    fn insts(&self, fun: &mut FunctionBuilder, insts: (Inst, Option<Inst>)) {
+        self.inst(fun, insts.0);
+        if let Some(inst2) = insts.1 {
+            self.inst(fun, inst2);
+        }
+    }
+
+    fn as_block(&self) -> Block {
+        self.block
+    }
+}
+
 impl FunctionBuilder {
     fn new() -> Self {
         Self {
@@ -187,40 +145,40 @@ impl FunctionBuilder {
         }
     }
 
-    fn block(&mut self) -> Block {
-        let block_idx = self.blocks.len().try_into().unwrap();
+    fn block(&mut self) -> BlockBuilder {
+        let block_idx: u32 = self.blocks.len().try_into().unwrap();
         self.blocks.push(vec![]);
-        Block(block_idx)
+        BlockBuilder { block: block_idx.into() }
     }
 
     fn literal(&mut self, lit: &ast::Literal) -> Const {
-        let idx = self.constants.len().try_into().unwrap();
+        let idx: u32 = self.constants.len().try_into().unwrap();
         self.constants.push(lit.clone());
-        Const(idx)
+        idx.into()
     }
 
     fn ident(&mut self, ident: &str) -> Const {
-        let idx = self.constants.len().try_into().unwrap();
+        let idx: u32 = self.constants.len().try_into().unwrap();
         self.constants.push(ast::Literal::String(ident.to_string()));
-        Const(idx)
+        idx.into()
     }
 
     fn function(&mut self, fun: Function) -> FunIdx {
-        let idx = self.functions.len().try_into().unwrap();
+        let idx: u32 = self.functions.len().try_into().unwrap();
         self.functions.push(fun);
-        FunIdx(idx)
+        idx.into()
     }
 
     fn reg(&mut self) -> Reg {
         let reg = self.next_register;
         self.next_register += 1;
-        Reg(reg)
+        reg.into()
     }
 
     fn regs(&mut self, count: u32) -> impl Iterator<Item = Reg> {
         let reg = self.next_register;
         self.next_register += count;
-        (reg..reg + count).map(Reg)
+        (reg..reg + count).map(Reg::from)
     }
 
     fn build(
@@ -251,15 +209,12 @@ impl FunctionBuilder {
                 code.append(&mut next_block);
 
                 match code.last().unwrap() {
-                    Inst {
-                        tag: Tag::JMP,
-                        data,
-                    } => {
-                        let target_block = *data as usize;
+                    Inst::Jump(InstJump { kind: JumpKind::Always, block, .. }) => {
+                        let target_block = block.as_idx();
                         if target_block <= next_block_idx {
                             continue;
                         }
-                        match blocks_to_take.get_mut(target_block as usize) {
+                        match blocks_to_take.get_mut(target_block) {
                             Some(block) => {
                                 code.pop(); // Get rid of jump
                                 next_block = block.take().unwrap();
@@ -268,8 +223,8 @@ impl FunctionBuilder {
                             None => break,
                         }
                     }
-                    Inst { tag: Tag::RET, .. } | Inst { tag: Tag::RETN, .. } => break,
-                    other => panic!("Block ended with non-jump {:?}", other),
+                    Inst::Ret(_) => break,
+                    other => panic!("Block ended with non-jump/return {:?}", other),
                 }
             }
         }
@@ -291,52 +246,15 @@ impl FunctionBuilder {
     }
 }
 
-macro_rules! newtype {
-    ($name:ident) => {
-        #[derive(Clone, Copy)]
-        pub struct $name(u32);
-
-        impl From<$name> for u32 {
-            fn from(wrapper: $name) -> u32 {
-                wrapper.0
-            }
-        }
-    };
-}
-
-newtype!(Const);
-newtype!(Reg);
-newtype!(FunIdx);
-
-pub struct Block(u32);
-
-impl From<&Block> for u32 {
-    fn from(wrapper: &Block) -> u32 {
-        wrapper.0
-    }
-}
-impl Block {
-    fn inst(&self, fun: &mut FunctionBuilder, inst: Inst) {
-        fun.blocks[self.0 as usize].push(inst);
-    }
-
-    fn insts(&self, fun: &mut FunctionBuilder, insts: (Inst, Option<Inst>)) {
-        self.inst(fun, insts.0);
-        if let Some(inst2) = insts.1 {
-            self.inst(fun, inst2);
-        }
-    }
-}
-
 pub fn compile_function(function: &ast::Function) -> Function {
     let mut builder = FunctionBuilder::new();
     let block = builder.block();
     let block = compile_statement(&mut builder, block, &function.body);
     if !matches!(
-        builder.blocks[block.0 as usize].last().unwrap().tag,
-        Tag::RETN | Tag::RET
+        builder.blocks[block.block.as_idx()].last().unwrap(),
+        Inst::Ret(_)
     ) {
-        block.inst(&mut builder, Inst::retn());
+        block.inst(&mut builder, Inst::retn(function.body.span));
     }
     builder.build(
         function.num_args,
@@ -351,7 +269,7 @@ pub fn compile_function(function: &ast::Function) -> Function {
 // --------------
 
 #[must_use]
-fn compile_statement(fun: &mut FunctionBuilder, block: Block, body: &Statement) -> Block {
+fn compile_statement(fun: &mut FunctionBuilder, block: BlockBuilder, body: &Statement) -> BlockBuilder {
     match &body.data {
         StatementData::Block(stmts) => stmts
             .iter()
@@ -360,8 +278,7 @@ fn compile_statement(fun: &mut FunctionBuilder, block: Block, body: &Statement) 
         StatementData::IfElse(cond, ifbody, elsebody) => {
             compile_ifelse(fun, block, cond, ifbody, elsebody)
         }
-        StatementData::While(cond, body) => compile_while(fun, block, cond, body, false),
-        StatementData::DoWhile(cond, body) => compile_while(fun, block, cond, body, true),
+        StatementData::While { while_kw, cond, body, is_do_while } => compile_while(fun, block, cond, body, *is_do_while, *while_kw),
         StatementData::Switch(_, _, _) => todo!(),
         StatementData::For {
             init,
@@ -389,31 +306,32 @@ fn compile_statement(fun: &mut FunctionBuilder, block: Block, body: &Statement) 
 #[must_use]
 fn compile_while(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     cond: &Expr,
     body: &Statement,
     is_do_while: bool,
-) -> Block {
+    while_span: Span,
+) -> BlockBuilder {
     let cond_block = fun.block();
     let body_block = fun.block();
     let end_block = fun.block();
 
-    let return_to_cond = Inst::jmp(&cond_block);
+    let return_to_cond = Inst::jmp(cond_block.as_block(), cond.span);
 
     // Previous Block
     block.inst(
         fun,
         Inst::jmp(if is_do_while {
-            &body_block
+            body_block.as_block()
         } else {
-            &cond_block
-        }),
+            cond_block.as_block()
+        }, while_span),
     );
 
     // Condition Block
     let end_cond_block = compile_expr(fun, cond_block, cond);
-    end_cond_block.inst(fun, Inst::jt(&body_block));
-    end_cond_block.inst(fun, Inst::jmp(&end_block));
+    end_cond_block.inst(fun, Inst::jt(body_block.as_block(), cond.span));
+    end_cond_block.inst(fun, Inst::jmp(end_block.as_block(), cond.span));
 
     // Body Block
     let end_body_block = compile_statement(fun, body_block, body);
@@ -425,27 +343,27 @@ fn compile_while(
 #[must_use]
 fn compile_ifelse(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     cond: &Expr,
     ifbody: &Statement,
     elsebody: &Statement,
-) -> Block {
+) -> BlockBuilder {
     let if_block = fun.block();
     let else_block = fun.block();
     let end_block = fun.block();
 
     // Previous Block
     let end_cond_expr = compile_expr(fun, block, cond);
-    end_cond_expr.inst(fun, Inst::jt(&if_block));
-    end_cond_expr.inst(fun, Inst::jmp(&else_block));
+    end_cond_expr.inst(fun, Inst::jt(if_block.as_block(), cond.span));
+    end_cond_expr.inst(fun, Inst::jmp(else_block.as_block(), cond.span));
 
     // If Block
     let end_if_block = compile_statement(fun, if_block, ifbody);
-    end_if_block.inst(fun, Inst::jmp(&end_block));
+    end_if_block.inst(fun, Inst::jmp(end_block.as_block(), ifbody.span));
 
     // Else Block
     let end_else_block = compile_statement(fun, else_block, elsebody);
-    end_else_block.inst(fun, Inst::jmp(&end_block));
+    end_else_block.inst(fun, Inst::jmp(end_block.as_block(), elsebody.span));
 
     end_block
 }
@@ -455,14 +373,14 @@ fn compile_ifelse(
 // ---------------
 
 #[must_use]
-fn compile_expr(fun: &mut FunctionBuilder, block: Block, expr: &Expr) -> Block {
+fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> BlockBuilder {
     match &expr.data {
         ExprData::Literal(lit) => compile_literal(fun, block, lit),
         ExprData::TableDecl(_) => todo!(),
         ExprData::ArrayDecl(_) => todo!(),
         ExprData::FunctionDef(ast_fun) => {
             let fun_idx = fun.function(compile_function(ast_fun));
-            block.inst(fun, Inst::loadf(fun_idx));
+            block.inst(fun, Inst::loadf(fun_idx, ast_fun.keyword_span));
             block
         }
         ExprData::ClassDef { parent, members } => todo!(),
@@ -478,33 +396,34 @@ fn compile_expr(fun: &mut FunctionBuilder, block: Block, expr: &Expr) -> Block {
             lhs,
             rhs,
         } => compile_binary_op(fun, block, op, lhs, rhs),
-        ExprData::UnaryOp(op, _span, expr) => compile_unary_op(fun, block, op, expr),
+        ExprData::UnaryOp(op, op_span, expr) => compile_unary_op(fun, block, op, expr, *op_span),
         ExprData::UnaryRefOp(_, _, _) => todo!(),
         ExprData::FunctionCall { func, args } => compile_fn_call(fun, block, func, args),
         ExprData::ArrayAccess { array, index } => todo!(),
         ExprData::This => {
-            block.inst(fun, Inst::this());
+            block.inst(fun, Inst::this(expr.span));
             block
         }
         ExprData::FieldAccess(parent, field) => {
             let field_const = fun.ident(&field.0);
+            let parent_span = parent.span;
             let block = compile_expr(fun, block, parent);
-            block.inst(fun, Inst::getfc(field_const));
+            block.inst(fun, Inst::getfc(field_const, GetFieldContext { parent_span, field_span: field.1 }));
             block
         }
         ExprData::Globals => {
-            block.inst(fun, Inst::root());
+            block.inst(fun, Inst::root(expr.span));
             block
         }
         ExprData::Ident(ident) => {
-            let ident = fun.ident(&ident);
-            block.inst(fun, Inst::getc(ident));
+            let ident_const = fun.ident(&ident);
+            block.inst(fun, Inst::getc(ident_const, GetIdentContext { ident_span: expr.span, ident_name: ident.clone() }));
             block
         }
         ExprData::Base => todo!(),
         ExprData::RawCall { func, this, args } => compile_raw_call(fun, block, func, this, args),
-        ExprData::Local(idx, _span) => {
-            block.inst(fun, Inst::loadl(*idx));
+        ExprData::Local(idx, span) => {
+            block.inst(fun, Inst::loadl(Local::from(*idx), *span));
             block
         }
     }
@@ -512,15 +431,17 @@ fn compile_expr(fun: &mut FunctionBuilder, block: Block, expr: &Expr) -> Block {
 
 fn compile_unary_op(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     op: &ast::UnaryOp,
     expr: &Expr,
-) -> Block {
+    op_span: Span,
+) -> BlockBuilder {
     let block = compile_expr(fun, block, expr);
+    let context = UnaryOpContext { op_span, op_name: todo!(), rhs_span: expr.span };
     let inst = match op {
-        UnaryOp::Neg => Inst::neg(),
-        UnaryOp::Not => Inst::lnot(),
-        UnaryOp::BitNot => Inst::bnot(),
+        UnaryOp::Neg => Inst::neg(context),
+        UnaryOp::Not => Inst::lnot(context),
+        UnaryOp::BitNot => Inst::bnot(context),
         UnaryOp::TypeOf => todo!("TypeOf will be an instrinsic"),
         UnaryOp::Clone => todo!("Clone will be an instrinsic"),
         UnaryOp::Resume => todo!("Resume will be an instrinsic"),
@@ -531,55 +452,59 @@ fn compile_unary_op(
 
 fn compile_binary_op(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     op: &ast::BinaryOp,
     lhs: &Expr,
     rhs: &Expr,
-) -> Block {
+    op_span: Span,
+) -> BlockBuilder {
     let lhs_reg = fun.reg();
     let block = compile_expr(fun, block, lhs);
-    block.inst(fun, Inst::storr(lhs_reg));
+    block.inst(fun, Inst::storr(lhs_reg, lhs.span));
 
     if matches!(op, BinaryOp::And | BinaryOp::Or) {
         let end_block = fun.block();
         let decision_inst = match op {
-            BinaryOp::And => Inst::jf(&end_block),
-            BinaryOp::Or => Inst::jt(&end_block),
+            BinaryOp::And => Inst::jf(end_block.as_block(), lhs.span),
+            BinaryOp::Or => Inst::jt(end_block.as_block(), lhs.span),
             _ => unreachable!(),
         };
         block.inst(fun, decision_inst);
         let block = compile_expr(fun, block, rhs);
-        block.inst(fun, Inst::jmp(&end_block));
+        block.inst(fun, Inst::jmp(end_block.as_block(), rhs.span));
         return end_block;
     }
 
     let block = compile_expr(fun, block, rhs);
 
+    let context = BinaryOpContext { lhs_span: lhs.span, op_span, op_name: todo!(), rhs_span: rhs.span };
+
     let inst = match op {
-        BinaryOp::Add => Inst::add(lhs_reg),
-        BinaryOp::Sub => Inst::sub(lhs_reg),
-        BinaryOp::Mul => Inst::mul(lhs_reg),
-        BinaryOp::Div => Inst::div(lhs_reg),
-        BinaryOp::Mod => Inst::modu(lhs_reg),
-        BinaryOp::Eq => Inst::iseq(lhs_reg),
-        BinaryOp::NotEq => Inst::isne(lhs_reg),
-        BinaryOp::Greater => Inst::isgt(lhs_reg),
-        BinaryOp::GreaterEq => Inst::isge(lhs_reg),
-        BinaryOp::Less => Inst::islt(lhs_reg),
-        BinaryOp::LessEq => Inst::isle(lhs_reg),
-        BinaryOp::Compare => Inst::cmp(lhs_reg),
+        BinaryOp::Add => Inst::add(lhs_reg, context),
+        BinaryOp::Sub => Inst::sub(lhs_reg, context),
+        BinaryOp::Mul => Inst::mul(lhs_reg, context),
+        BinaryOp::Div => Inst::div(lhs_reg, context),
+        BinaryOp::Mod => Inst::modu(lhs_reg, context),
+        BinaryOp::Eq => Inst::iseq(lhs_reg, context),
+        BinaryOp::NotEq => Inst::isne(lhs_reg, context),
+        BinaryOp::Greater => Inst::isgt(lhs_reg, context),
+        BinaryOp::GreaterEq => Inst::isge(lhs_reg, context),
+        BinaryOp::Less => Inst::islt(lhs_reg, context),
+        BinaryOp::LessEq => Inst::isle(lhs_reg, context),
+        BinaryOp::Compare => Inst::cmp(lhs_reg, context),
         BinaryOp::And => unreachable!(),
         BinaryOp::Or => unreachable!(),
-        BinaryOp::BitAnd => Inst::band(lhs_reg),
-        BinaryOp::BitOr => Inst::bor(lhs_reg),
-        BinaryOp::BitXor => Inst::bxor(lhs_reg),
+        BinaryOp::BitAnd => Inst::band(lhs_reg, context),
+        BinaryOp::BitOr => Inst::bor(lhs_reg, context),
+        BinaryOp::BitXor => Inst::bxor(lhs_reg, context),
         BinaryOp::Shl => {
-            block.inst(fun, Inst::brsh(lhs_reg));
-            Inst::neg()
+            block.inst(fun, Inst::brsh(lhs_reg, context));
+            todo!("This is broken");
+            Inst::neg(todo!())
         }
-        BinaryOp::Shr => Inst::brsh(lhs_reg),
-        BinaryOp::AShr => Inst::bash(lhs_reg),
-        BinaryOp::In => Inst::isin(lhs_reg),
+        BinaryOp::Shr => Inst::brsh(lhs_reg, context),
+        BinaryOp::AShr => Inst::bash(lhs_reg, context),
+        BinaryOp::In => Inst::isin(lhs_reg, context),
         BinaryOp::InstanceOf => todo!("InstanceOf will be an instrinsic"),
     };
 
@@ -589,33 +514,39 @@ fn compile_binary_op(
 
 fn compile_raw_call(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     func: &Expr,
     this: &Expr,
     args: &[Expr],
-) -> Block {
+    call_span: Span,
+) -> BlockBuilder {
     let fun_reg = fun.reg();
     let mut arg_regs = fun.regs((args.len() + 1).try_into().unwrap());
     let this_reg = arg_regs.next().unwrap();
 
     let block = compile_expr(fun, block, func);
-    block.inst(fun, Inst::storr(fun_reg));
+    block.inst(fun, Inst::storr(fun_reg, func.span));
     let block = compile_expr(fun, block, this);
-    block.inst(fun, Inst::storr(this_reg));
+    block.inst(fun, Inst::storr(this_reg, this.span));
     let block = load_call_args(fun, block, arg_regs, args);
 
-    block.inst(fun, Inst::loadr(fun_reg));
-    block.insts(fun, Inst::call(this_reg, args.len().try_into().unwrap()));
+    block.inst(fun, Inst::loadr(fun_reg, func.span));
+    block.inst(fun, Inst::call(this_reg, args.len().try_into().unwrap(), FnCallContext {
+        fn_span: func.span,
+        call_span,
+        args: args.iter().map(|expr| expr.span).collect(),
+    }));
 
     block
 }
 
 fn compile_fn_call(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     func: &ast::CallTarget,
     args: &[Expr],
-) -> Block {
+    call_span: Span,
+) -> BlockBuilder {
     let fun_reg = fun.reg();
     let mut arg_regs = fun.regs((args.len() + 1).try_into().unwrap());
     let this_reg = arg_regs.next().unwrap();
@@ -623,45 +554,49 @@ fn compile_fn_call(
     // This Object
     let block = match func {
         ast::CallTarget::Expr(fn_expr) => {
-            block.inst(fun, Inst::this());
-            block.inst(fun, Inst::storr(this_reg));
+            block.inst(fun, Inst::this(fn_expr.span));
+            block.inst(fun, Inst::storr(this_reg, fn_expr.span));
             let block = compile_expr(fun, block, fn_expr);
-            block.inst(fun, Inst::storr(fun_reg));
+            block.inst(fun, Inst::storr(fun_reg, fn_expr.span));
             block
         }
         ast::CallTarget::FieldAccess(env, fn_field) => {
             // TODO: double check if parent["field"] should use parent as env
             let block = compile_expr(fun, block, env);
-            block.inst(fun, Inst::storr(this_reg));
+            block.inst(fun, Inst::storr(this_reg, env.span));
             let fn_field_const = fun.ident(&fn_field.0);
-            block.inst(fun, Inst::getfc(fn_field_const));
-            block.inst(fun, Inst::storr(fun_reg));
+            block.inst(fun, Inst::getfc(fn_field_const, GetFieldContext { parent_span: env.span, field_span: fn_field.1 }));
+            block.inst(fun, Inst::storr(fun_reg, env.span | fn_field.1));
             block
         }
     };
 
     let block = load_call_args(fun, block, arg_regs, args);
 
-    block.inst(fun, Inst::loadr(fun_reg));
-    block.insts(fun, Inst::call(this_reg, args.len().try_into().unwrap()));
+    block.inst(fun, Inst::loadr(fun_reg, func.span()));
+    block.inst(fun, Inst::call(this_reg, args.len().try_into().unwrap(), FnCallContext {
+        fn_span: func.span(),
+        call_span,
+        args: args.iter().map(|expr| expr.span).collect(),
+    }));
     block
 }
 
 fn load_call_args(
     fun: &mut FunctionBuilder,
-    block: Block,
+    block: BlockBuilder,
     arg_regs: impl Iterator<Item = Reg>,
     args: &[Expr],
-) -> Block {
+) -> BlockBuilder {
     args.iter().zip(arg_regs).fold(block, |block, (arg, reg)| {
         let block = compile_expr(fun, block, arg);
-        block.inst(fun, Inst::storr(reg));
+        block.inst(fun, Inst::storr(reg, arg.span));
         block
     })
 }
 
 #[must_use]
-fn compile_assign(fun: &mut FunctionBuilder, block: Block, assign: &ast::Assign) -> Block {
+fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::Assign) -> BlockBuilder {
     let is_ns = match assign.kind {
         ast::AssignKind::Normal => false,
         ast::AssignKind::NewSlot => true,
@@ -675,18 +610,28 @@ fn compile_assign(fun: &mut FunctionBuilder, block: Block, assign: &ast::Assign)
         ast::AssignTarget::Ident(ident) => {
             let field = fun.ident(&ident.0);
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setc(field, is_ns));
+            block.inst(fun, Inst::setc(field, SetIdentContext {
+                ident_span: ident.1,
+                ident_name: ident.0.clone(),
+                assignment_span: assign.op_span,
+                value_span: assign.value.span,
+            }, is_ns));
             block
         }
         ast::AssignTarget::ArrayAccess { array, index, span } => {
             let parent = fun.reg();
             let field = fun.reg();
             let block = compile_expr(fun, block, array);
-            block.inst(fun, Inst::storr(parent));
+            block.inst(fun, Inst::storr(parent, array.span));
             let block = compile_expr(fun, block, index);
-            block.inst(fun, Inst::storr(field));
+            block.inst(fun, Inst::storr(field, index.span));
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setf(parent, is_ns));
+            block.inst(fun, Inst::setf(parent, SetFieldContext {
+                parent_span: array.span,
+                field_span: index.span,
+                assignment_span: assign.op_span,
+                value_span: assign.value.span,
+            }, is_ns));
             block
         }
         ast::AssignTarget::FieldAccess(parent, field) => {
@@ -694,24 +639,29 @@ fn compile_assign(fun: &mut FunctionBuilder, block: Block, assign: &ast::Assign)
             let field_reg = fun.reg();
             let field_const = fun.ident(&field.0);
             let block = compile_expr(fun, block, parent);
-            block.inst(fun, Inst::storr(parent_reg));
-            block.inst(fun, Inst::loadc(field_const));
-            block.inst(fun, Inst::storr(field_reg));
+            block.inst(fun, Inst::storr(parent_reg, parent.span));
+            block.inst(fun, Inst::loadc(field_const, field.1));
+            block.inst(fun, Inst::storr(field_reg, field.1));
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setf(parent_reg, is_ns));
+            block.inst(fun, Inst::setf(parent_reg, SetFieldContext {
+                parent_span: parent.span,
+                field_span: field.1,
+                assignment_span: assign.op_span,
+                value_span: assign.value.span,
+            }, is_ns));
             block
         }
-        ast::AssignTarget::Local(local_idx, _) => {
+        ast::AssignTarget::Local(local_idx, span) => {
             assert!(!is_ns, "Cannot use new slot with local variable");
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::storl(*local_idx));
+            block.inst(fun, Inst::storl((*local_idx).into()));
             block
         }
     }
 }
 
 #[must_use]
-fn compile_literal(fun: &mut FunctionBuilder, block: Block, lit: &ast::Literal) -> Block {
+fn compile_literal(fun: &mut FunctionBuilder, block: BlockBuilder, lit: &ast::Literal) -> BlockBuilder {
     let lit_idx = fun.literal(lit);
     block.inst(fun, Inst::loadc(lit_idx));
     block
