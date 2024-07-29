@@ -9,7 +9,7 @@ use hashbrown::HashMap;
 use crate::{context::SquirrelError, parser::ast, util::WriteOption};
 
 use super::{
-    bytecode::{decode, run_compare, Data, DcCompare, DcTag, Inst, Reg, Tag},
+    bytecode::{run_compare, Data, Inst, Reg, Tag},
     compiler::Function,
     value::{Table, Value},
 };

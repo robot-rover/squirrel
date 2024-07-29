@@ -517,7 +517,11 @@ body:
           end: End
       - data:
           While:
-            - data:
+            while_kw:
+              start: Start
+              end: End
+            cond:
+              data:
                 BinaryOp:
                   op: Less
                   op_span:
@@ -555,7 +559,8 @@ body:
               span:
                 start: Start
                 end: End
-            - data:
+            body:
+              data:
                 Block:
                   - data:
                       Expr:
@@ -699,6 +704,7 @@ body:
               span:
                 start: Start
                 end: End
+            is_do_while: false
         span:
           start: Start
           end: End
@@ -756,7 +762,11 @@ body:
           end: End
       - data:
           While:
-            - data:
+            while_kw:
+              start: Start
+              end: End
+            cond:
+              data:
                 BinaryOp:
                   op: Less
                   op_span:
@@ -794,7 +804,8 @@ body:
               span:
                 start: Start
                 end: End
-            - data:
+            body:
+              data:
                 Block:
                   - data:
                       Expr:
@@ -938,6 +949,7 @@ body:
               span:
                 start: Start
                 end: End
+            is_do_while: false
         span:
           start: Start
           end: End

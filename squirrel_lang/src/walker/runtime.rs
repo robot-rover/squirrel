@@ -120,27 +120,26 @@ fn run_statement(context: &mut Context, statement: &Statement) -> FlowResult {
                 run_statement(context, if_false)?;
             }
         }
-        StatementData::While(cond, body) => {
-            while run_expression(context, cond)?.truthy() {
+        StatementData::While { while_kw, cond, body, is_do_while } => {
+            let mut keep_going = true;
+            loop {
+                if !*is_do_while {
+                    keep_going = run_expression(context, cond)?.truthy();
+                }
                 match run_statement(context, body) {
                     Ok(()) => {}
                     Err(FlowControl::Break(_span)) => break,
                     Err(FlowControl::Continue(_span)) => {}
                     Err(other) => return Err(other),
                 }
+                if *is_do_while {
+                    keep_going = run_expression(context, cond)?.truthy();
+                }
+                if !keep_going {
+                    break;
+                }
             }
         }
-        StatementData::DoWhile(cond, body) => loop {
-            match run_statement(context, body) {
-                Ok(()) => {}
-                Err(FlowControl::Break(_span)) => break,
-                Err(FlowControl::Continue(_span)) => {}
-                Err(other) => return Err(other),
-            }
-            if !run_expression(context, cond)?.truthy() {
-                break;
-            }
-        },
         StatementData::Switch(val, cases, default) => {
             run_case(context, val, cases, default.as_ref().map(|b| &**b))?
         }

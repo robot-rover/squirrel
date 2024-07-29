@@ -375,7 +375,7 @@ fn compile_ifelse(
 #[must_use]
 fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> BlockBuilder {
     match &expr.data {
-        ExprData::Literal(lit) => compile_literal(fun, block, lit),
+        ExprData::Literal(lit) => compile_literal(fun, block, lit, expr.span),
         ExprData::TableDecl(_) => todo!(),
         ExprData::ArrayDecl(_) => todo!(),
         ExprData::FunctionDef(ast_fun) => {
@@ -395,10 +395,10 @@ fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> 
             op_span,
             lhs,
             rhs,
-        } => compile_binary_op(fun, block, op, lhs, rhs),
+        } => compile_binary_op(fun, block, op, lhs, rhs, expr.span),
         ExprData::UnaryOp(op, op_span, expr) => compile_unary_op(fun, block, op, expr, *op_span),
         ExprData::UnaryRefOp(_, _, _) => todo!(),
-        ExprData::FunctionCall { func, args } => compile_fn_call(fun, block, func, args),
+        ExprData::FunctionCall { func, args } => compile_fn_call(fun, block, func, args, expr.span),
         ExprData::ArrayAccess { array, index } => todo!(),
         ExprData::This => {
             block.inst(fun, Inst::this(expr.span));
@@ -421,7 +421,7 @@ fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> 
             block
         }
         ExprData::Base => todo!(),
-        ExprData::RawCall { func, this, args } => compile_raw_call(fun, block, func, this, args),
+        ExprData::RawCall { func, this, args } => compile_raw_call(fun, block, func, this, args, expr.span),
         ExprData::Local(idx, span) => {
             block.inst(fun, Inst::loadl(Local::from(*idx), *span));
             block
@@ -654,16 +654,16 @@ fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::
         ast::AssignTarget::Local(local_idx, span) => {
             assert!(!is_ns, "Cannot use new slot with local variable");
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::storl((*local_idx).into()));
+            block.inst(fun, Inst::storl((*local_idx).into(), assign.op_span | *span));
             block
         }
     }
 }
 
 #[must_use]
-fn compile_literal(fun: &mut FunctionBuilder, block: BlockBuilder, lit: &ast::Literal) -> BlockBuilder {
+fn compile_literal(fun: &mut FunctionBuilder, block: BlockBuilder, lit: &ast::Literal, span: Span) -> BlockBuilder {
     let lit_idx = fun.literal(lit);
-    block.inst(fun, Inst::loadc(lit_idx));
+    block.inst(fun, Inst::loadc(lit_idx, span));
     block
 }
 
