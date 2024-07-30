@@ -12,7 +12,10 @@ use hashbrown::HashMap;
 use crate::{context::SquirrelError, parser::ast, util::WriteOption};
 
 use super::{
-    bytecode::{run_arith, run_bitwise, run_call, run_compare, run_get, run_jump, run_load, run_misc, run_ret, run_set, run_store, run_unary, Block, Const, Data, FunIdx, Inst, Local, Reg, Tag},
+    bytecode::{
+        run_arith, run_bitwise, run_call, run_compare, run_get, run_jump, run_load, run_misc,
+        run_ret, run_set, run_store, run_unary, Block, Const, Data, FunIdx, Inst, Local, Reg, Tag,
+    },
     compiler::Function,
     value::{Table, Value},
 };
@@ -55,8 +58,23 @@ impl From<Function> for RtFunction {
             num_regs,
         } = value;
         let constants = constants.into_iter().map(Value::from).collect::<Vec<_>>();
-        let sub_functions = sub_functions.into_iter().map(RtFunction::from).map(Rc::new).collect::<Vec<_>>();
-        RtFunction { code, block_offsets, constants, num_regs, num_params, num_req_params: num_params, is_varargs, num_locals, locals, sub_functions }
+        let sub_functions = sub_functions
+            .into_iter()
+            .map(RtFunction::from)
+            .map(Rc::new)
+            .collect::<Vec<_>>();
+        RtFunction {
+            code,
+            block_offsets,
+            constants,
+            num_regs,
+            num_params,
+            num_req_params: num_params,
+            is_varargs,
+            num_locals,
+            locals,
+            sub_functions,
+        }
     }
 }
 
@@ -87,8 +105,13 @@ impl<'a> VMState<'a> {
     pub fn call_fn(&mut self, func: Rc<RtFunction>, env: Value, args: Vec<Value>) {
         let registers = vec![Value::Null; func.num_regs as usize];
         // TODO: Handle varargs and default args here
-        let mut locals = args.into_iter().map(|v| Rc::new(RefCell::new(v))).collect::<Vec<_>>();
-        locals.resize_with(func.num_locals as usize,|| Rc::new(RefCell::new(Value::Null)));
+        let mut locals = args
+            .into_iter()
+            .map(|v| Rc::new(RefCell::new(v)))
+            .collect::<Vec<_>>();
+        locals.resize_with(func.num_locals as usize, || {
+            Rc::new(RefCell::new(Value::Null))
+        });
 
         self.call_stack.push(StackFrame {
             ip: 0,
@@ -230,7 +253,8 @@ mod tests {
 
     use super::*;
     use crate::{
-        context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str, vm::compiler::compile_function,
+        context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str,
+        vm::compiler::compile_function,
     };
 
     test_foreach!(sample_test);

@@ -215,12 +215,24 @@ impl Statement {
 
     pub fn while_loop(cond: Expr, body: Statement, while_span: Span) -> Self {
         let span = while_span | body.span;
-        StatementData::While { while_kw: while_span, cond, body: Box::new(body), is_do_while: false }.spanning(span)
+        StatementData::While {
+            while_kw: while_span,
+            cond,
+            body: Box::new(body),
+            is_do_while: false,
+        }
+        .spanning(span)
     }
 
     pub fn do_while_loop(cond: Expr, body: Statement, do_span: Span, while_span: Span) -> Self {
         let span = do_span | while_span | body.span;
-        StatementData::While { while_kw: do_span, cond, body: Box::new(body), is_do_while: true }.spanning(span)
+        StatementData::While {
+            while_kw: do_span,
+            cond,
+            body: Box::new(body),
+            is_do_while: true,
+        }
+        .spanning(span)
     }
 
     pub fn switch(

@@ -2,9 +2,19 @@ use std::fmt;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{context::Span, parser::ast::{self, BinaryOp, Expr, ExprData, Statement, StatementData, UnaryOp}, vm::bytecode::{InstJump, JumpKind}};
+use crate::{
+    context::Span,
+    parser::ast::{self, BinaryOp, Expr, ExprData, Statement, StatementData, UnaryOp},
+    vm::bytecode::{InstJump, JumpKind},
+};
 
-use super::bytecode::{context::{BinaryOpContext, FnCallContext, GetFieldContext, GetIdentContext, SetFieldContext, SetIdentContext, UnaryOpContext}, Block, Const, FunIdx, Inst, Local, Reg, Tag};
+use super::bytecode::{
+    context::{
+        BinaryOpContext, FnCallContext, GetFieldContext, GetIdentContext, SetFieldContext,
+        SetIdentContext, UnaryOpContext,
+    },
+    Block, Const, FunIdx, Inst, Local, Reg, Tag,
+};
 
 #[derive(Serialize, Deserialize)]
 pub struct Function {
@@ -149,7 +159,9 @@ impl FunctionBuilder {
     fn block(&mut self) -> BlockBuilder {
         let block_idx: u32 = self.blocks.len().try_into().unwrap();
         self.blocks.push(vec![]);
-        BlockBuilder { block: block_idx.into() }
+        BlockBuilder {
+            block: block_idx.into(),
+        }
     }
 
     fn literal(&mut self, lit: &ast::Literal) -> Const {
@@ -210,7 +222,11 @@ impl FunctionBuilder {
                 code.append(&mut next_block);
 
                 match code.last().unwrap() {
-                    Inst::Jump(InstJump { kind: JumpKind::Always, block, .. }) => {
+                    Inst::Jump(InstJump {
+                        kind: JumpKind::Always,
+                        block,
+                        ..
+                    }) => {
                         let target_block = block.as_idx();
                         if target_block <= next_block_idx {
                             continue;
@@ -271,7 +287,11 @@ pub fn compile_function(function: &ast::Function) -> Function {
 // --------------
 
 #[must_use]
-fn compile_statement(fun: &mut FunctionBuilder, block: BlockBuilder, body: &Statement) -> BlockBuilder {
+fn compile_statement(
+    fun: &mut FunctionBuilder,
+    block: BlockBuilder,
+    body: &Statement,
+) -> BlockBuilder {
     match &body.data {
         StatementData::Block(stmts) => stmts
             .iter()
@@ -280,7 +300,12 @@ fn compile_statement(fun: &mut FunctionBuilder, block: BlockBuilder, body: &Stat
         StatementData::IfElse(cond, ifbody, elsebody) => {
             compile_ifelse(fun, block, cond, ifbody, elsebody)
         }
-        StatementData::While { while_kw, cond, body, is_do_while } => compile_while(fun, block, cond, body, *is_do_while, *while_kw),
+        StatementData::While {
+            while_kw,
+            cond,
+            body,
+            is_do_while,
+        } => compile_while(fun, block, cond, body, *is_do_while, *while_kw),
         StatementData::Switch(_, _, _) => todo!(),
         StatementData::For {
             init,
@@ -323,11 +348,14 @@ fn compile_while(
     // Previous Block
     block.inst(
         fun,
-        Inst::jmp(if is_do_while {
-            body_block.as_block()
-        } else {
-            cond_block.as_block()
-        }, while_span),
+        Inst::jmp(
+            if is_do_while {
+                body_block.as_block()
+            } else {
+                cond_block.as_block()
+            },
+            while_span,
+        ),
     );
 
     // Condition Block
@@ -410,7 +438,16 @@ fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> 
             let field_const = fun.ident(&field.0);
             let parent_span = parent.span;
             let block = compile_expr(fun, block, parent);
-            block.inst(fun, Inst::getfc(field_const, GetFieldContext { parent_span, field_span: field.1 }));
+            block.inst(
+                fun,
+                Inst::getfc(
+                    field_const,
+                    GetFieldContext {
+                        parent_span,
+                        field_span: field.1,
+                    },
+                ),
+            );
             block
         }
         ExprData::Globals => {
@@ -419,11 +456,22 @@ fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> 
         }
         ExprData::Ident(ident) => {
             let ident_const = fun.ident(&ident);
-            block.inst(fun, Inst::getc(ident_const, GetIdentContext { ident_span: expr.span, ident_name: ident.clone() }));
+            block.inst(
+                fun,
+                Inst::getc(
+                    ident_const,
+                    GetIdentContext {
+                        ident_span: expr.span,
+                        ident_name: ident.clone(),
+                    },
+                ),
+            );
             block
         }
         ExprData::Base => todo!(),
-        ExprData::RawCall { func, this, args } => compile_raw_call(fun, block, func, this, args, expr.span),
+        ExprData::RawCall { func, this, args } => {
+            compile_raw_call(fun, block, func, this, args, expr.span)
+        }
         ExprData::Local(idx, span) => {
             block.inst(fun, Inst::loadl(Local::from(*idx), *span));
             block
@@ -439,7 +487,11 @@ fn compile_unary_op(
     op_span: Span,
 ) -> BlockBuilder {
     let block = compile_expr(fun, block, expr);
-    let context = UnaryOpContext { op_span, op_name: todo!(), rhs_span: expr.span };
+    let context = UnaryOpContext {
+        op_span,
+        op_name: todo!(),
+        rhs_span: expr.span,
+    };
     let inst = match op {
         UnaryOp::Neg => Inst::neg(context),
         UnaryOp::Not => Inst::lnot(context),
@@ -479,7 +531,12 @@ fn compile_binary_op(
 
     let block = compile_expr(fun, block, rhs);
 
-    let context = BinaryOpContext { lhs_span: lhs.span, op_span, op_name: todo!(), rhs_span: rhs.span };
+    let context = BinaryOpContext {
+        lhs_span: lhs.span,
+        op_span,
+        op_name: todo!(),
+        rhs_span: rhs.span,
+    };
 
     let inst = match op {
         BinaryOp::Add => Inst::add(lhs_reg, context),
@@ -533,11 +590,18 @@ fn compile_raw_call(
     let block = load_call_args(fun, block, arg_regs, args);
 
     block.inst(fun, Inst::loadr(fun_reg, func.span));
-    block.inst(fun, Inst::call(this_reg, args.len().try_into().unwrap(), FnCallContext {
-        fn_span: func.span,
-        call_span,
-        args: args.iter().map(|expr| expr.span).collect(),
-    }));
+    block.inst(
+        fun,
+        Inst::call(
+            this_reg,
+            args.len().try_into().unwrap(),
+            FnCallContext {
+                fn_span: func.span,
+                call_span,
+                args: args.iter().map(|expr| expr.span).collect(),
+            },
+        ),
+    );
 
     block
 }
@@ -567,7 +631,16 @@ fn compile_fn_call(
             let block = compile_expr(fun, block, env);
             block.inst(fun, Inst::storr(this_reg, env.span));
             let fn_field_const = fun.ident(&fn_field.0);
-            block.inst(fun, Inst::getfc(fn_field_const, GetFieldContext { parent_span: env.span, field_span: fn_field.1 }));
+            block.inst(
+                fun,
+                Inst::getfc(
+                    fn_field_const,
+                    GetFieldContext {
+                        parent_span: env.span,
+                        field_span: fn_field.1,
+                    },
+                ),
+            );
             block.inst(fun, Inst::storr(fun_reg, env.span | fn_field.1));
             block
         }
@@ -576,11 +649,18 @@ fn compile_fn_call(
     let block = load_call_args(fun, block, arg_regs, args);
 
     block.inst(fun, Inst::loadr(fun_reg, func.span()));
-    block.inst(fun, Inst::call(this_reg, args.len().try_into().unwrap(), FnCallContext {
-        fn_span: func.span(),
-        call_span,
-        args: args.iter().map(|expr| expr.span).collect(),
-    }));
+    block.inst(
+        fun,
+        Inst::call(
+            this_reg,
+            args.len().try_into().unwrap(),
+            FnCallContext {
+                fn_span: func.span(),
+                call_span,
+                args: args.iter().map(|expr| expr.span).collect(),
+            },
+        ),
+    );
     block
 }
 
@@ -598,7 +678,11 @@ fn load_call_args(
 }
 
 #[must_use]
-fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::Assign) -> BlockBuilder {
+fn compile_assign(
+    fun: &mut FunctionBuilder,
+    block: BlockBuilder,
+    assign: &ast::Assign,
+) -> BlockBuilder {
     let is_ns = match assign.kind {
         ast::AssignKind::Normal => false,
         ast::AssignKind::NewSlot => true,
@@ -612,12 +696,19 @@ fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::
         ast::AssignTarget::Ident(ident) => {
             let field = fun.ident(&ident.0);
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setc(field, SetIdentContext {
-                ident_span: ident.1,
-                ident_name: ident.0.clone(),
-                assignment_span: assign.op_span,
-                value_span: assign.value.span,
-            }, is_ns));
+            block.inst(
+                fun,
+                Inst::setc(
+                    field,
+                    SetIdentContext {
+                        ident_span: ident.1,
+                        ident_name: ident.0.clone(),
+                        assignment_span: assign.op_span,
+                        value_span: assign.value.span,
+                    },
+                    is_ns,
+                ),
+            );
             block
         }
         ast::AssignTarget::ArrayAccess { array, index, span } => {
@@ -628,12 +719,19 @@ fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::
             let block = compile_expr(fun, block, index);
             block.inst(fun, Inst::storr(field, index.span));
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setf(parent, SetFieldContext {
-                parent_span: array.span,
-                field_span: index.span,
-                assignment_span: assign.op_span,
-                value_span: assign.value.span,
-            }, is_ns));
+            block.inst(
+                fun,
+                Inst::setf(
+                    parent,
+                    SetFieldContext {
+                        parent_span: array.span,
+                        field_span: index.span,
+                        assignment_span: assign.op_span,
+                        value_span: assign.value.span,
+                    },
+                    is_ns,
+                ),
+            );
             block
         }
         ast::AssignTarget::FieldAccess(parent, field) => {
@@ -645,25 +743,40 @@ fn compile_assign(fun: &mut FunctionBuilder, block: BlockBuilder, assign: &ast::
             block.inst(fun, Inst::loadc(field_const, field.1));
             block.inst(fun, Inst::storr(field_reg, field.1));
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::setf(parent_reg, SetFieldContext {
-                parent_span: parent.span,
-                field_span: field.1,
-                assignment_span: assign.op_span,
-                value_span: assign.value.span,
-            }, is_ns));
+            block.inst(
+                fun,
+                Inst::setf(
+                    parent_reg,
+                    SetFieldContext {
+                        parent_span: parent.span,
+                        field_span: field.1,
+                        assignment_span: assign.op_span,
+                        value_span: assign.value.span,
+                    },
+                    is_ns,
+                ),
+            );
             block
         }
         ast::AssignTarget::Local(local_idx, span) => {
             assert!(!is_ns, "Cannot use new slot with local variable");
             let block = compile_expr(fun, block, &assign.value);
-            block.inst(fun, Inst::storl((*local_idx).into(), assign.op_span | *span));
+            block.inst(
+                fun,
+                Inst::storl((*local_idx).into(), assign.op_span | *span),
+            );
             block
         }
     }
 }
 
 #[must_use]
-fn compile_literal(fun: &mut FunctionBuilder, block: BlockBuilder, lit: &ast::Literal, span: Span) -> BlockBuilder {
+fn compile_literal(
+    fun: &mut FunctionBuilder,
+    block: BlockBuilder,
+    lit: &ast::Literal,
+    span: Span,
+) -> BlockBuilder {
     let lit_idx = fun.literal(lit);
     block.inst(fun, Inst::loadc(lit_idx, span));
     block

@@ -1,23 +1,23 @@
-pub mod context;
-mod compare;
-mod load_store;
 mod arith;
 mod bitwise;
-mod jump_ret;
-mod unary;
 mod call;
+mod compare;
+pub mod context;
 mod get_set;
+mod jump_ret;
+mod load_store;
 mod misc;
+mod unary;
 
-pub use arith::{InstArith, run_arith};
-pub use bitwise::{InstBitwise, run_bitwise};
-pub use call::{InstCall, run_call};
-pub use compare::{InstCompare, run_compare};
-pub use get_set::{InstGet, InstSet, run_get, run_set};
-pub use jump_ret::{InstJump, InstRet, JumpKind, run_jump, run_ret};
-pub use load_store::{InstLoad, InstStore, run_load, run_store};
-pub use misc::{InstMisc, run_misc};
-pub use unary::{InstUnary, run_unary};
+pub use arith::{run_arith, InstArith};
+pub use bitwise::{run_bitwise, InstBitwise};
+pub use call::{run_call, InstCall};
+pub use compare::{run_compare, InstCompare};
+pub use get_set::{run_get, run_set, InstGet, InstSet};
+pub use jump_ret::{run_jump, run_ret, InstJump, InstRet, JumpKind};
+pub use load_store::{run_load, run_store, InstLoad, InstStore};
+pub use misc::{run_misc, InstMisc};
+pub use unary::{run_unary, InstUnary};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumDiscriminants;

@@ -1,7 +1,9 @@
 use serde::{Deserialize, Serialize};
 
 use super::{Inst, Reg};
-use crate::vm::{bytecode::context::BinaryOpContext, error::ExecResult, runtime::VMState, value::Value};
+use crate::vm::{
+    bytecode::context::BinaryOpContext, error::ExecResult, runtime::VMState, value::Value,
+};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 enum BitwiseOp {
@@ -22,7 +24,11 @@ pub struct InstBitwise {
 macro_rules! bitwise_constructor {
     ($name:ident, $op:ident) => {
         pub fn $name(reg: Reg, ctx: BinaryOpContext) -> Self {
-            Inst::Bitwise(InstBitwise { op: BitwiseOp::$op, reg, ctx })
+            Inst::Bitwise(InstBitwise {
+                op: BitwiseOp::$op,
+                reg,
+                ctx,
+            })
         }
     };
 }
@@ -42,10 +48,15 @@ pub fn run_bitwise(state: &mut VMState, inst: &InstBitwise) -> ExecResult {
     match (lhs, rhs) {
         (Value::Integer(lhs), Value::Integer(rhs)) => {
             state.set_acc(run_bitwise_int(lhs, rhs, inst.op));
-        },
+        }
         (lhs, rhs) => {
-            todo!("Bitwise operation on non-integer values: {:?} {:?} {:?}", lhs, inst.op, rhs);
-        },
+            todo!(
+                "Bitwise operation on non-integer values: {:?} {:?} {:?}",
+                lhs,
+                inst.op,
+                rhs
+            );
+        }
     }
     Ok(())
 }

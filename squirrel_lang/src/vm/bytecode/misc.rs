@@ -1,4 +1,7 @@
-use crate::{context::Span, vm::{error::ExecResult, runtime::VMState}};
+use crate::{
+    context::Span,
+    vm::{error::ExecResult, runtime::VMState},
+};
 
 use super::{Const, FunIdx, Inst, Local, Reg, Tag};
 use serde::{Deserialize, Serialize};
@@ -17,11 +20,17 @@ pub struct InstMisc {
 
 impl Inst {
     pub fn this(ctx: Span) -> Self {
-        Inst::Misc(InstMisc { op: MiscOp::This, ctx })
+        Inst::Misc(InstMisc {
+            op: MiscOp::This,
+            ctx,
+        })
     }
 
     pub fn root(ctx: Span) -> Self {
-        Inst::Misc(InstMisc { op: MiscOp::Root, ctx })
+        Inst::Misc(InstMisc {
+            op: MiscOp::Root,
+            ctx,
+        })
     }
 }
 

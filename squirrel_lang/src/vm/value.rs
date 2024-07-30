@@ -8,7 +8,10 @@ use crate::{
     vm::error::ExecError,
 };
 
-use super::{bytecode::Reg, runtime::{RtFunction, VMState}};
+use super::{
+    bytecode::Reg,
+    runtime::{RtFunction, VMState},
+};
 
 pub type NativeFn = fn(*mut VMState, Reg, u8) -> Result<(), ExecError>;
 

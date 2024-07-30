@@ -1,7 +1,10 @@
 use serde::{Deserialize, Serialize};
 
 use super::{Block, Const, FunIdx, Inst, Local, Reg};
-use crate::{context::Span, vm::{error::ExecResult, runtime::VMState, value::Value}};
+use crate::{
+    context::Span,
+    vm::{error::ExecResult, runtime::VMState, value::Value},
+};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub enum JumpKind {
@@ -19,24 +22,38 @@ pub struct InstJump {
 
 impl Inst {
     pub fn jmp(block: Block, ctx: Span) -> Inst {
-        Inst::Jump(InstJump { kind: JumpKind::Always, block, ctx })
+        Inst::Jump(InstJump {
+            kind: JumpKind::Always,
+            block,
+            ctx,
+        })
     }
 
     pub fn jt(block: Block, ctx: Span) -> Inst {
-        Inst::Jump(InstJump { kind: JumpKind::IfTrue, block, ctx })
+        Inst::Jump(InstJump {
+            kind: JumpKind::IfTrue,
+            block,
+            ctx,
+        })
     }
 
     pub fn jf(block: Block, ctx: Span) -> Inst {
-        Inst::Jump(InstJump { kind: JumpKind::IfFalse, block, ctx })
+        Inst::Jump(InstJump {
+            kind: JumpKind::IfFalse,
+            block,
+            ctx,
+        })
     }
 }
 
 pub fn run_jump(state: &mut VMState, inst: &InstJump) -> ExecResult {
     match inst.kind {
-        JumpKind::Always => {},
+        JumpKind::Always => {}
         JumpKind::IfTrue | JumpKind::IfFalse => {
             let state_to_jump = matches!(inst.kind, JumpKind::IfTrue);
-            if state.take_acc().truthy() != state_to_jump { return Ok(()) }
+            if state.take_acc().truthy() != state_to_jump {
+                return Ok(());
+            }
         }
     }
 
@@ -59,11 +76,17 @@ pub struct InstRet {
 
 impl Inst {
     pub fn retn(ctx: Span) -> Inst {
-        Inst::Ret(InstRet { kind: RetKind::Void, ctx })
+        Inst::Ret(InstRet {
+            kind: RetKind::Void,
+            ctx,
+        })
     }
 
     pub fn ret(ctx: Span) -> Inst {
-        Inst::Ret(InstRet { kind: RetKind::Value, ctx })
+        Inst::Ret(InstRet {
+            kind: RetKind::Value,
+            ctx,
+        })
     }
 }
 

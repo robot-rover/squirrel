@@ -2,11 +2,7 @@ use num_traits::ConstZero;
 use serde::{Deserialize, Serialize};
 
 use crate::vm::{bytecode::context::BinaryOpContext, runtime::VMState};
-use crate::vm::{
-    bytecode::{Data},
-    error::ExecResult,
-    value::Value,
-};
+use crate::vm::{bytecode::Data, error::ExecResult, value::Value};
 
 use super::{Inst, Reg};
 
@@ -31,9 +27,13 @@ pub struct InstCompare {
 macro_rules! compare_constructor {
     ($name:ident, $kind:ident) => {
         pub fn $name(reg: Reg, ctx: BinaryOpContext) -> Self {
-            Inst::Compare(InstCompare { reg, kind: CompareKind::$kind, ctx })
+            Inst::Compare(InstCompare {
+                reg,
+                kind: CompareKind::$kind,
+                ctx,
+            })
         }
-    }
+    };
 }
 
 impl Inst {

@@ -1,4 +1,11 @@
-use crate::{context::Span, vm::{bytecode::Reg, error::{ExecError, ExecResult}, value::{TypeName, Value}}};
+use crate::{
+    context::Span,
+    vm::{
+        bytecode::Reg,
+        error::{ExecError, ExecResult},
+        value::{TypeName, Value},
+    },
+};
 use hashbrown::HashMap;
 use std::cell::RefCell;
 use std::{io::Write, rc::Rc};
@@ -27,11 +34,7 @@ macro_rules! forward_functions {
     };
 }
 
-fn adjust_index(
-    start: i64,
-    end: Option<i64>,
-    len: usize,
-) -> Result<(usize, usize), ExecError> {
+fn adjust_index(start: i64, end: Option<i64>, len: usize) -> Result<(usize, usize), ExecError> {
     // let ilen = len as i64;
     // if start < -ilen || start >= ilen {
     //     return Err(ExecError::index_out_of_bounds(start, len, span));
@@ -59,11 +62,7 @@ fn get_this<T: TypeName>(this: Value) -> Result<T, ExecError> {
     todo!()
 }
 
-fn tofloat(
-    context: *mut VMState,
-    reg: Reg,
-    n_args: u8,
-) -> ExecResult {
+fn tofloat(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
     // argparse::parse0(args, call_info)?;
     // match this {
     //     Value::Float(f) => Ok(f),
@@ -81,11 +80,7 @@ fn tofloat(
     todo!()
 }
 
-fn tointeger(
-    context: *mut VMState,
-    reg: Reg,
-    n_args: u8,
-) -> ExecResult {
+fn tointeger(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
     // TODO: Handle 2nd arg as the base
     // argparse::parse0(args, call_info)?;
     // match this {
@@ -104,11 +99,7 @@ fn tointeger(
     todo!()
 }
 
-pub fn tostring(
-    context: *mut VMState,
-    reg: Reg,
-    n_args: u8,
-) -> ExecResult {
+pub fn tostring(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
     // argparse::parse0(args, call_info)?;
     // let meta = match &this {
     //     Value::Object(o) => o.borrow().get_field_str("_tostring"),
@@ -140,11 +131,7 @@ pub fn tostring(
     todo!()
 }
 
-fn weakref(
-    context: *mut VMState,
-    reg: Reg,
-    n_args: u8,
-) -> ExecResult {
+fn weakref(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
     todo!()
 }
 
@@ -204,11 +191,7 @@ fn slice(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
 pub mod integer {
     use super::*;
 
-    fn tochar(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn tochar(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<i64>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // Ok(Value::String(Rc::from(format!("{}", this as u8 as char))))
@@ -223,11 +206,7 @@ pub mod string {
 
     use super::*;
 
-    fn find(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn find(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<str>>(this)?;
         // argparse::validate_num_args(1..2, args.len(), call_info)?;
         // let mut arg_iter = args.into_iter();
@@ -251,22 +230,14 @@ pub mod string {
         todo!()
     }
 
-    fn toupper(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn toupper(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<str>>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // Ok(Value::String(Rc::from(this.to_uppercase())))
         todo!()
     }
 
-    fn tolower(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn tolower(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<str>>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // Ok(Value::String(Rc::from(this.to_lowercase())))
@@ -285,8 +256,7 @@ pub mod object {
     // forward_functions!(Rc<RefCell<Table>>, Table; rawget, rawin, getdelegate, filter, keys, values, rawset, rawdelete, clear, setdelegate);
 
     make_delegate!(
-        len,
-        // rawget,
+        len, // rawget,
         // rawset,
         // rawdelete,
         // rawin,
@@ -307,11 +277,7 @@ pub mod array {
     use super::*;
     // TODO: Most of these panic on out of bounds access, fix that
 
-    fn push(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn push(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // let arg = argparse::parse1::<Value>(args, call_info)?;
         // this.borrow_mut().push(arg);
@@ -319,27 +285,15 @@ pub mod array {
         todo!()
     }
 
-    fn append(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn append(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         push(context, reg, n_args)
     }
 
-    fn extend(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn extend(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("how to do iteration?")
     }
 
-    fn pop(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn pop(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this)?;
         // argparse::parse0(args, call_info)?;
         // let ret = this.borrow_mut().pop();
@@ -348,19 +302,11 @@ pub mod array {
         todo!()
     }
 
-    fn top(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn top(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("what does this function do LOL")
     }
 
-    fn insert(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn insert(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // let (idx, val) = argparse::parse2::<i64, Value>(args, call_info)?;
         // // TODO: support negative indexes here?
@@ -369,11 +315,7 @@ pub mod array {
         todo!()
     }
 
-    fn remove(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn remove(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // let idx = argparse::parse1::<i64>(args, call_info)?;
         // // TODO: support negative indexes here?
@@ -382,11 +324,7 @@ pub mod array {
         todo!()
     }
 
-    fn resize(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn resize(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // argparse::validate_num_args(1..2, args.len(), call_info)?;
         // let mut arg_iter = args.into_iter();
@@ -399,19 +337,11 @@ pub mod array {
         todo!()
     }
 
-    fn sort(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn sort(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("Sorting metamethods and calling back into squirrel")
     }
 
-    fn reverse(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn reverse(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // this.borrow_mut().reverse();
@@ -419,11 +349,7 @@ pub mod array {
         todo!()
     }
 
-    fn clear(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn clear(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // this.borrow_mut().clear();
@@ -432,43 +358,23 @@ pub mod array {
         todo!()
     }
 
-    fn map(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn map(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("How to do iteration? and call back into squirrel")
     }
 
-    fn apply(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn apply(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("How to do iteration? and call back into squirrel")
     }
 
-    fn reduce(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn reduce(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("How to do iteration? and call back into squirrel")
     }
 
-    fn filter(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn filter(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!("How to do iteration? and call back into squirrel")
     }
 
-    fn find(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn find(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Rc<RefCell<Vec<Value>>>>(this, call_info)?;
         // let needle = argparse::parse1::<Value>(args, call_info)?;
         // let found = this.borrow().iter().position(|v| v == &needle);
@@ -491,11 +397,7 @@ pub mod global {
 
     use super::*;
 
-    fn array(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn array(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // argparse::validate_num_args(1..2, args.len(), call_info)?;
         // let mut arg_iter = args.into_iter();
         // let size = argparse::convert_arg::<i64>(arg_iter.next().unwrap(), 0, call_info)?;
@@ -504,45 +406,25 @@ pub mod global {
         todo!()
     }
 
-    fn seterrorhandler(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn seterrorhandler(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn callee(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn callee(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // argparse::parse0(args, call_info)?;
         // Ok(Value::Closure(unsafe { (*context).infunc.closure.clone() }))
         todo!()
     }
 
-    fn setdebughook(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn setdebughook(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn enabledebuginfo(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn enabledebuginfo(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn getroottable(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn getroottable(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // argparse::parse0(args, call_info)?;
         // Ok(Value::Object(unsafe {
         //     (*context).vm_state.root_table.clone()
@@ -550,11 +432,7 @@ pub mod global {
         todo!()
     }
 
-    fn setroottable(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn setroottable(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let new_root = argparse::parse1::<Value>(args, call_info)?;
         // let mut new_root = match new_root {
         //     Value::Object(obj) => obj,
@@ -574,27 +452,15 @@ pub mod global {
         todo!()
     }
 
-    fn getconsttable(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn getconsttable(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn setconsttable(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn setconsttable(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn assert(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn assert(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // argparse::validate_num_args(1..2, args.len(), call_info)?;
         // let mut arg_iter = args.into_iter();
         // let exp = arg_iter.next().unwrap();
@@ -609,11 +475,7 @@ pub mod global {
         todo!()
     }
 
-    fn print(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn print(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         let mut stdout = &mut unsafe { &mut *context }.stdout;
         // let arg = argparse::parse1::<Value>(args, call_info)?;
         // write!(stdout, "{}", arg).unwrap();
@@ -629,11 +491,7 @@ pub mod global {
         Ok(())
     }
 
-    fn error(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn error(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let mut stderr = &mut unsafe { &mut *context }.vm_state.stderr;
         // let arg = argparse::parse1::<Value>(args, call_info)?;
         // write!(stderr, "{}", arg).unwrap();
@@ -641,54 +499,30 @@ pub mod global {
         todo!()
     }
 
-    fn compilestring(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn compilestring(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn collectgarbage(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn collectgarbage(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn resurrectunreachable(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn resurrectunreachable(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn _type(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn _type(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         // let this = get_this::<Value>(this, call_info)?;
         // argparse::parse0(args, call_info)?;
         // Ok(Value::String(Rc::from(this.type_str())))
         todo!()
     }
 
-    fn getstackinfos(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn getstackinfos(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 
-    fn newthread(
-        context: *mut VMState,
-        reg: Reg,
-    n_args: u8,
-    ) -> ExecResult {
+    fn newthread(context: *mut VMState, reg: Reg, n_args: u8) -> ExecResult {
         todo!()
     }
 

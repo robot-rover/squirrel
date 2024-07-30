@@ -1,7 +1,14 @@
 use serde::{Deserialize, Serialize};
 
 use super::{Const, FunIdx, Inst, Local, Reg};
-use crate::{context::Span, vm::{error::ExecResult, runtime::VMState, value::{Closure, Value}}};
+use crate::{
+    context::Span,
+    vm::{
+        error::ExecResult,
+        runtime::VMState,
+        value::{Closure, Value},
+    },
+};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub enum PrimType {
@@ -40,12 +47,18 @@ pub struct InstLoad {
 macro_rules! load_constructor {
     ($name:ident($data_name:ident: $variant:ident)) => {
         pub fn $name($data_name: $variant, ctx: Span) -> Inst {
-            Inst::Load(InstLoad { data: LoadSrc::$variant($data_name), ctx })
+            Inst::Load(InstLoad {
+                data: LoadSrc::$variant($data_name),
+                ctx,
+            })
         }
     };
     ($name:ident($data_name:ident: $variant:ident($data_ty:ident))) => {
         pub fn $name($data_name: $data_ty, ctx: Span) -> Inst {
-            Inst::Load(InstLoad { data: LoadSrc::$variant($data_name), ctx })
+            Inst::Load(InstLoad {
+                data: LoadSrc::$variant($data_name),
+                ctx,
+            })
         }
     };
 }
@@ -90,11 +103,17 @@ pub struct InstStore {
 
 impl Inst {
     pub fn storr(reg: Reg, ctx: Span) -> Inst {
-        Inst::Store(InstStore { target: StoreTarget::Reg(reg), ctx })
+        Inst::Store(InstStore {
+            target: StoreTarget::Reg(reg),
+            ctx,
+        })
     }
 
     pub fn storl(local: Local, ctx: Span) -> Inst {
-        Inst::Store(InstStore { target: StoreTarget::Local(local), ctx })
+        Inst::Store(InstStore {
+            target: StoreTarget::Local(local),
+            ctx,
+        })
     }
 }
 

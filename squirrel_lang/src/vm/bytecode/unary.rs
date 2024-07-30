@@ -2,7 +2,10 @@ use std::ops::Not;
 
 use serde::{Deserialize, Serialize};
 
-use crate::{context::Span, vm::{error::ExecResult, runtime::VMState, value::Value}};
+use crate::{
+    context::Span,
+    vm::{error::ExecResult, runtime::VMState, value::Value},
+};
 
 use super::{context::UnaryOpContext, Const, FunIdx, Inst, Local, Reg};
 
@@ -21,15 +24,24 @@ pub struct InstUnary {
 
 impl Inst {
     pub fn lnot(ctx: UnaryOpContext) -> Self {
-        Inst::Unary(InstUnary { op: UnaryOp::LNOT, ctx })
+        Inst::Unary(InstUnary {
+            op: UnaryOp::LNOT,
+            ctx,
+        })
     }
 
     pub fn bnot(ctx: UnaryOpContext) -> Self {
-        Inst::Unary(InstUnary { op: UnaryOp::BNOT, ctx })
+        Inst::Unary(InstUnary {
+            op: UnaryOp::BNOT,
+            ctx,
+        })
     }
 
     pub fn neg(ctx: UnaryOpContext) -> Self {
-        Inst::Unary(InstUnary { op: UnaryOp::NEG, ctx })
+        Inst::Unary(InstUnary {
+            op: UnaryOp::NEG,
+            ctx,
+        })
     }
 }
 
@@ -44,7 +56,6 @@ pub fn run_unary(state: &mut VMState, inst: &InstUnary) -> ExecResult {
         (UnaryOp::NEG, Value::Instance(inst)) => todo!("Metamethods"),
         (UnaryOp::NEG, Value::Table(table)) => todo!("Metamethods"),
         (UnaryOp::NEG, other) => panic!("Expected number, got {:?}", other),
-
     };
 
     state.set_acc(result);
