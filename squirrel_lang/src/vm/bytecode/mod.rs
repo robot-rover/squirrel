@@ -9,15 +9,15 @@ mod call;
 mod get_set;
 mod misc;
 
-pub use arith::InstArith;
-pub use bitwise::InstBitwise;
-pub use call::InstCall;
+pub use arith::{InstArith, run_arith};
+pub use bitwise::{InstBitwise, run_bitwise};
+pub use call::{InstCall, run_call};
 pub use compare::{InstCompare, run_compare};
-pub use get_set::{InstGet, InstSet};
-pub use jump_ret::{InstJump, InstRet, JumpKind};
-pub use load_store::{InstLoad, InstStore};
-pub use misc::InstMisc;
-pub use unary::InstUnary;
+pub use get_set::{InstGet, InstSet, run_get, run_set};
+pub use jump_ret::{InstJump, InstRet, JumpKind, run_jump, run_ret};
+pub use load_store::{InstLoad, InstStore, run_load, run_store};
+pub use misc::{InstMisc, run_misc};
+pub use unary::{InstUnary, run_unary};
 
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumDiscriminants;
@@ -52,6 +52,12 @@ newtype!(Reg);
 newtype!(FunIdx);
 newtype!(Block);
 newtype!(Local);
+
+impl Reg {
+    pub fn nth(&self, n: u32) -> Self {
+        Self(self.0 + n)
+    }
+}
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 #[repr(u8)]
@@ -130,11 +136,11 @@ pub enum Tag {
     // Field Instructions
     GETF,  // acc = reg[data][acc]
     GETFC, // acc = acc[const[data]]
-    SETF,  // reg[data][reg[data+1]] = acc
-    SETFS, // reg[data][reg[data+1]] = acc (newslot)
-
     GET,   // acc = env[acc]
     GETC,  // acc = env[const[data]]
+
+    SETF,  // reg[data][reg[data+1]] = acc
+    SETFS, // reg[data][reg[data+1]] = acc (newslot)
     SET,   // env[reg[data]] = acc
     SETC,  // env[const[data]] = acc
     SETS,  // env[reg[data]] = acc (newslot)

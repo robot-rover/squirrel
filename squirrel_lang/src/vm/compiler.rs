@@ -65,6 +65,7 @@ impl fmt::Debug for Function {
             for (local, local_idx) in locals_sorted {
                 write!(f, "\n  {}: {}", local_idx, local)?;
             }
+            write!(f, "\nRegisters: {}", self.num_regs)?;
 
             let block_idx_width = self.block_offsets.iter().max().unwrap().to_string().len();
             let mut blocks = self
@@ -247,6 +248,7 @@ impl FunctionBuilder {
 }
 
 pub fn compile_function(function: &ast::Function) -> Function {
+    // TODO: Default Args
     let mut builder = FunctionBuilder::new();
     let block = builder.block();
     let block = compile_statement(&mut builder, block, &function.body);

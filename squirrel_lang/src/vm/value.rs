@@ -8,7 +8,9 @@ use crate::{
     vm::error::ExecError,
 };
 
-pub type NativeFn = fn(/* *mut Context, */ Value, Vec<Value>) -> Result<Value, ExecError>;
+use super::{bytecode::Reg, runtime::{RtFunction, VMState}};
+
+pub type NativeFn = fn(*mut VMState, Reg, u8) -> Result<(), ExecError>;
 
 #[derive(Debug, Clone)]
 pub enum Value {
@@ -376,7 +378,6 @@ impl Table {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-        span: Span,
     ) -> Result<(), ExecError> {
         if is_newslot || self.slots.contains_key(&key) {
             self.slots.insert(key, value);
@@ -385,7 +386,7 @@ impl Table {
             match self.delegate.as_ref() {
                 Some(delegate) => {
                     let mut parent = delegate.borrow_mut();
-                    parent.set_field(key, value, is_newslot, span)
+                    parent.set_field(key, value, is_newslot)
                 }
                 None => todo!("Undefined field"),
             }
@@ -433,7 +434,7 @@ impl fmt::Debug for Table {
 
 #[derive(Debug)]
 pub struct Closure {
-    pub ast_fn: NonNull<ast::Function>,
+    pub rt_fn: Rc<RtFunction>,
     pub default_vals: Vec<Value>,
     pub upvalues: Vec<Rc<RefCell<Value>>>,
     // TODO: This should be weak
@@ -443,7 +444,7 @@ pub struct Closure {
 
 impl Closure {
     pub fn new(
-        ast_fn: &ast::Function,
+        ast_fn: Rc<RtFunction>,
         default_vals: Vec<Value>,
         // parent_rt: &FuncRuntime,
         root: Value,
@@ -464,9 +465,9 @@ impl Closure {
         // }
     }
 
-    pub fn root(ast_fn: &ast::Function, root: Value) -> Self {
+    pub fn root(root_fn: RtFunction, root: Value) -> Self {
         Closure {
-            ast_fn: NonNull::from(ast_fn),
+            rt_fn: Rc::new(root_fn),
             default_vals: Vec::new(),
             root,
             env: None,
@@ -544,7 +545,6 @@ impl Class {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-        span: Span,
     ) -> Result<(), ExecError> {
         match &mut self.fields {
             ClassFields::NoOffsets(fields) => {
@@ -632,7 +632,6 @@ impl Instance {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-        span: Span,
     ) -> Result<(), ExecError> {
         if is_newslot {
             return todo!("Mutating instantiated class");

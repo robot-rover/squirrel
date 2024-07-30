@@ -8,7 +8,7 @@ pub mod lexer;
 pub mod parser;
 pub mod util;
 pub mod vm;
-pub mod walker;
+// pub mod walker;
 
 #[cfg(test)]
 pub mod test_macro;
