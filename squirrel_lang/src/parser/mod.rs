@@ -10,17 +10,16 @@ use pratt::{parse_expr, parse_expr_line, parse_expr_token};
 use self::ast::{Expr, Function, Literal, Statement};
 
 use crate::{
-    context::{IntoSquirrelErrorContext, Span, SquirrelErrorContext},
+    context::{Span, SquirrelError, SquirrelErrorRendered},
     lexer::{SpannedLexer, Token},
 };
 
-pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorContext> {
+pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorRendered> {
     let mut lexer = SpannedLexer::new(contents, path);
 
     let (root_fn_body, fn_locals) = lexer.fn_scoped(iter::empty(), true, |lexer| {
         let stmts = parse_statements(lexer, |tok| tok == None)
-            .map_err(|err| err.with_context(&lexer))
-            .map_err(|err| err.with_context(contents))?;
+            .map_err(|err| err.with_context(&lexer).render(lexer))?;
         Ok(Statement::block(stmts, Span::empty(), Span::empty()))
     })?;
     assert!(
@@ -598,20 +597,20 @@ pub mod error {
     impl ParseError {
         pub fn with_context(self, ctx: &SpannedLexer) -> SquirrelError {
             match self {
-                ParseError::UnexpectedToken(tok, span, backtrace) => SquirrelError::new(
-                    ctx.get_file_name().to_string(),
+                ParseError::UnexpectedToken(tok, span, backtrace) => SquirrelError::new_bt(
+                    ctx.get_file_id(),
                     span.into(),
                     format!("Unexpected token {:?}", tok),
                     backtrace,
                 ),
-                ParseError::UnexpectedEof(backtrace) => SquirrelError::new(
-                    ctx.get_file_name().to_string(),
+                ParseError::UnexpectedEof(backtrace) => SquirrelError::new_bt(
+                    ctx.get_file_id(),
                     (ctx.current_offset()..ctx.current_offset()).into(),
                     format!("Unexpected eof"),
                     backtrace,
                 ),
-                ParseError::SyntaxError(message, span, backtrace) => SquirrelError::new(
-                    ctx.get_file_name().to_string(),
+                ParseError::SyntaxError(message, span, backtrace) => SquirrelError::new_bt(
+                    ctx.get_file_id(),
                     span.into(),
                     format!("Syntax Error: {:?}", message),
                     backtrace,
@@ -620,8 +619,8 @@ pub mod error {
                     target,
                     target_kind,
                     backtrace,
-                } => SquirrelError::new(
-                    ctx.get_file_name().to_string(),
+                } => SquirrelError::new_bt(
+                    ctx.get_file_id(),
                     target,
                     format!("Invalid assignment target: {}", target_kind),
                     backtrace,

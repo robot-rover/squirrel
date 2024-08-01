@@ -810,7 +810,10 @@ mod tests {
         let test_name = format!("compiler-{}", file_name.replace("/", "-"));
         let test_desc = format!("Compiler test for {}", file_name);
 
-        let ast = parse(file_contents, file_name.to_string()).unwrap();
+        let ast = match parse(file_contents, file_name.to_string()) {
+            Ok(ast) => ast,
+            Err(err) => panic!("{}", err),
+        };
 
         let actual_code = compile_function(&ast);
 

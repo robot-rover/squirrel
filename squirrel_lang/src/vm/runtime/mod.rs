@@ -10,7 +10,11 @@ use std::{
 use ariadne::{Cache, Source};
 use hashbrown::HashMap;
 
-use crate::{context::SquirrelError, parser::ast, util::WriteOption};
+use crate::{
+    context::{SquirrelError, SquirrelErrorRendered},
+    parser::ast,
+    util::WriteOption,
+};
 
 use super::{
     bytecode::{
@@ -237,7 +241,7 @@ pub fn run<'a>(
     file_name: &str,
     stdout: Option<&mut dyn io::Write>,
     args: impl IntoIterator<Item = &'a str>,
-) {
+) -> Result<(), SquirrelErrorRendered> {
     assert_eq!(
         root_file.code.num_params, 0,
         "root function must have 0 parameters"
@@ -274,16 +278,16 @@ pub fn run<'a>(
         locals,
     });
 
-    run_vm(&mut state);
+    run_vm(&mut state).map_err(|err| err.render(&mut state))
 }
 
-fn run_vm(state: &mut VMState) {
+fn run_vm(state: &mut VMState) -> Result<(), SquirrelError> {
     loop {
         let inst = {
             let frame = if let Some(frame) = state.call_stack.last_mut() {
                 frame
             } else {
-                break;
+                break Ok(());
             };
             let ip = frame.ip;
             frame.ip += 1;
@@ -304,7 +308,9 @@ fn run_vm(state: &mut VMState) {
             Inst::Misc(m) => run_misc(state, m),
             Inst::Unary(u) => run_unary(state, u),
         };
-        res.unwrap()
+        if let Err(err) = res {
+            return Err(err.with_context(state.frame().func.source_file_id, &mut *state));
+        }
     }
 }
 
@@ -313,10 +319,7 @@ mod tests {
     use std::iter;
 
     use super::*;
-    use crate::{
-        context::IntoSquirrelErrorContext, parser::parse, test_foreach, test_util::exchange_str,
-        vm::compiler::compile,
-    };
+    use crate::{parser::parse, test_foreach, test_util::exchange_str, vm::compiler::compile};
 
     test_foreach!(sample_test);
 
@@ -326,7 +329,7 @@ mod tests {
 
         let actual_ast = match parse(file_contents, file_name.to_string()) {
             Ok(ast) => ast,
-            Err(err) => panic!("{}", err),
+            Err(err) => panic!("{}", todo!()),
         };
 
         let actual_code = compile(
@@ -337,7 +340,11 @@ mod tests {
         println!("{:#?}", actual_code.code);
 
         let mut output = Vec::new();
-        run(actual_code, file_name, Some(&mut output), iter::empty());
+        let run_res = run(actual_code, file_name, Some(&mut output), iter::empty());
+
+        if let Err(err) = run_res {
+            panic!("{}", err);
+        }
 
         let actual_str = String::from_utf8(output).expect("Invalid UTF-8 in test output");
         #[cfg(not(miri))]

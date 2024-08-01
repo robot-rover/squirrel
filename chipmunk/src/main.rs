@@ -9,7 +9,7 @@ fn main() {
     let ast = match ast {
         Ok(ast) => ast,
         Err(e) => {
-            println!("Failed to parse file:\n{}", e);
+            println!("Failed to parse file:\n{}", todo!());
             std::process::exit(1);
         }
     };

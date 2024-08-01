@@ -4,14 +4,14 @@ use std::{
     str::FromStr,
 };
 
-use ariadne::{Label, Report, ReportKind};
+use ariadne::{Cache, Label, Report, ReportKind, Source};
 use hashbrown::HashMap;
 use logos::{Lexer, Logos, Skip};
 use serde::{Deserialize, Serialize};
 
-use crate::parser::error::ParseError;
+use crate::{context::render_report, parser::error::ParseError};
 
-use crate::context::{DisplayReport, Span, SquirrelError};
+use crate::context::{Span, SquirrelError};
 
 use self::error::{LexError, LexResult};
 
@@ -506,18 +506,52 @@ impl<'s> LocalResolution<'s> {
 }
 
 pub struct SpannedLexer<'s> {
+    file_id: usize,
     logos: logos::Lexer<'s, Token<'s>>,
     stored_next: Option<(Token<'s>, Span)>,
     locals: LocalResolution<'s>,
+    source: Source<&'s str>,
+}
+
+impl<'s> Cache<usize> for SpannedLexer<'s> {
+    type Storage = &'s str;
+
+    fn fetch(
+        &mut self,
+        id: &usize,
+    ) -> Result<&ariadne::Source<Self::Storage>, Box<dyn std::fmt::Debug + '_>> {
+        if *id == self.file_id {
+            Ok(&self.source)
+        } else {
+            Err(Box::new(format!(
+                "Invalid file id: {} (expected: {})",
+                id, self.file_id
+            )))
+        }
+    }
+
+    fn display<'a>(&self, id: &'a usize) -> Option<Box<dyn std::fmt::Display + 'a>> {
+        if self.file_id == *id {
+            Some(Box::new(self.logos.extras.file_name.clone()))
+        } else {
+            None
+        }
+    }
 }
 
 impl<'s> SpannedLexer<'s> {
     pub fn new(input: &'s str, file_name: String) -> Self {
         Self {
+            file_id: 0,
             logos: Token::lexer_with_extras(input, LexerContext::new(file_name)),
             stored_next: None,
             locals: LocalResolution::new(),
+            source: Source::from(input),
         }
+    }
+
+    pub fn get_file_id(&self) -> usize {
+        self.file_id
     }
 
     pub fn lcl(&mut self) -> &mut LocalResolution<'s> {
@@ -575,9 +609,7 @@ impl<'s> SpannedLexer<'s> {
                 let span = self.logos.span().into();
                 Some((token, span))
             }
-            Some(Err(err)) => {
-                return Err(err.with_context(&self.logos, self.get_file_name().to_string()))
-            }
+            Some(Err(err)) => return Err(err.with_context(&self.logos, self.file_id)),
             None => None,
         };
         self.stored_next = op;
@@ -667,7 +699,7 @@ impl<'s> SpannedLexer<'s> {
             .finish();
         println!(
             "{}",
-            DisplayReport::new(&report, self.get_file_name(), self.logos.source())
+            render_report(&report, self.get_file_name(), self.logos.source())
         );
     }
 }
@@ -740,7 +772,7 @@ mod error {
         pub fn with_context<'s>(
             self,
             lexer: &Lexer<'s, Token<'s>>,
-            file_name: String,
+            file_id: usize,
         ) -> SquirrelError {
             let token_location = lexer.span().into();
             let message = match self {
@@ -754,7 +786,7 @@ mod error {
                 LexError::General(msg) => msg,
                 LexError::UnterminatedString => "String missing termination character".to_string(),
             };
-            SquirrelError::new(file_name, token_location, message, SqBacktrace::new())
+            SquirrelError::new_bt(file_id, token_location, message, SqBacktrace::new())
         }
     }
 
@@ -773,8 +805,6 @@ mod error {
 
 #[cfg(test)]
 mod tests {
-    use crate::context::IntoSquirrelErrorContext;
-
     use super::error::LexResult;
 
     use crate::test_foreach;
@@ -865,7 +895,7 @@ mod tests {
         let tokens = spanned_lexer.by_ref().collect::<Result<Vec<_>, _>>();
         let tokens = match tokens {
             Ok(tokens) => tokens,
-            Err(e) => panic!("{:#}", e.with_context(spanned_lexer.get_source())),
+            Err(e) => panic!("{}", e.render(&mut spanned_lexer)),
         };
 
         let actual_data = tokens

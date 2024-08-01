@@ -1,5 +1,7 @@
 use std::ops::Range;
 
+use ariadne::{Cache, Color};
+
 use crate::context::{Span, SquirrelError};
 
 use super::value::Value;
@@ -163,196 +165,256 @@ pub enum ExecError {
 }
 
 impl ExecError {
-    // fn with_context(self, file_name: String) -> SquirrelError {
-    //     match self {
-    //         ExecError::UndefinedVariable(ident, bt) => SquirrelError::new(
-    //             file_name,
-    //             ident.1,
-    //             format!("Undefined variable: '{}'", ident.0),
-    //             bt,
-    //         ),
-    //         ExecError::IllegalKeyword(span, bt) => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             format!("Keyword is not valid in this context"),
-    //             bt,
-    //         ),
-    //         ExecError::WrongArgCount {
-    //             call_info,
-    //             expected,
-    //             got,
-    //             definition_span,
-    //             bt,
-    //         } => {
-    //             let CallInfo {
-    //                 func_span,
-    //                 call_span,
-    //             } = call_info;
-    //             let mut labels = vec![
-    //                 (
-    //                     func_span,
-    //                     if expected.start == expected.end {
-    //                         format!("Function expected {} arguments", expected.start)
-    //                     } else {
-    //                         format!(
-    //                             "Function expected {} to {} arguments",
-    //                             expected.start, expected.end
-    //                         )
-    //                     },
-    //                     Color::Blue,
-    //                 ),
-    //                 (call_span, format!("Call has {} arguments", got), Color::Red),
-    //             ];
-    //             if let Some(dspan) = definition_span {
-    //                 labels.push((dspan, "Function defined here".to_string(), Color::Green));
-    //             }
-    //             SquirrelError::new_labels(
-    //                 file_name,
-    //                 format!("Function called with incorrect number of arguments"),
-    //                 labels,
-    //                 bt,
-    //             )
-    //         }
-    //         ExecError::UndefinedField(span, val, bt) => {
-    //             SquirrelError::new(file_name, span, format!("Undefined field: {}", val), bt)
-    //         }
-    //         ExecError::UnhashableType { kind, span, bt } => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             format!("A value of type '{}' is not hashable", kind),
-    //             bt,
-    //         ),
-    //         ExecError::IllegalOperation {
-    //             op,
-    //             op_span,
-    //             lhs,
-    //             rhs,
-    //             bt,
-    //         } => {
-    //             let is_binary = rhs.is_some();
-    //             let mut labels = vec![
-    //                 (lhs.1, format!("Operand of type '{}'", lhs.0), Color::Red),
-    //                 (op_span, format!("Operator"), Color::Blue),
-    //             ];
-    //             if let Some(rhs) = rhs {
-    //                 labels.push((rhs.1, format!("Operand of type '{}'", rhs.0), Color::Red));
-    //             }
-    //             SquirrelError::new_labels(
-    //                 file_name,
-    //                 format!(
-    //                     "Illegal type{} for '{}' operator",
-    //                     if is_binary { "s" } else { "" },
-    //                     op
-    //                 ),
-    //                 labels,
-    //                 bt,
-    //             )
-    //         }
-    //         ExecError::WrongArgType {
-    //             call_info,
-    //             arg_index,
-    //             expected,
-    //             got,
-    //             bt,
-    //         } => {
-    //             let CallInfo {
-    //                 func_span,
-    //                 call_span,
-    //             } = call_info;
-    //             SquirrelError::new_labels(
-    //                 file_name,
-    //                 format!("Argument {} has the wrong type", arg_index),
-    //                 vec![
-    //                     (
-    //                         call_span,
-    //                         format!("Expected type: '{}'", expected),
-    //                         Color::Red,
-    //                     ),
-    //                     (call_span, format!("Got type: '{}'", got), Color::Red),
-    //                 ],
-    //                 bt,
-    //             )
-    //         }
-    //         ExecError::AssertionFailed(span, message, bt) => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             if let Some(message) = message {
-    //                 format!("Assertion failed: {}", message)
-    //             } else {
-    //                 "Assertion failed".to_string()
-    //             },
-    //             bt,
-    //         ),
-    //         ExecError::NumberParseError(span, message, bt) => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             format!("Failed to parse number: {}", message),
-    //             bt,
-    //         ),
-    //         ExecError::IndexOutOfBounds {
-    //             index,
-    //             len,
-    //             span,
-    //             bt,
-    //         } => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             format!("Index '{}' out of bounds for length '{}'", index, len),
-    //             bt,
-    //         ),
-    //         ExecError::WrongThisType {
-    //             call_info,
-    //             expected,
-    //             got,
-    //             bt,
-    //         } => SquirrelError::new_labels(
-    //             file_name,
-    //             format!(
-    //                 "Expected 'this' to be of type '{}', got '{}'",
-    //                 expected, got
-    //             ),
-    //             vec![
-    //                 (call_info.call_span, "This call".to_string(), Color::Blue),
-    //                 (call_info.func_span, "This function".to_string(), Color::Red),
-    //             ],
-    //             bt,
-    //         ),
-    //         ExecError::UniterableType { kind, span, bt } => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             format!("A value of type '{}' is not iterable", kind),
-    //             bt,
-    //         ),
-    //         ExecError::MutatingInstantiatedClass(span, bt) => SquirrelError::new(
-    //             file_name, span, "Cannot mutate an instantiated class".to_string(), bt
-    //         ),
-    //         ExecError::ExtendingNonClass(span, bt) => SquirrelError::new(
-    //             file_name, span, "Cannot extend a non-class".to_string(), bt
-    //         ),
-    //         ExecError::MissingMetamethod { obj_span, op_span, name, op, bt } => SquirrelError::new_labels(
-    //             file_name,
-    //             format!("Could not find metamethod '{}', which is needed to perform operation '{}'", name, op),
-    //             vec![
-    //                 (obj_span, format!("Object (missing '{}')", name), Color::Red),
-    //                 (op_span, "Operator".to_string(), Color::Blue),
-    //             ],
-    //             bt,
-    //         ),
-    //         ExecError::General(span, message, bt) => SquirrelError::new(
-    //             file_name,
-    //             span,
-    //             message,
-    //             bt
-    //         ),
-    //         ExecError::WrongMetamethodReturnType { obj_span, op_span, mm_name, expected, got, bt } => SquirrelError::new_labels(
-    //             file_name,
-    //             format!("Metamethod '{}' must return '{}', got '{}'", mm_name, expected, got),
-    //             vec![
-    //                 (obj_span, format!("Object"), Color::Red),
-    //                 (op_span, format!("Operator"), Color::Blue),
-    //             ],
-    //             bt
-    //         ),
-    //     }
-    // }
+    fn get_source_literal<C: Cache<usize>>(cache: &mut C, file_id: usize, span: Span) -> &str {
+        cache
+            .fetch(&file_id)
+            .expect("Illegal file ID")
+            .text()
+            .get(Range::<usize>::from(span))
+            .expect("Span out of range")
+    }
+
+    pub fn with_context<C: Cache<usize>>(self, file_id: usize, mut cache: C) -> SquirrelError {
+        match self {
+            ExecError::UndefinedVariable(ident) => SquirrelError::new(
+                file_id,
+                ident,
+                format!(
+                    "Undefined variable: '{}'",
+                    ExecError::get_source_literal(&mut cache, file_id, ident)
+                ),
+            ),
+            ExecError::IllegalKeyword(span, kw) => SquirrelError::new(
+                file_id,
+                span,
+                format!("The heyword '{}' is not valid in this context", kw),
+            ),
+            ExecError::WrongArgCount {
+                call_info,
+                expected,
+                def_span,
+            } => {
+                let CallInfo {
+                    func_span,
+                    call_span,
+                    arg_spans,
+                } = call_info;
+                let mut labels = vec![
+                    (
+                        func_span,
+                        if expected.start == expected.end {
+                            format!("Function expected {} arguments", expected.start)
+                        } else {
+                            format!(
+                                "Function expected {} to {} arguments",
+                                expected.start, expected.end
+                            )
+                        },
+                        Color::Blue,
+                    ),
+                    (
+                        call_span,
+                        format!("Call has {} arguments", arg_spans.len()),
+                        Color::Red,
+                    ),
+                ];
+                // TODO: Support different file
+                if let Some(dspan) = def_span {
+                    labels.push((dspan, "Function defined here".to_string(), Color::Green));
+                }
+                SquirrelError::new_labels(
+                    file_id,
+                    format!("Function called with incorrect number of arguments"),
+                    labels,
+                )
+            }
+            ExecError::UndefinedField {
+                parent_span,
+                field_span,
+                field,
+            } => SquirrelError::new_labels(
+                file_id,
+                format!("Undefined field: '{}'", field),
+                vec![
+                    (parent_span, "Parent object".to_string(), Color::Blue),
+                    (field_span, "Field".to_string(), Color::Red),
+                ],
+            ),
+            ExecError::UnhashableType { value, span } => SquirrelError::new(
+                file_id,
+                span,
+                format!("A value of type '{}' is not hashable", value.type_str()),
+            ),
+            ExecError::IllegalOperation {
+                op_name,
+                op_span,
+                lhs,
+                rhs,
+            } => {
+                let is_binary = rhs.is_some();
+                let mut labels = vec![
+                    (lhs.1, format!("Operand of type '{}'", lhs.0), Color::Red),
+                    (op_span, format!("Operator"), Color::Blue),
+                ];
+                if let Some(rhs) = rhs {
+                    labels.push((rhs.1, format!("Operand of type '{}'", rhs.0), Color::Red));
+                }
+                SquirrelError::new_labels(
+                    file_id,
+                    format!(
+                        "Illegal type{} for '{}' operator",
+                        if is_binary { "s" } else { "" },
+                        op_name
+                    ),
+                    labels,
+                )
+            }
+            ExecError::WrongArgType {
+                call_info,
+                arg_index,
+                expected,
+                got,
+            } => {
+                let CallInfo {
+                    func_span,
+                    call_span,
+                    arg_spans,
+                } = call_info;
+                SquirrelError::new_labels(
+                    file_id,
+                    format!("Argument {} has the wrong type", arg_index),
+                    vec![
+                        (
+                            call_span,
+                            format!("Expected type: '{}'", expected),
+                            Color::Red,
+                        ),
+                        (call_span, format!("Got type: '{}'", got), Color::Red),
+                    ],
+                )
+            }
+            ExecError::AssertionFailed(span, message) => SquirrelError::new(
+                file_id,
+                span,
+                if let Some(message) = message {
+                    format!("Assertion failed: {}", message)
+                } else {
+                    "Assertion failed".to_string()
+                },
+            ),
+            ExecError::NumberParseError(span, message) => SquirrelError::new(
+                file_id,
+                span,
+                format!("Failed to parse number: {}", message),
+            ),
+            ExecError::IndexOutOfBounds { index, len, span } => SquirrelError::new(
+                file_id,
+                span,
+                format!("Index '{}' out of bounds for length '{}'", index, len),
+            ),
+            ExecError::WrongThisType {
+                call_info,
+                expected,
+                got,
+            } => SquirrelError::new_labels(
+                file_id,
+                format!(
+                    "Expected 'this' to be of type '{}', got '{}'",
+                    expected, got
+                ),
+                vec![
+                    (call_info.call_span, "This call".to_string(), Color::Blue),
+                    (call_info.func_span, "This function".to_string(), Color::Red),
+                ],
+            ),
+            ExecError::UniterableType { span, value } => SquirrelError::new(
+                file_id,
+                span,
+                format!("A value of type '{}' is not iterable", value.type_str()),
+            ),
+            ExecError::MutatingInstantiatedClass {
+                class_span,
+                assign_span,
+            } => SquirrelError::new_labels(
+                file_id,
+                "Cannot mutate an instantiated class".to_string(),
+                vec![
+                    (class_span, "Class".to_string(), Color::Blue),
+                    (assign_span, "Assignment".to_string(), Color::Red),
+                ],
+            ),
+            ExecError::ExtendingNonClass { span, non_class } => SquirrelError::new_labels(
+                file_id,
+                "Cannot extend a non-class".to_string(),
+                vec![(
+                    span,
+                    format!("Value (of type {})", non_class.type_str()),
+                    Color::Red,
+                )],
+            ),
+            ExecError::MissingMetamethod {
+                obj_span,
+                op_span,
+                op_name,
+                mm_name,
+            } => SquirrelError::new_labels(
+                file_id,
+                format!(
+                    "Could not find metamethod '{}', which is needed to perform operation '{}'",
+                    mm_name, op_name
+                ),
+                vec![
+                    (
+                        obj_span,
+                        format!("Object (missing '{}')", mm_name),
+                        Color::Red,
+                    ),
+                    (op_span, "Operator".to_string(), Color::Blue),
+                ],
+            ),
+            ExecError::General(span, message) => SquirrelError::new(file_id, span, message),
+            ExecError::WrongMetamethodReturnType {
+                obj_span,
+                op_span,
+                mm_name,
+                expected,
+                got,
+            } => SquirrelError::new_labels(
+                file_id,
+                format!(
+                    "Metamethod '{}' must return '{}', got '{}'",
+                    mm_name,
+                    expected,
+                    got.type_str()
+                ),
+                vec![
+                    (obj_span, format!("Object"), Color::Red),
+                    (op_span, format!("Operator"), Color::Blue),
+                ],
+            ),
+            ExecError::UncallableType { call_info, not_fn } => SquirrelError::new(
+                file_id,
+                call_info.func_span,
+                format!("Value of type '{}' is not callable", not_fn.type_str()),
+            ),
+            ExecError::WrongIndexType {
+                span,
+                expected,
+                got,
+            } => SquirrelError::new(
+                file_id,
+                span,
+                format!(
+                    "Expected index of type '{}', got '{}'",
+                    expected,
+                    got.type_str()
+                ),
+            ),
+            ExecError::CannotModifyType { span, this } => SquirrelError::new(
+                file_id,
+                span,
+                format!("Cannot modify the type '{}'", this.type_str()),
+            ),
+        }
+    }
 }
