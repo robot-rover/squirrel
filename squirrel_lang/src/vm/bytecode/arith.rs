@@ -3,51 +3,65 @@ use std::{
     ops::{Add, Div, Mul, Rem, Sub},
 };
 
-use super::{Inst, Reg};
-use crate::vm::{
-    bytecode::context::BinaryOpContext, error::ExecResult, runtime::VMState, value::Value,
+use super::{Inst, InstCtx, Reg};
+use crate::{
+    impl_sub_inst,
+    vm::{bytecode::context::BinaryOpContext, error::ExecResult, runtime::VMState, value::Value},
 };
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 enum ArithOp {
-    ADD,
-    SUB,
-    MUL,
-    DIV,
-    MODU,
-    POW,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Modu,
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+impl ArithOp {
+    fn name(&self) -> &'static str {
+        match self {
+            Self::Add => "+",
+            Self::Sub => "-",
+            Self::Mul => "*",
+            Self::Div => "/",
+            Self::Modu => "%",
+        }
+    }
+}
+
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub struct InstArith {
     op: ArithOp,
     reg: Reg,
-    ctx: BinaryOpContext,
 }
+
+impl_sub_inst!(type Inst::Arith(InstArithCtx<InstArith, BinaryOpContext>));
 
 macro_rules! arith_constructor {
     ($name:ident, $op:ident) => {
         pub fn $name(reg: Reg, ctx: BinaryOpContext) -> Self {
-            Inst::Arith(InstArith {
-                op: ArithOp::$op,
-                reg,
+            Self::Arith(InstArithCtx {
+                data: InstArith {
+                    op: ArithOp::$op,
+                    reg,
+                },
                 ctx,
             })
         }
     };
 }
 
-impl Inst {
-    arith_constructor!(add, ADD);
-    arith_constructor!(sub, SUB);
-    arith_constructor!(mul, MUL);
-    arith_constructor!(div, DIV);
-    arith_constructor!(modu, MODU);
-    arith_constructor!(pow, POW);
+impl InstCtx {
+    arith_constructor!(add, Add);
+    arith_constructor!(sub, Sub);
+    arith_constructor!(mul, Mul);
+    arith_constructor!(div, Div);
+    arith_constructor!(modu, Modu);
 }
 
-pub fn run_arith(state: &mut VMState, inst: &InstArith) -> ExecResult {
+pub fn run_arith(state: &mut VMState, inst: InstArith) -> ExecResult {
     let frame = state.frame();
     let lhs = frame.get_reg(inst.reg).clone();
     let rhs = state.take_acc();
@@ -69,26 +83,14 @@ pub fn run_arith(state: &mut VMState, inst: &InstArith) -> ExecResult {
         }
         (Value::Instance(inst), other) => todo!("Metamethods"),
         (Value::Table(inst), other) => todo!("Metamethods"),
-        other => todo!("Error handling"),
+        other => {
+            return Err(state
+                .get_context(inst)
+                .illegal_operation(inst.op.name(), other.0, other.1))
+        }
     }
 
     Ok(())
-}
-
-trait ArithPow {
-    fn pow(self, rhs: Self) -> Self;
-}
-
-impl ArithPow for i64 {
-    fn pow(self, rhs: Self) -> Self {
-        self.pow(rhs.try_into().unwrap())
-    }
-}
-
-impl ArithPow for f64 {
-    fn pow(self, rhs: Self) -> Self {
-        self.powf(rhs)
-    }
 }
 
 fn run_concat<L, R>(lhs: L, rhs: R) -> Value
@@ -106,15 +108,13 @@ where
         + Mul<Output = T>
         + Div<Output = T>
         + Rem<Output = T>
-        + ArithPow
         + Into<Value>,
 {
     match op {
-        ArithOp::ADD => (lhs + rhs).into(),
-        ArithOp::SUB => (lhs - rhs).into(),
-        ArithOp::MUL => (lhs * rhs).into(),
-        ArithOp::DIV => (lhs / rhs).into(),
-        ArithOp::MODU => (lhs % rhs).into(),
-        ArithOp::POW => lhs.pow(rhs).into(),
+        ArithOp::Add => (lhs + rhs).into(),
+        ArithOp::Sub => (lhs - rhs).into(),
+        ArithOp::Mul => (lhs * rhs).into(),
+        ArithOp::Div => (lhs / rhs).into(),
+        ArithOp::Modu => (lhs % rhs).into(),
     }
 }

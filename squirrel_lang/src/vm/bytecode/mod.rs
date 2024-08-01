@@ -9,14 +9,16 @@ mod load_store;
 mod misc;
 mod unary;
 
-pub use arith::{run_arith, InstArith};
-pub use bitwise::{run_bitwise, InstBitwise};
-pub use call::{run_call, InstCall};
-pub use compare::{run_compare, InstCompare};
-pub use get_set::{run_get, run_set, InstGet, InstSet};
-pub use jump_ret::{run_jump, run_ret, InstJump, InstRet, JumpKind};
-pub use load_store::{run_load, run_store, InstLoad, InstStore};
+pub use arith::{run_arith, InstArith, InstArithCtx};
+pub use bitwise::{run_bitwise, InstBitwise, InstBitwiseCtx};
+pub use call::{run_call, InstCall, InstCallCtx};
+pub use compare::{run_compare, InstCompare, InstCompareCtx};
+pub use get_set::{run_get, run_set, InstGet, InstGetCtx, InstSet, InstSetCtx};
+pub use jump_ret::{run_jump, run_ret, InstJump, InstJumpCtx, InstRet, InstRetCtx, JumpKind};
+pub use load_store::{run_load, run_store, InstLoad, InstLoadCtx, InstStore, InstStoreCtx};
+use misc::InstMiscCtx;
 pub use misc::{run_misc, InstMisc};
+use unary::InstUnaryCtx;
 pub use unary::{run_unary, InstUnary};
 
 use serde::{Deserialize, Serialize};
@@ -93,7 +95,6 @@ pub enum Tag {
     MUL,  // acc = reg[data] * acc
     DIV,  // acc = reg[data] / acc
     MODU, // acc = reg[data] % acc
-    POW,  // acc = reg[data] ^ acc
 
     // Logical Instructions
     LNOT, // acc = !acc
@@ -153,10 +154,57 @@ pub enum Tag {
     ROOT, // acc = root
 }
 
-pub type Data = u8;
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SubInst<D, C> {
+    pub data: D,
+    pub ctx: C,
+}
+
+impl<D: Copy, C> SubInst<D, C> {
+    pub fn strip(&self) -> D {
+        self.data
+    }
+}
+
+pub trait SubInstGetContext {
+    type Context;
+    fn get_ctx(inst: &InstCtx) -> Option<&Self::Context>;
+}
+
+#[macro_export]
+macro_rules! impl_sub_inst {
+    (type Inst::$var:ident($name:ident<$data:ty, $context:ty>)) => {
+        pub type $name = crate::vm::bytecode::SubInst<$data, $context>;
+
+        impl crate::vm::bytecode::SubInstGetContext for $data {
+            type Context = $context;
+            fn get_ctx(inst: &crate::vm::bytecode::InstCtx) -> Option<&Self::Context> {
+                match inst {
+                    crate::vm::bytecode::InstCtx::$var(sub) => Some(&sub.ctx),
+                    _ => None,
+                }
+            }
+        }
+    };
+}
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 #[repr(C)]
+pub enum InstCtx {
+    Arith(InstArithCtx),
+    Bitwise(InstBitwiseCtx),
+    Call(InstCallCtx),
+    Compare(InstCompareCtx),
+    Get(InstGetCtx),
+    Set(InstSetCtx),
+    Jump(InstJumpCtx),
+    Ret(InstRetCtx),
+    Load(InstLoadCtx),
+    Store(InstStoreCtx),
+    Misc(InstMiscCtx),
+    Unary(InstUnaryCtx),
+}
+
 pub enum Inst {
     Arith(InstArith),
     Bitwise(InstBitwise),
@@ -170,4 +218,23 @@ pub enum Inst {
     Store(InstStore),
     Misc(InstMisc),
     Unary(InstUnary),
+}
+
+impl InstCtx {
+    pub fn strip(&self) -> Inst {
+        match self {
+            InstCtx::Arith(arith) => Inst::Arith(arith.strip()),
+            InstCtx::Bitwise(bitwise) => Inst::Bitwise(bitwise.strip()),
+            InstCtx::Call(call) => Inst::Call(call.strip()),
+            InstCtx::Compare(compare) => Inst::Compare(compare.strip()),
+            InstCtx::Get(get) => Inst::Get(get.strip()),
+            InstCtx::Set(set) => Inst::Set(set.strip()),
+            InstCtx::Jump(jump) => Inst::Jump(jump.strip()),
+            InstCtx::Ret(ret) => Inst::Ret(ret.strip()),
+            InstCtx::Load(load) => Inst::Load(load.strip()),
+            InstCtx::Store(store) => Inst::Store(store.strip()),
+            InstCtx::Misc(misc) => Inst::Misc(misc.strip()),
+            InstCtx::Unary(unary) => Inst::Unary(unary.strip()),
+        }
+    }
 }

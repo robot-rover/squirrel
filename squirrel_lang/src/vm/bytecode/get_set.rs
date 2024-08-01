@@ -2,149 +2,226 @@ use serde::{Deserialize, Serialize};
 
 use crate::{
     context::Span,
-    vm::{error::ExecResult, runtime::VMState, value::Value},
+    impl_sub_inst,
+    vm::{
+        error::{ExecError, ExecResult},
+        runtime::VMState,
+        value::{HashValue, SetFieldError, TypeName, Value},
+    },
 };
 
 use super::{
     context::{
         BinaryOpContext, GetFieldContext, GetIdentContext, SetFieldContext, SetIdentContext,
     },
-    Const, FunIdx, Inst, Local, Reg, Tag,
+    Const, FunIdx, Inst, InstCtx, Local, Reg, SubInst, SubInstGetContext, Tag,
 };
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub enum InstGet {
-    GET(GetIdentContext),
-    GETC(Const, GetIdentContext),
-    GETF(Reg, GetFieldContext),
-    GETFC(Const, GetFieldContext),
-    ISIN(Reg, BinaryOpContext),
+macro_rules! impl_sub_sub_inst {
+    ($par_var:ident $parent:ident::$var:ident($name:ident $(($($field:ty),+))?); $ctx:ty) => {
+        #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+        pub struct $name $(($($field),+))?;
+
+        impl SubInstGetContext for $name {
+            type Context = $ctx;
+            fn get_ctx(inst: &InstCtx) -> Option<&Self::Context> {
+                match inst {
+                    InstCtx::$par_var($parent::$var(.., ctx)) => Some(ctx),
+                    _ => None,
+                }
+            }
+        }
+    };
 }
 
-impl Inst {
-    pub fn get(ctx: GetIdentContext) -> Inst {
-        Inst::Get(InstGet::GET(ctx))
-    }
-
-    pub fn getc(constant: Const, ctx: GetIdentContext) -> Inst {
-        Inst::Get(InstGet::GETC(constant, ctx))
-    }
-
-    pub fn getf(reg_idx: Reg, ctx: GetFieldContext) -> Inst {
-        Inst::Get(InstGet::GETF(reg_idx, ctx))
-    }
-
-    pub fn getfc(constant: Const, ctx: GetFieldContext) -> Inst {
-        Inst::Get(InstGet::GETFC(constant, ctx))
-    }
-
-    pub fn isin(reg_idx: Reg, ctx: BinaryOpContext) -> Inst {
-        Inst::Get(InstGet::ISIN(reg_idx, ctx))
+macro_rules! impl_sub_inst {
+    ($par_var:ident $with_ctx:ident/$wo_ctx:ident {
+        $($variant:ident($data:ident $(($($field:ty),+))?, $ctx:ty)),+ $(,)?
+    }) => {
+        $(
+            impl_sub_sub_inst!($par_var $with_ctx::$variant($data $(($($field),+))?); $ctx);
+        )+
+        #[derive(Clone, Debug, Serialize, Deserialize)]
+        pub enum $with_ctx {
+            $($variant($data, $ctx)),+
+        }
+        #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+        pub enum $wo_ctx {
+            $($variant($data)),+
+        }
+        impl $with_ctx {
+            pub fn strip(&self) -> $wo_ctx {
+                match self {
+                    $(Self::$variant(data, _) => $wo_ctx::$variant(*data)),+
+                }
+            }
+        }
     }
 }
 
-pub fn run_get(state: &mut VMState, inst: &InstGet) -> ExecResult {
+impl_sub_inst!(Get InstGetCtx/InstGet {
+    Getc(Getc(Const), GetIdentContext),
+    Getf(Getf(Reg), GetFieldContext),
+    Getfc(Getfc(Const), GetFieldContext),
+    IsIn(IsIn(Reg), BinaryOpContext),
+});
+
+impl InstCtx {
+    pub fn getc(constant: Const, ctx: GetIdentContext) -> Self {
+        Self::Get(InstGetCtx::Getc(Getc(constant), ctx))
+    }
+
+    pub fn getf(reg_idx: Reg, ctx: GetFieldContext) -> Self {
+        Self::Get(InstGetCtx::Getf(Getf(reg_idx), ctx))
+    }
+
+    pub fn getfc(constant: Const, ctx: GetFieldContext) -> Self {
+        Self::Get(InstGetCtx::Getfc(Getfc(constant), ctx))
+    }
+
+    pub fn isin(reg_idx: Reg, ctx: BinaryOpContext) -> Self {
+        Self::Get(InstGetCtx::IsIn(IsIn(reg_idx), ctx))
+    }
+}
+
+pub fn run_get(state: &mut VMState, inst: InstGet) -> ExecResult {
     let parent = match inst {
-        InstGet::GET(_) | InstGet::GETC(_, _) => state.frame().get_env().clone(),
-        InstGet::GETF(reg, _) | InstGet::ISIN(reg, _) => state.frame().get_reg(*reg).clone(),
-        InstGet::GETFC(_, _) => state.take_acc(),
+        InstGet::Getc(_) => state.frame().get_env().clone(),
+        InstGet::Getf(Getf(reg)) | InstGet::IsIn(IsIn(reg)) => state.frame().get_reg(reg).clone(),
+        InstGet::Getfc(_) => state.take_acc(),
     };
 
     let field = match inst {
-        InstGet::GETC(constant, _) | InstGet::GETFC(constant, _) => {
-            state.frame().get_func().get_constant(*constant).clone()
+        InstGet::Getc(Getc(constant)) | InstGet::Getfc(Getfc(constant)) => {
+            state.frame().get_func().get_constant(constant).clone()
         }
-        InstGet::GET(_) | InstGet::GETF(_, _) | InstGet::ISIN(_, _) => state.take_acc(),
+        InstGet::Getf(_) | InstGet::IsIn(_) => state.take_acc(),
     };
 
-    state.set_acc(
-        parent
-            .get_field(&field.try_into().expect("Error Handling"))
-            .expect("Error Handling")
-            .clone(),
-    );
+    let field = match HashValue::try_from(field) {
+        Ok(hv) => hv,
+        Err(nhv) => match inst {
+            InstGet::Getc(g) => panic!("Getc should be called with a string constant"),
+            InstGet::Getf(g) => return Err(state.get_context(g).unhashable_type(nhv)),
+            InstGet::Getfc(g) => return Err(state.get_context(g).unhashable_type(nhv)),
+            InstGet::IsIn(_) => {
+                // Just return false
+                state.set_acc(Value::Boolean(false));
+                return Ok(());
+            }
+        },
+    };
+
+    let value = match (inst, parent.get_field(&field)) {
+        (InstGet::Getc(g), None) => return Err(state.get_context(g).undefined_variable()),
+        (InstGet::Getf(g), None) => return Err(state.get_context(g).undefined_field(field.into())),
+        (InstGet::Getfc(g), None) => {
+            return Err(state.get_context(g).undefined_field(field.into()))
+        }
+        (InstGet::IsIn(g), option) => Value::boolean(option.is_some()),
+        (_, Some(val)) => val,
+    };
+
+    state.set_acc(value);
 
     Ok(())
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub enum InstSet {
-    SET(Reg, SetIdentContext),
-    SETS(Reg, SetIdentContext),
-    SETC(Const, SetIdentContext),
-    SETCS(Const, SetIdentContext),
-    SETF(Reg, SetFieldContext),
-    SETFS(Reg, SetFieldContext),
-}
+impl_sub_inst!(Set InstSetCtx/InstSet {
+    Setc(Setc(Const, bool), SetIdentContext),
+    Setf(Setf(Reg, bool), SetFieldContext),
+});
 
-impl Inst {
-    pub fn setf(reg_idx: Reg, ctx: SetFieldContext, is_ns: bool) -> Inst {
-        Inst::Set(if is_ns {
-            InstSet::SETFS(reg_idx, ctx)
-        } else {
-            InstSet::SETF(reg_idx, ctx)
-        })
+impl InstCtx {
+    pub fn setf(reg_idx: Reg, ctx: SetFieldContext, is_ns: bool) -> Self {
+        Self::Set(InstSetCtx::Setf(Setf(reg_idx, is_ns), ctx))
     }
 
-    pub fn set(reg_idx: Reg, ctx: SetIdentContext, is_ns: bool) -> Inst {
-        Inst::Set(if is_ns {
-            InstSet::SETS(reg_idx, ctx)
-        } else {
-            InstSet::SET(reg_idx, ctx)
-        })
-    }
-
-    pub fn setc(constant: Const, ctx: SetIdentContext, is_ns: bool) -> Inst {
-        Inst::Set(if is_ns {
-            InstSet::SETCS(constant, ctx)
-        } else {
-            InstSet::SETC(constant, ctx)
-        })
+    pub fn setc(constant: Const, ctx: SetIdentContext, is_ns: bool) -> Self {
+        Self::Set(InstSetCtx::Setc(Setc(constant, is_ns), ctx))
     }
 }
 
-pub fn run_set(state: &mut VMState, inst: &InstSet) -> ExecResult {
+fn run_set_get_hashable(
+    state: &mut VMState,
+    inst: InstSet,
+    value: Value,
+) -> Result<HashValue, ExecError> {
+    match HashValue::try_from(value) {
+        Ok(hv) => Ok(hv),
+        Err(nhv) => match inst {
+            InstSet::Setc(_) => panic!("Setc should be called with a string constant"),
+            InstSet::Setf(s) => Err(state.get_context(s).unhashable_type(nhv)),
+        },
+    }
+}
+
+pub fn run_set(state: &mut VMState, inst: InstSet) -> ExecResult {
     let parent = match inst {
-        InstSet::SET(_, _) | InstSet::SETS(_, _) | InstSet::SETC(_, _) | InstSet::SETCS(_, _) => {
-            state.frame().get_env().clone()
-        }
-        InstSet::SETF(reg, _) | InstSet::SETFS(reg, _) => state.frame().get_reg(*reg).clone(),
+        InstSet::Setc(_) => state.frame().get_env().clone(),
+        InstSet::Setf(Setf(reg, _is_ns)) => state.frame().get_reg(reg).clone(),
     };
 
     let field = match inst {
-        InstSet::SET(reg, _) | InstSet::SETS(reg, _) => state.frame().get_reg(*reg).clone(),
-        InstSet::SETC(constant, _) | InstSet::SETCS(constant, _) => {
-            state.frame().get_func().get_constant(*constant).clone()
+        InstSet::Setc(Setc(constant, _is_ns)) => {
+            state.frame().get_func().get_constant(constant).clone()
         }
-        InstSet::SETF(reg, _) | InstSet::SETFS(reg, _) => state.frame().get_reg(reg.nth(1)).clone(),
+        InstSet::Setf(Setf(reg, _is_ns)) => state.frame().get_reg(reg.nth(1)).clone(),
     };
 
     let is_newslot = match inst {
-        InstSet::SETS(_, _) | InstSet::SETCS(_, _) | InstSet::SETFS(_, _) => true,
-        InstSet::SET(_, _) | InstSet::SETC(_, _) | InstSet::SETF(_, _) => false,
+        InstSet::Setc(Setc(_, is_ns)) => is_ns,
+        InstSet::Setf(Setf(_, is_ns)) => is_ns,
     };
 
+    // TODO: Need to clone here perhaps?
     let value = state.take_acc();
 
-    match (parent, field) {
-        // TODO: Bounds checking
+    let res = match (parent, field) {
         (Value::Array(array), Value::Integer(index)) => {
-            *array.borrow_mut().get_mut(index as usize).unwrap() = value
+            match array.borrow_mut().get_mut(index as usize) {
+                Some(r) => {
+                    *r = value;
+                    Ok(())
+                }
+                None => {
+                    return Err(match inst {
+                        InstSet::Setc(g) => panic!("Setc should be called with a string constant"),
+                        InstSet::Setf(g) => state
+                            .get_context(g)
+                            .index_out_of_bounds(index, array.borrow().len()),
+                    })
+                }
+            }
         }
-        (Value::Array(array), other) => todo!("Error handling"),
-        (Value::Table(table), field) => table
-            .borrow_mut()
-            .set_field(field.try_into().unwrap(), value, is_newslot)
-            .unwrap(),
-        (Value::Class(class), field) => class
-            .borrow_mut()
-            .set_field(field.try_into().unwrap(), value, is_newslot)
-            .unwrap(),
-        (Value::Instance(inst), field) => inst
-            .borrow_mut()
-            .set_field(field.try_into().unwrap(), value, is_newslot)
-            .unwrap(),
-        (other, _) => todo!("Error handling"),
+        (Value::Array(array), other) => {
+            return Err(match inst {
+                InstSet::Setc(g) => panic!("Setc should be called with a string constant"),
+                InstSet::Setf(g) => state
+                    .get_context(g)
+                    .wrong_index_type(<i64 as TypeName>::type_name(), other),
+            })
+        }
+        (Value::Table(table), field) => table.borrow_mut().set_field(
+            run_set_get_hashable(state, inst, field)?,
+            value,
+            is_newslot,
+        ),
+        (Value::Class(class), field) => class.borrow_mut().set_field(
+            run_set_get_hashable(state, inst, field)?,
+            value,
+            is_newslot,
+        ),
+        (Value::Instance(ins), field) => {
+            ins.borrow_mut()
+                .set_field(run_set_get_hashable(state, inst, field)?, value, is_newslot)
+        }
+        (other, _) => {
+            return Err(match inst {
+                InstSet::Setc(g) => state.get_context(g).cannot_modify_type(other),
+                InstSet::Setf(g) => state.get_context(g).cannot_modify_type(other),
+            })
+        }
     };
 
     Ok(())

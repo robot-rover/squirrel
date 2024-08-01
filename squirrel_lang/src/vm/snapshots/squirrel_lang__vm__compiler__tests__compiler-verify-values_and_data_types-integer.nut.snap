@@ -1,0 +1,2160 @@
+---
+source: squirrel_lang/src/vm/compiler.rs
+expression: actual_code
+---
+code:
+  - Load:
+      data:
+        Const: 0
+      ctx:
+        start: 10
+        end: 13
+  - Store:
+      data:
+        Local: 1
+      ctx:
+        start: 6
+        end: 9
+  - Load:
+      data:
+        Const: 1
+      ctx:
+        start: 34
+        end: 40
+  - Store:
+      data:
+        Local: 2
+      ctx:
+        start: 30
+        end: 33
+  - Load:
+      data:
+        Const: 2
+      ctx:
+        start: 65
+        end: 68
+  - Store:
+      data:
+        Local: 3
+      ctx:
+        start: 61
+        end: 64
+  - Load:
+      data:
+        Const: 3
+      ctx:
+        start: 87
+        end: 90
+  - Store:
+      data:
+        Local: 4
+      ctx:
+        start: 83
+        end: 86
+  - Misc:
+      data: Root
+      ctx:
+        start: 104
+        end: 106
+  - Store:
+      data:
+        Reg: 1
+      ctx:
+        start: 104
+        end: 106
+  - Get:
+      Getfc:
+        - 4
+        - parent_span:
+            start: 104
+            end: 106
+          field_span:
+            start: 106
+            end: 111
+  - Store:
+      data:
+        Reg: 0
+      ctx:
+        start: 104
+        end: 111
+  - Load:
+      data:
+        Local: 1
+      ctx:
+        start: 112
+        end: 113
+  - Store:
+      data:
+        Reg: 3
+      ctx:
+        start: 112
+        end: 113
+  - Load:
+      data:
+        Const: 5
+      ctx:
+        start: 116
+        end: 120
+  - Arith:
+      data:
+        op: Add
+        reg: 3
+      ctx:
+        lhs_span:
+          start: 112
+          end: 113
+        op_span:
+          start: 112
+          end: 120
+        rhs_span:
+          start: 116
+          end: 120
+  - Store:
+      data:
+        Reg: 2
+      ctx:
+        start: 112
+        end: 120
+  - Load:
+      data:
+        Reg: 0
+      ctx:
+        start: 104
+        end: 111
+  - Call:
+      data:
+        reg: 1
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 104
+          end: 111
+        call_span:
+          start: 111
+          end: 121
+        args:
+          - start: 112
+            end: 120
+  - Misc:
+      data: Root
+      ctx:
+        start: 122
+        end: 124
+  - Store:
+      data:
+        Reg: 5
+      ctx:
+        start: 122
+        end: 124
+  - Get:
+      Getfc:
+        - 6
+        - parent_span:
+            start: 122
+            end: 124
+          field_span:
+            start: 124
+            end: 129
+  - Store:
+      data:
+        Reg: 4
+      ctx:
+        start: 122
+        end: 129
+  - Load:
+      data:
+        Local: 2
+      ctx:
+        start: 130
+        end: 131
+  - Store:
+      data:
+        Reg: 7
+      ctx:
+        start: 130
+        end: 131
+  - Load:
+      data:
+        Const: 7
+      ctx:
+        start: 134
+        end: 138
+  - Arith:
+      data:
+        op: Add
+        reg: 7
+      ctx:
+        lhs_span:
+          start: 130
+          end: 131
+        op_span:
+          start: 130
+          end: 138
+        rhs_span:
+          start: 134
+          end: 138
+  - Store:
+      data:
+        Reg: 6
+      ctx:
+        start: 130
+        end: 138
+  - Load:
+      data:
+        Reg: 4
+      ctx:
+        start: 122
+        end: 129
+  - Call:
+      data:
+        reg: 5
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 122
+          end: 129
+        call_span:
+          start: 129
+          end: 139
+        args:
+          - start: 130
+            end: 138
+  - Misc:
+      data: Root
+      ctx:
+        start: 140
+        end: 142
+  - Store:
+      data:
+        Reg: 9
+      ctx:
+        start: 140
+        end: 142
+  - Get:
+      Getfc:
+        - 8
+        - parent_span:
+            start: 140
+            end: 142
+          field_span:
+            start: 142
+            end: 147
+  - Store:
+      data:
+        Reg: 8
+      ctx:
+        start: 140
+        end: 147
+  - Load:
+      data:
+        Local: 3
+      ctx:
+        start: 148
+        end: 149
+  - Store:
+      data:
+        Reg: 11
+      ctx:
+        start: 148
+        end: 149
+  - Load:
+      data:
+        Const: 9
+      ctx:
+        start: 152
+        end: 156
+  - Arith:
+      data:
+        op: Add
+        reg: 11
+      ctx:
+        lhs_span:
+          start: 148
+          end: 149
+        op_span:
+          start: 148
+          end: 156
+        rhs_span:
+          start: 152
+          end: 156
+  - Store:
+      data:
+        Reg: 10
+      ctx:
+        start: 148
+        end: 156
+  - Load:
+      data:
+        Reg: 8
+      ctx:
+        start: 140
+        end: 147
+  - Call:
+      data:
+        reg: 9
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 140
+          end: 147
+        call_span:
+          start: 147
+          end: 157
+        args:
+          - start: 148
+            end: 156
+  - Misc:
+      data: Root
+      ctx:
+        start: 158
+        end: 160
+  - Store:
+      data:
+        Reg: 13
+      ctx:
+        start: 158
+        end: 160
+  - Get:
+      Getfc:
+        - 10
+        - parent_span:
+            start: 158
+            end: 160
+          field_span:
+            start: 160
+            end: 165
+  - Store:
+      data:
+        Reg: 12
+      ctx:
+        start: 158
+        end: 165
+  - Load:
+      data:
+        Local: 4
+      ctx:
+        start: 166
+        end: 167
+  - Store:
+      data:
+        Reg: 15
+      ctx:
+        start: 166
+        end: 167
+  - Load:
+      data:
+        Const: 11
+      ctx:
+        start: 170
+        end: 174
+  - Arith:
+      data:
+        op: Add
+        reg: 15
+      ctx:
+        lhs_span:
+          start: 166
+          end: 167
+        op_span:
+          start: 166
+          end: 174
+        rhs_span:
+          start: 170
+          end: 174
+  - Store:
+      data:
+        Reg: 14
+      ctx:
+        start: 166
+        end: 174
+  - Load:
+      data:
+        Reg: 12
+      ctx:
+        start: 158
+        end: 165
+  - Call:
+      data:
+        reg: 13
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 158
+          end: 165
+        call_span:
+          start: 165
+          end: 175
+        args:
+          - start: 166
+            end: 174
+  - Load:
+      data:
+        Const: 12
+      ctx:
+        start: 225
+        end: 229
+  - Store:
+      data:
+        Local: 5
+      ctx:
+        start: 221
+        end: 224
+  - Load:
+      data:
+        Const: 13
+      ctx:
+        start: 240
+        end: 245
+  - Store:
+      data:
+        Local: 6
+      ctx:
+        start: 236
+        end: 239
+  - Load:
+      data:
+        Const: 14
+      ctx:
+        start: 256
+        end: 260
+  - Store:
+      data:
+        Local: 7
+      ctx:
+        start: 252
+        end: 255
+  - Misc:
+      data: Root
+      ctx:
+        start: 262
+        end: 264
+  - Store:
+      data:
+        Reg: 17
+      ctx:
+        start: 262
+        end: 264
+  - Get:
+      Getfc:
+        - 15
+        - parent_span:
+            start: 262
+            end: 264
+          field_span:
+            start: 264
+            end: 269
+  - Store:
+      data:
+        Reg: 16
+      ctx:
+        start: 262
+        end: 269
+  - Load:
+      data:
+        Local: 5
+      ctx:
+        start: 270
+        end: 271
+  - Store:
+      data:
+        Reg: 19
+      ctx:
+        start: 270
+        end: 271
+  - Load:
+      data:
+        Const: 16
+      ctx:
+        start: 274
+        end: 278
+  - Arith:
+      data:
+        op: Add
+        reg: 19
+      ctx:
+        lhs_span:
+          start: 270
+          end: 271
+        op_span:
+          start: 270
+          end: 278
+        rhs_span:
+          start: 274
+          end: 278
+  - Store:
+      data:
+        Reg: 18
+      ctx:
+        start: 270
+        end: 278
+  - Load:
+      data:
+        Reg: 16
+      ctx:
+        start: 262
+        end: 269
+  - Call:
+      data:
+        reg: 17
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 262
+          end: 269
+        call_span:
+          start: 269
+          end: 279
+        args:
+          - start: 270
+            end: 278
+  - Misc:
+      data: Root
+      ctx:
+        start: 280
+        end: 282
+  - Store:
+      data:
+        Reg: 21
+      ctx:
+        start: 280
+        end: 282
+  - Get:
+      Getfc:
+        - 17
+        - parent_span:
+            start: 280
+            end: 282
+          field_span:
+            start: 282
+            end: 287
+  - Store:
+      data:
+        Reg: 20
+      ctx:
+        start: 280
+        end: 287
+  - Load:
+      data:
+        Local: 6
+      ctx:
+        start: 288
+        end: 289
+  - Store:
+      data:
+        Reg: 23
+      ctx:
+        start: 288
+        end: 289
+  - Load:
+      data:
+        Const: 18
+      ctx:
+        start: 292
+        end: 296
+  - Arith:
+      data:
+        op: Add
+        reg: 23
+      ctx:
+        lhs_span:
+          start: 288
+          end: 289
+        op_span:
+          start: 288
+          end: 296
+        rhs_span:
+          start: 292
+          end: 296
+  - Store:
+      data:
+        Reg: 22
+      ctx:
+        start: 288
+        end: 296
+  - Load:
+      data:
+        Reg: 20
+      ctx:
+        start: 280
+        end: 287
+  - Call:
+      data:
+        reg: 21
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 280
+          end: 287
+        call_span:
+          start: 287
+          end: 297
+        args:
+          - start: 288
+            end: 296
+  - Misc:
+      data: Root
+      ctx:
+        start: 298
+        end: 300
+  - Store:
+      data:
+        Reg: 25
+      ctx:
+        start: 298
+        end: 300
+  - Get:
+      Getfc:
+        - 19
+        - parent_span:
+            start: 298
+            end: 300
+          field_span:
+            start: 300
+            end: 305
+  - Store:
+      data:
+        Reg: 24
+      ctx:
+        start: 298
+        end: 305
+  - Load:
+      data:
+        Local: 7
+      ctx:
+        start: 306
+        end: 307
+  - Store:
+      data:
+        Reg: 27
+      ctx:
+        start: 306
+        end: 307
+  - Load:
+      data:
+        Const: 20
+      ctx:
+        start: 310
+        end: 314
+  - Arith:
+      data:
+        op: Add
+        reg: 27
+      ctx:
+        lhs_span:
+          start: 306
+          end: 307
+        op_span:
+          start: 306
+          end: 314
+        rhs_span:
+          start: 310
+          end: 314
+  - Store:
+      data:
+        Reg: 26
+      ctx:
+        start: 306
+        end: 314
+  - Load:
+      data:
+        Reg: 24
+      ctx:
+        start: 298
+        end: 305
+  - Call:
+      data:
+        reg: 25
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 298
+          end: 305
+        call_span:
+          start: 305
+          end: 315
+        args:
+          - start: 306
+            end: 314
+  - Misc:
+      data: Root
+      ctx:
+        start: 342
+        end: 344
+  - Store:
+      data:
+        Reg: 29
+      ctx:
+        start: 342
+        end: 344
+  - Get:
+      Getfc:
+        - 21
+        - parent_span:
+            start: 342
+            end: 344
+          field_span:
+            start: 344
+            end: 349
+  - Store:
+      data:
+        Reg: 28
+      ctx:
+        start: 342
+        end: 349
+  - Load:
+      data:
+        Local: 1
+      ctx:
+        start: 351
+        end: 352
+  - Store:
+      data:
+        Reg: 32
+      ctx:
+        start: 351
+        end: 352
+  - Load:
+      data:
+        Local: 2
+      ctx:
+        start: 355
+        end: 356
+  - Arith:
+      data:
+        op: Add
+        reg: 32
+      ctx:
+        lhs_span:
+          start: 351
+          end: 352
+        op_span:
+          start: 351
+          end: 356
+        rhs_span:
+          start: 355
+          end: 356
+  - Store:
+      data:
+        Reg: 31
+      ctx:
+        start: 351
+        end: 356
+  - Load:
+      data:
+        Const: 22
+      ctx:
+        start: 360
+        end: 364
+  - Arith:
+      data:
+        op: Add
+        reg: 31
+      ctx:
+        lhs_span:
+          start: 351
+          end: 356
+        op_span:
+          start: 351
+          end: 364
+        rhs_span:
+          start: 360
+          end: 364
+  - Store:
+      data:
+        Reg: 30
+      ctx:
+        start: 351
+        end: 364
+  - Load:
+      data:
+        Reg: 28
+      ctx:
+        start: 342
+        end: 349
+  - Call:
+      data:
+        reg: 29
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 342
+          end: 349
+        call_span:
+          start: 349
+          end: 365
+        args:
+          - start: 351
+            end: 364
+  - Misc:
+      data: Root
+      ctx:
+        start: 366
+        end: 368
+  - Store:
+      data:
+        Reg: 34
+      ctx:
+        start: 366
+        end: 368
+  - Get:
+      Getfc:
+        - 23
+        - parent_span:
+            start: 366
+            end: 368
+          field_span:
+            start: 368
+            end: 373
+  - Store:
+      data:
+        Reg: 33
+      ctx:
+        start: 366
+        end: 373
+  - Load:
+      data:
+        Local: 1
+      ctx:
+        start: 375
+        end: 376
+  - Store:
+      data:
+        Reg: 37
+      ctx:
+        start: 375
+        end: 376
+  - Load:
+      data:
+        Local: 2
+      ctx:
+        start: 379
+        end: 380
+  - Arith:
+      data:
+        op: Sub
+        reg: 37
+      ctx:
+        lhs_span:
+          start: 375
+          end: 376
+        op_span:
+          start: 375
+          end: 380
+        rhs_span:
+          start: 379
+          end: 380
+  - Store:
+      data:
+        Reg: 36
+      ctx:
+        start: 375
+        end: 380
+  - Load:
+      data:
+        Const: 24
+      ctx:
+        start: 384
+        end: 388
+  - Arith:
+      data:
+        op: Add
+        reg: 36
+      ctx:
+        lhs_span:
+          start: 375
+          end: 380
+        op_span:
+          start: 375
+          end: 388
+        rhs_span:
+          start: 384
+          end: 388
+  - Store:
+      data:
+        Reg: 35
+      ctx:
+        start: 375
+        end: 388
+  - Load:
+      data:
+        Reg: 33
+      ctx:
+        start: 366
+        end: 373
+  - Call:
+      data:
+        reg: 34
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 366
+          end: 373
+        call_span:
+          start: 373
+          end: 389
+        args:
+          - start: 375
+            end: 388
+  - Misc:
+      data: Root
+      ctx:
+        start: 390
+        end: 392
+  - Store:
+      data:
+        Reg: 39
+      ctx:
+        start: 390
+        end: 392
+  - Get:
+      Getfc:
+        - 25
+        - parent_span:
+            start: 390
+            end: 392
+          field_span:
+            start: 392
+            end: 397
+  - Store:
+      data:
+        Reg: 38
+      ctx:
+        start: 390
+        end: 397
+  - Load:
+      data:
+        Local: 1
+      ctx:
+        start: 399
+        end: 400
+  - Store:
+      data:
+        Reg: 42
+      ctx:
+        start: 399
+        end: 400
+  - Load:
+      data:
+        Local: 2
+      ctx:
+        start: 403
+        end: 404
+  - Arith:
+      data:
+        op: Mul
+        reg: 42
+      ctx:
+        lhs_span:
+          start: 399
+          end: 400
+        op_span:
+          start: 399
+          end: 404
+        rhs_span:
+          start: 403
+          end: 404
+  - Store:
+      data:
+        Reg: 41
+      ctx:
+        start: 399
+        end: 404
+  - Load:
+      data:
+        Const: 26
+      ctx:
+        start: 408
+        end: 412
+  - Arith:
+      data:
+        op: Add
+        reg: 41
+      ctx:
+        lhs_span:
+          start: 399
+          end: 404
+        op_span:
+          start: 399
+          end: 412
+        rhs_span:
+          start: 408
+          end: 412
+  - Store:
+      data:
+        Reg: 40
+      ctx:
+        start: 399
+        end: 412
+  - Load:
+      data:
+        Reg: 38
+      ctx:
+        start: 390
+        end: 397
+  - Call:
+      data:
+        reg: 39
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 390
+          end: 397
+        call_span:
+          start: 397
+          end: 413
+        args:
+          - start: 399
+            end: 412
+  - Misc:
+      data: Root
+      ctx:
+        start: 414
+        end: 416
+  - Store:
+      data:
+        Reg: 44
+      ctx:
+        start: 414
+        end: 416
+  - Get:
+      Getfc:
+        - 27
+        - parent_span:
+            start: 414
+            end: 416
+          field_span:
+            start: 416
+            end: 421
+  - Store:
+      data:
+        Reg: 43
+      ctx:
+        start: 414
+        end: 421
+  - Load:
+      data:
+        Local: 1
+      ctx:
+        start: 423
+        end: 424
+  - Store:
+      data:
+        Reg: 47
+      ctx:
+        start: 423
+        end: 424
+  - Load:
+      data:
+        Local: 2
+      ctx:
+        start: 427
+        end: 428
+  - Arith:
+      data:
+        op: Div
+        reg: 47
+      ctx:
+        lhs_span:
+          start: 423
+          end: 424
+        op_span:
+          start: 423
+          end: 428
+        rhs_span:
+          start: 427
+          end: 428
+  - Store:
+      data:
+        Reg: 46
+      ctx:
+        start: 423
+        end: 428
+  - Load:
+      data:
+        Const: 28
+      ctx:
+        start: 432
+        end: 436
+  - Arith:
+      data:
+        op: Add
+        reg: 46
+      ctx:
+        lhs_span:
+          start: 423
+          end: 428
+        op_span:
+          start: 423
+          end: 436
+        rhs_span:
+          start: 432
+          end: 436
+  - Store:
+      data:
+        Reg: 45
+      ctx:
+        start: 423
+        end: 436
+  - Load:
+      data:
+        Reg: 43
+      ctx:
+        start: 414
+        end: 421
+  - Call:
+      data:
+        reg: 44
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 414
+          end: 421
+        call_span:
+          start: 421
+          end: 437
+        args:
+          - start: 423
+            end: 436
+  - Misc:
+      data: Root
+      ctx:
+        start: 488
+        end: 490
+  - Store:
+      data:
+        Reg: 49
+      ctx:
+        start: 488
+        end: 490
+  - Get:
+      Getfc:
+        - 29
+        - parent_span:
+            start: 488
+            end: 490
+          field_span:
+            start: 490
+            end: 495
+  - Store:
+      data:
+        Reg: 48
+      ctx:
+        start: 488
+        end: 495
+  - Load:
+      data:
+        Const: 30
+      ctx:
+        start: 497
+        end: 498
+  - Store:
+      data:
+        Reg: 52
+      ctx:
+        start: 497
+        end: 498
+  - Load:
+      data:
+        Const: 31
+      ctx:
+        start: 501
+        end: 502
+  - Arith:
+      data:
+        op: Modu
+        reg: 52
+      ctx:
+        lhs_span:
+          start: 497
+          end: 498
+        op_span:
+          start: 497
+          end: 502
+        rhs_span:
+          start: 501
+          end: 502
+  - Store:
+      data:
+        Reg: 51
+      ctx:
+        start: 497
+        end: 502
+  - Load:
+      data:
+        Const: 32
+      ctx:
+        start: 506
+        end: 510
+  - Arith:
+      data:
+        op: Add
+        reg: 51
+      ctx:
+        lhs_span:
+          start: 497
+          end: 502
+        op_span:
+          start: 497
+          end: 510
+        rhs_span:
+          start: 506
+          end: 510
+  - Store:
+      data:
+        Reg: 50
+      ctx:
+        start: 497
+        end: 510
+  - Load:
+      data:
+        Reg: 48
+      ctx:
+        start: 488
+        end: 495
+  - Call:
+      data:
+        reg: 49
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 488
+          end: 495
+        call_span:
+          start: 495
+          end: 511
+        args:
+          - start: 497
+            end: 510
+  - Misc:
+      data: Root
+      ctx:
+        start: 512
+        end: 514
+  - Store:
+      data:
+        Reg: 54
+      ctx:
+        start: 512
+        end: 514
+  - Get:
+      Getfc:
+        - 33
+        - parent_span:
+            start: 512
+            end: 514
+          field_span:
+            start: 514
+            end: 519
+  - Store:
+      data:
+        Reg: 53
+      ctx:
+        start: 512
+        end: 519
+  - Load:
+      data:
+        Const: 34
+      ctx:
+        start: 521
+        end: 522
+  - Store:
+      data:
+        Reg: 57
+      ctx:
+        start: 521
+        end: 522
+  - Load:
+      data:
+        Const: 35
+      ctx:
+        start: 525
+        end: 526
+  - Arith:
+      data:
+        op: Modu
+        reg: 57
+      ctx:
+        lhs_span:
+          start: 521
+          end: 522
+        op_span:
+          start: 521
+          end: 526
+        rhs_span:
+          start: 525
+          end: 526
+  - Store:
+      data:
+        Reg: 56
+      ctx:
+        start: 521
+        end: 526
+  - Load:
+      data:
+        Const: 36
+      ctx:
+        start: 530
+        end: 534
+  - Arith:
+      data:
+        op: Add
+        reg: 56
+      ctx:
+        lhs_span:
+          start: 521
+          end: 526
+        op_span:
+          start: 521
+          end: 534
+        rhs_span:
+          start: 530
+          end: 534
+  - Store:
+      data:
+        Reg: 55
+      ctx:
+        start: 521
+        end: 534
+  - Load:
+      data:
+        Reg: 53
+      ctx:
+        start: 512
+        end: 519
+  - Call:
+      data:
+        reg: 54
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 512
+          end: 519
+        call_span:
+          start: 519
+          end: 535
+        args:
+          - start: 521
+            end: 534
+  - Misc:
+      data: Root
+      ctx:
+        start: 536
+        end: 538
+  - Store:
+      data:
+        Reg: 59
+      ctx:
+        start: 536
+        end: 538
+  - Get:
+      Getfc:
+        - 37
+        - parent_span:
+            start: 536
+            end: 538
+          field_span:
+            start: 538
+            end: 543
+  - Store:
+      data:
+        Reg: 58
+      ctx:
+        start: 536
+        end: 543
+  - Load:
+      data:
+        Const: 38
+      ctx:
+        start: 546
+        end: 547
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 545
+          end: 546
+        val_span:
+          start: 546
+          end: 547
+  - Store:
+      data:
+        Reg: 62
+      ctx:
+        start: 545
+        end: 547
+  - Load:
+      data:
+        Const: 39
+      ctx:
+        start: 550
+        end: 551
+  - Arith:
+      data:
+        op: Modu
+        reg: 62
+      ctx:
+        lhs_span:
+          start: 545
+          end: 547
+        op_span:
+          start: 545
+          end: 551
+        rhs_span:
+          start: 550
+          end: 551
+  - Store:
+      data:
+        Reg: 61
+      ctx:
+        start: 545
+        end: 551
+  - Load:
+      data:
+        Const: 40
+      ctx:
+        start: 555
+        end: 559
+  - Arith:
+      data:
+        op: Add
+        reg: 61
+      ctx:
+        lhs_span:
+          start: 545
+          end: 551
+        op_span:
+          start: 545
+          end: 559
+        rhs_span:
+          start: 555
+          end: 559
+  - Store:
+      data:
+        Reg: 60
+      ctx:
+        start: 545
+        end: 559
+  - Load:
+      data:
+        Reg: 58
+      ctx:
+        start: 536
+        end: 543
+  - Call:
+      data:
+        reg: 59
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 536
+          end: 543
+        call_span:
+          start: 543
+          end: 560
+        args:
+          - start: 545
+            end: 559
+  - Misc:
+      data: Root
+      ctx:
+        start: 561
+        end: 563
+  - Store:
+      data:
+        Reg: 64
+      ctx:
+        start: 561
+        end: 563
+  - Get:
+      Getfc:
+        - 41
+        - parent_span:
+            start: 561
+            end: 563
+          field_span:
+            start: 563
+            end: 568
+  - Store:
+      data:
+        Reg: 63
+      ctx:
+        start: 561
+        end: 568
+  - Load:
+      data:
+        Const: 42
+      ctx:
+        start: 571
+        end: 572
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 570
+          end: 571
+        val_span:
+          start: 571
+          end: 572
+  - Store:
+      data:
+        Reg: 67
+      ctx:
+        start: 570
+        end: 572
+  - Load:
+      data:
+        Const: 43
+      ctx:
+        start: 575
+        end: 576
+  - Arith:
+      data:
+        op: Modu
+        reg: 67
+      ctx:
+        lhs_span:
+          start: 570
+          end: 572
+        op_span:
+          start: 570
+          end: 576
+        rhs_span:
+          start: 575
+          end: 576
+  - Store:
+      data:
+        Reg: 66
+      ctx:
+        start: 570
+        end: 576
+  - Load:
+      data:
+        Const: 44
+      ctx:
+        start: 580
+        end: 584
+  - Arith:
+      data:
+        op: Add
+        reg: 66
+      ctx:
+        lhs_span:
+          start: 570
+          end: 576
+        op_span:
+          start: 570
+          end: 584
+        rhs_span:
+          start: 580
+          end: 584
+  - Store:
+      data:
+        Reg: 65
+      ctx:
+        start: 570
+        end: 584
+  - Load:
+      data:
+        Reg: 63
+      ctx:
+        start: 561
+        end: 568
+  - Call:
+      data:
+        reg: 64
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 561
+          end: 568
+        call_span:
+          start: 568
+          end: 585
+        args:
+          - start: 570
+            end: 584
+  - Misc:
+      data: Root
+      ctx:
+        start: 586
+        end: 588
+  - Store:
+      data:
+        Reg: 69
+      ctx:
+        start: 586
+        end: 588
+  - Get:
+      Getfc:
+        - 45
+        - parent_span:
+            start: 586
+            end: 588
+          field_span:
+            start: 588
+            end: 593
+  - Store:
+      data:
+        Reg: 68
+      ctx:
+        start: 586
+        end: 593
+  - Load:
+      data:
+        Const: 46
+      ctx:
+        start: 596
+        end: 597
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 595
+          end: 596
+        val_span:
+          start: 596
+          end: 597
+  - Store:
+      data:
+        Reg: 72
+      ctx:
+        start: 595
+        end: 597
+  - Load:
+      data:
+        Const: 47
+      ctx:
+        start: 601
+        end: 602
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 600
+          end: 601
+        val_span:
+          start: 601
+          end: 602
+  - Arith:
+      data:
+        op: Modu
+        reg: 72
+      ctx:
+        lhs_span:
+          start: 595
+          end: 597
+        op_span:
+          start: 595
+          end: 602
+        rhs_span:
+          start: 600
+          end: 602
+  - Store:
+      data:
+        Reg: 71
+      ctx:
+        start: 595
+        end: 602
+  - Load:
+      data:
+        Const: 48
+      ctx:
+        start: 606
+        end: 610
+  - Arith:
+      data:
+        op: Add
+        reg: 71
+      ctx:
+        lhs_span:
+          start: 595
+          end: 602
+        op_span:
+          start: 595
+          end: 610
+        rhs_span:
+          start: 606
+          end: 610
+  - Store:
+      data:
+        Reg: 70
+      ctx:
+        start: 595
+        end: 610
+  - Load:
+      data:
+        Reg: 68
+      ctx:
+        start: 586
+        end: 593
+  - Call:
+      data:
+        reg: 69
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 586
+          end: 593
+        call_span:
+          start: 593
+          end: 611
+        args:
+          - start: 595
+            end: 610
+  - Misc:
+      data: Root
+      ctx:
+        start: 612
+        end: 614
+  - Store:
+      data:
+        Reg: 74
+      ctx:
+        start: 612
+        end: 614
+  - Get:
+      Getfc:
+        - 49
+        - parent_span:
+            start: 612
+            end: 614
+          field_span:
+            start: 614
+            end: 619
+  - Store:
+      data:
+        Reg: 73
+      ctx:
+        start: 612
+        end: 619
+  - Load:
+      data:
+        Const: 50
+      ctx:
+        start: 622
+        end: 623
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 621
+          end: 622
+        val_span:
+          start: 622
+          end: 623
+  - Store:
+      data:
+        Reg: 77
+      ctx:
+        start: 621
+        end: 623
+  - Load:
+      data:
+        Const: 51
+      ctx:
+        start: 627
+        end: 628
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 626
+          end: 627
+        val_span:
+          start: 627
+          end: 628
+  - Arith:
+      data:
+        op: Modu
+        reg: 77
+      ctx:
+        lhs_span:
+          start: 621
+          end: 623
+        op_span:
+          start: 621
+          end: 628
+        rhs_span:
+          start: 626
+          end: 628
+  - Store:
+      data:
+        Reg: 76
+      ctx:
+        start: 621
+        end: 628
+  - Load:
+      data:
+        Const: 52
+      ctx:
+        start: 632
+        end: 636
+  - Arith:
+      data:
+        op: Add
+        reg: 76
+      ctx:
+        lhs_span:
+          start: 621
+          end: 628
+        op_span:
+          start: 621
+          end: 636
+        rhs_span:
+          start: 632
+          end: 636
+  - Store:
+      data:
+        Reg: 75
+      ctx:
+        start: 621
+        end: 636
+  - Load:
+      data:
+        Reg: 73
+      ctx:
+        start: 612
+        end: 619
+  - Call:
+      data:
+        reg: 74
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 612
+          end: 619
+        call_span:
+          start: 619
+          end: 637
+        args:
+          - start: 621
+            end: 636
+  - Misc:
+      data: Root
+      ctx:
+        start: 638
+        end: 640
+  - Store:
+      data:
+        Reg: 79
+      ctx:
+        start: 638
+        end: 640
+  - Get:
+      Getfc:
+        - 53
+        - parent_span:
+            start: 638
+            end: 640
+          field_span:
+            start: 640
+            end: 645
+  - Store:
+      data:
+        Reg: 78
+      ctx:
+        start: 638
+        end: 645
+  - Load:
+      data:
+        Const: 54
+      ctx:
+        start: 647
+        end: 648
+  - Store:
+      data:
+        Reg: 82
+      ctx:
+        start: 647
+        end: 648
+  - Load:
+      data:
+        Const: 55
+      ctx:
+        start: 652
+        end: 653
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 651
+          end: 652
+        val_span:
+          start: 652
+          end: 653
+  - Arith:
+      data:
+        op: Modu
+        reg: 82
+      ctx:
+        lhs_span:
+          start: 647
+          end: 648
+        op_span:
+          start: 647
+          end: 653
+        rhs_span:
+          start: 651
+          end: 653
+  - Store:
+      data:
+        Reg: 81
+      ctx:
+        start: 647
+        end: 653
+  - Load:
+      data:
+        Const: 56
+      ctx:
+        start: 657
+        end: 661
+  - Arith:
+      data:
+        op: Add
+        reg: 81
+      ctx:
+        lhs_span:
+          start: 647
+          end: 653
+        op_span:
+          start: 647
+          end: 661
+        rhs_span:
+          start: 657
+          end: 661
+  - Store:
+      data:
+        Reg: 80
+      ctx:
+        start: 647
+        end: 661
+  - Load:
+      data:
+        Reg: 78
+      ctx:
+        start: 638
+        end: 645
+  - Call:
+      data:
+        reg: 79
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 638
+          end: 645
+        call_span:
+          start: 645
+          end: 662
+        args:
+          - start: 647
+            end: 661
+  - Misc:
+      data: Root
+      ctx:
+        start: 663
+        end: 665
+  - Store:
+      data:
+        Reg: 84
+      ctx:
+        start: 663
+        end: 665
+  - Get:
+      Getfc:
+        - 57
+        - parent_span:
+            start: 663
+            end: 665
+          field_span:
+            start: 665
+            end: 670
+  - Store:
+      data:
+        Reg: 83
+      ctx:
+        start: 663
+        end: 670
+  - Load:
+      data:
+        Const: 58
+      ctx:
+        start: 672
+        end: 673
+  - Store:
+      data:
+        Reg: 87
+      ctx:
+        start: 672
+        end: 673
+  - Load:
+      data:
+        Const: 59
+      ctx:
+        start: 677
+        end: 678
+  - Unary:
+      data: NEG
+      ctx:
+        op_span:
+          start: 676
+          end: 677
+        val_span:
+          start: 677
+          end: 678
+  - Arith:
+      data:
+        op: Modu
+        reg: 87
+      ctx:
+        lhs_span:
+          start: 672
+          end: 673
+        op_span:
+          start: 672
+          end: 678
+        rhs_span:
+          start: 676
+          end: 678
+  - Store:
+      data:
+        Reg: 86
+      ctx:
+        start: 672
+        end: 678
+  - Load:
+      data:
+        Const: 60
+      ctx:
+        start: 682
+        end: 686
+  - Arith:
+      data:
+        op: Add
+        reg: 86
+      ctx:
+        lhs_span:
+          start: 672
+          end: 678
+        op_span:
+          start: 672
+          end: 686
+        rhs_span:
+          start: 682
+          end: 686
+  - Store:
+      data:
+        Reg: 85
+      ctx:
+        start: 672
+        end: 686
+  - Load:
+      data:
+        Reg: 83
+      ctx:
+        start: 663
+        end: 670
+  - Call:
+      data:
+        reg: 84
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 663
+          end: 670
+        call_span:
+          start: 670
+          end: 687
+        args:
+          - start: 672
+            end: 686
+  - Ret:
+      data: Void
+      ctx:
+        start: 0
+        end: 687
+block_offsets:
+  - 0
+constants:
+  - Integer: 123
+  - Integer: 18
+  - Integer: 61
+  - Integer: 119
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - Boolean: true
+  - Boolean: false
+  - "Null"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 2
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 3
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 2
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 3
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 2
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 3
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 2
+  - String: "\n"
+  - String: print
+  - Integer: 5
+  - Integer: 3
+  - String: "\n"
+is_varargs: true
+num_regs: 88
+num_params: 0
+locals:
+  - - vargv
+    - 0
+  - - a
+    - 1
+  - - b
+    - 2
+  - - c
+    - 3
+  - - d
+    - 4
+  - - t
+    - 5
+  - - f
+    - 6
+  - - n
+    - 7
+num_locals: 8
+sub_functions: []

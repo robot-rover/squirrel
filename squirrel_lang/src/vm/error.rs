@@ -4,11 +4,77 @@ use crate::context::{Span, SquirrelError};
 
 use super::value::Value;
 
+pub enum Metamethod {
+    Set,
+    Get,
+    NewSlot,
+    DelSlot,
+    Add,
+    Sub,
+    Mul,
+    Div,
+    Modulo,
+    Unm,
+    TypeOf,
+    Cmp,
+    Call,
+    Cloned,
+    Nexti,
+    ToString,
+    // TODO
+    // Inherited,
+    // NewMember,
+}
+
+impl Metamethod {
+    fn name(&self) -> &'static str {
+        match self {
+            Metamethod::Set => "_set",
+            Metamethod::Get => "_get",
+            Metamethod::NewSlot => "_newslot",
+            Metamethod::DelSlot => "_delslot",
+            Metamethod::Add => "_add",
+            Metamethod::Sub => "_sub",
+            Metamethod::Mul => "_mul",
+            Metamethod::Div => "_div",
+            Metamethod::Modulo => "_modulo",
+            Metamethod::Unm => "_unm",
+            Metamethod::TypeOf => "_typeof",
+            Metamethod::Cmp => "_cmp",
+            Metamethod::Call => "_call",
+            Metamethod::Cloned => "_cloned",
+            Metamethod::Nexti => "_nexti",
+            Metamethod::ToString => "_tostring",
+        }
+    }
+
+    fn op_name(&self) -> &'static str {
+        match self {
+            Metamethod::Set => "=",
+            Metamethod::Get => ".",
+            Metamethod::NewSlot => "<-",
+            Metamethod::DelSlot => "delete",
+            Metamethod::Add => "+",
+            Metamethod::Sub => "-",
+            Metamethod::Mul => "*",
+            Metamethod::Div => "/",
+            Metamethod::Modulo => "%",
+            Metamethod::Unm => "-",
+            Metamethod::TypeOf => "typeof",
+            Metamethod::Cmp => "<=>",
+            Metamethod::Call => "()",
+            Metamethod::Cloned => "clone",
+            Metamethod::Nexti => "foreach",
+            Metamethod::ToString => "tostring()",
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct CallInfo {
-    func_span: Span,
-    call_span: Span,
-    arg_spans: Vec<Span>,
+    pub func_span: Span,
+    pub call_span: Span,
+    pub arg_spans: Vec<Span>,
 }
 
 pub type ExecResult = Result<(), ExecError>;
@@ -16,43 +82,42 @@ pub type ExecResult = Result<(), ExecError>;
 #[derive(Debug)]
 pub enum ExecError {
     General(Span, String),
-    UndefinedVariable(Span, String),
+    UndefinedVariable(Span),
     UndefinedField {
         parent_span: Span,
         field_span: Span,
         field: Value,
     },
-    IllegalKeyword(Span, String),
+    IllegalKeyword(Span, &'static str),
     WrongArgCount {
         call_info: CallInfo,
         expected: Range<usize>,
-        got: usize,
-        definition_span: Option<Span>,
+        def_span: Option<Span>,
     },
     UnhashableType {
-        kind: String,
+        value: Value,
         span: Span,
     },
     UniterableType {
-        kind: String,
+        value: Value,
         span: Span,
     },
     IllegalOperation {
-        op: String,
+        op_name: &'static str,
         op_span: Span,
-        lhs: (String, Span),
-        rhs: Option<(String, Span)>,
+        lhs: (Value, Span),
+        rhs: Option<(Value, Span)>,
     },
     WrongArgType {
         call_info: CallInfo,
         arg_index: usize,
-        expected: String,
-        got: String,
+        expected: &'static str,
+        got: Value,
     },
     WrongThisType {
         call_info: CallInfo,
-        expected: String,
-        got: String,
+        expected: &'static str,
+        got: Value,
     },
     AssertionFailed(Span, Option<String>),
     NumberParseError(Span, String),
@@ -61,23 +126,39 @@ pub enum ExecError {
         len: usize,
         span: Span,
     },
-    MutatingInstantiatedClass(Span),
+    MutatingInstantiatedClass {
+        class_span: Span,
+        assign_span: Span,
+    },
     ExtendingNonClass {
         span: Span,
-        non_class_ty: String,
+        non_class: Value,
     },
     MissingMetamethod {
         obj_span: Span,
         op_span: Span,
-        op: String,
-        mm_name: String,
+        op_name: &'static str,
+        mm_name: &'static str,
     },
     WrongMetamethodReturnType {
         obj_span: Span,
         op_span: Span,
-        mm_name: String,
-        expected: String,
-        got: String,
+        mm_name: &'static str,
+        expected: &'static str,
+        got: Value,
+    },
+    UncallableType {
+        call_info: CallInfo,
+        not_fn: Value,
+    },
+    WrongIndexType {
+        span: Span,
+        expected: &'static str,
+        got: Value,
+    },
+    CannotModifyType {
+        span: Span,
+        this: Value,
     },
 }
 

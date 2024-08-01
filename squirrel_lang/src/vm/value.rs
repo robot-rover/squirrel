@@ -381,7 +381,7 @@ impl Table {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-    ) -> Result<(), ExecError> {
+    ) -> Result<(), SetFieldError> {
         if is_newslot || self.slots.contains_key(&key) {
             self.slots.insert(key, value);
             Ok(())
@@ -391,7 +391,7 @@ impl Table {
                     let mut parent = delegate.borrow_mut();
                     parent.set_field(key, value, is_newslot)
                 }
-                None => todo!("Undefined field"),
+                None => Err(SetFieldError::UndefinedField),
             }
         }
     }
@@ -496,6 +496,11 @@ pub struct Class {
     fields: ClassFields,
 }
 
+pub enum SetFieldError {
+    UndefinedField,
+    MutatingInstantiatedClass,
+}
+
 impl Class {
     pub fn new(parent: Option<Rc<RefCell<Class>>>, fields: HashMap<HashValue, Value>) -> Self {
         Class {
@@ -548,17 +553,17 @@ impl Class {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-    ) -> Result<(), ExecError> {
+    ) -> Result<(), SetFieldError> {
         match &mut self.fields {
             ClassFields::NoOffsets(fields) => {
                 if is_newslot || fields.contains_key(&key) {
                     fields.insert(key, value);
                     Ok(())
                 } else {
-                    todo!("Undefined field")
+                    Err(SetFieldError::UndefinedField)
                 }
             }
-            ClassFields::Offsets(_) => todo!("Mutating instantiated class"),
+            ClassFields::Offsets(_) => Err(SetFieldError::MutatingInstantiatedClass),
         }
     }
 
@@ -635,15 +640,15 @@ impl Instance {
         key: HashValue,
         value: Value,
         is_newslot: bool,
-    ) -> Result<(), ExecError> {
+    ) -> Result<(), SetFieldError> {
         if is_newslot {
-            return todo!("Mutating instantiated class");
+            return Err(SetFieldError::MutatingInstantiatedClass);
         }
         if let Some(offset) = self.get_field_idx(&self.class.borrow(), &key) {
             self.fields[offset as usize] = value;
             Ok(())
         } else {
-            todo!("Undefined field")
+            Err(SetFieldError::UndefinedField)
         }
     }
 

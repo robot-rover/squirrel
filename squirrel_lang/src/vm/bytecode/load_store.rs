@@ -1,8 +1,9 @@
 use serde::{Deserialize, Serialize};
 
-use super::{Const, FunIdx, Inst, Local, Reg};
+use super::{Const, FunIdx, Inst, InstCtx, Local, Reg};
 use crate::{
     context::Span,
+    impl_sub_inst,
     vm::{
         error::ExecResult,
         runtime::VMState,
@@ -28,7 +29,7 @@ impl From<PrimType> for Value {
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-enum LoadSrc {
+pub enum InstLoad {
     Reg(Reg),
     Local(Local),
     Const(Const),
@@ -38,32 +39,23 @@ enum LoadSrc {
     I8(i8),
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct InstLoad {
-    data: LoadSrc,
-    ctx: Span,
-}
+impl_sub_inst!(type Inst::Load(InstLoadCtx<InstLoad, Span>));
 
 macro_rules! load_constructor {
     ($name:ident($data_name:ident: $variant:ident)) => {
-        pub fn $name($data_name: $variant, ctx: Span) -> Inst {
-            Inst::Load(InstLoad {
-                data: LoadSrc::$variant($data_name),
-                ctx,
-            })
-        }
+        load_constructor!($name($data_name: $variant($variant)));
     };
     ($name:ident($data_name:ident: $variant:ident($data_ty:ident))) => {
-        pub fn $name($data_name: $data_ty, ctx: Span) -> Inst {
-            Inst::Load(InstLoad {
-                data: LoadSrc::$variant($data_name),
+        pub fn $name($data_name: $data_ty, ctx: Span) -> Self {
+            Self::Load(InstLoadCtx {
+                data: InstLoad::$variant($data_name),
                 ctx,
             })
         }
     };
 }
 
-impl Inst {
+impl InstCtx {
     load_constructor!(loadr(reg: Reg));
     load_constructor!(loadl(local: Local));
     load_constructor!(loadc(constant: Const));
@@ -73,15 +65,15 @@ impl Inst {
     load_constructor!(loads(value: I8(i8)));
 }
 
-pub fn run_load(state: &mut VMState, inst: &InstLoad) -> ExecResult {
-    let value = match inst.data {
-        LoadSrc::Reg(reg) => state.frame().get_reg(reg).clone(),
-        LoadSrc::Local(local) => state.frame().get_local(local).borrow().clone(),
-        LoadSrc::Const(constant) => state.frame().get_func().get_constant(constant).clone(),
-        LoadSrc::FunIdx(fun_idx) => todo!(),
-        LoadSrc::PrimType(prim_type) => prim_type.into(),
-        LoadSrc::U8(value) => Value::Integer(value as u64 as i64),
-        LoadSrc::I8(value) => Value::Integer(value as i64),
+pub fn run_load(state: &mut VMState, inst: InstLoad) -> ExecResult {
+    let value = match inst {
+        InstLoad::Reg(reg) => state.frame().get_reg(reg).clone(),
+        InstLoad::Local(local) => state.frame().get_local(local).borrow().clone(),
+        InstLoad::Const(constant) => state.frame().get_func().get_constant(constant).clone(),
+        InstLoad::FunIdx(fun_idx) => todo!(),
+        InstLoad::PrimType(prim_type) => prim_type.into(),
+        InstLoad::U8(value) => Value::Integer(value as u64 as i64),
+        InstLoad::I8(value) => Value::Integer(value as i64),
     };
 
     state.set_acc(value);
@@ -90,38 +82,34 @@ pub fn run_load(state: &mut VMState, inst: &InstLoad) -> ExecResult {
 }
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
-enum StoreTarget {
+pub enum InstStore {
     Reg(Reg),
     Local(Local),
 }
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
-pub struct InstStore {
-    target: StoreTarget,
-    ctx: Span,
-}
+impl_sub_inst!(type Inst::Store(InstStoreCtx<InstStore, Span>));
 
-impl Inst {
-    pub fn storr(reg: Reg, ctx: Span) -> Inst {
-        Inst::Store(InstStore {
-            target: StoreTarget::Reg(reg),
+impl InstCtx {
+    pub fn storr(reg: Reg, ctx: Span) -> Self {
+        Self::Store(InstStoreCtx {
+            data: InstStore::Reg(reg),
             ctx,
         })
     }
 
-    pub fn storl(local: Local, ctx: Span) -> Inst {
-        Inst::Store(InstStore {
-            target: StoreTarget::Local(local),
+    pub fn storl(local: Local, ctx: Span) -> Self {
+        Self::Store(InstStoreCtx {
+            data: InstStore::Local(local),
             ctx,
         })
     }
 }
 
-pub fn run_store(state: &mut VMState, inst: &InstStore) -> ExecResult {
+pub fn run_store(state: &mut VMState, inst: InstStore) -> ExecResult {
     let value = state.take_acc();
-    match inst.target {
-        StoreTarget::Reg(reg) => *state.frame_mut().get_reg_mut(reg) = value,
-        StoreTarget::Local(local) => *state.frame().get_local(local).borrow_mut() = value,
+    match inst {
+        InstStore::Reg(reg) => *state.frame_mut().get_reg_mut(reg) = value,
+        InstStore::Local(local) => *state.frame().get_local(local).borrow_mut() = value,
     }
     Ok(())
 }

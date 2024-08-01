@@ -1,35 +1,39 @@
 use crate::{
     context::Span,
+    impl_sub_inst,
     vm::{error::ExecResult, runtime::VMState, value::Value},
 };
 
-use super::{context::FnCallContext, Const, FunIdx, Inst, Local, Reg, Tag};
+use super::{context::FnCallContext, Const, FunIdx, Inst, InstCtx, Local, Reg, Tag};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
 pub struct InstCall {
     reg: Reg,
     n_args: u8,
-    ctx: FnCallContext,
 }
 
-impl Inst {
+impl_sub_inst!(type Inst::Call(InstCallCtx<InstCall, FnCallContext>));
+
+impl InstCtx {
     pub fn call(reg: Reg, n_args: usize, ctx: FnCallContext) -> Self {
         // TODO: Don't unwrap here
-        Inst::Call(InstCall {
-            reg,
-            n_args: n_args.try_into().unwrap(),
+        Self::Call(InstCallCtx {
+            data: InstCall {
+                reg,
+                n_args: n_args.try_into().unwrap(),
+            },
             ctx,
         })
     }
 }
 
-pub fn run_call(state: &mut VMState, inst: &InstCall) -> ExecResult {
+pub fn run_call(state: &mut VMState, inst: InstCall) -> ExecResult {
     let frame = state.frame();
     let fun_idx = match state.take_acc() {
         Value::NativeFn(f) => f(state as *mut VMState, inst.reg, inst.n_args),
         Value::Closure(c) => todo!(),
-        other => todo!("error handling"),
+        other => return Err(state.get_context(inst).uncallable_type(other)),
     };
 
     Ok(())

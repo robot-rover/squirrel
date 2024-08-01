@@ -13,7 +13,7 @@ fn main() {
             std::process::exit(1);
         }
     };
-    let code = squirrel_lang::vm::compiler::compile_function(&ast);
+    let code = squirrel_lang::vm::compiler::compile(&ast, file_name, contents);
 
     println!("{:#?}", code);
 }
