@@ -7,6 +7,7 @@ use std::{
     cmp::Ordering,
     fmt,
     io::{self, stdout},
+    iter,
     rc::Rc,
 };
 
@@ -236,12 +237,12 @@ impl StackFrame {
 impl fmt::Display for StackFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "StackFrame")?;
-        writeln!(f, "ip: {}", self.ip)?;
+        writeln!(f, "ip: {} {:?}", self.ip, self.func.code[self.ip])?;
         writeln!(f, "env: {}", self.env)?;
         write!(f, "locals:")?;
         let mut local_name_iter = self.func.locals.iter().peekable();
         for (i, local) in self.locals.iter().enumerate() {
-            write!(f, "\n  {}: {}", i, RefCell::borrow(local))?;
+            write!(f, "\n  {}: {:?}", i, RefCell::borrow(local))?;
             match local_name_iter
                 .peek()
                 .map(|(name, idx)| (name, idx.cmp(&(i as u32))))
@@ -257,7 +258,7 @@ impl fmt::Display for StackFrame {
         write!(f, "\nregisters ({})", self.registers.len())?;
         for (i, reg) in self.registers.iter().enumerate() {
             if !matches!(reg, Value::Null) {
-                write!(f, "\n  {}: {}", i, reg)?;
+                write!(f, "\n  {}: {:?}", i, reg)?;
             }
         }
 
@@ -291,7 +292,9 @@ pub fn run<'a>(
         .map(|stream| WriteOption::Dyn(stream))
         .unwrap_or_else(|| WriteOption::Stdout(io::stdout()));
     let root_table = init_root_table();
-    let mut locals = vec![Rc::new(RefCell::new(Value::Null)); root_file.code.locals.len()];
+    let mut locals: Vec<_> = iter::repeat_with(|| Rc::new(RefCell::new(Value::Null)))
+        .take(root_file.code.locals.len())
+        .collect();
     *locals[0].borrow_mut() = Value::array(args.into_iter().map(Value::string).collect::<Vec<_>>());
     let num_regs = root_file.code.num_regs;
 

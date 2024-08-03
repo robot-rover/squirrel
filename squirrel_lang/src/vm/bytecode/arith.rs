@@ -80,6 +80,7 @@ impl InstCtx {
 
 pub fn run_arith(state: &mut VMState, inst: InstArith) -> ExecResult {
     let frame = state.frame();
+    println!("frame: {}", frame);
     let lhs = frame.get_reg(inst.reg);
     let rhs = state.get_acc();
     match (lhs, rhs) {

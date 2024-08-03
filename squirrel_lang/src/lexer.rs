@@ -748,7 +748,7 @@ mod error {
 
     use logos::Lexer;
 
-    use crate::context::{SqBacktrace, SquirrelError};
+    use crate::context::{RsBacktrace, SquirrelError};
 
     use super::Token;
 
@@ -786,7 +786,7 @@ mod error {
                 LexError::General(msg) => msg,
                 LexError::UnterminatedString => "String missing termination character".to_string(),
             };
-            SquirrelError::new_bt(file_id, token_location, message, SqBacktrace::new())
+            SquirrelError::new(file_id, token_location, message, RsBacktrace::new())
         }
     }
 

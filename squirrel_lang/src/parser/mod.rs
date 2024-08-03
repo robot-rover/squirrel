@@ -570,21 +570,21 @@ fn parse_function_args_body<'s>(
 }
 
 pub mod error {
-    use crate::context::{Span, SqBacktrace, SquirrelError};
+    use crate::context::{RsBacktrace, Span, SquirrelError};
 
     use crate::lexer::{SpannedLexer, Token};
 
     pub type ParseResult<T> = Result<T, ParseError>;
     #[derive(Debug)]
     pub enum ParseError {
-        UnexpectedToken(String, Span, SqBacktrace),
-        UnexpectedEof(SqBacktrace),
-        SyntaxError(String, Span, SqBacktrace),
+        UnexpectedToken(String, Span, RsBacktrace),
+        UnexpectedEof(RsBacktrace),
+        SyntaxError(String, Span, RsBacktrace),
         ErrorContext(SquirrelError),
         InvalidAssignment {
             target: Span,
             target_kind: String,
-            backtrace: SqBacktrace,
+            backtrace: RsBacktrace,
         },
     }
 
@@ -597,19 +597,19 @@ pub mod error {
     impl ParseError {
         pub fn with_context(self, ctx: &SpannedLexer) -> SquirrelError {
             match self {
-                ParseError::UnexpectedToken(tok, span, backtrace) => SquirrelError::new_bt(
+                ParseError::UnexpectedToken(tok, span, backtrace) => SquirrelError::new(
                     ctx.get_file_id(),
                     span.into(),
                     format!("Unexpected token {:?}", tok),
                     backtrace,
                 ),
-                ParseError::UnexpectedEof(backtrace) => SquirrelError::new_bt(
+                ParseError::UnexpectedEof(backtrace) => SquirrelError::new(
                     ctx.get_file_id(),
                     (ctx.current_offset()..ctx.current_offset()).into(),
                     format!("Unexpected eof"),
                     backtrace,
                 ),
-                ParseError::SyntaxError(message, span, backtrace) => SquirrelError::new_bt(
+                ParseError::SyntaxError(message, span, backtrace) => SquirrelError::new(
                     ctx.get_file_id(),
                     span.into(),
                     format!("Syntax Error: {:?}", message),
@@ -619,7 +619,7 @@ pub mod error {
                     target,
                     target_kind,
                     backtrace,
-                } => SquirrelError::new_bt(
+                } => SquirrelError::new(
                     ctx.get_file_id(),
                     target,
                     format!("Invalid assignment target: {}", target_kind),
@@ -630,22 +630,22 @@ pub mod error {
         }
 
         pub fn unexpected_token<'s>(tok: Token<'s>, span: Span) -> Self {
-            Self::UnexpectedToken(format!("{:?}", tok), span, SqBacktrace::new())
+            Self::UnexpectedToken(format!("{:?}", tok), span, RsBacktrace::new())
         }
 
         pub fn unexpected_eof() -> Self {
-            Self::UnexpectedEof(SqBacktrace::new())
+            Self::UnexpectedEof(RsBacktrace::new())
         }
 
         pub fn syntax_error(message: String, span: Span) -> Self {
-            Self::SyntaxError(message, span, SqBacktrace::new())
+            Self::SyntaxError(message, span, RsBacktrace::new())
         }
 
         pub fn invalid_assignment(target: Span, target_kind: String) -> Self {
             Self::InvalidAssignment {
                 target,
                 target_kind,
-                backtrace: SqBacktrace::new(),
+                backtrace: RsBacktrace::new(),
             }
         }
     }

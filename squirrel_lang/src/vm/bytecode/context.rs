@@ -3,7 +3,7 @@ use std::{fmt::Binary, ops::Range};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    context::Span,
+    context::{RsBacktrace, Span},
     vm::{
         error::{CallInfo, ExecError},
         value::Value,
@@ -17,7 +17,7 @@ pub struct GetIdentContext {
 
 impl GetIdentContext {
     pub fn undefined_variable(&self) -> ExecError {
-        ExecError::UndefinedVariable(self.ident_span)
+        ExecError::UndefinedVariable(self.ident_span, RsBacktrace::new())
     }
 
     pub fn get_span(&self) -> Span {
@@ -34,13 +34,14 @@ pub struct SetIdentContext {
 
 impl SetIdentContext {
     pub fn undefined_variable(&self) -> ExecError {
-        ExecError::UndefinedVariable(self.ident_span)
+        ExecError::UndefinedVariable(self.ident_span, RsBacktrace::new())
     }
 
     pub fn cannot_modify_type(&self, this: Value) -> ExecError {
         ExecError::CannotModifyType {
             span: self.ident_span,
             this,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -61,6 +62,7 @@ impl GetFieldContext {
             parent_span: self.parent_span,
             field_span: self.field_span,
             field,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -68,6 +70,7 @@ impl GetFieldContext {
         ExecError::UnhashableType {
             value: field,
             span: self.field_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -76,6 +79,7 @@ impl GetFieldContext {
             index,
             len,
             span: self.field_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -98,6 +102,7 @@ impl SetFieldContext {
             parent_span: self.parent_span,
             field_span: self.field_span,
             field,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -105,6 +110,7 @@ impl SetFieldContext {
         ExecError::CannotModifyType {
             span: self.parent_span,
             this,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -112,6 +118,7 @@ impl SetFieldContext {
         ExecError::UnhashableType {
             value: field,
             span: self.field_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -120,6 +127,7 @@ impl SetFieldContext {
             index,
             len,
             span: self.field_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -128,6 +136,7 @@ impl SetFieldContext {
             span: self.field_span,
             expected,
             got,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -135,6 +144,7 @@ impl SetFieldContext {
         ExecError::MutatingInstantiatedClass {
             class_span: self.parent_span,
             assign_span: self.assignment_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -163,6 +173,7 @@ impl FnCallContext {
         ExecError::UncallableType {
             call_info: self.make_call_info(),
             not_fn,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -171,6 +182,7 @@ impl FnCallContext {
             call_info: self.make_call_info(),
             expected,
             def_span,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -185,6 +197,7 @@ impl FnCallContext {
             arg_index,
             expected,
             got,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -209,6 +222,7 @@ impl NewClassContext {
                 .extends_kw_ty_span
                 .expect("Class doesn't extend anything")[1],
             non_class,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -236,6 +250,7 @@ impl BinaryOpContext {
             op_span: self.op_span,
             lhs: (lhs_val, self.lhs_span),
             rhs: Some((rhs_val, self.rhs_span)),
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -245,6 +260,7 @@ impl BinaryOpContext {
             op_span: self.op_span,
             op_name,
             mm_name,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -260,6 +276,7 @@ impl BinaryOpContext {
             mm_name,
             expected,
             got,
+            bt: RsBacktrace::new(),
         }
     }
 
@@ -281,6 +298,7 @@ impl UnaryOpContext {
             op_span: self.op_span,
             lhs: (val, self.val_span),
             rhs: None,
+            bt: RsBacktrace::new(),
         }
     }
 

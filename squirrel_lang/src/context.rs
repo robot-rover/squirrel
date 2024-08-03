@@ -100,11 +100,11 @@ static SQ_BACKTRACE: Lazy<bool> = Lazy::new(|| {
 });
 
 #[derive(Debug, Clone)]
-pub struct SqBacktrace(Rc<Backtrace>);
+pub struct RsBacktrace(Rc<Backtrace>);
 
-impl SqBacktrace {
+impl RsBacktrace {
     pub fn new() -> Self {
-        SqBacktrace(Rc::new(if *SQ_BACKTRACE {
+        RsBacktrace(Rc::new(if *SQ_BACKTRACE {
             Backtrace::force_capture()
         } else {
             Backtrace::disabled()
@@ -112,11 +112,11 @@ impl SqBacktrace {
     }
 
     pub fn empty() -> Self {
-        SqBacktrace(Rc::new(Backtrace::disabled()))
+        RsBacktrace(Rc::new(Backtrace::disabled()))
     }
 }
 
-impl Display for SqBacktrace {
+impl Display for RsBacktrace {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         if self.0.status() == BacktraceStatus::Captured {
             let bt_string = format!("{}", self.0);
@@ -131,42 +131,87 @@ impl Display for SqBacktrace {
 }
 
 #[derive(Debug, Clone)]
+pub struct SqStacktrace(Vec<SqTraceFrame>);
+#[derive(Debug, Clone)]
+pub struct SqTraceFrame {
+    pub file: String,
+    pub line: u32,
+}
+
+impl SqStacktrace {
+    pub fn new(trace: Vec<SqTraceFrame>) -> Self {
+        SqStacktrace(trace)
+    }
+
+    pub fn iter(&self) -> impl Iterator<Item = &SqTraceFrame> {
+        self.0.iter()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub struct SquirrelError {
     file_id: usize,
     message: String,
     labels: Vec<(Span, String, Color)>,
-    backtrace: SqBacktrace,
+    backtrace: RsBacktrace,
+    stacktrace: SqStacktrace,
 }
 
 impl SquirrelError {
-    pub fn new(file_id: usize, token: Span, message: String) -> Self {
-        Self::new_bt(file_id, token, message, SqBacktrace::empty())
+    pub fn new(file_id: usize, token: Span, message: String, backtrace: RsBacktrace) -> Self {
+        Self::new_st(
+            file_id,
+            token,
+            message,
+            backtrace,
+            SqStacktrace::new(Vec::new()),
+        )
     }
 
-    pub fn new_bt(file_id: usize, token: Span, message: String, backtrace: SqBacktrace) -> Self {
+    pub fn new_st(
+        file_id: usize,
+        token: Span,
+        message: String,
+        backtrace: RsBacktrace,
+        stacktrace: SqStacktrace,
+    ) -> Self {
         Self {
             file_id,
             message,
             labels: vec![(token, "Here".to_string(), Color::Red)],
             backtrace,
+            stacktrace,
         }
     }
 
-    pub fn new_labels(file_id: usize, message: String, labels: Vec<(Span, String, Color)>) -> Self {
-        Self::new_labels_bt(file_id, message, labels, SqBacktrace::empty())
-    }
-
-    pub fn new_labels_bt(
+    pub fn new_labels(
         file_id: usize,
         message: String,
         labels: Vec<(Span, String, Color)>,
-        backtrace: SqBacktrace,
+        backtrace: RsBacktrace,
+    ) -> Self {
+        Self::new_labels_st(
+            file_id,
+            message,
+            labels,
+            backtrace,
+            SqStacktrace::new(Vec::new()),
+        )
+    }
+
+    pub fn new_labels_st(
+        file_id: usize,
+        message: String,
+        labels: Vec<(Span, String, Color)>,
+        backtrace: RsBacktrace,
+        stacktrace: SqStacktrace,
     ) -> Self {
         Self {
             file_id,
             message,
             labels,
             backtrace,
+            stacktrace,
         }
     }
 
