@@ -5,20 +5,26 @@ use serde::{Deserialize, Serialize};
 use super::{Inst, InstCtx, Reg};
 use crate::{
     impl_sub_inst,
-    vm::{bytecode::context::BinaryOpContext, compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
+    vm::{
+        bytecode::context::BinaryOpContext,
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+        value::Value,
+    },
 };
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 enum BitwiseOp {
-    #[strum(to_string="band")]
+    #[strum(to_string = "band")]
     Band,
-    #[strum(to_string="bor")]
+    #[strum(to_string = "bor")]
     Bor,
-    #[strum(to_string="bxor")]
+    #[strum(to_string = "bxor")]
     Bxor,
-    #[strum(to_string="brsh")]
+    #[strum(to_string = "brsh")]
     Brsh,
-    #[strum(to_string="bash")]
+    #[strum(to_string = "bash")]
     Bash,
 }
 

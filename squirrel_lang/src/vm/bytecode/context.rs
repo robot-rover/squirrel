@@ -19,6 +19,10 @@ impl GetIdentContext {
     pub fn undefined_variable(&self) -> ExecError {
         ExecError::UndefinedVariable(self.ident_span)
     }
+
+    pub fn get_span(&self) -> Span {
+        self.ident_span
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -38,6 +42,10 @@ impl SetIdentContext {
             span: self.ident_span,
             this,
         }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.ident_span | self.value_span
     }
 }
 
@@ -69,6 +77,10 @@ impl GetFieldContext {
             len,
             span: self.field_span,
         }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.parent_span | self.field_span
     }
 }
 
@@ -125,6 +137,10 @@ impl SetFieldContext {
             assign_span: self.assignment_span,
         }
     }
+
+    pub fn get_span(&self) -> Span {
+        self.parent_span | self.value_span
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -171,6 +187,10 @@ impl FnCallContext {
             got,
         }
     }
+
+    pub fn get_span(&self) -> Span {
+        self.fn_span | self.call_span
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -190,6 +210,10 @@ impl NewClassContext {
                 .expect("Class doesn't extend anything")[1],
             non_class,
         }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.class_kw_span | self.class_body_span
     }
 }
 
@@ -238,6 +262,10 @@ impl BinaryOpContext {
             got,
         }
     }
+
+    pub fn get_span(&self) -> Span {
+        self.lhs_span | self.rhs_span
+    }
 }
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
@@ -254,5 +282,9 @@ impl UnaryOpContext {
             lhs: (val, self.val_span),
             rhs: None,
         }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.op_span | self.val_span
     }
 }

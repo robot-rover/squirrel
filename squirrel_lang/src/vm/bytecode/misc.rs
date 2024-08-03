@@ -1,7 +1,11 @@
 use crate::{
     context::Span,
     impl_sub_inst,
-    vm::{compiler::{self, FormatInst}, error::ExecResult, runtime::VMState},
+    vm::{
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+    },
 };
 
 use super::{Const, FunIdx, Inst, InstCtx, Local, Reg, Tag};
@@ -9,17 +13,20 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 pub enum InstMisc {
-    #[strum(to_string="this")]
+    #[strum(to_string = "this")]
     This,
-    #[strum(to_string="root")]
+    #[strum(to_string = "root")]
     Root,
 }
 impl FormatInst for InstMisc {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         write!(f, "{}", self)
     }
 }
-
 
 impl_sub_inst!(type Inst::Misc(InstMiscCtx<InstMisc, Span>));
 

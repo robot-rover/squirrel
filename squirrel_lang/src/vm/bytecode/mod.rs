@@ -24,6 +24,8 @@ pub use unary::{run_unary, InstUnary};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumDiscriminants;
 
+use crate::context::Span;
+
 use super::compiler::FormatInst;
 
 macro_rules! newtype {
@@ -223,7 +225,11 @@ pub enum Inst {
 }
 
 impl FormatInst for Inst {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &super::compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &super::compiler::Function,
+    ) -> std::fmt::Result {
         match self {
             Inst::Arith(arith) => arith.fmt_inst(f, fun),
             Inst::Bitwise(bitwise) => bitwise.fmt_inst(f, fun),
@@ -256,6 +262,23 @@ impl InstCtx {
             InstCtx::Store(store) => Inst::Store(store.strip()),
             InstCtx::Misc(misc) => Inst::Misc(misc.strip()),
             InstCtx::Unary(unary) => Inst::Unary(unary.strip()),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        match self {
+            InstCtx::Arith(arith) => arith.ctx.get_span(),
+            InstCtx::Bitwise(bitwise) => bitwise.ctx.get_span(),
+            InstCtx::Call(call) => call.ctx.get_span(),
+            InstCtx::Compare(compare) => compare.ctx.get_span(),
+            InstCtx::Get(get) => get.get_span(),
+            InstCtx::Set(set) => set.get_span(),
+            InstCtx::Jump(jump) => jump.ctx,
+            InstCtx::Ret(ret) => ret.ctx,
+            InstCtx::Load(load) => load.ctx,
+            InstCtx::Store(store) => store.ctx,
+            InstCtx::Misc(misc) => misc.ctx,
+            InstCtx::Unary(unary) => unary.ctx.get_span(),
         }
     }
 }

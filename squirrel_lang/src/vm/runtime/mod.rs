@@ -318,6 +318,8 @@ fn run_vm(state: &mut VMState) -> Result<(), SquirrelError> {
 mod tests {
     use std::iter;
 
+    use compiler::FunctionDebug;
+
     use super::*;
     use crate::{parser::parse, test_foreach, test_util::exchange_str, vm::compiler::compile};
 
@@ -337,7 +339,7 @@ mod tests {
             file_name.to_string(),
             file_contents.to_string(),
         );
-        println!("{:#?}", actual_code.code);
+        println!("{:#?}", actual_code.code.wrap(&actual_code));
 
         let mut output = Vec::new();
         let run_res = run(actual_code, file_name, Some(&mut output), iter::empty());

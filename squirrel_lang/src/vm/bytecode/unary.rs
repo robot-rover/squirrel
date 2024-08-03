@@ -5,18 +5,23 @@ use serde::{Deserialize, Serialize};
 use crate::{
     context::Span,
     impl_sub_inst,
-    vm::{compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
+    vm::{
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+        value::Value,
+    },
 };
 
 use super::{context::UnaryOpContext, Const, FunIdx, Inst, InstCtx, InstJump, Local, Reg};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 pub enum InstUnary {
-    #[strum(to_string="lnot")]
+    #[strum(to_string = "lnot")]
     LNOT,
-    #[strum(to_string="lbot")]
+    #[strum(to_string = "lbot")]
     BNOT,
-    #[strum(to_string="neg")]
+    #[strum(to_string = "neg")]
     NEG,
 }
 
@@ -31,11 +36,14 @@ impl InstUnary {
 }
 
 impl FormatInst for InstUnary {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         write!(f, "{}", self)
     }
 }
-
 
 impl_sub_inst!(type Inst::Unary(InstUnaryCtx<InstUnary, UnaryOpContext>));
 

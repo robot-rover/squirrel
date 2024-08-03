@@ -4,16 +4,21 @@ use super::{Block, Const, FunIdx, Inst, InstCtx, Local, Reg};
 use crate::{
     context::Span,
     impl_sub_inst,
-    vm::{compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
+    vm::{
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+        value::Value,
+    },
 };
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 pub enum JumpKind {
-    #[strum(to_string="jmp")]
+    #[strum(to_string = "jmp")]
     Always,
-    #[strum(to_string="jt")]
+    #[strum(to_string = "jt")]
     IfTrue,
-    #[strum(to_string="jf")]
+    #[strum(to_string = "jf")]
     IfFalse,
 }
 
@@ -24,7 +29,11 @@ pub struct InstJump {
 }
 
 impl FormatInst for InstJump {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         write!(f, "{:5} {}", self.kind, self.block)
     }
 }
@@ -81,17 +90,20 @@ pub fn run_jump(state: &mut VMState, inst: InstJump) -> ExecResult {
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 pub enum InstRet {
-    #[strum(to_string="ret")]
+    #[strum(to_string = "ret")]
     Value,
-    #[strum(to_string="retn")]
+    #[strum(to_string = "retn")]
     Void,
 }
 impl FormatInst for InstRet {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         write!(f, "{}", self)
     }
 }
-
 
 impl_sub_inst!(type Inst::Ret(InstRetCtx<InstRet, Span>));
 

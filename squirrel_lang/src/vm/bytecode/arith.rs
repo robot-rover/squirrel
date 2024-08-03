@@ -6,21 +6,27 @@ use std::{
 use super::{Inst, InstCtx, Reg};
 use crate::{
     impl_sub_inst,
-    vm::{bytecode::context::BinaryOpContext, compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
+    vm::{
+        bytecode::context::BinaryOpContext,
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+        value::Value,
+    },
 };
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 enum ArithOp {
-    #[strum(to_string="add")]
+    #[strum(to_string = "add")]
     Add,
-    #[strum(to_string="sub")]
+    #[strum(to_string = "sub")]
     Sub,
-    #[strum(to_string="mul")]
+    #[strum(to_string = "mul")]
     Mul,
-    #[strum(to_string="div")]
+    #[strum(to_string = "div")]
     Div,
-    #[strum(to_string="modu")]
+    #[strum(to_string = "modu")]
     Modu,
 }
 

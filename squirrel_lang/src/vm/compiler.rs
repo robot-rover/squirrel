@@ -1,5 +1,6 @@
 use std::fmt;
 
+use logos::source;
 use serde::{Deserialize, Serialize};
 
 use crate::{
@@ -27,9 +28,9 @@ impl<'a> fmt::Display for ConstFmt<'a> {
         write!(
             f,
             "consts[{}]({})",
-            self.0.as_idx(), self.1.constants[self.0.as_idx()]
+            self.0.as_idx(),
+            self.1.constants[self.0.as_idx()]
         )
-
     }
 }
 
@@ -42,7 +43,6 @@ impl Const {
 impl fmt::Display for Reg {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "r[{}]", self.as_idx())
-
     }
 }
 
@@ -93,8 +93,8 @@ pub struct File {
     pub code: Function,
 }
 
-impl fmt::Debug for Function {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+impl Function {
+    fn write(&self, f: &mut fmt::Formatter<'_>, source_file: Option<&File>) -> fmt::Result {
         write!(f, "Function(",)?;
         let mut arg_iter = self.locals[..self.num_params as usize]
             .iter()
@@ -144,6 +144,7 @@ impl fmt::Debug for Function {
             blocks.sort_by_key(|(_, offset)| *offset);
             let mut block_iter = blocks.into_iter().peekable();
             write!(f, "\nCode:")?;
+            let mut start_of_next_line = 0;
             for (offset, inst) in self.code.iter().enumerate() {
                 let block_idx = if let Some(&(block_idx, block_offset)) = block_iter.peek() {
                     assert!(
@@ -162,6 +163,21 @@ impl fmt::Debug for Function {
                     None
                 };
 
+                if let Some(source_file) = source_file {
+                    let start_offset = inst.get_span().start;
+                    if start_offset >= start_of_next_line {
+                        let line_end = source_file.source[start_offset..]
+                            .find('\n')
+                            .map(|end| start_offset + end)
+                            .unwrap_or(source_file.source.len());
+                        write!(
+                            f,
+                            "\n  ; {}",
+                            source_file.source[start_of_next_line..line_end].trim()
+                        )?;
+                        start_of_next_line = line_end + 1;
+                    };
+                }
                 if let Some(block_idx) = block_idx {
                     write!(f, "\n  {:width$}: ", block_idx, width = block_idx_width)?;
                 } else {
@@ -172,6 +188,24 @@ impl fmt::Debug for Function {
         }
 
         Ok(())
+    }
+
+    pub fn wrap<'a>(&'a self, file: &'a File) -> FunctionDebug<'a> {
+        FunctionDebug(self, file)
+    }
+}
+
+impl fmt::Debug for Function {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.write(f, None)
+    }
+}
+
+pub struct FunctionDebug<'a>(&'a Function, &'a File);
+
+impl<'a> fmt::Debug for FunctionDebug<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.0.write(f, Some(self.1))
     }
 }
 

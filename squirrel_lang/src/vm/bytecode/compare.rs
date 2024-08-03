@@ -1,7 +1,11 @@
 use num_traits::ConstZero;
 use serde::{Deserialize, Serialize};
 
-use crate::vm::{compiler::{self, FormatInst}, error::ExecResult, value::Value};
+use crate::vm::{
+    compiler::{self, FormatInst},
+    error::ExecResult,
+    value::Value,
+};
 use crate::{
     impl_sub_inst,
     vm::{bytecode::context::BinaryOpContext, runtime::VMState},
@@ -11,19 +15,19 @@ use super::{Inst, InstCtx, Reg};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 enum CompareKind {
-    #[strum(to_string="islt")]
+    #[strum(to_string = "islt")]
     IsLt,
-    #[strum(to_string="isle")]
+    #[strum(to_string = "isle")]
     IsLe,
-    #[strum(to_string="isgt")]
+    #[strum(to_string = "isgt")]
     IsGt,
-    #[strum(to_string="isge")]
+    #[strum(to_string = "isge")]
     IsGe,
-    #[strum(to_string="iseq")]
+    #[strum(to_string = "iseq")]
     IsEq,
-    #[strum(to_string="isne")]
+    #[strum(to_string = "isne")]
     IsNe,
-    #[strum(to_string="cmp")]
+    #[strum(to_string = "cmp")]
     Cmp,
 }
 
@@ -48,7 +52,11 @@ pub struct InstCompare {
 }
 
 impl FormatInst for InstCompare {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         write!(f, "{:5} {}", self.kind, self.reg)
     }
 }

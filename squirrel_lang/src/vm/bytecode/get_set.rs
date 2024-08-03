@@ -4,7 +4,10 @@ use crate::{
     context::Span,
     impl_sub_inst,
     vm::{
-        compiler::{self, FormatInst}, error::{ExecError, ExecResult}, runtime::VMState, value::{HashValue, SetFieldError, TypeName, Value}
+        compiler::{self, FormatInst},
+        error::{ExecError, ExecResult},
+        runtime::VMState,
+        value::{HashValue, SetFieldError, TypeName, Value},
     },
 };
 
@@ -65,12 +68,27 @@ impl_sub_inst!(Get InstGetCtx/InstGet {
 });
 
 impl FormatInst for InstGet {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         match self {
             InstGet::Getc(Getc(constant)) => write!(f, "{:5} {}", "get", constant.fmt_inst(fun)),
             InstGet::Getf(Getf(reg)) => write!(f, "{:5} {}", "getf", reg),
             InstGet::Getfc(Getfc(constant)) => write!(f, "{:5} {}", "getf", constant.fmt_inst(fun)),
             InstGet::IsIn(IsIn(reg)) => write!(f, "{:5} {}", "isin", reg),
+        }
+    }
+}
+
+impl InstGetCtx {
+    pub fn get_span(&self) -> Span {
+        match self {
+            InstGetCtx::Getc(_, ctx) => ctx.get_span(),
+            InstGetCtx::Getf(_, ctx) => ctx.get_span(),
+            InstGetCtx::Getfc(_, ctx) => ctx.get_span(),
+            InstGetCtx::IsIn(_, ctx) => ctx.get_span(),
         }
     }
 }
@@ -142,10 +160,25 @@ impl_sub_inst!(Set InstSetCtx/InstSet {
 });
 
 impl FormatInst for InstSet {
-    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
         match self {
-            InstSet::Setc(Setc(constant, is_ns)) => write!(f, "{:5} {} ns:{}", "set", constant.fmt_inst(fun), is_ns),
+            InstSet::Setc(Setc(constant, is_ns)) => {
+                write!(f, "{:5} {} ns:{}", "set", constant.fmt_inst(fun), is_ns)
+            }
             InstSet::Setf(Setf(reg, is_ns)) => write!(f, "{:5} {} ns:{}", "set", reg, is_ns),
+        }
+    }
+}
+
+impl InstSetCtx {
+    pub fn get_span(&self) -> Span {
+        match self {
+            InstSetCtx::Setc(_, ctx) => ctx.get_span(),
+            InstSetCtx::Setf(_, ctx) => ctx.get_span(),
         }
     }
 }
