@@ -1,17 +1,24 @@
+use std::fmt;
+
 use serde::{Deserialize, Serialize};
 
 use super::{Inst, InstCtx, Reg};
 use crate::{
     impl_sub_inst,
-    vm::{bytecode::context::BinaryOpContext, error::ExecResult, runtime::VMState, value::Value},
+    vm::{bytecode::context::BinaryOpContext, compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
 };
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 enum BitwiseOp {
+    #[strum(to_string="band")]
     Band,
+    #[strum(to_string="bor")]
     Bor,
+    #[strum(to_string="bxor")]
     Bxor,
+    #[strum(to_string="brsh")]
     Brsh,
+    #[strum(to_string="bash")]
     Bash,
 }
 
@@ -32,6 +39,12 @@ impl BitwiseOp {
 pub struct InstBitwise {
     op: BitwiseOp,
     reg: Reg,
+}
+
+impl FormatInst for InstBitwise {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> fmt::Result {
+        write!(f, "{:5} {}", self.op, self.reg)
+    }
 }
 
 impl_sub_inst!(type Inst::Bitwise(InstBitwiseCtx<InstBitwise, BinaryOpContext>));

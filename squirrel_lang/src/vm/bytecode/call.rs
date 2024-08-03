@@ -1,7 +1,7 @@
 use crate::{
     context::Span,
     impl_sub_inst,
-    vm::{error::ExecResult, runtime::VMState, value::Value},
+    vm::{compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::Value},
 };
 
 use super::{context::FnCallContext, Const, FunIdx, Inst, InstCtx, Local, Reg, Tag};
@@ -25,6 +25,12 @@ impl InstCtx {
             },
             ctx,
         })
+    }
+}
+
+impl FormatInst for InstCall {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        write!(f, "{:5} {} {}", "call", self.reg, self.n_args)
     }
 }
 

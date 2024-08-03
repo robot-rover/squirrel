@@ -1,7 +1,7 @@
 use num_traits::ConstZero;
 use serde::{Deserialize, Serialize};
 
-use crate::vm::{error::ExecResult, value::Value};
+use crate::vm::{compiler::{self, FormatInst}, error::ExecResult, value::Value};
 use crate::{
     impl_sub_inst,
     vm::{bytecode::context::BinaryOpContext, runtime::VMState},
@@ -9,14 +9,21 @@ use crate::{
 
 use super::{Inst, InstCtx, Reg};
 
-#[derive(Clone, Copy, Debug, Serialize, Deserialize)]
+#[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 enum CompareKind {
+    #[strum(to_string="islt")]
     IsLt,
+    #[strum(to_string="isle")]
     IsLe,
+    #[strum(to_string="isgt")]
     IsGt,
+    #[strum(to_string="isge")]
     IsGe,
+    #[strum(to_string="iseq")]
     IsEq,
+    #[strum(to_string="isne")]
     IsNe,
+    #[strum(to_string="cmp")]
     Cmp,
 }
 
@@ -38,6 +45,12 @@ impl CompareKind {
 pub struct InstCompare {
     reg: Reg,
     kind: CompareKind,
+}
+
+impl FormatInst for InstCompare {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        write!(f, "{:5} {}", self.kind, self.reg)
+    }
 }
 
 impl_sub_inst!(type Inst::Compare(InstCompareCtx<InstCompare, BinaryOpContext>));

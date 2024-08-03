@@ -4,9 +4,7 @@ use crate::{
     context::Span,
     impl_sub_inst,
     vm::{
-        error::{ExecError, ExecResult},
-        runtime::VMState,
-        value::{HashValue, SetFieldError, TypeName, Value},
+        compiler::{self, FormatInst}, error::{ExecError, ExecResult}, runtime::VMState, value::{HashValue, SetFieldError, TypeName, Value}
     },
 };
 
@@ -65,6 +63,17 @@ impl_sub_inst!(Get InstGetCtx/InstGet {
     Getfc(Getfc(Const), GetFieldContext),
     IsIn(IsIn(Reg), BinaryOpContext),
 });
+
+impl FormatInst for InstGet {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        match self {
+            InstGet::Getc(Getc(constant)) => write!(f, "{:5} {}", "get", constant.fmt_inst(fun)),
+            InstGet::Getf(Getf(reg)) => write!(f, "{:5} {}", "getf", reg),
+            InstGet::Getfc(Getfc(constant)) => write!(f, "{:5} {}", "getf", constant.fmt_inst(fun)),
+            InstGet::IsIn(IsIn(reg)) => write!(f, "{:5} {}", "isin", reg),
+        }
+    }
+}
 
 impl InstCtx {
     pub fn getc(constant: Const, ctx: GetIdentContext) -> Self {
@@ -131,6 +140,15 @@ impl_sub_inst!(Set InstSetCtx/InstSet {
     Setc(Setc(Const, bool), SetIdentContext),
     Setf(Setf(Reg, bool), SetFieldContext),
 });
+
+impl FormatInst for InstSet {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        match self {
+            InstSet::Setc(Setc(constant, is_ns)) => write!(f, "{:5} {} ns:{}", "set", constant.fmt_inst(fun), is_ns),
+            InstSet::Setf(Setf(reg, is_ns)) => write!(f, "{:5} {} ns:{}", "set", reg, is_ns),
+        }
+    }
+}
 
 impl InstCtx {
     pub fn setf(reg_idx: Reg, ctx: SetFieldContext, is_ns: bool) -> Self {

@@ -24,6 +24,8 @@ pub use unary::{run_unary, InstUnary};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumDiscriminants;
 
+use super::compiler::FormatInst;
+
 macro_rules! newtype {
     ($name:ident) => {
         #[derive(Clone, Copy, Debug, Serialize, Deserialize)]
@@ -218,6 +220,25 @@ pub enum Inst {
     Store(InstStore),
     Misc(InstMisc),
     Unary(InstUnary),
+}
+
+impl FormatInst for Inst {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &super::compiler::Function) -> std::fmt::Result {
+        match self {
+            Inst::Arith(arith) => arith.fmt_inst(f, fun),
+            Inst::Bitwise(bitwise) => bitwise.fmt_inst(f, fun),
+            Inst::Call(call) => call.fmt_inst(f, fun),
+            Inst::Compare(compare) => compare.fmt_inst(f, fun),
+            Inst::Get(get) => get.fmt_inst(f, fun),
+            Inst::Set(set) => set.fmt_inst(f, fun),
+            Inst::Jump(jump) => jump.fmt_inst(f, fun),
+            Inst::Ret(ret) => ret.fmt_inst(f, fun),
+            Inst::Load(load) => load.fmt_inst(f, fun),
+            Inst::Store(store) => store.fmt_inst(f, fun),
+            Inst::Misc(misc) => misc.fmt_inst(f, fun),
+            Inst::Unary(unary) => unary.fmt_inst(f, fun),
+        }
+    }
 }
 
 impl InstCtx {

@@ -5,9 +5,7 @@ use crate::{
     context::Span,
     impl_sub_inst,
     vm::{
-        error::ExecResult,
-        runtime::VMState,
-        value::{Closure, Value},
+        compiler::{self, FormatInst}, error::ExecResult, runtime::VMState, value::{Closure, Value}
     },
 };
 
@@ -37,6 +35,20 @@ pub enum InstLoad {
     PrimType(PrimType),
     U8(u8),
     I8(i8),
+}
+
+impl FormatInst for InstLoad {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        match self {
+            InstLoad::Reg(reg) => write!(f, "{:5} {}", "load", reg),
+            InstLoad::Local(local) => write!(f, "{:5} {}", "load", local.fmt_inst(fun)),
+            InstLoad::Const(constant) => write!(f, "{:5} {}", "load", constant.fmt_inst(fun)),
+            InstLoad::FunIdx(fun) => write!(f, "{:5} {}", "load", fun),
+            InstLoad::PrimType(prim) => write!(f, "{:5} {:?}", "load", prim),
+            InstLoad::U8(imm) => write!(f, "{:5} u {}", "load", imm),
+            InstLoad::I8(imm) => write!(f, "{:5} i {}", "load", imm),
+        }
+    }
 }
 
 impl_sub_inst!(type Inst::Load(InstLoadCtx<InstLoad, Span>));
@@ -86,6 +98,16 @@ pub enum InstStore {
     Reg(Reg),
     Local(Local),
 }
+
+impl FormatInst for InstStore {
+    fn fmt_inst(&self, f: &mut std::fmt::Formatter<'_>, fun: &compiler::Function) -> std::fmt::Result {
+        match self {
+            InstStore::Reg(reg) => write!(f, "{:5} {}", "store", reg),
+            InstStore::Local(local) => write!(f, "{:5} {}", "store", local.fmt_inst(fun)),
+        }
+    }
+}
+
 
 impl_sub_inst!(type Inst::Store(InstStoreCtx<InstStore, Span>));
 
