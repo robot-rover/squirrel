@@ -89,20 +89,20 @@ impl InstCtx {
 
 pub fn run_compare(state: &mut VMState, inst: InstCompare) -> ExecResult {
     let frame = state.frame();
-    let lhs = frame.get_reg(inst.reg).clone();
-    let rhs = state.take_acc();
+    let lhs = frame.get_reg(inst.reg);
+    let rhs = state.get_acc();
     state.set_acc(match (lhs, rhs) {
-        (Value::Integer(lhs), Value::Integer(rhs)) => compare_zero(inst.kind, lhs - rhs),
-        (Value::Float(lhs), Value::Integer(rhs)) => compare_zero(inst.kind, lhs - rhs as f64),
-        (Value::Integer(lhs), Value::Float(rhs)) => compare_zero(inst.kind, lhs as f64 - rhs),
-        (Value::Float(lhs), Value::Float(rhs)) => compare_zero(inst.kind, lhs - rhs),
+        (Value::Integer(lhs), Value::Integer(rhs)) => compare_zero(inst.kind, *lhs - *rhs),
+        (Value::Float(lhs), Value::Integer(rhs)) => compare_zero(inst.kind, *lhs - *rhs as f64),
+        (Value::Integer(lhs), Value::Float(rhs)) => compare_zero(inst.kind, *lhs as f64 - *rhs),
+        (Value::Float(lhs), Value::Float(rhs)) => compare_zero(inst.kind, *lhs - *rhs),
         (Value::Instance(inst), other) => todo!("Metamethods"),
         (Value::Table(inst), other) => todo!("Metamethods"),
         other => {
             return Err(state.get_context(inst).illegal_operation(
                 inst.kind.op_name(),
-                other.0,
-                other.1,
+                other.0.clone(),
+                other.1.clone(),
             ))
         }
     });

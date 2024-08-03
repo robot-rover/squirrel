@@ -2,7 +2,10 @@ mod builtins;
 // mod argparse;
 
 use std::{
+    borrow::Borrow,
     cell::RefCell,
+    cmp::Ordering,
+    fmt,
     io::{self, stdout},
     rc::Rc,
 };
@@ -22,7 +25,7 @@ use super::{
         run_ret, run_set, run_store, run_unary, Block, Const, FunIdx, Inst, InstCtx, Local, Reg,
         SubInstGetContext, Tag,
     },
-    compiler::{self, Function},
+    compiler::{self, FormatInst, Function},
     value::{Table, Value},
 };
 
@@ -117,8 +120,8 @@ impl<'a> VMState<'a> {
         self.call_stack.last_mut().unwrap()
     }
 
-    pub fn take_acc(&mut self) -> Value {
-        std::mem::replace(&mut self.acc, Value::Null)
+    pub fn get_acc(&self) -> &Value {
+        &self.acc
     }
 
     pub fn set_acc(&mut self, value: Value) {
@@ -227,6 +230,38 @@ impl StackFrame {
 
     pub fn jump_to_block(&mut self, block: Block) {
         self.ip = self.func.block_offsets[block.as_idx()] as usize;
+    }
+}
+
+impl fmt::Display for StackFrame {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        writeln!(f, "StackFrame")?;
+        writeln!(f, "ip: {}", self.ip)?;
+        writeln!(f, "env: {}", self.env)?;
+        write!(f, "locals:")?;
+        let mut local_name_iter = self.func.locals.iter().peekable();
+        for (i, local) in self.locals.iter().enumerate() {
+            write!(f, "\n  {}: {}", i, RefCell::borrow(local))?;
+            match local_name_iter
+                .peek()
+                .map(|(name, idx)| (name, idx.cmp(&(i as u32))))
+            {
+                Some((_, Ordering::Less)) => unreachable!("Local names are out of order"),
+                Some((name, Ordering::Equal)) => {
+                    write!(f, " ({})", name)?;
+                    local_name_iter.next();
+                }
+                None | Some((_, Ordering::Greater)) => {}
+            }
+        }
+        write!(f, "\nregisters ({})", self.registers.len())?;
+        for (i, reg) in self.registers.iter().enumerate() {
+            if !matches!(reg, Value::Null) {
+                write!(f, "\n  {}: {}", i, reg)?;
+            }
+        }
+
+        Ok(())
     }
 }
 

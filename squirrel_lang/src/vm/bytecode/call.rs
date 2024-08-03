@@ -45,10 +45,10 @@ impl FormatInst for InstCall {
 
 pub fn run_call(state: &mut VMState, inst: InstCall) -> ExecResult {
     let frame = state.frame();
-    let fun_idx = match state.take_acc() {
+    let fun_idx = match state.get_acc() {
         Value::NativeFn(f) => f(state as *mut VMState, inst.reg, inst.n_args),
         Value::Closure(c) => todo!(),
-        other => return Err(state.get_context(inst).uncallable_type(other)),
+        other => return Err(state.get_context(inst).uncallable_type(other.clone())),
     };
 
     Ok(())

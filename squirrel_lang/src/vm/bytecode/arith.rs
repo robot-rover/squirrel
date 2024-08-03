@@ -80,30 +80,32 @@ impl InstCtx {
 
 pub fn run_arith(state: &mut VMState, inst: InstArith) -> ExecResult {
     let frame = state.frame();
-    let lhs = frame.get_reg(inst.reg).clone();
-    let rhs = state.take_acc();
+    let lhs = frame.get_reg(inst.reg);
+    let rhs = state.get_acc();
     match (lhs, rhs) {
         (lhs @ Value::String(_), rhs) | (lhs, rhs @ Value::String(_)) => {
             state.set_acc(run_concat(lhs, rhs));
         }
         (Value::Integer(lhs), Value::Integer(rhs)) => {
-            state.set_acc(run_arith_numeric(lhs, rhs, inst.op));
+            state.set_acc(run_arith_numeric(*lhs, *rhs, inst.op));
         }
         (Value::Float(lhs), Value::Integer(rhs)) => {
-            state.set_acc(run_arith_numeric(lhs, rhs as f64, inst.op));
+            state.set_acc(run_arith_numeric(*lhs, *rhs as f64, inst.op));
         }
         (Value::Integer(lhs), Value::Float(rhs)) => {
-            state.set_acc(run_arith_numeric(lhs as f64, rhs, inst.op));
+            state.set_acc(run_arith_numeric(*lhs as f64, *rhs, inst.op));
         }
         (Value::Float(lhs), Value::Float(rhs)) => {
-            state.set_acc(run_arith_numeric(lhs, rhs, inst.op));
+            state.set_acc(run_arith_numeric(*lhs, *rhs, inst.op));
         }
         (Value::Instance(inst), other) => todo!("Metamethods"),
         (Value::Table(inst), other) => todo!("Metamethods"),
         other => {
-            return Err(state
-                .get_context(inst)
-                .illegal_operation(inst.op.name(), other.0, other.1))
+            return Err(state.get_context(inst).illegal_operation(
+                inst.op.name(),
+                other.0.clone(),
+                other.1.clone(),
+            ))
         }
     }
 

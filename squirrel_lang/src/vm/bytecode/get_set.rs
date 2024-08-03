@@ -113,19 +113,20 @@ impl InstCtx {
 
 pub fn run_get(state: &mut VMState, inst: InstGet) -> ExecResult {
     let parent = match inst {
-        InstGet::Getc(_) => state.frame().get_env().clone(),
-        InstGet::Getf(Getf(reg)) | InstGet::IsIn(IsIn(reg)) => state.frame().get_reg(reg).clone(),
-        InstGet::Getfc(_) => state.take_acc(),
+        InstGet::Getc(_) => state.frame().get_env(),
+        InstGet::Getf(Getf(reg)) | InstGet::IsIn(IsIn(reg)) => state.frame().get_reg(reg),
+        InstGet::Getfc(_) => state.get_acc(),
     };
 
     let field = match inst {
         InstGet::Getc(Getc(constant)) | InstGet::Getfc(Getfc(constant)) => {
-            state.frame().get_func().get_constant(constant).clone()
+            state.frame().get_func().get_constant(constant)
         }
-        InstGet::Getf(_) | InstGet::IsIn(_) => state.take_acc(),
+        InstGet::Getf(_) | InstGet::IsIn(_) => state.get_acc(),
     };
 
-    let field = match HashValue::try_from(field) {
+    // TODO: Don't need to clone here?
+    let field = match HashValue::try_from(field.clone()) {
         Ok(hv) => hv,
         Err(nhv) => match inst {
             InstGet::Getc(g) => panic!("Getc should be called with a string constant"),
@@ -226,7 +227,7 @@ pub fn run_set(state: &mut VMState, inst: InstSet) -> ExecResult {
     };
 
     // TODO: Need to clone here perhaps?
-    let value = state.take_acc();
+    let value = state.get_acc().clone();
 
     let res = match (parent, field) {
         (Value::Array(array), Value::Integer(index)) => {

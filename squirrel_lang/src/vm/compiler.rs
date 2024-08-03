@@ -170,11 +170,9 @@ impl Function {
                             .find('\n')
                             .map(|end| start_offset + end)
                             .unwrap_or(source_file.source.len());
-                        write!(
-                            f,
-                            "\n  ; {}",
-                            source_file.source[start_of_next_line..line_end].trim()
-                        )?;
+                        for line in source_file.source[start_of_next_line..line_end].lines() {
+                            write!(f, "\n  ; {}", line)?;
+                        }
                         start_of_next_line = line_end + 1;
                     };
                 }

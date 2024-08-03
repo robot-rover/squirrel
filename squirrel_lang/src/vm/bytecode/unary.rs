@@ -71,7 +71,7 @@ impl InstCtx {
 }
 
 pub fn run_unary(state: &mut VMState, inst: InstUnary) -> ExecResult {
-    let acc = state.take_acc();
+    let acc = state.get_acc();
     let result = match (inst, acc) {
         (InstUnary::LNOT, any) => (!any.truthy()).into(),
         (InstUnary::BNOT, Value::Integer(i)) => Value::Integer(!i),
@@ -82,7 +82,7 @@ pub fn run_unary(state: &mut VMState, inst: InstUnary) -> ExecResult {
         (InstUnary::BNOT | InstUnary::NEG, other) => {
             return Err(state
                 .get_context(inst)
-                .illegal_operation(inst.name(), other))
+                .illegal_operation(inst.name(), other.clone()))
         }
     };
 

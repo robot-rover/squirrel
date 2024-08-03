@@ -77,7 +77,7 @@ pub fn run_jump(state: &mut VMState, inst: InstJump) -> ExecResult {
         JumpKind::Always => {}
         JumpKind::IfTrue | JumpKind::IfFalse => {
             let state_to_jump = matches!(inst.kind, JumpKind::IfTrue);
-            if state.take_acc().truthy() != state_to_jump {
+            if state.get_acc().truthy() != state_to_jump {
                 return Ok(());
             }
         }

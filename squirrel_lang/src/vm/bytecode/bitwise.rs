@@ -79,16 +79,18 @@ impl InstCtx {
 
 pub fn run_bitwise(state: &mut VMState, inst: InstBitwise) -> ExecResult {
     let frame = state.frame();
-    let lhs = frame.get_reg(inst.reg).clone();
-    let rhs = state.take_acc();
+    let lhs = frame.get_reg(inst.reg);
+    let rhs = state.get_acc();
     match (lhs, rhs) {
         (Value::Integer(lhs), Value::Integer(rhs)) => {
-            state.set_acc(run_bitwise_int(lhs, rhs, inst.op));
+            state.set_acc(run_bitwise_int(*lhs, *rhs, inst.op));
         }
         other => {
-            return Err(state
-                .get_context(inst)
-                .illegal_operation(inst.op.name(), other.0, other.1))
+            return Err(state.get_context(inst).illegal_operation(
+                inst.op.name(),
+                other.0.clone(),
+                other.1.clone(),
+            ))
         }
     }
     Ok(())

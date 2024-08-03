@@ -26,7 +26,7 @@ use strum_macros::EnumDiscriminants;
 
 use crate::context::Span;
 
-use super::compiler::FormatInst;
+use super::compiler::{self, FormatInst};
 
 macro_rules! newtype {
     ($name:ident) => {
@@ -228,7 +228,7 @@ impl FormatInst for Inst {
     fn fmt_inst(
         &self,
         f: &mut std::fmt::Formatter<'_>,
-        fun: &super::compiler::Function,
+        fun: &compiler::Function,
     ) -> std::fmt::Result {
         match self {
             Inst::Arith(arith) => arith.fmt_inst(f, fun),

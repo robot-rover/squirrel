@@ -138,10 +138,10 @@ impl InstCtx {
 }
 
 pub fn run_store(state: &mut VMState, inst: InstStore) -> ExecResult {
-    let value = state.take_acc();
+    let value = state.get_acc();
     match inst {
-        InstStore::Reg(reg) => *state.frame_mut().get_reg_mut(reg) = value,
-        InstStore::Local(local) => *state.frame().get_local(local).borrow_mut() = value,
+        InstStore::Reg(reg) => *state.frame_mut().get_reg_mut(reg) = value.clone(),
+        InstStore::Local(local) => *state.frame().get_local(local).borrow_mut() = value.clone(),
     }
     Ok(())
 }

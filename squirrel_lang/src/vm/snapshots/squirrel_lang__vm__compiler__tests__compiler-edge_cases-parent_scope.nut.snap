@@ -1,0 +1,461 @@
+---
+source: squirrel_lang/src/vm/compiler.rs
+expression: actual_code
+---
+code:
+  - Load:
+      data:
+        Const: 0
+      ctx:
+        start: 4
+        end: 7
+  - Store:
+      data:
+        Reg: 0
+      ctx:
+        start: 4
+        end: 7
+  - Misc:
+      data: This
+      ctx:
+        start: 11
+        end: 15
+  - Get:
+      IsIn:
+        - 0
+        - lhs_span:
+            start: 4
+            end: 7
+          op_span:
+            start: 4
+            end: 15
+          rhs_span:
+            start: 11
+            end: 15
+  - Jump:
+      data:
+        kind: IfTrue
+        block: 1
+      ctx:
+        start: 4
+        end: 15
+  - Misc:
+      data: This
+      ctx:
+        start: 55
+        end: 60
+  - Store:
+      data:
+        Reg: 8
+      ctx:
+        start: 55
+        end: 60
+  - Get:
+      Getc:
+        - 5
+        - ident_span:
+            start: 55
+            end: 60
+  - Store:
+      data:
+        Reg: 7
+      ctx:
+        start: 55
+        end: 60
+  - Load:
+      data:
+        Const: 6
+      ctx:
+        start: 61
+        end: 69
+  - Store:
+      data:
+        Reg: 9
+      ctx:
+        start: 61
+        end: 69
+  - Load:
+      data:
+        Reg: 7
+      ctx:
+        start: 55
+        end: 60
+  - Call:
+      data:
+        reg: 8
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 55
+          end: 60
+        call_span:
+          start: 60
+          end: 70
+        args:
+          - start: 61
+            end: 69
+  - Misc:
+      data: This
+      ctx:
+        start: 71
+        end: 76
+  - Store:
+      data:
+        Reg: 11
+      ctx:
+        start: 71
+        end: 76
+  - Get:
+      Getc:
+        - 7
+        - ident_span:
+            start: 71
+            end: 76
+  - Store:
+      data:
+        Reg: 10
+      ctx:
+        start: 71
+        end: 76
+  - Misc:
+      data: This
+      ctx:
+        start: 77
+        end: 89
+  - Store:
+      data:
+        Reg: 14
+      ctx:
+        start: 77
+        end: 89
+  - Get:
+      Getc:
+        - 8
+        - ident_span:
+            start: 77
+            end: 89
+  - Store:
+      data:
+        Reg: 13
+      ctx:
+        start: 77
+        end: 89
+  - Load:
+      data:
+        Reg: 13
+      ctx:
+        start: 77
+        end: 89
+  - Call:
+      data:
+        reg: 14
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 77
+          end: 89
+        call_span:
+          start: 89
+          end: 91
+        args: []
+  - Store:
+      data:
+        Reg: 12
+      ctx:
+        start: 89
+        end: 91
+  - Load:
+      data:
+        Reg: 10
+      ctx:
+        start: 71
+        end: 76
+  - Call:
+      data:
+        reg: 11
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 71
+          end: 76
+        call_span:
+          start: 76
+          end: 92
+        args:
+          - start: 89
+            end: 91
+  - Misc:
+      data: This
+      ctx:
+        start: 93
+        end: 99
+  - Store:
+      data:
+        Reg: 16
+      ctx:
+        start: 93
+        end: 99
+  - Get:
+      Getc:
+        - 9
+        - ident_span:
+            start: 93
+            end: 99
+  - Store:
+      data:
+        Reg: 15
+      ctx:
+        start: 93
+        end: 99
+  - Misc:
+      data: This
+      ctx:
+        start: 100
+        end: 104
+  - Store:
+      data:
+        Reg: 18
+      ctx:
+        start: 100
+        end: 104
+  - Misc:
+      data: This
+      ctx:
+        start: 108
+        end: 120
+  - Store:
+      data:
+        Reg: 20
+      ctx:
+        start: 108
+        end: 120
+  - Get:
+      Getc:
+        - 10
+        - ident_span:
+            start: 108
+            end: 120
+  - Store:
+      data:
+        Reg: 19
+      ctx:
+        start: 108
+        end: 120
+  - Load:
+      data:
+        Reg: 19
+      ctx:
+        start: 108
+        end: 120
+  - Call:
+      data:
+        reg: 20
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 108
+          end: 120
+        call_span:
+          start: 120
+          end: 122
+        args: []
+  - Compare:
+      data:
+        reg: 18
+        kind: IsEq
+      ctx:
+        lhs_span:
+          start: 100
+          end: 104
+        op_span:
+          start: 100
+          end: 122
+        rhs_span:
+          start: 120
+          end: 122
+  - Store:
+      data:
+        Reg: 17
+      ctx:
+        start: 100
+        end: 122
+  - Load:
+      data:
+        Reg: 15
+      ctx:
+        start: 93
+        end: 99
+  - Call:
+      data:
+        reg: 16
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 93
+          end: 99
+        call_span:
+          start: 99
+          end: 123
+        args:
+          - start: 100
+            end: 122
+  - Ret:
+      data: Void
+      ctx:
+        start: 0
+        end: 123
+  - Misc:
+      data: Root
+      ctx:
+        start: 23
+        end: 25
+  - Store:
+      data:
+        Reg: 2
+      ctx:
+        start: 23
+        end: 25
+  - Get:
+      Getfc:
+        - 1
+        - parent_span:
+            start: 23
+            end: 25
+          field_span:
+            start: 25
+            end: 30
+  - Store:
+      data:
+        Reg: 1
+      ctx:
+        start: 23
+        end: 30
+  - Get:
+      Getc:
+        - 2
+        - ident_span:
+            start: 31
+            end: 32
+  - Store:
+      data:
+        Reg: 6
+      ctx:
+        start: 31
+        end: 32
+  - Get:
+      Getfc:
+        - 3
+        - parent_span:
+            start: 31
+            end: 32
+          field_span:
+            start: 33
+            end: 41
+  - Store:
+      data:
+        Reg: 5
+      ctx:
+        start: 31
+        end: 41
+  - Load:
+      data:
+        Reg: 5
+      ctx:
+        start: 31
+        end: 41
+  - Call:
+      data:
+        reg: 6
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 31
+          end: 41
+        call_span:
+          start: 41
+          end: 43
+        args: []
+  - Store:
+      data:
+        Reg: 4
+      ctx:
+        start: 41
+        end: 43
+  - Load:
+      data:
+        Const: 4
+      ctx:
+        start: 46
+        end: 50
+  - Arith:
+      data:
+        op: Add
+        reg: 4
+      ctx:
+        lhs_span:
+          start: 41
+          end: 43
+        op_span:
+          start: 41
+          end: 50
+        rhs_span:
+          start: 46
+          end: 50
+  - Store:
+      data:
+        Reg: 3
+      ctx:
+        start: 41
+        end: 50
+  - Load:
+      data:
+        Reg: 1
+      ctx:
+        start: 23
+        end: 30
+  - Call:
+      data:
+        reg: 2
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 23
+          end: 30
+        call_span:
+          start: 30
+          end: 51
+        args:
+          - start: 41
+            end: 50
+  - Jump:
+      data:
+        kind: Always
+        block: 3
+      ctx:
+        start: 0
+        end: 53
+block_offsets:
+  - 0
+  - 43
+  - 5
+  - 5
+constants:
+  - String: a
+  - String: print
+  - String: a
+  - String: tostring
+  - String: "\n"
+  - String: print
+  - String: "root: "
+  - String: print
+  - String: getroottable
+  - String: assert
+  - String: getroottable
+is_varargs: true
+num_regs: 21
+num_params: 0
+locals:
+  - - vargv
+    - 0
+num_locals: 1
+sub_functions: []
