@@ -15,16 +15,16 @@ use ariadne::{Cache, Source};
 use hashbrown::HashMap;
 
 use crate::{
-    context::{SquirrelError, SquirrelErrorRendered},
     parser::ast,
+    sq_error::{SquirrelError, SquirrelErrorRendered},
     util::WriteOption,
 };
 
 use super::{
     bytecode::{
-        run_arith, run_bitwise, run_call, run_compare, run_get, run_jump, run_load, run_misc,
-        run_ret, run_set, run_store, run_unary, Block, Const, FunIdx, Inst, InstCtx, Local, Reg,
-        SubInstGetContext, Tag,
+        run_arith, run_bitwise, run_call, run_class, run_compare, run_del, run_get, run_jump,
+        run_load, run_misc, run_ret, run_set, run_store, run_unary, Block, Const, FunIdx, Inst,
+        InstCtx, Local, Reg, SubInstGetContext, Tag,
     },
     compiler::{self, FormatInst, Function},
     value::{Table, Value},
@@ -345,6 +345,8 @@ fn run_vm(state: &mut VMState) -> Result<(), SquirrelError> {
             Inst::Store(s) => run_store(state, s),
             Inst::Misc(m) => run_misc(state, m),
             Inst::Unary(u) => run_unary(state, u),
+            Inst::Class(c) => run_class(state, c),
+            Inst::Del(d) => run_del(state, d),
         };
         if let Err(err) = res {
             return Err(err.with_context(state.frame().func.source_file_id, &mut *state));

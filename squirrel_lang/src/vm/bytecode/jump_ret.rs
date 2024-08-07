@@ -2,8 +2,8 @@ use serde::{Deserialize, Serialize};
 
 use super::{Block, Const, FunIdx, Inst, InstCtx, Local, Reg};
 use crate::{
-    context::Span,
     impl_sub_inst,
+    sq_error::Span,
     vm::{
         compiler::{self, FormatInst},
         error::ExecResult,

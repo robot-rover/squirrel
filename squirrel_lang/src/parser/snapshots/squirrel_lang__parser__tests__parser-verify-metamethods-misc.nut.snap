@@ -1860,6 +1860,14 @@ body:
                             span:
                               start: Start
                               end: End
+                      ctx:
+                        class_kw_span:
+                          start: Start
+                          end: End
+                        class_body_span:
+                          start: Start
+                          end: End
+                        extends_kw_ty_span: ~
                   span:
                     start: Start
                     end: End
@@ -2356,6 +2364,14 @@ body:
                             span:
                               start: Start
                               end: End
+                      ctx:
+                        class_kw_span:
+                          start: Start
+                          end: End
+                        class_body_span:
+                          start: Start
+                          end: End
+                        extends_kw_ty_span: ~
                   span:
                     start: Start
                     end: End

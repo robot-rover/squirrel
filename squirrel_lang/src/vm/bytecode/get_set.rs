@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    context::Span,
+    context::{
+        BinaryOpContext, GetFieldContext, GetIdentContext, SetFieldContext, SetIdentContext,
+    },
     impl_sub_inst,
+    sq_error::Span,
     vm::{
         compiler::{self, FormatInst},
         error::{ExecError, ExecResult},
@@ -11,12 +14,7 @@ use crate::{
     },
 };
 
-use super::{
-    context::{
-        BinaryOpContext, GetFieldContext, GetIdentContext, SetFieldContext, SetIdentContext,
-    },
-    Const, FunIdx, Inst, InstCtx, Local, Reg, SubInst, SubInstGetContext, Tag,
-};
+use super::{Const, FunIdx, Inst, InstCtx, Local, Reg, SubInst, SubInstGetContext, Tag};
 
 macro_rules! impl_sub_sub_inst {
     ($par_var:ident $parent:ident::$var:ident($name:ident $(($($field:ty),+))?); $ctx:ty) => {
@@ -276,5 +274,116 @@ pub fn run_set(state: &mut VMState, inst: InstSet) -> ExecResult {
         }
     };
 
-    Ok(())
+    match res {
+        Ok(()) => Ok(()),
+        Err(SetFieldError::UndefinedField(field)) => Err(match inst {
+            InstSet::Setc(g) => state.get_context(g).undefined_variable(),
+            InstSet::Setf(g) => state.get_context(g).undefined_field(field),
+        }),
+        Err(SetFieldError::MutatingInstantiatedClass) => Err(match inst {
+            InstSet::Setc(g) => state.get_context(g).mutating_instantiated_class(),
+            InstSet::Setf(g) => state.get_context(g).mutating_instantiated_class(),
+        }),
+    }
+}
+
+impl_sub_inst!(Del InstDelCtx/InstDel {
+    Delc(Delc(Const), SetIdentContext),
+    Delf(Delf(Reg), SetFieldContext),
+    Delfc(Delfc(Const), SetFieldContext),
+});
+
+impl FormatInst for InstDel {
+    fn fmt_inst(
+        &self,
+        f: &mut std::fmt::Formatter<'_>,
+        fun: &compiler::Function,
+    ) -> std::fmt::Result {
+        match self {
+            InstDel::Delc(Delc(constant)) => {
+                write!(f, "{:5} {}", "delc", constant.fmt_inst(fun))
+            }
+            InstDel::Delf(Delf(reg)) => write!(f, "{:5} {}", "delf", reg),
+            InstDel::Delfc(Delfc(constant)) => {
+                write!(f, "{:5} {}", "delf", constant.fmt_inst(fun))
+            }
+        }
+    }
+}
+
+impl InstDelCtx {
+    pub fn get_span(&self) -> Span {
+        match self {
+            InstDelCtx::Delc(_, ctx) => ctx.get_span(),
+            InstDelCtx::Delf(_, ctx) => ctx.get_span(),
+            InstDelCtx::Delfc(_, ctx) => ctx.get_span(),
+        }
+    }
+}
+
+impl InstCtx {
+    pub fn delc(constant: Const, ctx: SetIdentContext) -> Self {
+        Self::Del(InstDelCtx::Delc(Delc(constant), ctx))
+    }
+
+    pub fn delf(reg: Reg, ctx: SetFieldContext) -> Self {
+        Self::Del(InstDelCtx::Delf(Delf(reg), ctx))
+    }
+
+    pub fn delfc(constant: Const, ctx: SetFieldContext) -> Self {
+        Self::Del(InstDelCtx::Delfc(Delfc(constant), ctx))
+    }
+}
+
+pub fn run_del(state: &mut VMState, inst: InstDel) -> ExecResult {
+    let parent = match inst {
+        InstDel::Delc(_) => state.frame().get_env(),
+        InstDel::Delf(Delf(reg)) => state.frame().get_reg(reg),
+        InstDel::Delfc(_) => state.get_acc(),
+    };
+
+    let field = match inst {
+        InstDel::Delc(Delc(constant)) | InstDel::Delfc(Delfc(constant)) => {
+            state.frame().get_func().get_constant(constant)
+        }
+        InstDel::Delf(_) => state.get_acc(),
+    };
+
+    // TODO: Don't need to clone here?
+    let field = match HashValue::try_from(field.clone()) {
+        Ok(hv) => hv,
+        Err(nhv) => match inst {
+            InstDel::Delc(g) => panic!("Delc should be called with a string constant"),
+            InstDel::Delf(g) => return Err(state.get_context(g).unhashable_type(nhv)),
+            InstDel::Delfc(g) => return Err(state.get_context(g).unhashable_type(nhv)),
+        },
+    };
+
+    let res = match (parent, field) {
+        (Value::Table(table), field) => table.borrow_mut().del_field(field),
+        (other, _) => {
+            return Err(match inst {
+                InstDel::Delc(g) => state.get_context(g).cannot_modify_type(other.clone()),
+                InstDel::Delf(g) => state.get_context(g).cannot_modify_type(other.clone()),
+                InstDel::Delfc(g) => state.get_context(g).cannot_modify_type(other.clone()),
+            })
+        }
+    };
+
+    match res {
+        Ok(value) => {
+            state.set_acc(value);
+            Ok(())
+        }
+        Err(SetFieldError::UndefinedField(field)) => match inst {
+            InstDel::Delc(g) => Err(state.get_context(g).undefined_variable()),
+            InstDel::Delf(g) => Err(state.get_context(g).undefined_field(field)),
+            InstDel::Delfc(g) => Err(state.get_context(g).undefined_field(field)),
+        },
+        Err(SetFieldError::MutatingInstantiatedClass) => match inst {
+            InstDel::Delc(g) => Err(state.get_context(g).mutating_instantiated_class()),
+            InstDel::Delf(g) => Err(state.get_context(g).mutating_instantiated_class()),
+            InstDel::Delfc(g) => Err(state.get_context(g).mutating_instantiated_class()),
+        },
+    }
 }

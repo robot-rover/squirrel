@@ -1,257 +1,314 @@
-use std::{
-    any::{type_name, type_name_of_val},
-    backtrace::{self, Backtrace, BacktraceStatus},
-    cmp::{max, min},
-    env,
-    fmt::{self, Display},
-    io,
-    ops::{BitOr, Range},
-    rc::Rc,
-};
+use std::{fmt::Binary, ops::Range};
 
-use ariadne::{Cache, Color, Label, Report, ReportKind, Source};
-use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
-pub struct Span {
-    pub start: usize,
-    pub end: usize,
+use crate::{
+    sq_error::{RsBacktrace, Span},
+    vm::{
+        error::{CallInfo, ExecError},
+        value::Value,
+    },
+};
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct GetIdentContext {
+    pub ident_span: Span,
 }
 
-impl Span {
-    // TODO: Should really get rid of this
-    pub fn empty() -> Self {
-        Self { start: 0, end: 0 }
+impl GetIdentContext {
+    pub fn undefined_variable(&self) -> ExecError {
+        ExecError::UndefinedVariable(self.ident_span, RsBacktrace::new())
     }
 
-    pub fn in_file(self, file_name: &str) -> ContextSpan {
-        ContextSpan {
-            file_name,
-            span: self,
-        }
-    }
-}
-
-impl BitOr for Span {
-    type Output = Self;
-
-    fn bitor(self, rhs: Self) -> Self {
-        (min(self.start, rhs.start)..max(self.end, rhs.end)).into()
+    pub fn get_span(&self) -> Span {
+        self.ident_span
     }
 }
 
-impl From<Range<usize>> for Span {
-    fn from(range: Range<usize>) -> Self {
-        Self {
-            start: range.start,
-            end: range.end,
-        }
-    }
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SetIdentContext {
+    pub ident_span: Span,
+    pub assignment_span: Span,
+    pub value_span: Span,
 }
 
-impl From<Span> for Range<usize> {
-    fn from(span: Span) -> Self {
-        span.start..span.end
-    }
-}
-
-impl ariadne::Span for Span {
-    type SourceId = ();
-
-    fn source(&self) -> &Self::SourceId {
-        &()
+impl SetIdentContext {
+    pub fn undefined_variable(&self) -> ExecError {
+        ExecError::UndefinedVariable(self.ident_span, RsBacktrace::new())
     }
 
-    fn start(&self) -> usize {
-        self.start
-    }
-
-    fn end(&self) -> usize {
-        self.end
-    }
-}
-
-pub struct ContextSpan<'a> {
-    pub file_name: &'a str,
-    pub span: Span,
-}
-
-impl<'a> ariadne::Span for ContextSpan<'a> {
-    type SourceId = &'a str;
-
-    fn source(&self) -> &Self::SourceId {
-        &self.file_name
-    }
-
-    fn start(&self) -> usize {
-        self.span.start
-    }
-
-    fn end(&self) -> usize {
-        self.span.end
-    }
-}
-
-static SQ_BACKTRACE: Lazy<bool> = Lazy::new(|| {
-    env::var("SQ_BACKTRACE")
-        .map(|val| val == "1")
-        .unwrap_or(false)
-});
-
-#[derive(Debug, Clone)]
-pub struct RsBacktrace(Rc<Backtrace>);
-
-impl RsBacktrace {
-    pub fn new() -> Self {
-        RsBacktrace(Rc::new(if *SQ_BACKTRACE {
-            Backtrace::force_capture()
-        } else {
-            Backtrace::disabled()
-        }))
-    }
-
-    pub fn empty() -> Self {
-        RsBacktrace(Rc::new(Backtrace::disabled()))
-    }
-}
-
-impl Display for RsBacktrace {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        if self.0.status() == BacktraceStatus::Captured {
-            let bt_string = format!("{}", self.0);
-            for line in bt_string.lines() {
-                if line.contains("./") || line.contains("squirrel") {
-                    writeln!(f, "{}", line)?;
-                }
-            }
-        }
-        Ok(())
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct SqStacktrace(Vec<SqTraceFrame>);
-#[derive(Debug, Clone)]
-pub struct SqTraceFrame {
-    pub file: String,
-    pub line: u32,
-}
-
-impl SqStacktrace {
-    pub fn new(trace: Vec<SqTraceFrame>) -> Self {
-        SqStacktrace(trace)
-    }
-
-    pub fn iter(&self) -> impl Iterator<Item = &SqTraceFrame> {
-        self.0.iter()
-    }
-}
-
-#[derive(Debug, Clone)]
-pub struct SquirrelError {
-    file_id: usize,
-    message: String,
-    labels: Vec<(Span, String, Color)>,
-    backtrace: RsBacktrace,
-    stacktrace: SqStacktrace,
-}
-
-impl SquirrelError {
-    pub fn new(file_id: usize, token: Span, message: String, backtrace: RsBacktrace) -> Self {
-        Self::new_st(
-            file_id,
-            token,
-            message,
-            backtrace,
-            SqStacktrace::new(Vec::new()),
-        )
-    }
-
-    pub fn new_st(
-        file_id: usize,
-        token: Span,
-        message: String,
-        backtrace: RsBacktrace,
-        stacktrace: SqStacktrace,
-    ) -> Self {
-        Self {
-            file_id,
-            message,
-            labels: vec![(token, "Here".to_string(), Color::Red)],
-            backtrace,
-            stacktrace,
+    pub fn cannot_modify_type(&self, this: Value) -> ExecError {
+        ExecError::CannotModifyType {
+            span: self.ident_span,
+            this,
+            bt: RsBacktrace::new(),
         }
     }
 
-    pub fn new_labels(
-        file_id: usize,
-        message: String,
-        labels: Vec<(Span, String, Color)>,
-        backtrace: RsBacktrace,
-    ) -> Self {
-        Self::new_labels_st(
-            file_id,
-            message,
-            labels,
-            backtrace,
-            SqStacktrace::new(Vec::new()),
-        )
-    }
-
-    pub fn new_labels_st(
-        file_id: usize,
-        message: String,
-        labels: Vec<(Span, String, Color)>,
-        backtrace: RsBacktrace,
-        stacktrace: SqStacktrace,
-    ) -> Self {
-        Self {
-            file_id,
-            message,
-            labels,
-            backtrace,
-            stacktrace,
+    pub fn mutating_instantiated_class(&self) -> ExecError {
+        ExecError::MutatingInstantiatedClass {
+            class_span: self.ident_span,
+            assign_span: self.assignment_span,
+            bt: RsBacktrace::new(),
         }
     }
 
-    pub fn render<C: Cache<usize>>(&self, cache: C) -> SquirrelErrorRendered {
-        let mut report_vec = Vec::new();
-        Report::build(ReportKind::Error, self.file_id, self.labels[0].0.start)
-            .with_message(self.message.as_str())
-            .with_labels(self.labels.iter().map(|(span, label, color)| {
-                Label::new((self.file_id, (*span).into()))
-                    .with_message(label.as_str())
-                    .with_color(*color)
-            }))
-            .finish()
-            .write(cache, &mut report_vec)
-            .unwrap();
-        SquirrelErrorRendered(format!(
-            "{}{}",
-            String::from_utf8(report_vec).expect("Unable to convert report to utf-8"),
-            &self.backtrace
-        ))
+    pub fn get_span(&self) -> Span {
+        self.ident_span | self.value_span
     }
 }
 
-#[derive(Clone)]
-pub struct SquirrelErrorRendered(String);
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct GetFieldContext {
+    pub parent_span: Span,
+    pub field_span: Span,
+}
 
-impl Display for SquirrelErrorRendered {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.0)
+impl GetFieldContext {
+    pub fn undefined_field(&self, field: Value) -> ExecError {
+        ExecError::UndefinedField {
+            parent_span: self.parent_span,
+            field_span: self.field_span,
+            field,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn unhashable_type(&self, field: Value) -> ExecError {
+        ExecError::UnhashableType {
+            value: field,
+            span: self.field_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn index_out_of_bounds(&self, index: i64, len: usize) -> ExecError {
+        ExecError::IndexOutOfBounds {
+            index,
+            len,
+            span: self.field_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.parent_span | self.field_span
     }
 }
 
-pub fn render_report<'a>(
-    report: &'a Report<'a, ContextSpan<'a>>,
-    file_name: &'a str,
-    source: &'a str,
-) -> String {
-    let mut report_bytes = Vec::new();
-    report
-        .write((file_name, Source::from(source)), &mut report_bytes)
-        .expect("Unable to write report");
-    String::from_utf8(report_bytes).expect("Unable to convert report to utf-8")
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct SetFieldContext {
+    pub parent_span: Span,
+    pub field_span: Span,
+    pub assignment_span: Span,
+    pub value_span: Span,
+}
+
+impl SetFieldContext {
+    pub fn undefined_field(&self, field: Value) -> ExecError {
+        ExecError::UndefinedField {
+            parent_span: self.parent_span,
+            field_span: self.field_span,
+            field,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn cannot_modify_type(&self, this: Value) -> ExecError {
+        ExecError::CannotModifyType {
+            span: self.parent_span,
+            this,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn unhashable_type(&self, field: Value) -> ExecError {
+        ExecError::UnhashableType {
+            value: field,
+            span: self.field_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn index_out_of_bounds(&self, index: i64, len: usize) -> ExecError {
+        ExecError::IndexOutOfBounds {
+            index,
+            len,
+            span: self.field_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn wrong_index_type(&self, expected: &'static str, got: Value) -> ExecError {
+        ExecError::WrongIndexType {
+            span: self.field_span,
+            expected,
+            got,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn mutating_instantiated_class(&self) -> ExecError {
+        ExecError::MutatingInstantiatedClass {
+            class_span: self.parent_span,
+            assign_span: self.assignment_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.parent_span | self.value_span
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct FnCallContext {
+    pub fn_span: Span,
+    pub call_span: Span,
+    pub args: Vec<Span>,
+}
+
+impl FnCallContext {
+    fn make_call_info(&self) -> CallInfo {
+        CallInfo {
+            func_span: self.fn_span.clone(),
+            call_span: self.call_span.clone(),
+            arg_spans: self.args.clone(),
+        }
+    }
+
+    pub fn uncallable_type(&self, not_fn: Value) -> ExecError {
+        ExecError::UncallableType {
+            call_info: self.make_call_info(),
+            not_fn,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn wrong_arg_count(&self, expected: Range<usize>, def_span: Option<Span>) -> ExecError {
+        ExecError::WrongArgCount {
+            call_info: self.make_call_info(),
+            expected,
+            def_span,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn wrong_arg_type(
+        &self,
+        arg_index: usize,
+        expected: &'static str,
+        got: Value,
+    ) -> ExecError {
+        ExecError::WrongArgType {
+            call_info: self.make_call_info(),
+            arg_index,
+            expected,
+            got,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.fn_span | self.call_span
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize, PartialEq, Eq)]
+pub struct NewClassContext {
+    pub class_kw_span: Span,
+    pub class_body_span: Span,
+    pub extends_kw_ty_span: Option<[Span; 2]>,
+}
+
+impl NewClassContext {
+    pub fn extending_non_class(&self, non_class: Value) -> ExecError {
+        ExecError::ExtendingNonClass {
+            span: self
+                .extends_kw_ty_span
+                .expect("Class doesn't extend anything")[1],
+            non_class,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.class_kw_span | self.class_body_span
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct BinaryOpContext {
+    pub lhs_span: Span,
+    pub op_span: Span,
+    pub rhs_span: Span,
+}
+
+impl BinaryOpContext {
+    pub fn illegal_operation(
+        &self,
+        op_name: &'static str,
+        lhs_val: Value,
+        rhs_val: Value,
+    ) -> ExecError {
+        ExecError::IllegalOperation {
+            op_name,
+            op_span: self.op_span,
+            lhs: (lhs_val, self.lhs_span),
+            rhs: Some((rhs_val, self.rhs_span)),
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn missing_metamethod(&self, op_name: &'static str, mm_name: &'static str) -> ExecError {
+        ExecError::MissingMetamethod {
+            obj_span: self.lhs_span,
+            op_span: self.op_span,
+            op_name,
+            mm_name,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn wrong_metamethod_return_type(
+        &self,
+        mm_name: &'static str,
+        expected: &'static str,
+        got: Value,
+    ) -> ExecError {
+        ExecError::WrongMetamethodReturnType {
+            obj_span: self.lhs_span,
+            op_span: self.op_span,
+            mm_name,
+            expected,
+            got,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.lhs_span | self.rhs_span
+    }
+}
+
+#[derive(Clone, Debug, Serialize, Deserialize)]
+pub struct UnaryOpContext {
+    pub op_span: Span,
+    pub val_span: Span,
+}
+
+impl UnaryOpContext {
+    pub fn illegal_operation(&self, op_name: &'static str, val: Value) -> ExecError {
+        ExecError::IllegalOperation {
+            op_name,
+            op_span: self.op_span,
+            lhs: (val, self.val_span),
+            rhs: None,
+            bt: RsBacktrace::new(),
+        }
+    }
+
+    pub fn get_span(&self) -> Span {
+        self.op_span | self.val_span
+    }
 }

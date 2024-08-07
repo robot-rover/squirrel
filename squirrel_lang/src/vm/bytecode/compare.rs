@@ -1,14 +1,15 @@
 use num_traits::ConstZero;
 use serde::{Deserialize, Serialize};
 
-use crate::vm::{
-    compiler::{self, FormatInst},
-    error::ExecResult,
-    value::Value,
-};
+use crate::impl_sub_inst;
 use crate::{
-    impl_sub_inst,
-    vm::{bytecode::context::BinaryOpContext, runtime::VMState},
+    context::BinaryOpContext,
+    vm::{
+        compiler::{self, FormatInst},
+        error::ExecResult,
+        runtime::VMState,
+        value::Value,
+    },
 };
 
 use super::{Inst, InstCtx, Reg};

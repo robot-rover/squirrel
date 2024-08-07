@@ -1,8 +1,8 @@
 mod arith;
 mod bitwise;
 mod call;
+mod class;
 mod compare;
-pub mod context;
 mod get_set;
 mod jump_ret;
 mod load_store;
@@ -12,10 +12,15 @@ mod unary;
 pub use arith::{run_arith, InstArith, InstArithCtx};
 pub use bitwise::{run_bitwise, InstBitwise, InstBitwiseCtx};
 pub use call::{run_call, InstCall, InstCallCtx};
+pub use class::{run_class, InstClass, InstClassCtx};
 pub use compare::{run_compare, InstCompare, InstCompareCtx};
-pub use get_set::{run_get, run_set, InstGet, InstGetCtx, InstSet, InstSetCtx};
+pub use get_set::{
+    run_del, run_get, run_set, InstDel, InstDelCtx, InstGet, InstGetCtx, InstSet, InstSetCtx,
+};
 pub use jump_ret::{run_jump, run_ret, InstJump, InstJumpCtx, InstRet, InstRetCtx, JumpKind};
-pub use load_store::{run_load, run_store, InstLoad, InstLoadCtx, InstStore, InstStoreCtx};
+pub use load_store::{
+    run_load, run_store, InstLoad, InstLoadCtx, InstStore, InstStoreCtx, PrimType,
+};
 use misc::InstMiscCtx;
 pub use misc::{run_misc, InstMisc};
 use unary::InstUnaryCtx;
@@ -24,7 +29,7 @@ pub use unary::{run_unary, InstUnary};
 use serde::{Deserialize, Serialize};
 use strum_macros::EnumDiscriminants;
 
-use crate::context::Span;
+use crate::sq_error::Span;
 
 use super::compiler::{self, FormatInst};
 
@@ -201,12 +206,14 @@ pub enum InstCtx {
     Compare(InstCompareCtx),
     Get(InstGetCtx),
     Set(InstSetCtx),
+    Del(InstDelCtx),
     Jump(InstJumpCtx),
     Ret(InstRetCtx),
     Load(InstLoadCtx),
     Store(InstStoreCtx),
     Misc(InstMiscCtx),
     Unary(InstUnaryCtx),
+    Class(InstClassCtx),
 }
 
 pub enum Inst {
@@ -216,14 +223,17 @@ pub enum Inst {
     Compare(InstCompare),
     Get(InstGet),
     Set(InstSet),
+    Del(InstDel),
     Jump(InstJump),
     Ret(InstRet),
     Load(InstLoad),
     Store(InstStore),
     Misc(InstMisc),
     Unary(InstUnary),
+    Class(InstClass),
 }
 
+// TODO: Should to these with macros
 impl FormatInst for Inst {
     fn fmt_inst(
         &self,
@@ -243,6 +253,8 @@ impl FormatInst for Inst {
             Inst::Store(store) => store.fmt_inst(f, fun),
             Inst::Misc(misc) => misc.fmt_inst(f, fun),
             Inst::Unary(unary) => unary.fmt_inst(f, fun),
+            Inst::Class(class) => class.fmt_inst(f, fun),
+            Inst::Del(del) => del.fmt_inst(f, fun),
         }
     }
 }
@@ -262,6 +274,8 @@ impl InstCtx {
             InstCtx::Store(store) => Inst::Store(store.strip()),
             InstCtx::Misc(misc) => Inst::Misc(misc.strip()),
             InstCtx::Unary(unary) => Inst::Unary(unary.strip()),
+            InstCtx::Class(class) => Inst::Class(class.strip()),
+            InstCtx::Del(del) => Inst::Del(del.strip()),
         }
     }
 
@@ -279,6 +293,8 @@ impl InstCtx {
             InstCtx::Store(store) => store.ctx,
             InstCtx::Misc(misc) => misc.ctx,
             InstCtx::Unary(unary) => unary.ctx.get_span(),
+            InstCtx::Class(class) => class.ctx.get_span(),
+            InstCtx::Del(del) => del.get_span(),
         }
     }
 }

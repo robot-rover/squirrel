@@ -1,0 +1,262 @@
+---
+source: squirrel_lang/src/vm/compiler.rs
+expression: actual_code
+---
+code:
+  - Load:
+      data:
+        PrimType: EmptyTable
+      ctx:
+        start: 9
+        end: 88
+  - Store:
+      data:
+        Reg: 0
+      ctx:
+        start: 9
+        end: 88
+  - Load:
+      data:
+        Const: 1
+      ctx:
+        start: 24
+        end: 35
+  - Store:
+      data:
+        Reg: 1
+      ctx:
+        start: 24
+        end: 35
+  - Load:
+      data:
+        FunIdx: 0
+      ctx:
+        start: 15
+        end: 23
+  - Set:
+      Setf:
+        - - 0
+          - true
+        - parent_span:
+            start: 9
+            end: 88
+          field_span:
+            start: 24
+            end: 35
+          assignment_span:
+            start: 24
+            end: 35
+          value_span:
+            start: 0
+            end: 86
+  - Load:
+      data:
+        Reg: 0
+      ctx:
+        start: 9
+        end: 88
+  - Set:
+      Setc:
+        - - 0
+          - true
+        - ident_span:
+            start: 0
+            end: 5
+          assignment_span:
+            start: 6
+            end: 8
+          value_span:
+            start: 9
+            end: 88
+  - Get:
+      Getc:
+        - 2
+        - ident_span:
+            start: 90
+            end: 95
+  - Store:
+      data:
+        Reg: 3
+      ctx:
+        start: 90
+        end: 95
+  - Get:
+      Getfc:
+        - 3
+        - parent_span:
+            start: 90
+            end: 95
+          field_span:
+            start: 96
+            end: 107
+  - Store:
+      data:
+        Reg: 2
+      ctx:
+        start: 90
+        end: 107
+  - Misc:
+      data: This
+      ctx:
+        start: 108
+        end: 120
+  - Store:
+      data:
+        Reg: 6
+      ctx:
+        start: 108
+        end: 120
+  - Get:
+      Getc:
+        - 4
+        - ident_span:
+            start: 108
+            end: 120
+  - Store:
+      data:
+        Reg: 5
+      ctx:
+        start: 108
+        end: 120
+  - Load:
+      data:
+        Reg: 5
+      ctx:
+        start: 108
+        end: 120
+  - Call:
+      data:
+        reg: 6
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 108
+          end: 120
+        call_span:
+          start: 120
+          end: 122
+        args: []
+  - Store:
+      data:
+        Reg: 4
+      ctx:
+        start: 120
+        end: 122
+  - Load:
+      data:
+        Reg: 2
+      ctx:
+        start: 90
+        end: 107
+  - Call:
+      data:
+        reg: 3
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 90
+          end: 107
+        call_span:
+          start: 107
+          end: 123
+        args:
+          - start: 120
+            end: 122
+  - Ret:
+      data: Void
+      ctx:
+        start: 0
+        end: 123
+block_offsets:
+  - 0
+constants:
+  - String: table
+  - String: setdelegate
+  - String: table
+  - String: setdelegate
+  - String: getroottable
+is_varargs: true
+num_regs: 7
+num_params: 0
+locals:
+  - - vargv
+    - 0
+num_locals: 1
+sub_functions:
+  - code:
+      - Misc:
+          data: Root
+          ctx:
+            start: 56
+            end: 58
+      - Store:
+          data:
+            Reg: 1
+          ctx:
+            start: 56
+            end: 58
+      - Get:
+          Getfc:
+            - 0
+            - parent_span:
+                start: 56
+                end: 58
+              field_span:
+                start: 58
+                end: 63
+      - Store:
+          data:
+            Reg: 0
+          ctx:
+            start: 56
+            end: 63
+      - Load:
+          data:
+            Const: 1
+          ctx:
+            start: 64
+            end: 79
+      - Store:
+          data:
+            Reg: 2
+          ctx:
+            start: 64
+            end: 79
+      - Load:
+          data:
+            Reg: 0
+          ctx:
+            start: 56
+            end: 63
+      - Call:
+          data:
+            reg: 1
+            n_args: 1
+          ctx:
+            fn_span:
+              start: 56
+              end: 63
+            call_span:
+              start: 63
+              end: 80
+            args:
+              - start: 64
+                end: 79
+      - Ret:
+          data: Void
+          ctx:
+            start: 0
+            end: 86
+    block_offsets:
+      - 0
+    constants:
+      - String: print
+      - String: "Just a test\n"
+    is_varargs: false
+    num_regs: 3
+    num_params: 1
+    locals:
+      - - delegate
+        - 0
+    num_locals: 1
+    sub_functions: []

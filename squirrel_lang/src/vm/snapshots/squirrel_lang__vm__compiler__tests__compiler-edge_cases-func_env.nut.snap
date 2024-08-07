@@ -1,0 +1,840 @@
+---
+source: squirrel_lang/src/vm/compiler.rs
+expression: actual_code
+---
+code:
+  - Load:
+      data:
+        PrimType: EmptyTable
+      ctx:
+        start: 11
+        end: 36
+  - Store:
+      data:
+        Reg: 0
+      ctx:
+        start: 11
+        end: 36
+  - Load:
+      data:
+        Const: 1
+      ctx:
+        start: 17
+        end: 22
+  - Store:
+      data:
+        Reg: 1
+      ctx:
+        start: 17
+        end: 22
+  - Load:
+      data:
+        Const: 2
+      ctx:
+        start: 25
+        end: 34
+  - Set:
+      Setf:
+        - - 0
+          - true
+        - parent_span:
+            start: 11
+            end: 36
+          field_span:
+            start: 17
+            end: 22
+          assignment_span:
+            start: 17
+            end: 22
+          value_span:
+            start: 25
+            end: 34
+  - Load:
+      data:
+        Reg: 0
+      ctx:
+        start: 11
+        end: 36
+  - Set:
+      Setc:
+        - - 0
+          - true
+        - ident_span:
+            start: 0
+            end: 7
+          assignment_span:
+            start: 8
+            end: 10
+          value_span:
+            start: 11
+            end: 36
+  - Load:
+      data:
+        PrimType: EmptyTable
+      ctx:
+        start: 49
+        end: 74
+  - Store:
+      data:
+        Reg: 2
+      ctx:
+        start: 49
+        end: 74
+  - Load:
+      data:
+        Const: 4
+      ctx:
+        start: 55
+        end: 60
+  - Store:
+      data:
+        Reg: 3
+      ctx:
+        start: 55
+        end: 60
+  - Load:
+      data:
+        Const: 5
+      ctx:
+        start: 63
+        end: 72
+  - Set:
+      Setf:
+        - - 2
+          - true
+        - parent_span:
+            start: 49
+            end: 74
+          field_span:
+            start: 55
+            end: 60
+          assignment_span:
+            start: 55
+            end: 60
+          value_span:
+            start: 63
+            end: 72
+  - Load:
+      data:
+        Reg: 2
+      ctx:
+        start: 49
+        end: 74
+  - Set:
+      Setc:
+        - - 3
+          - true
+        - ident_span:
+            start: 38
+            end: 45
+          assignment_span:
+            start: 46
+            end: 48
+          value_span:
+            start: 49
+            end: 74
+  - Load:
+      data:
+        Const: 7
+      ctx:
+        start: 85
+        end: 97
+  - Set:
+      Setc:
+        - - 6
+          - true
+        - ident_span:
+            start: 76
+            end: 81
+          assignment_span:
+            start: 82
+            end: 84
+          value_span:
+            start: 85
+            end: 97
+  - Load:
+      data:
+        FunIdx: 0
+      ctx:
+        start: 99
+        end: 107
+  - Set:
+      Setc:
+        - - 8
+          - true
+        - ident_span:
+            start: 108
+            end: 117
+          assignment_span:
+            start: 99
+            end: 107
+          value_span:
+            start: 0
+            end: 231
+  - Misc:
+      data: This
+      ctx:
+        start: 233
+        end: 242
+  - Store:
+      data:
+        Reg: 5
+      ctx:
+        start: 233
+        end: 242
+  - Get:
+      Getc:
+        - 9
+        - ident_span:
+            start: 233
+            end: 242
+  - Store:
+      data:
+        Reg: 4
+      ctx:
+        start: 233
+        end: 242
+  - Load:
+      data:
+        Reg: 4
+      ctx:
+        start: 233
+        end: 242
+  - Call:
+      data:
+        reg: 5
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 233
+          end: 242
+        call_span:
+          start: 242
+          end: 244
+        args: []
+  - Get:
+      Getc:
+        - 11
+        - ident_span:
+            start: 246
+            end: 253
+  - Store:
+      data:
+        Reg: 6
+      ctx:
+        start: 246
+        end: 253
+  - Load:
+      data:
+        Const: 10
+      ctx:
+        start: 254
+        end: 263
+  - Store:
+      data:
+        Reg: 7
+      ctx:
+        start: 254
+        end: 263
+  - Get:
+      Getc:
+        - 12
+        - ident_span:
+            start: 267
+            end: 276
+  - Set:
+      Setf:
+        - - 6
+          - true
+        - parent_span:
+            start: 246
+            end: 253
+          field_span:
+            start: 254
+            end: 263
+          assignment_span:
+            start: 264
+            end: 266
+          value_span:
+            start: 267
+            end: 276
+  - Get:
+      Getc:
+        - 13
+        - ident_span:
+            start: 277
+            end: 284
+  - Store:
+      data:
+        Reg: 9
+      ctx:
+        start: 277
+        end: 284
+  - Get:
+      Getfc:
+        - 14
+        - parent_span:
+            start: 277
+            end: 284
+          field_span:
+            start: 285
+            end: 294
+  - Store:
+      data:
+        Reg: 8
+      ctx:
+        start: 277
+        end: 294
+  - Load:
+      data:
+        Reg: 8
+      ctx:
+        start: 277
+        end: 294
+  - Call:
+      data:
+        reg: 9
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 277
+          end: 294
+        call_span:
+          start: 294
+          end: 296
+        args: []
+  - Get:
+      Getc:
+        - 16
+        - ident_span:
+            start: 298
+            end: 305
+  - Store:
+      data:
+        Reg: 10
+      ctx:
+        start: 298
+        end: 305
+  - Load:
+      data:
+        Const: 15
+      ctx:
+        start: 306
+        end: 315
+  - Store:
+      data:
+        Reg: 11
+      ctx:
+        start: 306
+        end: 315
+  - Get:
+      Getc:
+        - 17
+        - ident_span:
+            start: 319
+            end: 328
+  - Set:
+      Setf:
+        - - 10
+          - true
+        - parent_span:
+            start: 298
+            end: 305
+          field_span:
+            start: 306
+            end: 315
+          assignment_span:
+            start: 316
+            end: 318
+          value_span:
+            start: 319
+            end: 328
+  - Get:
+      Getc:
+        - 18
+        - ident_span:
+            start: 329
+            end: 336
+  - Store:
+      data:
+        Reg: 13
+      ctx:
+        start: 329
+        end: 336
+  - Get:
+      Getfc:
+        - 19
+        - parent_span:
+            start: 329
+            end: 336
+          field_span:
+            start: 337
+            end: 346
+  - Store:
+      data:
+        Reg: 12
+      ctx:
+        start: 329
+        end: 346
+  - Load:
+      data:
+        Reg: 12
+      ctx:
+        start: 329
+        end: 346
+  - Call:
+      data:
+        reg: 13
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 329
+          end: 346
+        call_span:
+          start: 346
+          end: 348
+        args: []
+  - Get:
+      Getc:
+        - 20
+        - ident_span:
+            start: 358
+            end: 367
+  - Store:
+      data:
+        Reg: 14
+      ctx:
+        start: 358
+        end: 367
+  - Load:
+      data:
+        Const: 21
+      ctx:
+        start: 369
+        end: 373
+  - Store:
+      data:
+        Reg: 15
+      ctx:
+        start: 369
+        end: 373
+  - Load:
+      data:
+        Reg: 14
+      ctx:
+        start: 358
+        end: 367
+  - Call:
+      data:
+        reg: 15
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 358
+          end: 367
+        call_span:
+          start: 350
+          end: 374
+        args: []
+  - Misc:
+      data:
+        Array: 1
+      ctx:
+        start: 383
+        end: 394
+  - Store:
+      data:
+        Reg: 17
+      ctx:
+        start: 383
+        end: 394
+  - Get:
+      Getfc:
+        - 23
+        - parent_span:
+            start: 383
+            end: 394
+          field_span:
+            start: 383
+            end: 394
+  - Store:
+      data:
+        Reg: 16
+      ctx:
+        start: 383
+        end: 394
+  - Get:
+      Getc:
+        - 24
+        - ident_span:
+            start: 384
+            end: 393
+  - Store:
+      data:
+        Reg: 18
+      ctx:
+        start: 384
+        end: 393
+  - Load:
+      data:
+        Reg: 16
+      ctx:
+        start: 383
+        end: 394
+  - Call:
+      data:
+        reg: 17
+        n_args: 1
+      ctx:
+        fn_span:
+          start: 383
+          end: 394
+        call_span:
+          start: 384
+          end: 393
+        args:
+          - start: 384
+            end: 393
+  - Load:
+      data:
+        Reg: 17
+      ctx:
+        start: 383
+        end: 394
+  - Set:
+      Setc:
+        - - 22
+          - true
+        - ident_span:
+            start: 376
+            end: 379
+          assignment_span:
+            start: 380
+            end: 382
+          value_span:
+            start: 383
+            end: 394
+  - Misc:
+      data: This
+      ctx:
+        start: 398
+        end: 401
+  - Store:
+      data:
+        Reg: 20
+      ctx:
+        start: 398
+        end: 401
+  - Get:
+      Getc:
+        - 25
+        - ident_span:
+            start: 395
+            end: 398
+  - Store:
+      data:
+        Reg: 21
+      ctx:
+        start: 395
+        end: 398
+  - Load:
+      data:
+        Const: 26
+      ctx:
+        start: 399
+        end: 400
+  - Get:
+      Getf:
+        - 21
+        - parent_span:
+            start: 395
+            end: 398
+          field_span:
+            start: 399
+            end: 400
+  - Store:
+      data:
+        Reg: 19
+      ctx:
+        start: 398
+        end: 401
+  - Load:
+      data:
+        Reg: 19
+      ctx:
+        start: 398
+        end: 401
+  - Call:
+      data:
+        reg: 20
+        n_args: 0
+      ctx:
+        fn_span:
+          start: 398
+          end: 401
+        call_span:
+          start: 401
+          end: 403
+        args: []
+  - Ret:
+      data: Void
+      ctx:
+        start: 0
+        end: 403
+block_offsets:
+  - 0
+constants:
+  - String: table_a
+  - String: ident
+  - String: Table A
+  - String: table_b
+  - String: ident
+  - String: Table B
+  - String: ident
+  - String: File Table
+  - String: get_ident
+  - String: get_ident
+  - String: get_ident
+  - String: table_a
+  - String: get_ident
+  - String: table_a
+  - String: get_ident
+  - String: get_ident
+  - String: table_b
+  - String: get_ident
+  - String: table_b
+  - String: get_ident
+  - String: get_ident
+  - "Null"
+  - String: arr
+  - String: push
+  - String: get_ident
+  - String: arr
+  - Integer: 0
+is_varargs: true
+num_regs: 22
+num_params: 0
+locals:
+  - - vargv
+    - 0
+num_locals: 1
+sub_functions:
+  - code:
+      - Misc:
+          data: This
+          ctx:
+            start: 130
+            end: 134
+      - Store:
+          data:
+            Reg: 0
+          ctx:
+            start: 130
+            end: 134
+      - Load:
+          data:
+            Const: 0
+          ctx:
+            start: 138
+            end: 142
+      - Compare:
+          data:
+            reg: 0
+            kind: IsEq
+          ctx:
+            lhs_span:
+              start: 130
+              end: 134
+            op_span:
+              start: 130
+              end: 142
+            rhs_span:
+              start: 138
+              end: 142
+      - Jump:
+          data:
+            kind: IfTrue
+            block: 1
+          ctx:
+            start: 130
+            end: 142
+      - Misc:
+          data: Root
+          ctx:
+            start: 197
+            end: 199
+      - Store:
+          data:
+            Reg: 5
+          ctx:
+            start: 197
+            end: 199
+      - Get:
+          Getfc:
+            - 3
+            - parent_span:
+                start: 197
+                end: 199
+              field_span:
+                start: 199
+                end: 204
+      - Store:
+          data:
+            Reg: 4
+          ctx:
+            start: 197
+            end: 204
+      - Misc:
+          data: This
+          ctx:
+            start: 205
+            end: 209
+      - Get:
+          Getfc:
+            - 4
+            - parent_span:
+                start: 205
+                end: 209
+              field_span:
+                start: 210
+                end: 215
+      - Store:
+          data:
+            Reg: 7
+          ctx:
+            start: 205
+            end: 215
+      - Load:
+          data:
+            Const: 5
+          ctx:
+            start: 218
+            end: 222
+      - Arith:
+          data:
+            op: Add
+            reg: 7
+          ctx:
+            lhs_span:
+              start: 205
+              end: 215
+            op_span:
+              start: 205
+              end: 222
+            rhs_span:
+              start: 218
+              end: 222
+      - Store:
+          data:
+            Reg: 6
+          ctx:
+            start: 205
+            end: 222
+      - Load:
+          data:
+            Reg: 4
+          ctx:
+            start: 197
+            end: 204
+      - Call:
+          data:
+            reg: 5
+            n_args: 1
+          ctx:
+            fn_span:
+              start: 197
+              end: 204
+            call_span:
+              start: 204
+              end: 223
+            args:
+              - start: 205
+                end: 222
+      - Ret:
+          data: Void
+          ctx:
+            start: 0
+            end: 231
+      - Misc:
+          data: Root
+          ctx:
+            start: 154
+            end: 156
+      - Store:
+          data:
+            Reg: 2
+          ctx:
+            start: 154
+            end: 156
+      - Get:
+          Getfc:
+            - 1
+            - parent_span:
+                start: 154
+                end: 156
+              field_span:
+                start: 156
+                end: 161
+      - Store:
+          data:
+            Reg: 1
+          ctx:
+            start: 154
+            end: 161
+      - Load:
+          data:
+            Const: 2
+          ctx:
+            start: 162
+            end: 174
+      - Store:
+          data:
+            Reg: 3
+          ctx:
+            start: 162
+            end: 174
+      - Load:
+          data:
+            Reg: 1
+          ctx:
+            start: 154
+            end: 161
+      - Call:
+          data:
+            reg: 2
+            n_args: 1
+          ctx:
+            fn_span:
+              start: 154
+              end: 161
+            call_span:
+              start: 161
+              end: 175
+            args:
+              - start: 162
+                end: 174
+      - Jump:
+          data:
+            kind: Always
+            block: 3
+          ctx:
+            start: 0
+            end: 181
+    block_offsets:
+      - 0
+      - 18
+      - 5
+      - 17
+    constants:
+      - "Null"
+      - String: print
+      - String: "No ident\n"
+      - String: print
+      - String: ident
+      - String: "\n"
+    is_varargs: false
+    num_regs: 8
+    num_params: 0
+    locals: []
+    num_locals: 0
+    sub_functions: []

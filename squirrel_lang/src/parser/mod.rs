@@ -10,8 +10,8 @@ use pratt::{parse_expr, parse_expr_line, parse_expr_token};
 use self::ast::{Expr, Function, Literal, Statement};
 
 use crate::{
-    context::{Span, SquirrelError, SquirrelErrorRendered},
     lexer::{SpannedLexer, Token},
+    sq_error::{Span, SquirrelError, SquirrelErrorRendered},
 };
 
 pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorRendered> {
@@ -332,11 +332,12 @@ fn parse_class_extends_body<'s>(
     tokens: &mut SpannedLexer<'s>,
     class_span: Span,
 ) -> ParseResult<Expr> {
-    let parent = if let (Token::Extends, _) = tokens.peek_token(true)? {
+    let parent = if let (Token::Extends, extends_kw) = tokens.peek_token(true)? {
+        let extends_kw = *extends_kw;
         tokens.skip_token();
         let (parent_ident, ctx) = tokens.next_token(true)?;
         if let Token::Identifier(parent_name) = parent_ident {
-            Some((parent_name.to_string(), ctx))
+            Some((extends_kw, (parent_name.to_string(), ctx)))
         } else {
             return Err(ParseError::unexpected_token(parent_ident, ctx));
         }
@@ -570,7 +571,7 @@ fn parse_function_args_body<'s>(
 }
 
 pub mod error {
-    use crate::context::{RsBacktrace, Span, SquirrelError};
+    use crate::sq_error::{RsBacktrace, Span, SquirrelError};
 
     use crate::lexer::{SpannedLexer, Token};
 

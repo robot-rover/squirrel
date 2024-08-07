@@ -9,9 +9,9 @@ use hashbrown::HashMap;
 use logos::{Lexer, Logos, Skip};
 use serde::{Deserialize, Serialize};
 
-use crate::{context::render_report, parser::error::ParseError};
+use crate::{parser::error::ParseError, sq_error::render_report};
 
-use crate::context::{Span, SquirrelError};
+use crate::sq_error::{Span, SquirrelError};
 
 use self::error::{LexError, LexResult};
 
@@ -748,7 +748,7 @@ mod error {
 
     use logos::Lexer;
 
-    use crate::context::{RsBacktrace, SquirrelError};
+    use crate::sq_error::{RsBacktrace, SquirrelError};
 
     use super::Token;
 

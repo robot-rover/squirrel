@@ -2,7 +2,7 @@ use std::ops::Range;
 
 use ariadne::{Cache, Color};
 
-use crate::context::{RsBacktrace, Span, SquirrelError};
+use crate::sq_error::{RsBacktrace, Span, SquirrelError};
 
 use super::value::Value;
 

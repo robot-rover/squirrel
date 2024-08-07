@@ -3,8 +3,8 @@ use std::{cell::RefCell, fmt, hash::Hash, mem, ops::Deref, ptr};
 use std::{ptr::NonNull, rc::Rc};
 
 use crate::{
-    context::Span,
     parser::ast::{self, Expr},
+    sq_error::Span,
     vm::error::ExecError,
 };
 
@@ -382,8 +382,11 @@ impl Table {
         value: Value,
         is_newslot: bool,
     ) -> Result<(), SetFieldError> {
-        if is_newslot || self.slots.contains_key(&key) {
+        if is_newslot {
             self.slots.insert(key, value);
+            Ok(())
+        } else if let Some(old) = self.slots.get_mut(&key) {
+            *old = value;
             Ok(())
         } else {
             match self.delegate.as_ref() {
@@ -391,7 +394,21 @@ impl Table {
                     let mut parent = delegate.borrow_mut();
                     parent.set_field(key, value, is_newslot)
                 }
-                None => Err(SetFieldError::UndefinedField),
+                None => Err(SetFieldError::UndefinedField(key.into())),
+            }
+        }
+    }
+
+    pub fn del_field(&mut self, key: HashValue) -> Result<Value, SetFieldError> {
+        if let Some(removed) = self.slots.remove(&key) {
+            Ok(removed)
+        } else {
+            match self.delegate.as_ref() {
+                Some(delegate) => {
+                    let mut parent = delegate.borrow_mut();
+                    parent.del_field(key)
+                }
+                None => Err(SetFieldError::UndefinedField(key.into())),
             }
         }
     }
@@ -497,15 +514,15 @@ pub struct Class {
 }
 
 pub enum SetFieldError {
-    UndefinedField,
+    UndefinedField(Value),
     MutatingInstantiatedClass,
 }
 
 impl Class {
-    pub fn new(parent: Option<Rc<RefCell<Class>>>, fields: HashMap<HashValue, Value>) -> Self {
+    pub fn new(parent: Option<Rc<RefCell<Class>>>) -> Self {
         Class {
             parent,
-            fields: ClassFields::NoOffsets(fields),
+            fields: ClassFields::NoOffsets(HashMap::new()),
         }
     }
 
@@ -560,7 +577,7 @@ impl Class {
                     fields.insert(key, value);
                     Ok(())
                 } else {
-                    Err(SetFieldError::UndefinedField)
+                    Err(SetFieldError::UndefinedField(key.into()))
                 }
             }
             ClassFields::Offsets(_) => Err(SetFieldError::MutatingInstantiatedClass),
@@ -596,6 +613,13 @@ impl Class {
             instance.fields[*offset as usize] = value.clone();
         }
         Ok(())
+    }
+
+    pub fn get_base(&self) -> Value {
+        self.parent
+            .as_ref()
+            .map(|p| Value::Class(p.clone()))
+            .unwrap_or_else(|| Value::Null)
     }
 }
 
@@ -648,7 +672,7 @@ impl Instance {
             self.fields[offset as usize] = value;
             Ok(())
         } else {
-            Err(SetFieldError::UndefinedField)
+            Err(SetFieldError::UndefinedField(key.into()))
         }
     }
 

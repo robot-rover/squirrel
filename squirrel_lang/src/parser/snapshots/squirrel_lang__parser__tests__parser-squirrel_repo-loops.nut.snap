@@ -248,6 +248,9 @@ body:
           end: End
       - data:
           For:
+            for_kw:
+              start: Start
+              end: End
             init:
               data:
                 Expr:

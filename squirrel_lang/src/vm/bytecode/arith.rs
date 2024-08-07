@@ -5,9 +5,9 @@ use std::{
 
 use super::{Inst, InstCtx, Reg};
 use crate::{
+    context::BinaryOpContext,
     impl_sub_inst,
     vm::{
-        bytecode::context::BinaryOpContext,
         compiler::{self, FormatInst},
         error::ExecResult,
         runtime::VMState,

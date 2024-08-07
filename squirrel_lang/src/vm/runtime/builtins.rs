@@ -1,5 +1,5 @@
 use crate::{
-    context::Span,
+    sq_error::Span,
     vm::{
         bytecode::Reg,
         error::{ExecError, ExecResult},

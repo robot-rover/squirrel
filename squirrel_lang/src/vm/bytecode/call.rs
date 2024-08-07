@@ -1,6 +1,7 @@
 use crate::{
-    context::Span,
+    context::FnCallContext,
     impl_sub_inst,
+    sq_error::Span,
     vm::{
         compiler::{self, FormatInst},
         error::ExecResult,
@@ -9,7 +10,7 @@ use crate::{
     },
 };
 
-use super::{context::FnCallContext, Const, FunIdx, Inst, InstCtx, Local, Reg, Tag};
+use super::{Const, FunIdx, Inst, InstCtx, Local, Reg, Tag};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize)]

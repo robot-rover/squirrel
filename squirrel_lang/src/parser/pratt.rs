@@ -1,7 +1,7 @@
 use std::convert::TryInto;
 
-use crate::context::Span;
 use crate::lexer::{SpannedLexer, Token};
+use crate::sq_error::Span;
 
 use super::{
     ast::{AssignKind, BinaryOp, Expr, ExprData, Literal, UnaryOp, UnaryRefOp},
@@ -187,6 +187,15 @@ pub fn parse_expr_bp<'s, F: Fn(&Token<'s>) -> bool>(
                 Token::Delete => UnaryRefOp::Delete,
                 _ => unreachable!(),
             };
+            if matches!(
+                (&op, &rhs.data),
+                (UnaryRefOp::Delete, ExprData::Local(_, _))
+            ) {
+                return Err(ParseError::syntax_error(
+                    format!("Cannot delete local values. Try assigning null instead."),
+                    ctx,
+                ));
+            }
             Expr::unary_ref_op(op, rhs.try_into()?, ctx)
         }
         Token::RawCall => {

@@ -1,14 +1,15 @@
+use hashbrown::HashMap;
 use serde::{Deserialize, Serialize};
 
 use super::{Const, FunIdx, Inst, InstCtx, Local, Reg};
 use crate::{
-    context::Span,
     impl_sub_inst,
+    sq_error::Span,
     vm::{
         compiler::{self, FormatInst},
         error::ExecResult,
         runtime::VMState,
-        value::{Closure, Value},
+        value::{Closure, Table, Value},
     },
 };
 
@@ -17,6 +18,7 @@ pub enum PrimType {
     Null,
     False,
     True,
+    EmptyTable,
 }
 
 impl From<PrimType> for Value {
@@ -25,6 +27,7 @@ impl From<PrimType> for Value {
             PrimType::Null => Value::Null,
             PrimType::False => Value::Boolean(false),
             PrimType::True => Value::Boolean(true),
+            PrimType::EmptyTable => Value::table(Table::new(None, HashMap::new())),
         }
     }
 }
@@ -89,7 +92,10 @@ pub fn run_load(state: &mut VMState, inst: InstLoad) -> ExecResult {
         InstLoad::Reg(reg) => state.frame().get_reg(reg).clone(),
         InstLoad::Local(local) => state.frame().get_local(local).borrow().clone(),
         InstLoad::Const(constant) => state.frame().get_func().get_constant(constant).clone(),
-        InstLoad::FunIdx(fun_idx) => todo!(),
+        InstLoad::FunIdx(fun_idx) => {
+            state.frame().get_func().get_sub_function(fun_idx);
+            todo!("If we immediately call, we can omit constructing a closure in the compiler, otherwise we need to explicitly set it with a new instruction")
+        }
         InstLoad::PrimType(prim_type) => prim_type.into(),
         InstLoad::U8(value) => Value::Integer(value as u64 as i64),
         InstLoad::I8(value) => Value::Integer(value as i64),

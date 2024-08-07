@@ -3,8 +3,9 @@ use std::ops::Not;
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    context::Span,
+    context::UnaryOpContext,
     impl_sub_inst,
+    sq_error::Span,
     vm::{
         compiler::{self, FormatInst},
         error::ExecResult,
@@ -13,7 +14,7 @@ use crate::{
     },
 };
 
-use super::{context::UnaryOpContext, Const, FunIdx, Inst, InstCtx, InstJump, Local, Reg};
+use super::{Const, FunIdx, Inst, InstCtx, InstJump, Local, Reg};
 
 #[derive(Clone, Copy, Debug, Serialize, Deserialize, strum_macros::Display)]
 pub enum InstUnary {

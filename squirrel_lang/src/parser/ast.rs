@@ -6,8 +6,9 @@ use std::{
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    context::Span,
+    context::NewClassContext,
     lexer::{FunctionLocals, LocalResolution},
+    sq_error::Span,
 };
 
 use super::error::ParseError;
@@ -163,8 +164,8 @@ pub enum StatementData {
         is_do_while: bool,
     },
     Switch(Expr, Vec<(Expr, Statement)>, Option<StateRef>),
-    // TODO: Implement this with while loop in parser
     For {
+        for_kw: Span,
         init: StateRef,
         cond: Expr,
         incr: StateRef,
@@ -255,6 +256,7 @@ impl Statement {
     ) -> Self {
         let span = for_span | body.span;
         StatementData::For {
+            for_kw: for_span,
             init: Box::new(init),
             cond,
             incr: Box::new(incr),
@@ -443,6 +445,7 @@ pub enum ExprData {
     ClassDef {
         parent: Option<Ident>,
         members: Vec<(Expr, Expr)>,
+        ctx: NewClassContext,
     },
     Assign(Assign),
     Ternary {
@@ -517,13 +520,29 @@ impl Expr {
     }
 
     pub fn class_def(
-        parent: Option<Ident>,
+        extends_and_parent: Option<(Span, Ident)>,
         members: Vec<(Expr, Expr)>,
-        class_keyword_span: Span,
-        end_span: Span,
+        class_kw_span: Span,
+        class_body_span: Span,
     ) -> Self {
-        let span = end_span | class_keyword_span;
-        ExprData::ClassDef { parent, members }.spanning(span)
+        let span = class_body_span | class_kw_span;
+        let (parent, extends_kw_ty_span) =
+            if let Some((extends_kw, (parent, extends_ty))) = extends_and_parent {
+                (Some((parent, extends_ty)), Some([extends_kw, extends_ty]))
+            } else {
+                (None, None)
+            };
+        let ctx = NewClassContext {
+            class_kw_span,
+            class_body_span,
+            extends_kw_ty_span,
+        };
+        ExprData::ClassDef {
+            parent,
+            members,
+            ctx,
+        }
+        .spanning(span)
     }
 
     pub fn assign(target: AssignTarget, op_span: Span, value: Expr, kind: AssignKind) -> Self {

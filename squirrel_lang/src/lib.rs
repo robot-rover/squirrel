@@ -6,6 +6,7 @@
 pub mod context;
 pub mod lexer;
 pub mod parser;
+pub mod sq_error;
 pub mod util;
 pub mod vm;
 // pub mod walker;
