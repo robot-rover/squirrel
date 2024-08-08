@@ -32,17 +32,10 @@ use super::{
 
 #[derive(Debug)]
 pub struct RtFunction {
-    code: Vec<InstCtx>,
-    block_offsets: Vec<u32>,
+    function_idx: usize,
     constants: Vec<Value>,
-    num_regs: u32,
-    num_params: u32,
-    num_req_params: u32,
-    is_varargs: bool,
-    num_locals: u32,
-    locals: Vec<(String, u32)>,
+    f: Function,
     source_file_id: usize,
-    sub_functions: Vec<Rc<RtFunction>>,
 }
 
 impl RtFunction {
@@ -50,40 +43,17 @@ impl RtFunction {
         &self.constants[constant.as_idx()]
     }
 
-    pub fn get_sub_function(&self, idx: FunIdx) -> &RtFunction {
-        &self.sub_functions[idx.as_idx()]
+    pub fn get_sub_fn_idx(&self, fun_idx: FunIdx) -> usize {
+        fun_idx.as_idx() + self.function_idx
     }
 
-    fn load(func: Function, source_file_id: usize) -> Self {
-        let Function {
-            code,
-            constants,
-            is_varargs,
-            num_params,
-            locals,
-            sub_functions,
-            block_offsets,
-            num_locals,
-            num_regs,
-        } = func;
-        let constants = constants.into_iter().map(Value::from).collect::<Vec<_>>();
-        let sub_functions = sub_functions
-            .into_iter()
-            .map(|f| RtFunction::load(f, source_file_id))
-            .map(Rc::new)
-            .collect::<Vec<_>>();
+    fn load(func: Function, source_file_id: usize, global_fn_id: usize) -> Self {
+        let constants = func.constants.iter().map(Value::from).collect::<Vec<_>>();
         RtFunction {
-            code,
-            block_offsets,
+            f: func,
+            function_idx: global_fn_id,
             constants,
-            num_regs,
-            num_params,
-            num_req_params: num_params,
-            is_varargs,
-            num_locals,
-            locals,
             source_file_id,
-            sub_functions,
         }
     }
 }
@@ -105,6 +75,7 @@ impl File {
 }
 
 pub struct VMState<'a> {
+    rt_funcs: Vec<Rc<RtFunction>>,
     root_table: Rc<RefCell<Table>>,
     stdout: WriteOption<'a>,
     pub call_stack: Vec<StackFrame>,
@@ -130,13 +101,13 @@ impl<'a> VMState<'a> {
     }
 
     pub fn call_fn(&mut self, func: Rc<RtFunction>, env: Value, args: Vec<Value>) {
-        let registers = vec![Value::Null; func.num_regs as usize];
+        let registers = vec![Value::Null; func.f.num_regs as usize];
         // TODO: Handle varargs and default args here
         let mut locals = args
             .into_iter()
             .map(|v| Rc::new(RefCell::new(v)))
             .collect::<Vec<_>>();
-        locals.resize_with(func.num_locals as usize, || {
+        locals.resize_with(func.f.num_locals as usize, || {
             Rc::new(RefCell::new(Value::Null))
         });
 
@@ -155,7 +126,7 @@ impl<'a> VMState<'a> {
 
     pub fn get_context<I: SubInstGetContext>(&self, inst: I) -> &I::Context {
         let frame = self.frame();
-        I::get_ctx(&frame.func.code[frame.ip - 1]).expect("Instruction and Context type mismatch")
+        I::get_ctx(&frame.func.f.code[frame.ip - 1]).expect("Instruction and Context type mismatch")
     }
 
     pub fn load_file(&mut self, file: compiler::File) -> Rc<RtFunction> {
@@ -170,7 +141,18 @@ impl<'a> VMState<'a> {
             contents: Source::from(source),
         });
 
-        Rc::new(RtFunction::load(code, source_id))
+        let first_idx = self.rt_funcs.len();
+        self.rt_funcs.extend(
+            (first_idx..)
+                .zip(code)
+                .map(|(i, f)| Rc::new(RtFunction::load(f, source_id, i))),
+        );
+
+        self.rt_funcs[first_idx].clone()
+    }
+
+    pub fn get_rt_func(&self, fun_offset: usize) -> Rc<RtFunction> {
+        self.rt_funcs[fun_offset].clone()
     }
 }
 
@@ -221,26 +203,22 @@ impl StackFrame {
         &self.func
     }
 
-    pub fn get_sub_func(&self, idx: FunIdx) -> &RtFunction {
-        &self.func.sub_functions[idx.as_idx()]
-    }
-
     pub fn get_local(&self, local: Local) -> &Rc<RefCell<Value>> {
         &self.locals[local.as_idx()]
     }
 
     pub fn jump_to_block(&mut self, block: Block) {
-        self.ip = self.func.block_offsets[block.as_idx()] as usize;
+        self.ip = self.func.f.block_offsets[block.as_idx()] as usize;
     }
 }
 
 impl fmt::Display for StackFrame {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         writeln!(f, "StackFrame")?;
-        writeln!(f, "ip: {} {:?}", self.ip, self.func.code[self.ip])?;
+        writeln!(f, "ip: {} {:?}", self.ip, self.func.f.code[self.ip])?;
         writeln!(f, "env: {}", self.env)?;
         write!(f, "locals:")?;
-        let mut local_name_iter = self.func.locals.iter().peekable();
+        let mut local_name_iter = self.func.f.locals.iter().peekable();
         for (i, local) in self.locals.iter().enumerate() {
             write!(f, "\n  {}: {:?}", i, RefCell::borrow(local))?;
             match local_name_iter
@@ -278,25 +256,23 @@ pub fn run<'a>(
     stdout: Option<&mut dyn io::Write>,
     args: impl IntoIterator<Item = &'a str>,
 ) -> Result<(), SquirrelErrorRendered> {
+    let root_fn = &root_file.code[0];
     assert_eq!(
-        root_file.code.num_params, 0,
+        root_fn.num_params, 0,
         "root function must have 0 parameters"
     );
-    assert!(root_file.code.is_varargs, "root function must be varargs");
-    assert_eq!(
-        root_file.code.locals.get(0),
-        Some(&(String::from("vargv"), 0))
-    );
+    assert!(root_fn.is_varargs, "root function must be varargs");
+    assert_eq!(root_fn.locals.get(0), Some(&(String::from("vargv"), 0)));
 
     let stdout = stdout
         .map(|stream| WriteOption::Dyn(stream))
         .unwrap_or_else(|| WriteOption::Stdout(io::stdout()));
     let root_table = init_root_table();
     let mut locals: Vec<_> = iter::repeat_with(|| Rc::new(RefCell::new(Value::Null)))
-        .take(root_file.code.locals.len())
+        .take(root_fn.locals.len())
         .collect();
     *locals[0].borrow_mut() = Value::array(args.into_iter().map(Value::string).collect::<Vec<_>>());
-    let num_regs = root_file.code.num_regs;
+    let num_regs = root_fn.num_regs;
 
     let mut state = VMState {
         root_table: root_table.clone(),
@@ -304,13 +280,14 @@ pub fn run<'a>(
         call_stack: Vec::new(),
         acc: Value::Null,
         files: Vec::new(),
+        rt_funcs: Vec::new(),
     };
 
-    let root_fn = state.load_file(root_file);
+    let root_rt_fn = state.load_file(root_file);
 
     state.call_stack.push(StackFrame {
         ip: 0,
-        func: root_fn,
+        func: root_rt_fn,
         env: Value::Table(root_table),
         registers: vec![Value::Null; num_regs as usize],
         locals,
@@ -329,7 +306,7 @@ fn run_vm(state: &mut VMState) -> Result<(), SquirrelError> {
             };
             let ip = frame.ip;
             frame.ip += 1;
-            frame.func.code[ip].strip()
+            frame.func.f.code[ip].strip()
         };
 
         let res = match inst {
@@ -379,7 +356,8 @@ mod tests {
             file_name.to_string(),
             file_contents.to_string(),
         );
-        println!("{:#?}", actual_code.code.wrap(&actual_code));
+        // TODO: Only prints 1 function
+        println!("{:#?}", actual_code.code[0].wrap(&actual_code));
 
         let mut output = Vec::new();
         let run_res = run(actual_code, file_name, Some(&mut output), iter::empty());

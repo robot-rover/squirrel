@@ -104,13 +104,13 @@ impl Value {
     }
 }
 
-impl From<ast::Literal> for Value {
-    fn from(value: ast::Literal) -> Self {
+impl From<&ast::Literal> for Value {
+    fn from(value: &ast::Literal) -> Self {
         match value {
-            ast::Literal::Integer(i) => Value::Integer(i),
-            ast::Literal::Number(f) => Value::Float(f),
-            ast::Literal::String(s) => Value::string(&s),
-            ast::Literal::Boolean(b) => Value::Boolean(b),
+            ast::Literal::Integer(i) => Value::Integer(*i),
+            ast::Literal::Number(f) => Value::Float(*f),
+            ast::Literal::String(s) => Value::string(s),
+            ast::Literal::Boolean(b) => Value::Boolean(*b),
             ast::Literal::Null => Value::Null,
         }
     }
@@ -463,24 +463,25 @@ pub struct Closure {
 
 impl Closure {
     pub fn new(
-        ast_fn: Rc<RtFunction>,
+        func: Rc<RtFunction>,
         default_vals: Vec<Value>,
         parent_frame: &StackFrame,
-        root: Value,
+        root: Rc<RefCell<Table>>,
     ) -> Self {
-        let upvalues = ast_fn
-            .upvalues
-            .iter()
-            .cloned()
-            .map(|(parent_idx, _this_idx)| parent_frame.locals[parent_idx as usize].clone())
-            .collect();
-        Closure {
-            ast_fn: NonNull::from(ast_fn),
-            default_vals,
-            root,
-            env: None,
-            upvalues,
-        }
+        todo!("Need upvalues in Function")
+        // let upvalues = func.f
+        //     .upvalues
+        //     .iter()
+        //     .cloned()
+        //     .map(|(parent_idx, _this_idx)| parent_frame.locals[parent_idx as usize].clone())
+        //     .collect();
+        // Closure {
+        //     ast_fn: NonNull::from(ast_fn),
+        //     default_vals,
+        //     root,
+        //     env: None,
+        //     upvalues,
+        // }
     }
 
     pub fn root(root_fn: RtFunction, root: Value) -> Self {

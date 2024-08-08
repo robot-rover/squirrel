@@ -93,8 +93,14 @@ pub fn run_load(state: &mut VMState, inst: InstLoad) -> ExecResult {
         InstLoad::Local(local) => state.frame().get_local(local).borrow().clone(),
         InstLoad::Const(constant) => state.frame().get_func().get_constant(constant).clone(),
         InstLoad::FunIdx(fun_idx) => {
-            state.frame().get_func().get_sub_function(fun_idx);
-            todo!("If we immediately call, we can omit constructing a closure in the compiler, otherwise we need to explicitly set it with a new instruction")
+            let fun_offset = state.frame().get_func().get_sub_fn_idx(fun_idx);
+            let rt_func = state.get_rt_func(fun_offset);
+            Value::closure(Closure::new(
+                rt_func,
+                todo!("Where to store default values"),
+                state.frame(),
+                state.get_root().clone(),
+            ))
         }
         InstLoad::PrimType(prim_type) => prim_type.into(),
         InstLoad::U8(value) => Value::Integer(value as u64 as i64),

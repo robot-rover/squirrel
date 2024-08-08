@@ -89,7 +89,7 @@ pub struct Function {
 pub struct File {
     pub file_name: String,
     pub source: String,
-    pub code: Function,
+    pub code: Vec<Function>,
 }
 
 impl Function {
@@ -327,7 +327,7 @@ impl FunctionBuilder {
         locals: Vec<(String, u32)>,
         is_varargs: bool,
         num_locals: u32,
-    ) -> Function {
+    ) -> Vec<Function> {
         let mut blocks_to_take = self
             .blocks
             .into_iter()
@@ -379,7 +379,7 @@ impl FunctionBuilder {
         assert_eq!(block_offsets[0], 0);
         assert!(block_offsets[1..].iter().all(|offset| *offset != 0));
 
-        Function {
+        let this_fn = Function {
             code,
             block_offsets,
             constants: self.constants,
@@ -388,8 +388,9 @@ impl FunctionBuilder {
             num_regs: self.next_register,
             locals,
             num_locals,
-            sub_functions: self.functions,
-        }
+        };
+
+        vec![this_fn]
     }
 }
 
@@ -413,7 +414,7 @@ pub fn compile(ast: &ast::Function, file_name: String, source: String) -> File {
     }
 }
 
-fn compile_function(function: &ast::Function) -> Function {
+fn compile_function(function: &ast::Function) -> Vec<Function> {
     if function.default_expr.len() > 0 {
         // TODO: Default Args
         todo!()
@@ -625,7 +626,8 @@ fn compile_expr(fun: &mut FunctionBuilder, block: BlockBuilder, expr: &Expr) -> 
         ExprData::TableDecl(slots) => compile_table_decl(fun, block, slots, expr.span),
         ExprData::ArrayDecl(elements) => compile_array_decl(fun, block, elements, expr.span),
         ExprData::FunctionDef(ast_fun) => {
-            let fun_idx = fun.function(compile_function(ast_fun));
+            let fun_idx = FunIdx::from(u32::try_from(fun.functions.len()).unwrap());
+            fun.functions.append(&mut compile_function(ast_fun));
             block.inst(fun, InstCtx::loadf(fun_idx, ast_fun.keyword_span));
             block
         }
