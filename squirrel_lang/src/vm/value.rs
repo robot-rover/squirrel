@@ -10,7 +10,7 @@ use crate::{
 
 use super::{
     bytecode::Reg,
-    runtime::{RtFunction, VMState},
+    runtime::{RtFunction, StackFrame, VMState},
 };
 
 pub type NativeFn = fn(*mut VMState, Reg, u8) -> Result<(), ExecError>;
@@ -459,30 +459,28 @@ pub struct Closure {
     pub upvalues: Vec<Rc<RefCell<Value>>>,
     // TODO: This should be weak
     pub root: Value,
-    pub env: Option<Value>,
 }
 
 impl Closure {
     pub fn new(
         ast_fn: Rc<RtFunction>,
         default_vals: Vec<Value>,
-        // parent_rt: &FuncRuntime,
+        parent_frame: &StackFrame,
         root: Value,
     ) -> Self {
-        todo!()
-        // let upvalues = ast_fn
-        //     .upvalues
-        //     .iter()
-        //     .cloned()
-        //     .map(|(parent_idx, _this_idx)| parent_rt.locals[parent_idx as usize].clone())
-        //     .collect();
-        // Closure {
-        //     ast_fn: NonNull::from(ast_fn),
-        //     default_vals,
-        //     root,
-        //     env: None,
-        //     upvalues,
-        // }
+        let upvalues = ast_fn
+            .upvalues
+            .iter()
+            .cloned()
+            .map(|(parent_idx, _this_idx)| parent_frame.locals[parent_idx as usize].clone())
+            .collect();
+        Closure {
+            ast_fn: NonNull::from(ast_fn),
+            default_vals,
+            root,
+            env: None,
+            upvalues,
+        }
     }
 
     pub fn root(root_fn: RtFunction, root: Value) -> Self {
@@ -490,7 +488,6 @@ impl Closure {
             rt_fn: Rc::new(root_fn),
             default_vals: Vec::new(),
             root,
-            env: None,
             upvalues: Vec::new(),
         }
     }

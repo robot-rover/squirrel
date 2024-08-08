@@ -9,6 +9,7 @@ function rerun_test(a_arg = inc_a()) {
     ::print(a_arg + "\n")
 }
 
+::print("Int Argument\n")
 rerun_test()
 rerun_test()
 rerun_test()
@@ -20,6 +21,7 @@ function mut_test(b_arg = tab) {
     ::print(b_arg.val + "\n")
 }
 
+::print("Table Argument\n")
 mut_test()
 mut_test()
 mut_test()

@@ -83,7 +83,6 @@ pub struct Function {
     pub num_params: u32,
     pub locals: Vec<(String, u32)>,
     pub num_locals: u32,
-    pub sub_functions: Vec<Function>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -397,7 +396,19 @@ impl FunctionBuilder {
 pub fn compile(ast: &ast::Function, file_name: String, source: String) -> File {
     File {
         file_name,
-        source,
+        source, // let upvalues = ast_fn
+        //     .upvalues
+        //     .iter()
+        //     .cloned()
+        //     .map(|(parent_idx, _this_idx)| parent_rt.locals[parent_idx as usize].clone())
+        //     .collect();
+        // Closure {
+        //     ast_fn: NonNull::from(ast_fn),
+        //     default_vals,
+        //     root,
+        //     env: None,
+        //     upvalues,
+        // }
         code: compile_function(ast),
     }
 }
