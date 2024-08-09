@@ -5,53 +5,7 @@ expression: actual_code
 - code:
     - Load:
         data:
-          PrimType: EmptyTable
-        ctx:
-          start: Start
-          end: End
-    - Store:
-        data:
-          Reg: 0
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Const: 1
-        ctx:
-          start: Start
-          end: End
-    - Store:
-        data:
-          Reg: 1
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Const: 2
-        ctx:
-          start: Start
-          end: End
-    - Set:
-        Setf:
-          - - 0
-            - true
-          - parent_span:
-              start: Start
-              end: End
-            field_span:
-              start: Start
-              end: End
-            assignment_span:
-              start: Start
-              end: End
-            value_span:
-              start: Start
-              end: End
-    - Load:
-        data:
-          Reg: 0
+          FunIdx: 0
         ctx:
           start: Start
           end: End
@@ -70,13 +24,32 @@ expression: actual_code
               end: End
     - Load:
         data:
+          Const: 2
+        ctx:
+          start: Start
+          end: End
+    - Set:
+        Setc:
+          - - 1
+            - true
+          - ident_span:
+              start: Start
+              end: End
+            assignment_span:
+              start: Start
+              end: End
+            value_span:
+              start: Start
+              end: End
+    - Load:
+        data:
           PrimType: EmptyTable
         ctx:
           start: Start
           end: End
     - Store:
         data:
-          Reg: 2
+          Reg: 0
         ctx:
           start: Start
           end: End
@@ -88,7 +61,7 @@ expression: actual_code
           end: End
     - Store:
         data:
-          Reg: 3
+          Reg: 1
         ctx:
           start: Start
           end: End
@@ -100,7 +73,7 @@ expression: actual_code
           end: End
     - Set:
         Setf:
-          - - 2
+          - - 0
             - true
           - parent_span:
               start: Start
@@ -116,7 +89,41 @@ expression: actual_code
               end: End
     - Load:
         data:
-          Reg: 2
+          Const: 6
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 1
+        ctx:
+          start: Start
+          end: End
+    - Get:
+        Getc:
+          - 7
+          - ident_span:
+              start: Start
+              end: End
+    - Set:
+        Setf:
+          - - 0
+            - true
+          - parent_span:
+              start: Start
+              end: End
+            field_span:
+              start: Start
+              end: End
+            assignment_span:
+              start: Start
+              end: End
+            value_span:
+              start: Start
+              end: End
+    - Load:
+        data:
+          Reg: 0
         ctx:
           start: Start
           end: End
@@ -133,43 +140,96 @@ expression: actual_code
             value_span:
               start: Start
               end: End
-    - Load:
-        data:
-          Const: 7
-        ctx:
-          start: Start
-          end: End
-    - Set:
-        Setc:
-          - - 6
-            - true
+    - Get:
+        Getc:
+          - 8
           - ident_span:
               start: Start
               end: End
-            assignment_span:
-              start: Start
-              end: End
-            value_span:
-              start: Start
-              end: End
-    - Load:
+    - Store:
         data:
-          FunIdx: 0
+          Local: 1
         ctx:
           start: Start
           end: End
-    - Set:
-        Setc:
-          - - 8
-            - true
+    - Get:
+        Getc:
+          - 10
           - ident_span:
               start: Start
               end: End
-            assignment_span:
+    - Get:
+        Getfc:
+          - 9
+          - parent_span:
               start: Start
               end: End
-            value_span:
+            field_span:
               start: Start
+              end: End
+    - Store:
+        data:
+          Local: 2
+        ctx:
+          start: Start
+          end: End
+    - Misc:
+        data: Root
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 3
+        ctx:
+          start: Start
+          end: End
+    - Get:
+        Getfc:
+          - 11
+          - parent_span:
+              start: Start
+              end: End
+            field_span:
+              start: Start
+              end: End
+    - Store:
+        data:
+          Reg: 2
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Const: 12
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 4
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Reg: 2
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 3
+          n_args: 1
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args:
+            - start: Start
               end: End
     - Misc:
         data: This
@@ -178,31 +238,31 @@ expression: actual_code
           end: End
     - Store:
         data:
-          Reg: 5
+          Reg: 6
         ctx:
           start: Start
           end: End
     - Get:
         Getc:
-          - 9
+          - 13
           - ident_span:
               start: Start
               end: End
     - Store:
         data:
-          Reg: 4
+          Reg: 5
         ctx:
           start: Start
           end: End
     - Load:
         data:
-          Reg: 4
+          Reg: 5
         ctx:
           start: Start
           end: End
     - Call:
         data:
-          reg: 5
+          reg: 6
           n_args: 0
         ctx:
           fn_span:
@@ -214,53 +274,30 @@ expression: actual_code
           args: []
     - Get:
         Getc:
-          - 11
+          - 14
           - ident_span:
               start: Start
               end: End
-    - Store:
-        data:
-          Reg: 6
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Const: 10
-        ctx:
-          start: Start
-          end: End
     - Store:
         data:
           Reg: 7
         ctx:
           start: Start
           end: End
+    - Misc:
+        data: This
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 10
+        ctx:
+          start: Start
+          end: End
     - Get:
         Getc:
-          - 12
-          - ident_span:
-              start: Start
-              end: End
-    - Set:
-        Setf:
-          - - 6
-            - true
-          - parent_span:
-              start: Start
-              end: End
-            field_span:
-              start: Start
-              end: End
-            assignment_span:
-              start: Start
-              end: End
-            value_span:
-              start: Start
-              end: End
-    - Get:
-        Getc:
-          - 13
+          - 15
           - ident_span:
               start: Start
               end: End
@@ -270,30 +307,15 @@ expression: actual_code
         ctx:
           start: Start
           end: End
-    - Get:
-        Getfc:
-          - 14
-          - parent_span:
-              start: Start
-              end: End
-            field_span:
-              start: Start
-              end: End
-    - Store:
-        data:
-          Reg: 8
-        ctx:
-          start: Start
-          end: End
     - Load:
         data:
-          Reg: 8
+          Reg: 9
         ctx:
           start: Start
           end: End
     - Call:
         data:
-          reg: 9
+          reg: 10
           n_args: 0
         ctx:
           fn_span:
@@ -303,21 +325,44 @@ expression: actual_code
             start: Start
             end: End
           args: []
-    - Get:
-        Getc:
-          - 16
-          - ident_span:
-              start: Start
-              end: End
     - Store:
         data:
-          Reg: 10
+          Reg: 8
         ctx:
           start: Start
           end: End
     - Load:
         data:
-          Const: 15
+          Reg: 7
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 8
+          n_args: 0
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args: []
+    - Misc:
+        data: This
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 12
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Local: 1
         ctx:
           start: Start
           end: End
@@ -327,27 +372,122 @@ expression: actual_code
         ctx:
           start: Start
           end: End
+    - Load:
+        data:
+          Reg: 11
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 12
+          n_args: 0
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args: []
+    - Misc:
+        data: This
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 14
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Local: 2
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 13
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Reg: 13
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 14
+          n_args: 0
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args: []
+    - Misc:
+        data: Root
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 16
+        ctx:
+          start: Start
+          end: End
     - Get:
-        Getc:
-          - 17
-          - ident_span:
-              start: Start
-              end: End
-    - Set:
-        Setf:
-          - - 10
-            - true
+        Getfc:
+          - 16
           - parent_span:
               start: Start
               end: End
             field_span:
               start: Start
               end: End
-            assignment_span:
-              start: Start
-              end: End
-            value_span:
-              start: Start
+    - Store:
+        data:
+          Reg: 15
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Const: 17
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 17
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Reg: 15
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 16
+          n_args: 1
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args:
+            - start: Start
               end: End
     - Get:
         Getc:
@@ -357,7 +497,7 @@ expression: actual_code
               end: End
     - Store:
         data:
-          Reg: 13
+          Reg: 19
         ctx:
           start: Start
           end: End
@@ -372,19 +512,19 @@ expression: actual_code
               end: End
     - Store:
         data:
-          Reg: 12
+          Reg: 18
         ctx:
           start: Start
           end: End
     - Load:
         data:
-          Reg: 12
+          Reg: 18
         ctx:
           start: Start
           end: End
     - Call:
         data:
-          reg: 13
+          reg: 19
           n_args: 0
         ctx:
           fn_span:
@@ -402,132 +542,13 @@ expression: actual_code
               end: End
     - Store:
         data:
-          Reg: 14
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Const: 21
-        ctx:
-          start: Start
-          end: End
-    - Store:
-        data:
-          Reg: 15
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Reg: 14
-        ctx:
-          start: Start
-          end: End
-    - Call:
-        data:
-          reg: 15
-          n_args: 0
-        ctx:
-          fn_span:
-            start: Start
-            end: End
-          call_span:
-            start: Start
-            end: End
-          args: []
-    - Misc:
-        data:
-          Array: 1
-        ctx:
-          start: Start
-          end: End
-    - Store:
-        data:
-          Reg: 17
-        ctx:
-          start: Start
-          end: End
-    - Get:
-        Getfc:
-          - 23
-          - parent_span:
-              start: Start
-              end: End
-            field_span:
-              start: Start
-              end: End
-    - Store:
-        data:
-          Reg: 16
-        ctx:
-          start: Start
-          end: End
-    - Get:
-        Getc:
-          - 24
-          - ident_span:
-              start: Start
-              end: End
-    - Store:
-        data:
-          Reg: 18
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Reg: 16
-        ctx:
-          start: Start
-          end: End
-    - Call:
-        data:
-          reg: 17
-          n_args: 1
-        ctx:
-          fn_span:
-            start: Start
-            end: End
-          call_span:
-            start: Start
-            end: End
-          args:
-            - start: Start
-              end: End
-    - Load:
-        data:
-          Reg: 17
-        ctx:
-          start: Start
-          end: End
-    - Set:
-        Setc:
-          - - 22
-            - true
-          - ident_span:
-              start: Start
-              end: End
-            assignment_span:
-              start: Start
-              end: End
-            value_span:
-              start: Start
-              end: End
-    - Misc:
-        data: This
-        ctx:
-          start: Start
-          end: End
-    - Store:
-        data:
           Reg: 20
         ctx:
           start: Start
           end: End
     - Get:
         Getc:
-          - 25
+          - 21
           - ident_span:
               start: Start
               end: End
@@ -539,34 +560,55 @@ expression: actual_code
           end: End
     - Load:
         data:
-          Const: 26
-        ctx:
-          start: Start
-          end: End
-    - Get:
-        Getf:
-          - 21
-          - parent_span:
-              start: Start
-              end: End
-            field_span:
-              start: Start
-              end: End
-    - Store:
-        data:
-          Reg: 19
-        ctx:
-          start: Start
-          end: End
-    - Load:
-        data:
-          Reg: 19
+          Reg: 20
         ctx:
           start: Start
           end: End
     - Call:
         data:
-          reg: 20
+          reg: 21
+          n_args: 0
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args: []
+    - Load:
+        data:
+          Local: 1
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 22
+        ctx:
+          start: Start
+          end: End
+    - Get:
+        Getc:
+          - 22
+          - ident_span:
+              start: Start
+              end: End
+    - Store:
+        data:
+          Reg: 23
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Reg: 22
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 23
           n_args: 0
         ctx:
           fn_span:
@@ -584,37 +626,37 @@ expression: actual_code
   block_offsets:
     - 0
   constants:
-    - String: table_a
-    - String: ident
-    - String: Table A
-    - String: table_b
-    - String: ident
-    - String: Table B
-    - String: ident
-    - String: File Table
-    - String: get_ident
-    - String: get_ident
-    - String: get_ident
-    - String: table_a
-    - String: get_ident
-    - String: table_a
-    - String: get_ident
-    - String: get_ident
-    - String: table_b
-    - String: get_ident
-    - String: table_b
-    - String: get_ident
-    - String: get_ident
-    - "Null"
-    - String: arr
-    - String: push
-    - String: get_ident
-    - String: arr
-    - Integer: 0
+    - String: show_this
+    - String: whoami
+    - String: root
+    - String: a
+    - String: whoami
+    - String: a
+    - String: show_this
+    - String: show_this
+    - String: show_this
+    - String: show_this
+    - String: a
+    - String: print
+    - String: "-- Should be root --\n"
+    - String: show_this
+    - String: show_this
+    - String: getroottable
+    - String: print
+    - String: "-- Should be a --\n"
+    - String: a
+    - String: show_this
+    - String: show_this
+    - String: a
+    - String: a
   is_varargs: true
-  num_regs: 22
+  num_regs: 24
   num_params: 0
   locals:
     - - vargv
       - 0
-  num_locals: 1
+    - - st
+      - 1
+    - - st2
+      - 2
+  num_locals: 3

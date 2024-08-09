@@ -2,20 +2,19 @@
 source: squirrel_lang/src/vm/compiler.rs
 expression: actual_code
 ---
-code:
-  - Ret:
-      data: Void
-      ctx:
-        start: 0
-        end: 0
-block_offsets:
-  - 0
-constants: []
-is_varargs: true
-num_regs: 0
-num_params: 0
-locals:
-  - - vargv
+- code:
+    - Ret:
+        data: Void
+        ctx:
+          start: Start
+          end: End
+  block_offsets:
     - 0
-num_locals: 1
-sub_functions: []
+  constants: []
+  is_varargs: true
+  num_regs: 0
+  num_params: 0
+  locals:
+    - - vargv
+      - 0
+  num_locals: 1

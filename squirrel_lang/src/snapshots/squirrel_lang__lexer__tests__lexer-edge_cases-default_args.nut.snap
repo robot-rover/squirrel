@@ -47,6 +47,12 @@ expression: Lexer test for edge_cases/default_args.nut
 - RightCurlyBrace
 - Newline
 - Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Int Argument\n"
+- RightParenthesis
+- Newline
 - Identifier: rerun_test
 - LeftParenthesis
 - RightParenthesis
@@ -100,6 +106,12 @@ expression: Lexer test for edge_cases/default_args.nut
 - Newline
 - RightCurlyBrace
 - Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "Table Argument\n"
+- RightParenthesis
 - Newline
 - Identifier: mut_test
 - LeftParenthesis

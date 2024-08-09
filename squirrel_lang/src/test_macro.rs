@@ -14,6 +14,10 @@ macro_rules! test_foreach {
                 $func(INHERIT_ENV_PATH, INHERIT_ENV_CONTENTS);
             }
             #[test]
+            fn test_delete() {
+                $func(DELETE_PATH, DELETE_CONTENTS);
+            }
+            #[test]
             fn test_lost_env() {
                 $func(LOST_ENV_PATH, LOST_ENV_CONTENTS);
             }
@@ -46,8 +50,16 @@ macro_rules! test_foreach {
                 $func(DELETE_TO_ROOT_PATH, DELETE_TO_ROOT_CONTENTS);
             }
             #[test]
+            fn test_closure_root() {
+                $func(CLOSURE_ROOT_PATH, CLOSURE_ROOT_CONTENTS);
+            }
+            #[test]
             fn test_default_args() {
                 $func(DEFAULT_ARGS_PATH, DEFAULT_ARGS_CONTENTS);
+            }
+            #[test]
+            fn test_closure_this() {
+                $func(CLOSURE_THIS_PATH, CLOSURE_THIS_CONTENTS);
             }
             #[test]
             fn test_shadow_builtin() {
@@ -238,6 +250,8 @@ pub mod data {
         pub const FUNC_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/func_env.nut");
         pub const INHERIT_ENV_PATH: &str = "edge_cases/inherit_env.nut";
         pub const INHERIT_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/inherit_env.nut");
+        pub const DELETE_PATH: &str = "edge_cases/delete.nut";
+        pub const DELETE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/delete.nut");
         pub const LOST_ENV_PATH: &str = "edge_cases/lost_env.nut";
         pub const LOST_ENV_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/lost_env.nut");
         pub const OVERWRITING_SCOPE_PATH: &str = "edge_cases/overwriting_scope.nut";
@@ -254,8 +268,12 @@ pub mod data {
         pub const PARENT_SCOPE_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/parent_scope.nut");
         pub const DELETE_TO_ROOT_PATH: &str = "edge_cases/delete_to_root.nut";
         pub const DELETE_TO_ROOT_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/delete_to_root.nut");
+        pub const CLOSURE_ROOT_PATH: &str = "edge_cases/closure_root.nut";
+        pub const CLOSURE_ROOT_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/closure_root.nut");
         pub const DEFAULT_ARGS_PATH: &str = "edge_cases/default_args.nut";
         pub const DEFAULT_ARGS_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/default_args.nut");
+        pub const CLOSURE_THIS_PATH: &str = "edge_cases/closure_this.nut";
+        pub const CLOSURE_THIS_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/closure_this.nut");
         pub const SHADOW_BUILTIN_PATH: &str = "edge_cases/shadow_builtin.nut";
         pub const SHADOW_BUILTIN_CONTENTS: &str = include_str!("../../resources/scripts/edge_cases/shadow_builtin.nut");
         pub const ITERATION_PATH: &str = "edge_cases/iteration.nut";

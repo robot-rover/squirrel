@@ -2,77 +2,76 @@
 source: squirrel_lang/src/vm/compiler.rs
 expression: actual_code
 ---
-code:
-  - Misc:
-      data: This
-      ctx:
-        start: 0
-        end: 5
-  - Store:
-      data:
-        Reg: 1
-      ctx:
-        start: 0
-        end: 5
-  - Get:
-      Getc:
-        - 0
-        - ident_span:
-            start: 0
-            end: 5
-  - Store:
-      data:
-        Reg: 0
-      ctx:
-        start: 0
-        end: 5
-  - Load:
-      data:
-        Const: 1
-      ctx:
-        start: 6
-        end: 20
-  - Store:
-      data:
-        Reg: 2
-      ctx:
-        start: 6
-        end: 20
-  - Load:
-      data:
-        Reg: 0
-      ctx:
-        start: 0
-        end: 5
-  - Call:
-      data:
-        reg: 1
-        n_args: 1
-      ctx:
-        fn_span:
-          start: 0
-          end: 5
-        call_span:
-          start: 5
-          end: 21
-        args:
-          - start: 6
-            end: 20
-  - Ret:
-      data: Void
-      ctx:
-        start: 0
-        end: 21
-block_offsets:
-  - 0
-constants:
-  - String: print
-  - String: Hello World!
-is_varargs: true
-num_regs: 3
-num_params: 0
-locals:
-  - - vargv
+- code:
+    - Misc:
+        data: This
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 1
+        ctx:
+          start: Start
+          end: End
+    - Get:
+        Getc:
+          - 0
+          - ident_span:
+              start: Start
+              end: End
+    - Store:
+        data:
+          Reg: 0
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Const: 1
+        ctx:
+          start: Start
+          end: End
+    - Store:
+        data:
+          Reg: 2
+        ctx:
+          start: Start
+          end: End
+    - Load:
+        data:
+          Reg: 0
+        ctx:
+          start: Start
+          end: End
+    - Call:
+        data:
+          reg: 1
+          n_args: 1
+        ctx:
+          fn_span:
+            start: Start
+            end: End
+          call_span:
+            start: Start
+            end: End
+          args:
+            - start: Start
+              end: End
+    - Ret:
+        data: Void
+        ctx:
+          start: Start
+          end: End
+  block_offsets:
     - 0
-num_locals: 1
-sub_functions: []
+  constants:
+    - String: print
+    - String: Hello World!
+  is_varargs: true
+  num_regs: 3
+  num_params: 0
+  locals:
+    - - vargv
+      - 0
+  num_locals: 1

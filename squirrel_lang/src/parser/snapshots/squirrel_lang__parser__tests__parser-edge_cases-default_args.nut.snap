@@ -248,6 +248,32 @@ body:
             data:
               FunctionCall:
                 func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      Literal:
+                        String: "Int Argument\n"
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
                   Expr:
                     data:
                       Ident: rerun_test
@@ -492,6 +518,32 @@ body:
                 op_span:
                   start: Start
                   end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      Literal:
+                        String: "Table Argument\n"
+                    span:
+                      start: Start
+                      end: End
             span:
               start: Start
               end: End
