@@ -22,12 +22,8 @@ pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorRend
             .map_err(|err| err.with_context(&lexer).render(lexer))?;
         Ok(Statement::block(stmts, Span::empty(), Span::empty()))
     })?;
-    assert!(
-        fn_locals.upvalues.is_empty(),
-        "Root function cannot have upvalues"
-    );
 
-    Ok(Function::new(
+    let f = Function::new(
         Span::empty(),
         Span::empty(),
         0,
@@ -35,7 +31,16 @@ pub fn parse(contents: &str, path: String) -> Result<Function, SquirrelErrorRend
         true,
         fn_locals,
         root_fn_body,
-    ))
+    );
+
+    assert!(
+        !f.locals
+            .iter()
+            .any(|local| matches!(local, ast::Local::Upvalue(_))),
+        "Root function cannot have upvalues"
+    );
+
+    Ok(f)
 }
 
 fn parse_block<'s>(lexer: &mut SpannedLexer<'s>) -> ParseResult<Statement> {

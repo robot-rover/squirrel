@@ -10,13 +10,9 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - fooinst
-    - 1
-num_locals: 2
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: fooinst
 is_varargs: true
 body:
   data:
@@ -136,9 +132,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:

@@ -12,16 +12,8 @@ num_args: 0
 default_expr: []
 locals:
   - NamedReg: vargv
-  - NamedReg: int_b10
-  - NamedReg: int_hex
-  - NamedReg: int_oct
-  - NamedReg: int_char
-  - NamedReg: float
-  - NamedReg: float_sci
-  - NamedReg: float_sci2
-  - NamedReg: str
-  - NamedReg: str_verb
-  - NamedReg: str_verb_multi
+  - NamedReg: st
+  - NamedReg: st2
 is_varargs: true
 body:
   data:
@@ -32,7 +24,7 @@ body:
               Assign:
                 target:
                   Ident:
-                    - println
+                    - show_this
                     - start: Start
                       end: End
                 value:
@@ -44,10 +36,9 @@ body:
                       arg_span:
                         start: Start
                         end: End
-                      num_args: 1
+                      num_args: 0
                       default_expr: []
-                      locals:
-                        - NamedReg: val
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -74,10 +65,31 @@ body:
                                                 end: End
                                               lhs:
                                                 data:
-                                                  Local:
-                                                    - 0
-                                                    - start: Start
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: Start
                                                       end: End
+                                                    lhs:
+                                                      data:
+                                                        Literal:
+                                                          String: "this: "
+                                                      span:
+                                                        start: Start
+                                                        end: End
+                                                    rhs:
+                                                      data:
+                                                        FieldAccess:
+                                                          - data: This
+                                                            span:
+                                                              start: Start
+                                                              end: End
+                                                          - - whoami
+                                                            - start: Start
+                                                              end: End
+                                                      span:
+                                                        start: Start
+                                                        end: End
                                                 span:
                                                   start: Start
                                                   end: End
@@ -118,18 +130,18 @@ body:
             data:
               Assign:
                 target:
-                  Local:
-                    - 1
+                  Ident:
+                    - whoami
                     - start: Start
                       end: End
                 value:
                   data:
                     Literal:
-                      Integer: 34
+                      String: root
                   span:
                     start: Start
                     end: End
-                kind: Normal
+                kind: NewSlot
                 op_span:
                   start: Start
                   end: End
@@ -142,23 +154,70 @@ body:
       - data:
           Expr:
             data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
+              Assign:
+                target:
+                  Ident:
+                    - a
+                    - start: Start
                       end: End
-                args:
-                  - data:
-                      Local:
-                        - 1
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: whoami
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Literal:
+                              String: a
+                          span:
+                            start: Start
+                            end: End
+                      - - data:
+                            Literal:
+                              String: show_this
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Ident: show_this
+                          span:
+                            start: Start
+                            end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
                       end: End
+                value:
+                  data:
+                    Ident: show_this
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
             span:
               start: Start
               end: End
@@ -176,8 +235,15 @@ body:
                       end: End
                 value:
                   data:
-                    Literal:
-                      Integer: 4278231328
+                    FieldAccess:
+                      - data:
+                          Ident: a
+                        span:
+                          start: Start
+                          end: End
+                      - - show_this
+                        - start: Start
+                          end: End
                   span:
                     start: Start
                     end: End
@@ -196,14 +262,104 @@ body:
             data:
               FunctionCall:
                 func:
-                  Expr:
-                    data:
-                      Ident: println
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      Literal:
+                        String: "-- Should be root --\n"
                     span:
                       start: Start
                       end: End
-                args:
-                  - data:
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: show_this
+                    span:
+                      start: Start
+                      end: End
+                args: []
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              RawCall:
+                func:
+                  data:
+                    Ident: show_this
+                  span:
+                    start: Start
+                    end: End
+                this:
+                  data:
+                    FunctionCall:
+                      func:
+                        Expr:
+                          data:
+                            Ident: getroottable
+                          span:
+                            start: Start
+                            end: End
+                      args: []
+                  span:
+                    start: Start
+                    end: End
+                args: []
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Local:
+                        - 1
+                        - start: Start
+                          end: End
+                    span:
+                      start: Start
+                      end: End
+                args: []
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
                       Local:
                         - 2
                         - start: Start
@@ -211,32 +367,7 @@ body:
                     span:
                       start: Start
                       end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 3
-                    - start: Start
-                      end: End
-                value:
-                  data:
-                    Literal:
-                      Integer: 491
-                  span:
-                    start: Start
-                    end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
+                args: []
             span:
               start: Start
               end: End
@@ -248,47 +379,21 @@ body:
             data:
               FunctionCall:
                 func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
+                  FieldAccess:
+                    - data: Globals
+                      span:
+                        start: Start
+                        end: End
+                    - - print
+                      - start: Start
+                        end: End
                 args:
                   - data:
-                      Local:
-                        - 3
-                        - start: Start
-                          end: End
+                      Literal:
+                        String: "-- Should be a --\n"
                     span:
                       start: Start
                       end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 4
-                    - start: Start
-                      end: End
-                value:
-                  data:
-                    Literal:
-                      Integer: 97
-                  span:
-                    start: Start
-                    end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
             span:
               start: Start
               end: End
@@ -300,21 +405,16 @@ body:
             data:
               FunctionCall:
                 func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 4
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
+                  FieldAccess:
+                    - data:
+                        Ident: a
+                      span:
+                        start: Start
+                        end: End
+                    - - show_this
+                      - start: Start
+                        end: End
+                args: []
             span:
               start: Start
               end: End
@@ -324,75 +424,20 @@ body:
       - data:
           Expr:
             data:
-              Assign:
-                target:
-                  Local:
-                    - 5
-                    - start: Start
-                      end: End
-                value:
+              RawCall:
+                func:
                   data:
-                    Literal:
-                      Number: 1.52
+                    Ident: show_this
                   span:
                     start: Start
                     end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 5
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 6
-                    - start: Start
-                      end: End
-                value:
+                this:
                   data:
-                    Literal:
-                      Number: 0.01
+                    Ident: a
                   span:
                     start: Start
                     end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
+                args: []
             span:
               start: Start
               end: End
@@ -402,231 +447,23 @@ body:
       - data:
           Expr:
             data:
-              FunctionCall:
+              RawCall:
                 func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 6
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 7
-                    - start: Start
-                      end: End
-                value:
                   data:
-                    Literal:
-                      Number: 120
+                    Local:
+                      - 1
+                      - start: Start
+                        end: End
                   span:
                     start: Start
                     end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 7
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 8
-                    - start: Start
-                      end: End
-                value:
+                this:
                   data:
-                    Literal:
-                      String: "I'm a string"
+                    Ident: a
                   span:
                     start: Start
                     end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 8
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 9
-                    - start: Start
-                      end: End
-                value:
-                  data:
-                    Literal:
-                      String: "I'm a verbatim string"
-                  span:
-                    start: Start
-                    end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 9
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              Assign:
-                target:
-                  Local:
-                    - 10
-                    - start: Start
-                      end: End
-                value:
-                  data:
-                    Literal:
-                      String: "I'm a verbatim string\nthat spans multiple lines"
-                  span:
-                    start: Start
-                    end: End
-                kind: Normal
-                op_span:
-                  start: Start
-                  end: End
-            span:
-              start: Start
-              end: End
-        span:
-          start: Start
-          end: End
-      - data:
-          Expr:
-            data:
-              FunctionCall:
-                func:
-                  Expr:
-                    data:
-                      Ident: println
-                    span:
-                      start: Start
-                      end: End
-                args:
-                  - data:
-                      Local:
-                        - 10
-                        - start: Start
-                          end: End
-                    span:
-                      start: Start
-                      end: End
+                args: []
             span:
               start: Start
               end: End

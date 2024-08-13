@@ -10,15 +10,10 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - a
-    - 1
-  - - num
-    - 2
-num_locals: 3
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: a
+  - NamedReg: num
 is_varargs: true
 body:
   data:

@@ -725,26 +725,37 @@ expression: actual_code
   num_regs: 30
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - int_b10
-      - 1
-    - - int_hex
-      - 2
-    - - int_oct
-      - 3
-    - - int_char
-      - 4
-    - - float
-      - 5
-    - - float_sci
-      - 6
-    - - float_sci2
-      - 7
-    - - str
-      - 8
-    - - str_verb
-      - 9
-    - - str_verb_multi
-      - 10
-  num_locals: 11
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - int_b10
+    - NamedReg:
+        - 2
+        - int_hex
+    - NamedReg:
+        - 3
+        - int_oct
+    - NamedReg:
+        - 4
+        - int_char
+    - NamedReg:
+        - 5
+        - float
+    - NamedReg:
+        - 6
+        - float_sci
+    - NamedReg:
+        - 7
+        - float_sci2
+    - NamedReg:
+        - 8
+        - str
+    - NamedReg:
+        - 9
+        - str_verb
+    - NamedReg:
+        - 10
+        - str_verb_multi
+  num_locals: 0

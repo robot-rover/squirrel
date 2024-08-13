@@ -10,13 +10,9 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - player
-    - 1
-num_locals: 2
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: player
 is_varargs: true
 body:
   data:
@@ -120,9 +116,7 @@ body:
                                 end: End
                               num_args: 0
                               default_expr: []
-                              local_names: []
-                              num_locals: 0
-                              upvalues: []
+                              locals: []
                               is_varargs: false
                               body:
                                 data:
@@ -181,9 +175,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -378,15 +370,10 @@ body:
                         end: End
                       num_args: 2
                       default_expr: []
-                      local_names:
-                        - - name
-                          - 0
-                        - - pos
-                          - 1
-                        - - newentity
-                          - 2
-                      num_locals: 3
-                      upvalues: []
+                      locals:
+                        - NamedReg: name
+                        - NamedReg: pos
+                        - NamedReg: newentity
                       is_varargs: false
                       body:
                         data:
@@ -676,17 +663,11 @@ body:
                         end: End
                       num_args: 2
                       default_expr: []
-                      local_names:
-                        - - name
-                          - 0
-                        - - pos
-                          - 1
-                        - - p
-                          - 2
-                        - - newplayer
-                          - 3
-                      num_locals: 4
-                      upvalues: []
+                      locals:
+                        - NamedReg: name
+                        - NamedReg: pos
+                        - NamedReg: p
+                        - NamedReg: newplayer
                       is_varargs: false
                       body:
                         data:

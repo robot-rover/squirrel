@@ -2016,22 +2016,31 @@ expression: actual_code
   num_regs: 82
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - del1
-      - 1
-    - - del2
-      - 2
-    - - onet
-      - 3
-    - - twot
-      - 4
-    - - ArithC
-      - 5
-    - - onec
-      - 6
-    - - twoc
-      - 7
-    - - hello
-      - 8
-  num_locals: 9
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - del1
+    - NamedReg:
+        - 2
+        - del2
+    - NamedReg:
+        - 3
+        - onet
+    - NamedReg:
+        - 4
+        - twot
+    - Local:
+        - 0
+        - ArithC
+    - NamedReg:
+        - 5
+        - onec
+    - NamedReg:
+        - 6
+        - twoc
+    - NamedReg:
+        - 7
+        - hello
+  num_locals: 0

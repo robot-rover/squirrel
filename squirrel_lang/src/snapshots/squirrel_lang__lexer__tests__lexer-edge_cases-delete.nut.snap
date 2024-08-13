@@ -1,0 +1,36 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/delete.nut
+---
+- Identifier: env_mem
+- NewSlot
+- String: env_mem
+- Newline
+- Newline
+- Identifier: obj
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: obj_mem
+- Assign
+- String: obj_mem
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: local_mem
+- Assign
+- String: local_mem
+- Newline
+- Newline
+- Delete
+- Identifier: env_mem
+- Newline
+- Delete
+- Identifier: obj
+- Period
+- Identifier: obj_mem
+- Newline
+- Newline
+- Newline

@@ -10,13 +10,9 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - start
-    - 1
-num_locals: 2
-upvalues: []
+locals:
+  - Local: vargv
+  - NamedReg: start
 is_varargs: true
 body:
   data:
@@ -92,11 +88,8 @@ body:
                         end: End
                       num_args: 1
                       default_expr: []
-                      local_names:
-                        - - startstate
-                          - 0
-                      num_locals: 1
-                      upvalues: []
+                      locals:
+                        - NamedReg: startstate
                       is_varargs: false
                       body:
                         data:
@@ -170,9 +163,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -228,9 +219,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -383,13 +372,9 @@ body:
                         end: End
                       num_args: 2
                       default_expr: []
-                      local_names:
-                        - - start_state
-                          - 0
-                        - - max_counter
-                          - 1
-                      num_locals: 2
-                      upvalues: []
+                      locals:
+                        - NamedReg: start_state
+                        - NamedReg: max_counter
                       is_varargs: false
                       body:
                         data:
@@ -491,9 +476,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -641,23 +624,13 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names:
-                        - - n
-                          - 2
-                        - - val
-                          - 3
-                        - - toggle
-                          - 4
-                        - - i
-                          - 5
-                        - - ntoggle
-                          - 6
-                      num_locals: 7
-                      upvalues:
-                        - - 0
-                          - 0
-                        - - 0
-                          - 1
+                      locals:
+                        - Upvalue: 0
+                        - NamedReg: n
+                        - NamedReg: val
+                        - NamedReg: toggle
+                        - NamedReg: i
+                        - NamedReg: ntoggle
                       is_varargs: false
                       body:
                         data:
@@ -668,7 +641,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 2
+                                          - 1
                                           - start: Start
                                             end: End
                                       value:
@@ -721,7 +694,7 @@ body:
                                                             array:
                                                               data:
                                                                 Local:
-                                                                  - 1
+                                                                  - 0
                                                                   - start: Start
                                                                     end: End
                                                               span:
@@ -770,7 +743,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 3
+                                          - 2
                                           - start: Start
                                             end: End
                                       value:
@@ -796,7 +769,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 4
+                                          - 3
                                           - start: Start
                                             end: End
                                       value:
@@ -812,7 +785,7 @@ body:
                                             args:
                                               - data:
                                                   Local:
-                                                    - 3
+                                                    - 2
                                                     - start: Start
                                                       end: End
                                                 span:
@@ -837,13 +810,13 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 5
+                                          - 4
                                           - start: Start
                                             end: End
                                       value:
                                         data:
                                           Local:
-                                            - 2
+                                            - 1
                                             - start: Start
                                               end: End
                                         span:
@@ -871,7 +844,7 @@ body:
                                         - start: Start
                                           end: End
                                         - Local:
-                                            - 5
+                                            - 4
                                             - start: Start
                                               end: End
                                     span:
@@ -886,7 +859,7 @@ body:
                                                 Assign:
                                                   target:
                                                     Local:
-                                                      - 3
+                                                      - 2
                                                       - start: Start
                                                         end: End
                                                   value:
@@ -900,7 +873,7 @@ body:
                                                                     FieldAccess:
                                                                       - data:
                                                                           Local:
-                                                                            - 4
+                                                                            - 3
                                                                             - start: Start
                                                                               end: End
                                                                         span:
@@ -958,7 +931,7 @@ body:
                                                       FieldAccess:
                                                         - data:
                                                             Local:
-                                                              - 4
+                                                              - 3
                                                               - start: Start
                                                                 end: End
                                                           span:
@@ -1000,7 +973,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 3
+                                          - 2
                                           - start: Start
                                             end: End
                                       value:
@@ -1026,7 +999,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 6
+                                          - 5
                                           - start: Start
                                             end: End
                                       value:
@@ -1042,7 +1015,7 @@ body:
                                             args:
                                               - data:
                                                   Local:
-                                                    - 3
+                                                    - 2
                                                     - start: Start
                                                       end: End
                                                 span:
@@ -1073,13 +1046,13 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 5
+                                          - 4
                                           - start: Start
                                             end: End
                                       value:
                                         data:
                                           Local:
-                                            - 2
+                                            - 1
                                             - start: Start
                                               end: End
                                         span:
@@ -1107,7 +1080,7 @@ body:
                                         - start: Start
                                           end: End
                                         - Local:
-                                            - 5
+                                            - 4
                                             - start: Start
                                               end: End
                                     span:
@@ -1122,7 +1095,7 @@ body:
                                                 Assign:
                                                   target:
                                                     Local:
-                                                      - 3
+                                                      - 2
                                                       - start: Start
                                                         end: End
                                                   value:
@@ -1136,7 +1109,7 @@ body:
                                                                     FieldAccess:
                                                                       - data:
                                                                           Local:
-                                                                            - 6
+                                                                            - 5
                                                                             - start: Start
                                                                               end: End
                                                                         span:
@@ -1194,7 +1167,7 @@ body:
                                                       FieldAccess:
                                                         - data:
                                                             Local:
-                                                              - 6
+                                                              - 5
                                                               - start: Start
                                                                 end: End
                                                           span:

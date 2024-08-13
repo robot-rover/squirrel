@@ -10,39 +10,22 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - base_vec
-    - 1
-  - - v1
-    - 2
-  - - v2
-    - 3
-  - - r
-    - 4
-  - - i
-    - 5
-  - - val
-    - 6
-  - - i
-    - 7
-  - - val
-    - 8
-  - - i
-    - 9
-  - - val
-    - 10
-  - - i
-    - 11
-  - - val
-    - 12
-  - - i
-    - 13
-  - - val
-    - 14
-num_locals: 15
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - Local: base_vec
+  - NamedReg: v1
+  - NamedReg: v2
+  - NamedReg: r
+  - NamedReg: i
+  - NamedReg: val
+  - NamedReg: i
+  - NamedReg: val
+  - NamedReg: i
+  - NamedReg: val
+  - NamedReg: i
+  - NamedReg: val
+  - NamedReg: i
+  - NamedReg: val
 is_varargs: true
 body:
   data:
@@ -75,11 +58,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - n
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: n
                               is_varargs: false
                               body:
                                 data:
@@ -230,11 +210,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - n
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: n
                               is_varargs: false
                               body:
                                 data:
@@ -385,11 +362,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - n
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: n
                               is_varargs: false
                               body:
                                 data:
@@ -540,11 +514,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - n
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: n
                               is_varargs: false
                               body:
                                 data:
@@ -695,11 +666,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - n
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: n
                               is_varargs: false
                               body:
                                 data:
@@ -826,9 +794,7 @@ body:
                                 end: End
                               num_args: 0
                               default_expr: []
-                              local_names: []
-                              num_locals: 0
-                              upvalues: []
+                              locals: []
                               is_varargs: false
                               body:
                                 data:
@@ -866,11 +832,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - key
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: key
                               is_varargs: false
                               body:
                                 data:
@@ -946,13 +909,9 @@ body:
                                 end: End
                               num_args: 2
                               default_expr: []
-                              local_names:
-                                - - key
-                                  - 0
-                                - - val
-                                  - 1
-                              num_locals: 2
-                              upvalues: []
+                              locals:
+                                - NamedReg: key
+                                - NamedReg: val
                               is_varargs: false
                               body:
                                 data:
@@ -1199,17 +1158,11 @@ body:
                         end: End
                       num_args: 3
                       default_expr: []
-                      local_names:
-                        - - _x
-                          - 0
-                        - - _y
-                          - 1
-                        - - _z
-                          - 2
-                      num_locals: 4
-                      upvalues:
-                        - - 1
-                          - 3
+                      locals:
+                        - NamedReg: _x
+                        - NamedReg: _y
+                        - NamedReg: _z
+                        - Upvalue: 1
                       is_varargs: false
                       body:
                         data:

@@ -10,45 +10,25 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - tab
-    - 1
-  - - a
-    - 2
-  - - b
-    - 3
-  - - newline
-    - 4
-  - - carriage
-    - 5
-  - - v
-    - 6
-  - - f
-    - 7
-  - - back
-    - 8
-  - - quote
-    - 9
-  - - single
-    - 10
-  - - zero
-    - 11
-  - - hexcode
-    - 12
-  - - unicodes
-    - 13
-  - - unicodel
-    - 14
-  - - normal
-    - 15
-  - - verb
-    - 16
-  - - multiline
-    - 17
-num_locals: 18
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: tab
+  - NamedReg: a
+  - NamedReg: b
+  - NamedReg: newline
+  - NamedReg: carriage
+  - NamedReg: v
+  - NamedReg: f
+  - NamedReg: back
+  - NamedReg: quote
+  - NamedReg: single
+  - NamedReg: zero
+  - NamedReg: hexcode
+  - NamedReg: unicodes
+  - NamedReg: unicodel
+  - NamedReg: normal
+  - NamedReg: verb
+  - NamedReg: multiline
 is_varargs: true
 body:
   data:

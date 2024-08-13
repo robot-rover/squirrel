@@ -2267,18 +2267,25 @@ expression: actual_code
   num_regs: 78
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - arithT
-      - 1
-    - - one
-      - 2
-    - - two
-      - 3
-    - - ArithC
-      - 4
-    - - one
-      - 5
-    - - two
-      - 6
-  num_locals: 7
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - arithT
+    - NamedReg:
+        - 2
+        - one
+    - NamedReg:
+        - 3
+        - two
+    - Local:
+        - 0
+        - ArithC
+    - NamedReg:
+        - 4
+        - one
+    - NamedReg:
+        - 5
+        - two
+  num_locals: 0

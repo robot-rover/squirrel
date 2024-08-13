@@ -9,7 +9,10 @@ use hashbrown::HashMap;
 use logos::{Lexer, Logos, Skip};
 use serde::{Deserialize, Serialize};
 
-use crate::{parser::error::ParseError, sq_error::render_report};
+use crate::{
+    parser::{ast, error::ParseError},
+    sq_error::render_report,
+};
 
 use crate::sq_error::{Span, SquirrelError};
 
@@ -363,20 +366,17 @@ fn parse_char_lit<'s>(lexer: &Lexer<'s, Token<'s>>) -> LexResult<i64> {
     Ok(target as i64)
 }
 
-#[derive(Debug, Clone)]
-struct VisibleLocal {
-    func_idx: u32,
-    local_idx: u32,
-}
-
 #[derive(Debug)]
 pub struct FunctionLocals<'s> {
-    pub locals: Vec<(&'s str, u32)>,
+    // Locals defined in this function
+    locals: Vec<(&'s str, u32, bool)>,
     // Outer local index, Inner local index
-    pub upvalues: Vec<(u32, u32)>,
+    upvalues: Vec<(u32, u32)>,
+    visible_locals: Vec<HashMap<&'s str, u32>>,
 }
 
-impl FunctionLocals<'_> {
+impl<'s> FunctionLocals<'s> {
+    const OUTSIDE_LOCAL: &'static str = "Cannot call when outside of local scope";
     pub fn local_count(&self) -> u32 {
         self.locals.len() as u32 + self.upvalues.len() as u32
     }
@@ -385,24 +385,19 @@ impl FunctionLocals<'_> {
         Self {
             locals: Vec::new(),
             upvalues: Vec::new(),
+            visible_locals: Vec::new(),
         }
     }
 
     fn validate(&self) -> bool {
         let mut locals_found = vec![false; self.locals.len() + self.upvalues.len()];
-        for (_name, idx) in self.locals.iter() {
-            if let Some(iref) = locals_found.get_mut(*idx as usize) {
-                if *iref {
-                    return false;
-                }
-                *iref = true;
-            } else {
-                return false;
-            }
-        }
-
-        for (_outer_idx, this_idx) in self.upvalues.iter().cloned() {
-            if let Some(iref) = locals_found.get_mut(this_idx as usize) {
+        for idx in self
+            .locals
+            .iter()
+            .map(|(_, idx, _)| *idx)
+            .chain(self.upvalues.iter().map(|(_, idx)| *idx))
+        {
+            if let Some(iref) = locals_found.get_mut(idx as usize) {
                 if *iref {
                     return false;
                 }
@@ -414,59 +409,90 @@ impl FunctionLocals<'_> {
 
         locals_found.into_iter().all(convert::identity)
     }
+
+    fn add_local(&mut self, local: &'s str) -> u32 {
+        let local_idx = self.local_count();
+        self.visible_locals
+            .last_mut()
+            .expect(Self::OUTSIDE_LOCAL)
+            .insert(local, local_idx);
+        self.locals.push((local, local_idx, false));
+        local_idx
+    }
+
+    fn add_upvalue(&mut self, upvalue: &'s str, parent_idx: u32) -> u32 {
+        let upvalue_idx = self.local_count();
+        self.visible_locals
+            .first_mut()
+            .expect(Self::OUTSIDE_LOCAL)
+            .insert(upvalue, upvalue_idx);
+        self.upvalues.push((parent_idx, upvalue_idx));
+        upvalue_idx
+    }
+
+    pub fn to_locals(self) -> Vec<ast::Local> {
+        let mut locals: Vec<Option<ast::Local>> = vec![None; self.local_count() as usize];
+        for (name, idx, is_upvalue) in self.locals {
+            let idx = idx as usize;
+            assert_eq!(locals[idx], None);
+            locals[idx] = Some(if is_upvalue {
+                ast::Local::Local(name.to_owned())
+            } else {
+                ast::Local::NamedReg(name.to_owned())
+            });
+        }
+
+        for (parent_idx, idx) in self.upvalues {
+            let idx = idx as usize;
+            assert_eq!(locals[idx], None);
+            locals[idx] = Some(ast::Local::Upvalue(parent_idx));
+        }
+
+        locals
+            .into_iter()
+            .map(|o| o.expect("Local indicies are not contiguous"))
+            .collect()
+    }
 }
 
 pub struct LocalResolution<'s> {
-    visible_locals: Vec<HashMap<&'s str, VisibleLocal>>,
-    all_locals: Vec<FunctionLocals<'s>>,
+    fn_scopes: Vec<FunctionLocals<'s>>,
 }
 
 impl<'s> LocalResolution<'s> {
     const OUTSIDE_GLOBAL: &'static str = "Cannot call add_local when outside of global scope";
+    const OUTSIDE_LOCAL: &'static str = "Cannot call add_local when outside of local scope";
 
     pub fn add_local(&mut self, local: &'s str) -> u32 {
-        let local_idx = self
-            .all_locals
-            .last()
-            .expect(Self::OUTSIDE_GLOBAL)
-            .local_count();
-        // println!("{}Declaring local {local} -> {local_idx}", " ".repeat(self.visible_locals.len()));
-        let visible = VisibleLocal {
-            func_idx: self.all_locals.len() as u32 - 1,
-            local_idx,
-        };
-        self.visible_locals
+        self.fn_scopes
             .last_mut()
             .expect(Self::OUTSIDE_GLOBAL)
-            .insert(local, visible);
-        self.all_locals
-            .last_mut()
-            .expect(Self::OUTSIDE_GLOBAL)
-            .locals
-            .push((local, local_idx));
-        local_idx
+            .add_local(local)
     }
 
     pub fn maybe_reference_local(&mut self, local: &'s str) -> Option<u32> {
-        let VisibleLocal {
-            func_idx,
-            mut local_idx,
-        } = self
-            .visible_locals
+        let (mut local_idx, fn_idx) = self
+            .fn_scopes
             .iter()
+            .enumerate()
             .rev()
-            .find_map(|scope| scope.get(local))?
+            .find_map(|(fn_idx, fn_scope)| {
+                fn_scope
+                    .visible_locals
+                    .iter()
+                    .find_map(|scope| scope.get(local).map(|idx| (*idx, fn_idx)))
+            })?
             .clone();
 
         // Need to propogate this local upwards through upvalues
-        let current_func_idx = self.all_locals.len() as u32 - 1;
-        for func_scope_idx in func_idx..current_func_idx {
+        let current_func_idx = self.fn_scopes.len() - 1;
+        if current_func_idx != fn_idx {
+            // This local is used as an upvalue
+            self.fn_scopes[fn_idx].locals[local_idx as usize].2 = true;
+        }
+        for func_scope_idx in fn_idx..current_func_idx {
             let next_func_idx = func_scope_idx + 1;
-            let upvalue_idx = self.all_locals[next_func_idx as usize].local_count();
-            self.all_locals[next_func_idx as usize]
-                .upvalues
-                .push((local_idx, upvalue_idx));
-            local_idx = upvalue_idx;
+            local_idx = self.fn_scopes[next_func_idx].add_upvalue(local, local_idx);
         }
         // println!("{}Resolved local reference: {local} -> {local_idx}", " ".repeat(self.visible_locals.len()));
 
@@ -474,16 +500,26 @@ impl<'s> LocalResolution<'s> {
     }
 
     fn enter_scope(&mut self) {
-        self.visible_locals.push(HashMap::new());
+        self.fn_scopes
+            .last_mut()
+            .expect(Self::OUTSIDE_GLOBAL)
+            .visible_locals
+            .push(HashMap::new());
     }
 
     fn exit_scope(&mut self) {
-        self.visible_locals.pop().expect(Self::OUTSIDE_GLOBAL);
+        self.fn_scopes
+            .last_mut()
+            .expect(Self::OUTSIDE_GLOBAL)
+            .visible_locals
+            .pop()
+            .expect(Self::OUTSIDE_LOCAL);
     }
 
     fn enter_fn_scope(&mut self, args: impl IntoIterator<Item = &'s str>, is_varargs: bool) {
-        self.visible_locals.push(HashMap::new());
-        self.all_locals.push(FunctionLocals::new());
+        let mut fl = FunctionLocals::new();
+        fl.visible_locals.push(HashMap::new());
+        self.fn_scopes.push(fl);
         args.into_iter().for_each(|arg| {
             self.add_local(arg);
         });
@@ -493,14 +529,16 @@ impl<'s> LocalResolution<'s> {
     }
 
     fn exit_fn_scope(&mut self) -> FunctionLocals<'s> {
-        self.visible_locals.pop().expect(Self::OUTSIDE_GLOBAL);
-        self.all_locals.pop().expect(Self::OUTSIDE_GLOBAL)
+        assert_eq!(
+            self.fn_scopes.last().map(|fl| fl.visible_locals.len()),
+            Some(1)
+        );
+        self.fn_scopes.pop().expect(Self::OUTSIDE_GLOBAL)
     }
 
     fn new() -> Self {
         Self {
-            visible_locals: Vec::new(),
-            all_locals: Vec::new(),
+            fn_scopes: Vec::new(),
         }
     }
 }
@@ -565,12 +603,15 @@ impl<'s> SpannedLexer<'s> {
         result
     }
 
-    pub fn fn_scoped<T, E, F: FnOnce(&mut Self) -> Result<T, E>>(
+    pub fn fn_scoped<T, E, F>(
         &mut self,
         args: impl IntoIterator<Item = &'s str>,
         is_varargs: bool,
         f: F,
-    ) -> Result<(T, FunctionLocals<'s>), E> {
+    ) -> Result<(T, FunctionLocals<'s>), E>
+    where
+        F: FnOnce(&mut Self) -> Result<T, E>,
+    {
         self.locals.enter_fn_scope(args, is_varargs);
         let result = f(self);
         let fn_locals = self.locals.exit_fn_scope();

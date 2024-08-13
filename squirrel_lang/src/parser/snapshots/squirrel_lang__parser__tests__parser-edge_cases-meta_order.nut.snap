@@ -10,27 +10,16 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - del1
-    - 1
-  - - del2
-    - 2
-  - - onet
-    - 3
-  - - twot
-    - 4
-  - - ArithC
-    - 5
-  - - onec
-    - 6
-  - - twoc
-    - 7
-  - - hello
-    - 8
-num_locals: 9
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: del1
+  - NamedReg: del2
+  - NamedReg: onet
+  - NamedReg: twot
+  - Local: ArithC
+  - NamedReg: onec
+  - NamedReg: twoc
+  - NamedReg: hello
 is_varargs: true
 body:
   data:
@@ -55,13 +44,9 @@ body:
                         end: End
                       num_args: 2
                       default_expr: []
-                      local_names:
-                        - - one
-                          - 0
-                        - - two
-                          - 1
-                      num_locals: 2
-                      upvalues: []
+                      locals:
+                        - NamedReg: one
+                        - NamedReg: two
                       is_varargs: false
                       body:
                         data:
@@ -806,11 +791,8 @@ body:
                         end: End
                       num_args: 1
                       default_expr: []
-                      local_names:
-                        - - name
-                          - 0
-                      num_locals: 1
-                      upvalues: []
+                      locals:
+                        - Local: name
                       is_varargs: false
                       body:
                         data:
@@ -835,13 +817,9 @@ body:
                                                 end: End
                                               num_args: 1
                                               default_expr: []
-                                              local_names:
-                                                - - other
-                                                  - 0
-                                              num_locals: 2
-                                              upvalues:
-                                                - - 0
-                                                  - 1
+                                              locals:
+                                                - NamedReg: other
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -994,13 +972,9 @@ body:
                                                 end: End
                                               num_args: 1
                                               default_expr: []
-                                              local_names:
-                                                - - other
-                                                  - 0
-                                              num_locals: 2
-                                              upvalues:
-                                                - - 0
-                                                  - 1
+                                              locals:
+                                                - NamedReg: other
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -1153,13 +1127,9 @@ body:
                                                 end: End
                                               num_args: 1
                                               default_expr: []
-                                              local_names:
-                                                - - other
-                                                  - 0
-                                              num_locals: 2
-                                              upvalues:
-                                                - - 0
-                                                  - 1
+                                              locals:
+                                                - NamedReg: other
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -1312,13 +1282,9 @@ body:
                                                 end: End
                                               num_args: 1
                                               default_expr: []
-                                              local_names:
-                                                - - other
-                                                  - 0
-                                              num_locals: 2
-                                              upvalues:
-                                                - - 0
-                                                  - 1
+                                              locals:
+                                                - NamedReg: other
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -1471,13 +1437,9 @@ body:
                                                 end: End
                                               num_args: 1
                                               default_expr: []
-                                              local_names:
-                                                - - other
-                                                  - 0
-                                              num_locals: 2
-                                              upvalues:
-                                                - - 0
-                                                  - 1
+                                              locals:
+                                                - NamedReg: other
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -1630,11 +1592,8 @@ body:
                                                 end: End
                                               num_args: 0
                                               default_expr: []
-                                              local_names: []
-                                              num_locals: 1
-                                              upvalues:
-                                                - - 0
-                                                  - 0
+                                              locals:
+                                                - Upvalue: 0
                                               is_varargs: false
                                               body:
                                                 data:
@@ -2045,13 +2004,9 @@ body:
                                   end: End
                                 num_args: 2
                                 default_expr: []
-                                local_names:
-                                  - - n
-                                    - 0
-                                  - - name
-                                    - 1
-                                num_locals: 2
-                                upvalues: []
+                                locals:
+                                  - NamedReg: n
+                                  - NamedReg: name
                                 is_varargs: false
                                 body:
                                   data:
@@ -2142,13 +2097,9 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 2
-                                upvalues:
-                                  - - 5
-                                    - 1
+                                locals:
+                                  - NamedReg: other
+                                  - Upvalue: 5
                                 is_varargs: false
                                 body:
                                   data:
@@ -2289,13 +2240,9 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 2
-                                upvalues:
-                                  - - 5
-                                    - 1
+                                locals:
+                                  - NamedReg: other
+                                  - Upvalue: 5
                                 is_varargs: false
                                 body:
                                   data:
@@ -2436,13 +2383,9 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 2
-                                upvalues:
-                                  - - 5
-                                    - 1
+                                locals:
+                                  - NamedReg: other
+                                  - Upvalue: 5
                                 is_varargs: false
                                 body:
                                   data:
@@ -2583,13 +2526,9 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 2
-                                upvalues:
-                                  - - 5
-                                    - 1
+                                locals:
+                                  - NamedReg: other
+                                  - Upvalue: 5
                                 is_varargs: false
                                 body:
                                   data:
@@ -2730,13 +2669,9 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 2
-                                upvalues:
-                                  - - 5
-                                    - 1
+                                locals:
+                                  - NamedReg: other
+                                  - Upvalue: 5
                                 is_varargs: false
                                 body:
                                   data:
@@ -2877,9 +2812,7 @@ body:
                                   end: End
                                 num_args: 0
                                 default_expr: []
-                                local_names: []
-                                num_locals: 0
-                                upvalues: []
+                                locals: []
                                 is_varargs: false
                                 body:
                                   data:

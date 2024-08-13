@@ -2140,20 +2140,28 @@ expression: actual_code
   num_regs: 88
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - a
-      - 1
-    - - b
-      - 2
-    - - c
-      - 3
-    - - d
-      - 4
-    - - t
-      - 5
-    - - f
-      - 6
-    - - n
-      - 7
-  num_locals: 8
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - a
+    - NamedReg:
+        - 2
+        - b
+    - NamedReg:
+        - 3
+        - c
+    - NamedReg:
+        - 4
+        - d
+    - NamedReg:
+        - 5
+        - t
+    - NamedReg:
+        - 6
+        - f
+    - NamedReg:
+        - 7
+        - n
+  num_locals: 0

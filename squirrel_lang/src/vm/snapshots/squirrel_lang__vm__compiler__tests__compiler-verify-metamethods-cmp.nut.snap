@@ -1174,16 +1174,22 @@ expression: actual_code
   num_regs: 47
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - comparable
-      - 1
-    - - a
-      - 2
-    - - b
-      - 3
-    - - a
-      - 4
-    - - b
-      - 5
-  num_locals: 6
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - comparable
+    - NamedReg:
+        - 2
+        - a
+    - NamedReg:
+        - 3
+        - b
+    - NamedReg:
+        - 4
+        - a
+    - NamedReg:
+        - 5
+        - b
+  num_locals: 0

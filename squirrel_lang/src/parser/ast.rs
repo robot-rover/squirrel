@@ -108,16 +108,30 @@ pub enum UnaryRefOp {
     Delete,
 }
 
+#[derive(Clone, Debug, PartialEq, Eq, Serialize, Deserialize)]
+pub enum Local {
+    Local(String),
+    Upvalue(u32),
+    NamedReg(String),
+}
+
+impl fmt::Display for Local {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Local::Local(name) => write!(f, "{}", name),
+            Local::Upvalue(idx) => write!(f, "upvalue {}", idx),
+            Local::NamedReg(name) => write!(f, "r {}", name),
+        }
+    }
+}
+
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
 pub struct Function {
     pub keyword_span: Span,
     pub arg_span: Span,
     pub num_args: u32,
     pub default_expr: Vec<Expr>,
-    pub local_names: Vec<(String, u32)>,
-    pub num_locals: u32,
-    // Outer local idx, Inner local idx
-    pub upvalues: Vec<(u32, u32)>,
+    pub locals: Vec<Local>,
     pub is_varargs: bool,
     pub body: StateRef,
 }
@@ -137,13 +151,7 @@ impl Function {
             arg_span,
             num_args,
             default_expr,
-            num_locals: locals.local_count(),
-            local_names: locals
-                .locals
-                .into_iter()
-                .map(|(name, idx)| (name.to_string(), idx))
-                .collect(),
-            upvalues: locals.upvalues,
+            locals: locals.to_locals(),
             is_varargs,
             body: Box::new(body),
         }

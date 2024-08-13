@@ -10,17 +10,11 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - randtor
-    - 1
-  - - i
-    - 2
-  - - val
-    - 3
-num_locals: 4
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: randtor
+  - NamedReg: i
+  - NamedReg: val
 is_varargs: true
 body:
   data:
@@ -45,19 +39,12 @@ body:
                         end: End
                       num_args: 1
                       default_expr: []
-                      local_names:
-                        - - max
-                          - 0
-                        - - last
-                          - 1
-                        - - IM
-                          - 2
-                        - - IA
-                          - 3
-                        - - IC
-                          - 4
-                      num_locals: 5
-                      upvalues: []
+                      locals:
+                        - NamedReg: max
+                        - NamedReg: last
+                        - NamedReg: IM
+                        - NamedReg: IA
+                        - NamedReg: IC
                       is_varargs: false
                       body:
                         data:
@@ -600,19 +587,12 @@ body:
                         end: End
                       num_args: 1
                       default_expr: []
-                      local_names:
-                        - - n
-                          - 0
-                        - - prev
-                          - 1
-                        - - curr
-                          - 2
-                        - - i
-                          - 3
-                        - - res
-                          - 4
-                      num_locals: 5
-                      upvalues: []
+                      locals:
+                        - NamedReg: n
+                        - NamedReg: prev
+                        - NamedReg: curr
+                        - NamedReg: i
+                        - NamedReg: res
                       is_varargs: false
                       body:
                         data:

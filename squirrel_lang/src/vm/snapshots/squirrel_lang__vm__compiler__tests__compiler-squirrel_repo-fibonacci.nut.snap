@@ -339,8 +339,10 @@ expression: actual_code
   num_regs: 13
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - n
-      - 1
-  num_locals: 2
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - n
+  num_locals: 0

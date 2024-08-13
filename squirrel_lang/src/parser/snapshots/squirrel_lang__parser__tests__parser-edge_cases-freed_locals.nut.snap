@@ -10,27 +10,16 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - a
-    - 1
-  - - my_ref_b
-    - 2
-  - - outer_ref_c
-    - 3
-  - - i
-    - 4
-  - - c
-    - 5
-  - - i
-    - 6
-  - - d
-    - 7
-  - - e
-    - 8
-num_locals: 9
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - Local: a
+  - NamedReg: my_ref_b
+  - NamedReg: outer_ref_c
+  - NamedReg: i
+  - Local: c
+  - NamedReg: i
+  - NamedReg: d
+  - NamedReg: e
 is_varargs: true
 body:
   data:
@@ -81,15 +70,8 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 3
-                      upvalues:
-                        - - 1
-                          - 0
-                        - - 1
-                          - 1
-                        - - 1
-                          - 2
+                      locals:
+                        - Upvalue: 1
                       is_varargs: false
                       body:
                         data:
@@ -145,7 +127,7 @@ body:
                                     Assign:
                                       target:
                                         Local:
-                                          - 1
+                                          - 0
                                           - start: Start
                                             end: End
                                       value:
@@ -158,7 +140,7 @@ body:
                                             lhs:
                                               data:
                                                 Local:
-                                                  - 2
+                                                  - 0
                                                   - start: Start
                                                     end: End
                                               span:
@@ -345,11 +327,8 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names:
-                        - - b
-                          - 0
-                      num_locals: 1
-                      upvalues: []
+                      locals:
+                        - Local: b
                       is_varargs: false
                       body:
                         data:
@@ -400,11 +379,8 @@ body:
                                               end: End
                                             num_args: 0
                                             default_expr: []
-                                            local_names: []
-                                            num_locals: 1
-                                            upvalues:
-                                              - - 0
-                                                - 0
+                                            locals:
+                                              - Upvalue: 0
                                             is_varargs: false
                                             body:
                                               data:
@@ -626,11 +602,8 @@ body:
                                     end: End
                                   num_args: 0
                                   default_expr: []
-                                  local_names: []
-                                  num_locals: 1
-                                  upvalues:
-                                    - - 5
-                                      - 0
+                                  locals:
+                                    - Upvalue: 5
                                   is_varargs: false
                                   body:
                                     data:

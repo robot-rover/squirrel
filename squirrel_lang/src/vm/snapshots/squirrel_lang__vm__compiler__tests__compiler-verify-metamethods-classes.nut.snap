@@ -15,6 +15,7 @@ expression: actual_code
   num_regs: 0
   num_params: 0
   locals:
-    - - vargv
-      - 0
-  num_locals: 1
+    - NamedReg:
+        - 0
+        - vargv
+  num_locals: 0

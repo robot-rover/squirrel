@@ -10,21 +10,13 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - comparable
-    - 1
-  - - a
-    - 2
-  - - b
-    - 3
-  - - a
-    - 4
-  - - b
-    - 5
-num_locals: 6
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: comparable
+  - NamedReg: a
+  - NamedReg: b
+  - NamedReg: a
+  - NamedReg: b
 is_varargs: true
 body:
   data:
@@ -83,11 +75,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - other
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: other
                               is_varargs: false
                               body:
                                 data:
@@ -588,11 +577,8 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - n
-                                    - 0
-                                num_locals: 1
-                                upvalues: []
+                                locals:
+                                  - NamedReg: n
                                 is_varargs: false
                                 body:
                                   data:
@@ -647,11 +633,8 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - other
-                                    - 0
-                                num_locals: 1
-                                upvalues: []
+                                locals:
+                                  - NamedReg: other
                                 is_varargs: false
                                 body:
                                   data:

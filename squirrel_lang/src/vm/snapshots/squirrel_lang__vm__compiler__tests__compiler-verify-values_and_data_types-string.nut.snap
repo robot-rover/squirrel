@@ -1857,40 +1857,58 @@ expression: actual_code
   num_regs: 77
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - tab
-      - 1
-    - - a
-      - 2
-    - - b
-      - 3
-    - - newline
-      - 4
-    - - carriage
-      - 5
-    - - v
-      - 6
-    - - f
-      - 7
-    - - back
-      - 8
-    - - quote
-      - 9
-    - - single
-      - 10
-    - - zero
-      - 11
-    - - hexcode
-      - 12
-    - - unicodes
-      - 13
-    - - unicodel
-      - 14
-    - - normal
-      - 15
-    - - verb
-      - 16
-    - - multiline
-      - 17
-  num_locals: 18
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - tab
+    - NamedReg:
+        - 2
+        - a
+    - NamedReg:
+        - 3
+        - b
+    - NamedReg:
+        - 4
+        - newline
+    - NamedReg:
+        - 5
+        - carriage
+    - NamedReg:
+        - 6
+        - v
+    - NamedReg:
+        - 7
+        - f
+    - NamedReg:
+        - 8
+        - back
+    - NamedReg:
+        - 9
+        - quote
+    - NamedReg:
+        - 10
+        - single
+    - NamedReg:
+        - 11
+        - zero
+    - NamedReg:
+        - 12
+        - hexcode
+    - NamedReg:
+        - 13
+        - unicodes
+    - NamedReg:
+        - 14
+        - unicodel
+    - NamedReg:
+        - 15
+        - normal
+    - NamedReg:
+        - 16
+        - verb
+    - NamedReg:
+        - 17
+        - multiline
+  num_locals: 0

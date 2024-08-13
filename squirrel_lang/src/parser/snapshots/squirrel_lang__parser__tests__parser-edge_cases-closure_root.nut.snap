@@ -1,0 +1,419 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: print
+  - NamedReg: sr
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - whoami
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: root
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - a
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: whoami
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Literal:
+                              String: a
+                          span:
+                            start: Start
+                            end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - b
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: whoami
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Literal:
+                              String: b
+                          span:
+                            start: Start
+                            end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    FieldAccess:
+                      - data: Globals
+                        span:
+                          start: Start
+                          end: End
+                      - - print
+                        - start: Start
+                          end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: setroottable
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      Ident: b
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - show_root
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    FunctionDef:
+                      keyword_span:
+                        start: Start
+                        end: End
+                      arg_span:
+                        start: Start
+                        end: End
+                      num_args: 1
+                      default_expr: []
+                      locals:
+                        - NamedReg: p
+                      is_varargs: false
+                      body:
+                        data:
+                          Block:
+                            - data:
+                                Expr:
+                                  data:
+                                    FunctionCall:
+                                      func:
+                                        Expr:
+                                          data:
+                                            Local:
+                                              - 0
+                                              - start: Start
+                                                end: End
+                                          span:
+                                            start: Start
+                                            end: End
+                                      args:
+                                        - data:
+                                            BinaryOp:
+                                              op: Add
+                                              op_span:
+                                                start: Start
+                                                end: End
+                                              lhs:
+                                                data:
+                                                  BinaryOp:
+                                                    op: Add
+                                                    op_span:
+                                                      start: Start
+                                                      end: End
+                                                    lhs:
+                                                      data:
+                                                        Literal:
+                                                          String: "root: "
+                                                      span:
+                                                        start: Start
+                                                        end: End
+                                                    rhs:
+                                                      data:
+                                                        FieldAccess:
+                                                          - data: Globals
+                                                            span:
+                                                              start: Start
+                                                              end: End
+                                                          - - whoami
+                                                            - start: Start
+                                                              end: End
+                                                      span:
+                                                        start: Start
+                                                        end: End
+                                                span:
+                                                  start: Start
+                                                  end: End
+                                              rhs:
+                                                data:
+                                                  Literal:
+                                                    String: "\n"
+                                                span:
+                                                  start: Start
+                                                  end: End
+                                          span:
+                                            start: Start
+                                            end: End
+                                  span:
+                                    start: Start
+                                    end: End
+                              span:
+                                start: Start
+                                end: End
+                        span:
+                          start: Start
+                          end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: show_root
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      Local:
+                        - 1
+                        - start: Start
+                          end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 2
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Ident: show_root
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  FieldAccess:
+                    - data:
+                        Ident: show_root
+                      span:
+                        start: Start
+                        end: End
+                    - - setroot
+                      - start: Start
+                        end: End
+                args:
+                  - data:
+                      Ident: a
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Local:
+                        - 2
+                        - start: Start
+                          end: End
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      Local:
+                        - 1
+                        - start: Start
+                          end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              FunctionCall:
+                func:
+                  Expr:
+                    data:
+                      Ident: show_root
+                    span:
+                      start: Start
+                      end: End
+                args:
+                  - data:
+                      Local:
+                        - 1
+                        - start: Start
+                          end: End
+                    span:
+                      start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

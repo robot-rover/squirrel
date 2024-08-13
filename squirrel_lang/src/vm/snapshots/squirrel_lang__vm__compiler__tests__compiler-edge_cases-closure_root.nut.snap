@@ -512,10 +512,13 @@ expression: actual_code
   num_regs: 19
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - print
-      - 1
-    - - sr
-      - 2
-  num_locals: 3
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - print
+    - NamedReg:
+        - 2
+        - sr
+  num_locals: 0

@@ -1,0 +1,94 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/closure_root.nut
+---
+- Identifier: whoami
+- NewSlot
+- String: root
+- Newline
+- Newline
+- Identifier: a
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: whoami
+- Assign
+- String: a
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: b
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: whoami
+- Assign
+- String: b
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: print
+- Assign
+- DoubleColon
+- Identifier: print
+- Newline
+- Newline
+- Identifier: setroottable
+- LeftParenthesis
+- Identifier: b
+- RightParenthesis
+- Newline
+- Newline
+- Function
+- Identifier: show_root
+- LeftParenthesis
+- Identifier: p
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- Identifier: p
+- LeftParenthesis
+- String: "root: "
+- Plus
+- DoubleColon
+- Identifier: whoami
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: show_root
+- LeftParenthesis
+- Identifier: print
+- RightParenthesis
+- Newline
+- Newline
+- Newline
+- Local
+- Identifier: sr
+- Assign
+- Identifier: show_root
+- Newline
+- Newline
+- Identifier: show_root
+- Period
+- Identifier: setroot
+- LeftParenthesis
+- Identifier: a
+- RightParenthesis
+- Newline
+- Newline
+- Identifier: sr
+- LeftParenthesis
+- Identifier: print
+- RightParenthesis
+- Newline
+- Identifier: show_root
+- LeftParenthesis
+- Identifier: print
+- RightParenthesis

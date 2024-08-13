@@ -772,10 +772,13 @@ expression: actual_code
   num_regs: 35
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - t
-      - 1
-    - - test
-      - 2
-  num_locals: 3
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - t
+    - NamedReg:
+        - 2
+        - test
+  num_locals: 0

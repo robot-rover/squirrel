@@ -1,0 +1,150 @@
+---
+source: squirrel_lang/src/parser/mod.rs
+expression: actual_ast
+---
+keyword_span:
+  start: Start
+  end: End
+arg_span:
+  start: Start
+  end: End
+num_args: 0
+default_expr: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: local_mem
+is_varargs: true
+body:
+  data:
+    Block:
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - env_mem
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: env_mem
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Ident:
+                    - obj
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    TableDecl:
+                      - - data:
+                            Literal:
+                              String: obj_mem
+                          span:
+                            start: Start
+                            end: End
+                        - data:
+                            Literal:
+                              String: obj_mem
+                          span:
+                            start: Start
+                            end: End
+                  span:
+                    start: Start
+                    end: End
+                kind: NewSlot
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              Assign:
+                target:
+                  Local:
+                    - 1
+                    - start: Start
+                      end: End
+                value:
+                  data:
+                    Literal:
+                      String: local_mem
+                  span:
+                    start: Start
+                    end: End
+                kind: Normal
+                op_span:
+                  start: Start
+                  end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              UnaryRefOp:
+                - Delete
+                - start: Start
+                  end: End
+                - Ident:
+                    - env_mem
+                    - start: Start
+                      end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+      - data:
+          Expr:
+            data:
+              UnaryRefOp:
+                - Delete
+                - start: Start
+                  end: End
+                - FieldAccess:
+                    - data:
+                        Ident: obj
+                      span:
+                        start: Start
+                        end: End
+                    - - obj_mem
+                      - start: Start
+                        end: End
+            span:
+              start: Start
+              end: End
+        span:
+          start: Start
+          end: End
+  span:
+    start: Start
+    end: End

@@ -701,12 +701,16 @@ expression: actual_code
   num_regs: 32
   num_params: 0
   locals:
-    - - vargv
-      - 0
-    - - ex
-      - 1
-    - - string
-      - 2
-    - - res
-      - 3
-  num_locals: 4
+    - NamedReg:
+        - 0
+        - vargv
+    - NamedReg:
+        - 1
+        - ex
+    - NamedReg:
+        - 2
+        - string
+    - NamedReg:
+        - 3
+        - res
+  num_locals: 0

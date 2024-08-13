@@ -10,39 +10,22 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - a
-    - 1
-  - - counter
-    - 2
-  - - a
-    - 3
-  - - idx
-    - 4
-  - - val
-    - 5
-  - - val
-    - 6
-  - - obj
-    - 7
-  - - obj_list
-    - 8
-  - - val
-    - 9
-  - - val
-    - 10
-  - - i
-    - 11
-  - - key
-    - 12
-  - - val
-    - 13
-  - - val
-    - 14
-num_locals: 15
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: a
+  - NamedReg: counter
+  - NamedReg: a
+  - NamedReg: idx
+  - NamedReg: val
+  - NamedReg: val
+  - NamedReg: obj
+  - NamedReg: obj_list
+  - NamedReg: val
+  - NamedReg: val
+  - NamedReg: i
+  - NamedReg: key
+  - NamedReg: val
+  - NamedReg: val
 is_varargs: true
 body:
   data:

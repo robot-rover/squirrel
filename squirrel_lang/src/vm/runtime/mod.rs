@@ -18,6 +18,7 @@ use crate::{
     parser::ast,
     sq_error::{SquirrelError, SquirrelErrorRendered},
     util::WriteOption,
+    vm::compiler::LocalMapping,
 };
 
 use super::{
@@ -219,20 +220,21 @@ impl fmt::Display for StackFrame {
         writeln!(f, "env: {}", self.env)?;
         write!(f, "locals:")?;
         let mut local_name_iter = self.func.f.locals.iter().peekable();
-        for (i, local) in self.locals.iter().enumerate() {
-            write!(f, "\n  {}: {:?}", i, RefCell::borrow(local))?;
-            match local_name_iter
-                .peek()
-                .map(|(name, idx)| (name, idx.cmp(&(i as u32))))
-            {
-                Some((_, Ordering::Less)) => unreachable!("Local names are out of order"),
-                Some((name, Ordering::Equal)) => {
-                    write!(f, " ({})", name)?;
-                    local_name_iter.next();
-                }
-                None | Some((_, Ordering::Greater)) => {}
-            }
-        }
+        // TODO: Show named registers and locals
+        // for (i, local) in self.locals.iter().enumerate() {
+        //     write!(f, "\n  {}: {:?}", i, RefCell::borrow(local))?;
+        //     match local_name_iter
+        //         .peek()
+        //         .map(|(name, idx)| (name, idx.cmp(&(i as u32))))
+        //     {
+        //         Some((_, Ordering::Less)) => unreachable!("Local names are out of order"),
+        //         Some((name, Ordering::Equal)) => {
+        //             write!(f, " ({})", name)?;
+        //             local_name_iter.next();
+        //         }
+        //         None | Some((_, Ordering::Greater)) => {}
+        //     }
+        // }
         write!(f, "\nregisters ({})", self.registers.len())?;
         for (i, reg) in self.registers.iter().enumerate() {
             if !matches!(reg, Value::Null) {
@@ -262,7 +264,13 @@ pub fn run<'a>(
         "root function must have 0 parameters"
     );
     assert!(root_fn.is_varargs, "root function must be varargs");
-    assert_eq!(root_fn.locals.get(0), Some(&(String::from("vargv"), 0)));
+    assert!(
+        matches!(
+            root_fn.locals.get(0).and_then(|lm| lm.get_name()),
+            Some("vargv")
+        ),
+        "root function must have named registers vargv and vargc"
+    );
 
     let stdout = stdout
         .map(|stream| WriteOption::Dyn(stream))

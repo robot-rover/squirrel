@@ -10,11 +10,8 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-num_locals: 1
-upvalues: []
+locals:
+  - NamedReg: vargv
 is_varargs: true
 body:
   data:
@@ -65,9 +62,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -173,11 +168,8 @@ body:
                           span:
                             start: Start
                             end: End
-                      local_names:
-                        - - a_arg
-                          - 0
-                      num_locals: 1
-                      upvalues: []
+                      locals:
+                        - NamedReg: a_arg
                       is_varargs: false
                       body:
                         data:
@@ -385,11 +377,8 @@ body:
                           span:
                             start: Start
                             end: End
-                      local_names:
-                        - - b_arg
-                          - 0
-                      num_locals: 1
-                      upvalues: []
+                      locals:
+                        - NamedReg: b_arg
                       is_varargs: false
                       body:
                         data:

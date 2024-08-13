@@ -10,17 +10,11 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - myslots
-    - 1
-  - - a
-    - 2
-  - - b
-    - 3
-num_locals: 4
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: myslots
+  - NamedReg: a
+  - NamedReg: b
 is_varargs: true
 body:
   data:
@@ -79,13 +73,9 @@ body:
                                 end: End
                               num_args: 2
                               default_expr: []
-                              local_names:
-                                - - idx
-                                  - 0
-                                - - val
-                                  - 1
-                              num_locals: 2
-                              upvalues: []
+                              locals:
+                                - NamedReg: idx
+                                - NamedReg: val
                               is_varargs: false
                               body:
                                 data:
@@ -222,11 +212,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - idx
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: idx
                               is_varargs: false
                               body:
                                 data:
@@ -355,13 +342,9 @@ body:
                                 end: End
                               num_args: 2
                               default_expr: []
-                              local_names:
-                                - - key
-                                  - 0
-                                - - value
-                                  - 1
-                              num_locals: 2
-                              upvalues: []
+                              locals:
+                                - NamedReg: key
+                                - NamedReg: value
                               is_varargs: false
                               body:
                                 data:
@@ -450,11 +433,8 @@ body:
                                 end: End
                               num_args: 1
                               default_expr: []
-                              local_names:
-                                - - key
-                                  - 0
-                              num_locals: 1
-                              upvalues: []
+                              locals:
+                                - NamedReg: key
                               is_varargs: false
                               body:
                                 data:
@@ -1040,9 +1020,7 @@ body:
                                   end: End
                                 num_args: 0
                                 default_expr: []
-                                local_names: []
-                                num_locals: 0
-                                upvalues: []
+                                locals: []
                                 is_varargs: false
                                 body:
                                   data:
@@ -1098,13 +1076,9 @@ body:
                                   end: End
                                 num_args: 2
                                 default_expr: []
-                                local_names:
-                                  - - idx
-                                    - 0
-                                  - - val
-                                    - 1
-                                num_locals: 2
-                                upvalues: []
+                                locals:
+                                  - NamedReg: idx
+                                  - NamedReg: val
                                 is_varargs: false
                                 body:
                                   data:
@@ -1257,11 +1231,8 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - idx
-                                    - 0
-                                num_locals: 1
-                                upvalues: []
+                                locals:
+                                  - NamedReg: idx
                                 is_varargs: false
                                 body:
                                   data:
@@ -1406,13 +1377,9 @@ body:
                                   end: End
                                 num_args: 2
                                 default_expr: []
-                                local_names:
-                                  - - key
-                                    - 0
-                                  - - value
-                                    - 1
-                                num_locals: 2
-                                upvalues: []
+                                locals:
+                                  - NamedReg: key
+                                  - NamedReg: value
                                 is_varargs: false
                                 body:
                                   data:
@@ -1509,11 +1476,8 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - key
-                                    - 0
-                                num_locals: 1
-                                upvalues: []
+                                locals:
+                                  - NamedReg: key
                                 is_varargs: false
                                 body:
                                   data:

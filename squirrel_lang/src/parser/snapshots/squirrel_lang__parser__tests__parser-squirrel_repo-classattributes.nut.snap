@@ -10,21 +10,13 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - member
-    - 1
-  - - val
-    - 2
-  - - attr
-    - 3
-  - - i
-    - 4
-  - - v
-    - 5
-num_locals: 6
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: member
+  - NamedReg: val
+  - NamedReg: attr
+  - NamedReg: i
+  - NamedReg: v
 is_varargs: true
 body:
   data:
@@ -59,11 +51,8 @@ body:
                                   end: End
                                 num_args: 1
                                 default_expr: []
-                                local_names:
-                                  - - a
-                                    - 0
-                                num_locals: 1
-                                upvalues: []
+                                locals:
+                                  - NamedReg: a
                                 is_varargs: false
                                 body:
                                   data:
@@ -139,13 +128,9 @@ body:
                                   end: End
                                 num_args: 0
                                 default_expr: []
-                                local_names:
-                                  - - i
-                                    - 0
-                                  - - val
-                                    - 1
-                                num_locals: 2
-                                upvalues: []
+                                locals:
+                                  - NamedReg: i
+                                  - NamedReg: val
                                 is_varargs: false
                                 body:
                                   data:

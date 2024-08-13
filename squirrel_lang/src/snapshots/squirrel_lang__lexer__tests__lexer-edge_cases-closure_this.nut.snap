@@ -1,0 +1,113 @@
+---
+source: squirrel_lang/src/lexer.rs
+expression: Lexer test for edge_cases/closure_this.nut
+---
+- Function
+- Identifier: show_this
+- LeftParenthesis
+- RightParenthesis
+- LeftCurlyBrace
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "this: "
+- Plus
+- This
+- Period
+- Identifier: whoami
+- Plus
+- String: "\n"
+- RightParenthesis
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Identifier: whoami
+- NewSlot
+- String: root
+- Newline
+- Newline
+- Identifier: a
+- NewSlot
+- LeftCurlyBrace
+- Newline
+- Identifier: whoami
+- Assign
+- String: a
+- Newline
+- Identifier: show_this
+- Assign
+- Identifier: show_this
+- Newline
+- RightCurlyBrace
+- Newline
+- Newline
+- Local
+- Identifier: st
+- Assign
+- Identifier: show_this
+- Newline
+- Newline
+- Local
+- Identifier: st2
+- Assign
+- Identifier: a
+- Period
+- Identifier: show_this
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "-- Should be root --\n"
+- RightParenthesis
+- Newline
+- Identifier: show_this
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- RawCall
+- LeftParenthesis
+- Identifier: show_this
+- Comma
+- Identifier: getroottable
+- LeftParenthesis
+- RightParenthesis
+- RightParenthesis
+- Newline
+- Identifier: st
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Identifier: st2
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- Newline
+- DoubleColon
+- Identifier: print
+- LeftParenthesis
+- String: "-- Should be a --\n"
+- RightParenthesis
+- Newline
+- Identifier: a
+- Period
+- Identifier: show_this
+- LeftParenthesis
+- RightParenthesis
+- Newline
+- RawCall
+- LeftParenthesis
+- Identifier: show_this
+- Comma
+- Identifier: a
+- RightParenthesis
+- Newline
+- RawCall
+- LeftParenthesis
+- Identifier: st
+- Comma
+- Identifier: a
+- RightParenthesis
+- Newline

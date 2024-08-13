@@ -81,7 +81,7 @@ pub struct Function {
     pub is_varargs: bool,
     pub num_regs: u32,
     pub num_params: u32,
-    pub locals: Vec<(String, u32)>,
+    pub locals: Vec<LocalMapping>,
     pub num_locals: u32,
 }
 
@@ -95,12 +95,17 @@ pub struct File {
 impl Function {
     fn write(&self, f: &mut fmt::Formatter<'_>, source_file: Option<&File>) -> fmt::Result {
         write!(f, "Function(",)?;
-        let mut arg_iter = self.locals[..self.num_params as usize]
-            .iter()
-            .map(|(name, _)| name.as_str())
-            .peekable();
-        while let Some(arg_name) = arg_iter.next() {
-            write!(f, "{}", arg_name)?;
+        let mut arg_iter = self.locals.iter().take(self.num_params as usize).peekable();
+        while let Some(arg) = arg_iter.next() {
+            match arg {
+                LocalMapping::NamedReg(_, name) => {
+                    write!(f, "{}", name)?;
+                }
+                LocalMapping::LocalArg { name, .. } => {
+                    write!(f, "{}", name)?;
+                }
+                _ => unreachable!(),
+            }
             if arg_iter.peek().is_some() {
                 write!(f, ", ")?;
             }
@@ -122,16 +127,38 @@ impl Function {
                 write!(f, "\n  {}: {:?}", idx, constant)?;
             }
 
-            let mut locals_sorted = self.locals[self.num_params as usize..]
-                .iter()
-                .cloned()
-                .collect::<Vec<_>>();
-            locals_sorted.sort_by_key(|(_, idx)| *idx);
+            // TODO: Clean this up
             write!(f, "\nLocals:")?;
-            for (local, local_idx) in locals_sorted {
-                write!(f, "\n  {}: {}", local_idx, local)?;
+            for local in self.locals.iter() {
+                match local {
+                    LocalMapping::NamedReg(_, _) => continue,
+                    LocalMapping::Local(local_idx, local_name) => {
+                        write!(f, "\n  {}: {}", local_idx, local_name)?
+                    }
+                    LocalMapping::Upvalue {
+                        this_local,
+                        parent_local,
+                    } => {
+                        write!(f, "\n  {}: u{}", this_local, parent_local)?;
+                    }
+                    LocalMapping::LocalArg {
+                        init_reg,
+                        end_local,
+                        name,
+                    } => {
+                        write!(f, "\n  {}: {} (arg: r{})", end_local, name, init_reg)?;
+                    }
+                }
             }
             write!(f, "\nRegisters: {}", self.num_regs)?;
+            for reg in self.locals.iter() {
+                match reg {
+                    LocalMapping::NamedReg(reg_idx, name) => {
+                        write!(f, "\n  {}: {}", reg_idx, name)?;
+                    }
+                    _ => continue,
+                }
+            }
 
             let block_idx_width = self.block_offsets.iter().max().unwrap().to_string().len();
             let mut blocks = self
@@ -206,15 +233,6 @@ impl<'a> fmt::Debug for FunctionDebug<'a> {
     }
 }
 
-struct FunctionBuilder {
-    blocks: Vec<Vec<InstCtx>>,
-    constants: Vec<ast::Literal>,
-    functions: Vec<Function>,
-    next_register: u32,
-    cont_blocks: Vec<Block>,
-    break_blocks: Vec<Block>,
-}
-
 struct BlockBuilder {
     block: Block,
 }
@@ -236,16 +254,105 @@ impl BlockBuilder {
     }
 }
 
-impl FunctionBuilder {
-    fn new() -> Self {
-        Self {
-            blocks: Vec::new(),
-            constants: Vec::new(),
-            functions: Vec::new(),
-            next_register: 0,
-            cont_blocks: Vec::new(),
-            break_blocks: Vec::new(),
+struct FunctionBuilder {
+    blocks: Vec<Vec<InstCtx>>,
+    constants: Vec<ast::Literal>,
+    functions: Vec<Function>,
+    next_register: u32,
+    cont_blocks: Vec<Block>,
+    break_blocks: Vec<Block>,
+    local_mapping: Vec<LocalMapping>,
+    num_params: u32,
+    is_varargs: bool,
+}
+
+#[derive(Serialize, Deserialize)]
+pub enum LocalMapping {
+    NamedReg(u32, String),
+    Local(u32, String),
+    Upvalue {
+        this_local: u32,
+        parent_local: u32,
+    },
+    LocalArg {
+        init_reg: u32,
+        end_local: u32,
+        name: String,
+    },
+}
+
+impl LocalMapping {
+    pub fn get_name(&self) -> Option<&str> {
+        match self {
+            LocalMapping::NamedReg(_, name) => Some(name),
+            LocalMapping::Local(_, name) => Some(name),
+            LocalMapping::Upvalue { .. } => None,
+            LocalMapping::LocalArg { name, .. } => Some(name),
         }
+    }
+}
+
+impl FunctionBuilder {
+    fn new(
+        arg_span: Span,
+        locals: Vec<ast::Local>,
+        num_params: u32,
+        is_varargs: bool,
+    ) -> (Self, BlockBuilder) {
+        let mut init_block = Vec::new();
+        let effective_args = num_params + if is_varargs { 1 } else { 0 };
+        let mut next_reg = 0;
+        let mut next_local = 0;
+        let local_mapping = locals
+            .into_iter()
+            .enumerate()
+            .map(|(idx, local)| match local {
+                ast::Local::NamedReg(name) => {
+                    let reg_idx = next_reg;
+                    next_reg += 1;
+                    LocalMapping::NamedReg(reg_idx, name)
+                }
+                ast::Local::Local(name) => {
+                    let local_idx = next_local;
+                    next_local += 1;
+                    if idx < effective_args as usize {
+                        let reg_idx = next_reg;
+                        next_reg += 1;
+                        init_block.push(InstCtx::loadr(Reg::from(reg_idx), arg_span));
+                        init_block.push(InstCtx::storl(Local::from(local_idx), arg_span));
+                        LocalMapping::LocalArg {
+                            init_reg: reg_idx,
+                            end_local: local_idx,
+                            name,
+                        }
+                    } else {
+                        LocalMapping::Local(local_idx, name)
+                    }
+                }
+                ast::Local::Upvalue(parent_local) => {
+                    let local_idx = next_local;
+                    next_local += 1;
+                    LocalMapping::Upvalue {
+                        this_local: local_idx,
+                        parent_local,
+                    }
+                }
+            })
+            .collect();
+        (
+            Self {
+                blocks: vec![init_block],
+                constants: Vec::new(),
+                functions: Vec::new(),
+                next_register: 0,
+                cont_blocks: Vec::new(),
+                break_blocks: Vec::new(),
+                local_mapping,
+                num_params,
+                is_varargs,
+            },
+            BlockBuilder { block: 0.into() },
+        )
     }
 
     fn enter_loop(&mut self, cont_block: Block, break_block: Block) {
@@ -321,13 +428,7 @@ impl FunctionBuilder {
         (reg..reg + count).map(Reg::from)
     }
 
-    fn build(
-        self,
-        num_params: u32,
-        locals: Vec<(String, u32)>,
-        is_varargs: bool,
-        num_locals: u32,
-    ) -> Vec<Function> {
+    fn build(self) -> Vec<Function> {
         let mut blocks_to_take = self
             .blocks
             .into_iter()
@@ -379,14 +480,30 @@ impl FunctionBuilder {
         assert_eq!(block_offsets[0], 0);
         assert!(block_offsets[1..].iter().all(|offset| *offset != 0));
 
+        let num_locals = self
+            .local_mapping
+            .iter()
+            .filter_map(|local| match local {
+                LocalMapping::NamedReg(_, _) => None,
+                LocalMapping::Local(idx, _) => Some(*idx),
+                LocalMapping::Upvalue { this_local, .. } => Some(*this_local),
+                LocalMapping::LocalArg {
+                    init_reg,
+                    end_local,
+                    name,
+                } => Some(*end_local),
+            })
+            .max()
+            .unwrap_or(0);
+
         let this_fn = Function {
             code,
             block_offsets,
             constants: self.constants,
-            is_varargs,
-            num_params,
+            is_varargs: self.is_varargs,
+            num_params: self.num_params,
             num_regs: self.next_register,
-            locals,
+            locals: self.local_mapping,
             num_locals,
         };
 
@@ -419,8 +536,12 @@ fn compile_function(function: &ast::Function) -> Vec<Function> {
         // TODO: Default Args
         todo!()
     }
-    let mut builder = FunctionBuilder::new();
-    let block = builder.block();
+    let (mut builder, block) = FunctionBuilder::new(
+        function.arg_span,
+        function.locals.clone(),
+        function.num_args,
+        function.is_varargs,
+    );
     let block = compile_statement(&mut builder, block, &function.body);
     if !matches!(
         builder.blocks[block.block.as_idx()].last(),
@@ -428,12 +549,7 @@ fn compile_function(function: &ast::Function) -> Vec<Function> {
     ) {
         block.inst(&mut builder, InstCtx::retn(function.body.span));
     }
-    builder.build(
-        function.num_args,
-        function.local_names.clone(),
-        function.is_varargs,
-        function.num_locals,
-    )
+    builder.build()
 }
 
 // --------------

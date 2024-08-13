@@ -10,23 +10,14 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - SIZE
-    - 1
-  - - n
-    - 2
-  - - m1
-    - 3
-  - - m2
-    - 4
-  - - mm
-    - 5
-  - - i
-    - 6
-num_locals: 7
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: SIZE
+  - NamedReg: n
+  - NamedReg: m1
+  - NamedReg: m2
+  - NamedReg: mm
+  - NamedReg: i
 is_varargs: true
 body:
   data:
@@ -77,21 +68,13 @@ body:
                         end: End
                       num_args: 2
                       default_expr: []
-                      local_names:
-                        - - rows
-                          - 0
-                        - - cols
-                          - 1
-                        - - i
-                          - 2
-                        - - j
-                          - 3
-                        - - count
-                          - 4
-                        - - m
-                          - 5
-                      num_locals: 6
-                      upvalues: []
+                      locals:
+                        - NamedReg: rows
+                        - NamedReg: cols
+                        - NamedReg: i
+                        - NamedReg: j
+                        - NamedReg: count
+                        - NamedReg: m
                       is_varargs: false
                       body:
                         data:
@@ -584,27 +567,16 @@ body:
                         end: End
                       num_args: 5
                       default_expr: []
-                      local_names:
-                        - - rows
-                          - 0
-                        - - cols
-                          - 1
-                        - - m1
-                          - 2
-                        - - m2
-                          - 3
-                        - - m3
-                          - 4
-                        - - i
-                          - 5
-                        - - j
-                          - 6
-                        - - k
-                          - 7
-                        - - val
-                          - 8
-                      num_locals: 9
-                      upvalues: []
+                      locals:
+                        - NamedReg: rows
+                        - NamedReg: cols
+                        - NamedReg: m1
+                        - NamedReg: m2
+                        - NamedReg: m3
+                        - NamedReg: i
+                        - NamedReg: j
+                        - NamedReg: k
+                        - NamedReg: val
                       is_varargs: false
                       body:
                         data:

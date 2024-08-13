@@ -10,15 +10,10 @@ arg_span:
   end: End
 num_args: 0
 default_expr: []
-local_names:
-  - - vargv
-    - 0
-  - - statethread
-    - 1
-  - - i
-    - 2
-num_locals: 3
-upvalues: []
+locals:
+  - NamedReg: vargv
+  - NamedReg: statethread
+  - NamedReg: i
 is_varargs: true
 body:
   data:
@@ -43,9 +38,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -130,9 +123,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
@@ -217,9 +208,7 @@ body:
                         end: End
                       num_args: 0
                       default_expr: []
-                      local_names: []
-                      num_locals: 0
-                      upvalues: []
+                      locals: []
                       is_varargs: false
                       body:
                         data:
